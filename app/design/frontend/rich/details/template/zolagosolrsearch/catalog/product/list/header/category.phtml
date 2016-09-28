@@ -36,12 +36,12 @@ if ($this->isContentMode() && !$vendor) return; // no header only on CMS page an
                         <div class="category-attribute-description">
                             <?php if(strpos($desc, '|') !== false): ?>
                             <input type="checkbox" class="read-more-state" id="category-description" />
-                            <p class="read-more-wrap">
+                            <div class="read-more-wrap">
                                 <span class="read-more-text"><?php echo substr($desc,0,strpos($desc, '|')); ?></span>
                                 <span class="read-more-target"><?php echo substr($desc,strpos($desc, '|') + 1); ?></span>
                                 <label for="category-description" class="read-more-trigger" onclick="setTimeout(Mall.listing.updateFilters, 30)"><?php echo $this->__("Read more"); ?> <i class="fa fa-caret-down" aria-hidden="true"></i></label>
                                 <label for="category-description" class="read-less-trigger" onclick="setTimeout(Mall.listing.updateFilters, 30)"><?php echo $this->__("Read less"); ?> <i class="fa fa-caret-up" aria-hidden="true"></i></label>
-                            </p>
+                            </div>
                             <?php else: echo $desc; endif; ?>
                         </div>
                         <?php endif; ?>
