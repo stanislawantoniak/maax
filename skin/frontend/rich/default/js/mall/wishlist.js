@@ -18,6 +18,8 @@ Mall.wishlist = {
     init: function () {
         "use strict";
         if(Mall.listing) {
+            Mall.listing.initAddToBasketFromListing();
+
 	        setTimeout(function () {
 		        Mall.wishlist.calculateWidths();
 	        }, 500);

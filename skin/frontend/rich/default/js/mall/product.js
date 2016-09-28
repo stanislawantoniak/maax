@@ -246,7 +246,7 @@ Mall.product = {
                 jQuery(".sizes-content a").css('display','inline-block');
 
             } else {
-            	jQuery('.size-box div').remove();
+            	jQuery('.block_to_size').remove();
             }
 		}
 
