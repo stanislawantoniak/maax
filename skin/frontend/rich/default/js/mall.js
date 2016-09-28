@@ -183,7 +183,7 @@ var Mall = {
         Mall.setFavoritesCountBadge(data.content.favorites_count);
         // set products count badge
         Mall.setProductsCountBadge(data.content.cart.all_products_count);
-
+        Mall.setMessage(data.content.messages);
 	    //hide basket loading
 	    Mall.hideBasketLoading();
 
@@ -459,7 +459,11 @@ var Mall = {
 	    var badge = jQuery("#link_favorites>a>div>span.badge");
 	    badge.removeClass('badgeDouble badgeTriple badgeSingle').addClass(newClass).text(count);
     },
-
+    setMessage : function (content) {
+    	if (content) {
+	    	jQuery(".page-messages-block div div").html(content);
+	}
+    },
     setUserBlockData : function(content) {
         var userBlock = jQuery("#header_top_block_right");
         // set customer account url
