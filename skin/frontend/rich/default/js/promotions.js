@@ -17,15 +17,11 @@ Mall.promotions.initNotLogged = function() {
 	}
 };
 
-Mall.promotions.setListHeight = function () {
-	var heightBody = (jQuery("body").outerHeight() - jQuery('#header .header_top').outerHeight() - jQuery('.header_bottom').outerHeight() - jQuery('#footer').outerHeight()),
-		heightModal = jQuery('.mypromotions-modal:visible').outerHeight(),
-		height,
+Mall.promotions.setListHeight = function() {
+	var height = jQuery('.mypromotions-modal:visible').outerHeight(),
 		target = jQuery('#mypromotions-list');
 
-	height = (heightBody < heightModal) ? heightModal : heightBody;
-
-	target.css('height', height + 'px');
+	target.css('height',height + 'px');
 };
 
 Mall.promotions.jsCopySupported = false;
