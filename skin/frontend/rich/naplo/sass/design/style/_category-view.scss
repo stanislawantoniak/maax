@@ -19,6 +19,14 @@
     @media (max-width: $screen-sm-to-smmd-max) {
       display: none;
     }
+
+
+    .read-more-wrap {
+      p {
+        margin-bottom: 0;
+      }
+    }
+
     .read-more-state {
       display: none;
     }
