@@ -91,7 +91,7 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 				<!-- END:/ PRODUCT SHOP -->
 			</div>
 		</div>
-		<div id="product_long_box" class="col-xs-12">
+		<div id="product_long_box" class="col-sm-12 col-xs-12">
 			<ul class="title_section">
 				<li>
 					<input type="radio" name="tabs" id="tab-1" checked>
@@ -191,17 +191,17 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 			</ul>
 		</div>
 	</div>
-	
+
 	<div id="product_additions_1" class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 		<?php echo $this->getChildHtml('upsell'); ?>
 	</div>
-	
+
 	<?php echo $this->getChildHtml('blogposts'); ?>
-	
+
 	<div id="product_additions_2" class="col-xs-12">
 		<?php echo $this->getChildHtml('crosssell'); ?>
 	</div>
-	
+
 </div>
 
 <div class="modal bs-example-modal-lg" id="popup-after-add-to-cart" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
@@ -336,11 +336,18 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 
 	Mall.product.sizetable.setContent(<?php echo $this->getSizeTableForJs();?>);
 
-	var f = function () {
-		jQuery("#product_long_box").height(
-			jQuery("[name=tabs]:checked ~ article").height() + 180
-		);
+	var adjustDescriptionTabsHeight = function () {
+		var articleHeight = jQuery("[name=tabs]:checked ~ article").height();
+		var newHeightDelta = 180;
+		if(Mall.isMobile(Mall.Breakpoint.sm)){
+			newHeightDelta = 250;
+		} else if(Mall.isMobile(Mall.Breakpoint.md)){
+			newHeightDelta = 210;
+		}
+		jQuery("#product_long_box").height(articleHeight+newHeightDelta);
 	};
-	f();
-	jQuery("[name=tabs]").change(f);
+	adjustDescriptionTabsHeight();
+	jQuery("[name=tabs]").change(adjustDescriptionTabsHeight);
+
+	jQuery(window).resize(adjustDescriptionTabsHeight);
 </script>
