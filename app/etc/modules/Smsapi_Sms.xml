@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<config>
-    <modules>
-        <Smsapi_Sms>
-            <active>true</active>
-            <codePool>community</codePool>
-        </Smsapi_Sms>
-    </modules>
-</config>
