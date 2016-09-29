@@ -10,7 +10,7 @@ class Orba_Shipping_Model_Packstation_Pwr extends Orba_Shipping_Model_Carrier_Ab
     protected $_client;
 
     public function isActive() {
-        return Mage::helper('zolagoos/pwr')->isActive();
+        return Mage::helper('zospwr')->isActive();
     }
     
     public function prepareSettings($params,$shipment,$udpo) {
