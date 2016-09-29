@@ -589,40 +589,6 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		return $this;
 	}
 	
-//	/**
-//	 * @param int $optionId
-//	 * @return Mana_Filters_Model_Filter2_Value | Mana_Filters_Model_Filter2_Store | null
-//	 */
-//	protected function _getManaManufacturerByOptionId($optionId) {
-//		return $this->_getManaManufacturerValueCollection()->
-//			getItemByColumnValue("option_id", (int)$optionId);
-//	}
-//
-//	/**
-//	 * @return Mana_Filters_Resource_Filter2_Value_Collection
-//	 */
-//	protected function _getManaManufacturerValueCollection() {
-//
-//		if(!$this->_manaCollection){
-//
-//			$manaFilter = Mage::getModel("mana_filters/filter2");
-//			/* @var $manaFilter Mana_Filters_Model_Filter2 */
-//			$manaFilter->load($this->getBrandAttributeCode(), "code");
-//
-//			$collection = Mage::getResourceModel(
-//						'mana_filters/filter2_value_' .
-//						(Mage::helper('mana_admin')->isGlobal() ? "" : "store_") .
-//						"collection"
-//			);
-//			if(!Mage::helper('mana_admin')->isGlobal()){
-//				$collection->addFieldToFilter("store_id", Mage::app()->getStore()->getId());
-//			}
-//			$collection->addFieldToFilter("filter_id", $manaFilter->getId());
-//			$this->_manaCollection =  $collection;
-//		}
-//		return $this->_manaCollection;
-//	}
-	
 	/**
 	 * 
 	 * @param Mage_Catalog_Model_Resource_Eav_Attribute $attribute
