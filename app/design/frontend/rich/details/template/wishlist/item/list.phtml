@@ -18,17 +18,13 @@ $zssHelper = Mage::helper("zolagosolrsearch");
                 <div id="grid" class="shuffle--container shuffle--fluid">
                     <?php foreach ($_collection as $product): ?>
                         <?php
-						$_product = $product->getProduct();
+                        $_product = $product->getProduct();
                         $stockItem = Mage::getModel('cataloginventory/stock_item')->loadByProduct($_product);
 
-                        if(!!$stockItem->getBackorders()){
-                            $maxSaleQty = (int) $stockItem->getMaxSaleQty();
-                        } else {
-                            $maxSaleQty = (int) $stockItem->getQty();
-                        }
+                        $maxSaleQty = (!!$stockItem->getBackorders()) ? (int)$stockItem->getMaxSaleQty() : (int)$stockItem->getQty();
 
-						$_product->setImage($_product->getThumbnail()); // trick
-						$_productImageUrl = $zssHelper->getListingResizedImageUrl($_product);
+                        $_product->setImage($_product->getThumbnail()); // trick
+                        $_productImageUrl = $zssHelper->getListingResizedImageUrl($_product);
                         $_productImageInfo = $_helper->getResizedImageInfo($_product);
 						?>
                         <div id="prod-<?php echo $product->getEntityId();?>" class="item col-phone col-xs-4 col-sm-4 col-md-3 col-lg-3 size14">
@@ -53,19 +49,13 @@ $zssHelper = Mage::helper("zolagosolrsearch");
                                         <div class="col-price col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                             <?php if (!$_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE && $_product->getPrice() != $_product->getFinalPrice()) : ?>
                                                 <span class="old">
-                                                        <?php echo $this->helper('core')->currency($product->getPrice(), true, false); ?>
-                                                    </span>
+                                                    <?php echo $this->helper('core')->currency($product->getPrice(), true, false); ?>
+                                                </span>
                                             <?php endif; ?>
                                             <span>
-                                                    <?php echo $this->helper('core')->currency($_product->getFinalPrice(), true, false); ?>
-                                                </span>
+                                                <?php echo $this->helper('core')->currency($_product->getFinalPrice(), true, false); ?>
+                                            </span>
                                         </div>
-                                        <div class="like liked col-lg-6 text-right col-md-6 col-sm-6 col-xs-6"
-                                             data-idproduct="<?php echo $_product->getId(); ?>">
-                                            <span class="icoLike"></span>
-	                                        <span class="likeAdded"><i class="fa fa-list"></i> <?php echo $_helper->__('remove from the list')?></span>
-                                        </div>
-
 
                                         <div class="size-box-bundle col-lg-12 col-md-12 col-sm-12 col-xs-12 clearfix">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 clearfix quantity_block">
@@ -98,7 +88,15 @@ $zssHelper = Mage::helper("zolagosolrsearch");
                                                 </div>
                                             </div>
                                         </div>
-
+                                        <div class="action-box col-lg-12 col-md-12 col-sm-12 col-xs-12 no-padding clearfix">
+                                            <div class="like liked" data-idproduct="<?php echo $_product->getId(); ?>">
+                                                <span class="icoLike"></span>
+                                                <span class="likeAdded"><i class="fa fa-list"></i>
+                                                    <elem class="desktop-view"><?php echo $_helper->__('Remove from the shopping list')?></elem>
+                                                    <elem class="mobile-view"><?php echo $_helper->__('Remove from the list')?></elem>
+                                                </span>
+                                            </div>
+                                        </div>
                                     </div>
 								</a>
                             </div>
