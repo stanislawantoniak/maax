@@ -43,6 +43,8 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 	// Mass editor
 	const RES_UDPROD_VENDOR_IMAGE					= "udprod/vendor_image";
 	// Mass editor
+	const RES_UDPROD_VENDOR_AJAX					= "udprod/vendor_ajax";
+	// Mass editor
 	const RES_UDPROD_VENDOR_MASS					= "udprod/vendor_mass";
 	// Gh Attribute Rules
 	const RES_GH_ATTRIBUTE_RULES					= "udropship/mass";
@@ -119,6 +121,8 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 		self::RES_UDPROD_VENDOR_PRODUCT				=> "Mass products v2",
 		// Mass images
 		self::RES_UDPROD_VENDOR_IMAGE				=> "Mass images",
+		// Mass images
+		self::RES_UDPROD_VENDOR_AJAX				=> "Mass images",
 		// POS Manage
 		self::RES_UDROPSHIP_POS						=> "POS Manage",
 		// Operator manage
@@ -209,6 +213,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 
         // Build ACL Rules - Mass Actions (Zarządzanie opisami i zdjęciami produktów + przeglad atrybutow)
         $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_UDPROD_VENDOR_IMAGE);  // zarzadzanie zdjeciami produktow
+        $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_UDPROD_VENDOR_AJAX);  // zarzadzanie zdjeciami produktow
         $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_UDPROD_VENDOR_PRODUCT);// zarzadzanie opisami produktow
         $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_UDPROD_VENDOR_MASS);   // zarzadzanie opisami produktow ?
         $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_MASS_OPERATOR, self::RES_UDPROD_VENDOR_ATTRIBUTES); //przeglad atrybutow
