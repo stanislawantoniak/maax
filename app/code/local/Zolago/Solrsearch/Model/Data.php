@@ -285,18 +285,7 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 				$docData['udropship_brandshop_id_int'] = $brandshop->getId();
 			}
 		}
-		
-		// Mana manufacturer logo
-		if($this->getBrandAttributeCode() && $item->getOrigData($this->getBrandAttributeCode())){
-			$manaValueObejct = $this->_getManaManufacturerByOptionId(
-				$item->getOrigData($this->getBrandAttributeCode())
-			);
-			if($manaValueObejct && $manaValueObejct->getNormalImage()){
-				$docData[$this->getBrandAttributeCode() . '_logo_varchar'] = 
-					"m-image" . DS . $manaValueObejct->getNormalImage();
-			}
-		}
-		
+				
 		// Wishlist count
 		$docData['wishlist_count_int'] = (int)$item->getOrigData('wishlist_count');
 		
