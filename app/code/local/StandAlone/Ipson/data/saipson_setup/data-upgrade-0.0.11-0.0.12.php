@@ -130,7 +130,7 @@ and also iPads specifically.
         <div class="row">
             <div class="wishlist-cms-content col-sm-12">
                 <p class="fontBlack">Chcesz mieć zawsze dostęp do swojej listy zakup&oacute;w?</p>
-                <p style="display: inline;">Zaloguj się lub zał&oacute;ż konto żeby zostały zapamiętane zawsze jak się zalogujesz, niezależne od miejsca i urządzenia.</p>
+                <p style=" display: inline;">Zaloguj się lub zał&oacute;ż konto żeby zostały zapamiętane zawsze jak się zalogujesz, niezależne od miejsca i urządzenia.</p>
                 <a class="underline" href="/customer/account/login/">Zaloguj&nbsp;się</a>
                 <p>Nie masz jeszcze konta? Utw&oacute;rz konto w zaledwie 10 sekund! <a class="underline" href="/customer/account/create/">Zał&oacute;ż&nbsp;konto</a></p>
                 <br />
