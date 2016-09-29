@@ -17,7 +17,7 @@ $cms = array(
         <div class="row">
             <div class="wishlist-cms-content col-sm-12">
                 <p style="font-family: latoblack">Chcesz mieć zawsze dostęp do swoich ulubionych?</p>
-                <p style="margin-right: 5px; display: inline;">Zaloguj się lub załóż konto żeby zostały zapamiętane zawsze jak się zalogujesz, niezależne od miejsca i urządzenia. </p><a href="/customer/account/login/" class="button button-third">ZALOGUJ&nbsp;SIĘ</a>
+                <p style="display: inline;">Zaloguj się lub załóż konto żeby zostały zapamiętane zawsze jak się zalogujesz, niezależne od miejsca i urządzenia. </p><a href="/customer/account/login/" class="button button-third">ZALOGUJ&nbsp;SIĘ</a>
                 <p>Nie masz jeszcze konta? Utwórz konto w zaledwie 10 sekund! <a href="/customer/account/create/" class="underline">Załóż&nbsp;konto</a></p>
                 <br>
                 <p style="font-size: 12px;">Możesz usunąć produkt z listy ulubionych klikając na serduszko.</p>
