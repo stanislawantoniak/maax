@@ -91,13 +91,13 @@
     #clone_submenu .box:nth-child(1),
     #clone_submenu .box:nth-child(2),
     #clone_submenu .box:nth-child(3){
-        margin-right: 3.2%;
+        margin-right: 0%;
     }
     #clone_submenu .box:nth-child(4) {
-        margin-right: 4%;
+        margin-right: 0%;
     }
     #clone_submenu .box:nth-child(5) {
-        margin-right: 3%;
+        margin-right: 0%;
     }
     #clone_submenu .box .long-wrap {
         width: 85%;
