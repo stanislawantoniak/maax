@@ -25,7 +25,8 @@ class Zolago_Po_Block_Vendor_Po_Edit_Payments
     {
         $params = array(
             "id" => $this->getPo()->getId(),
-            "form_key" => Mage::getSingleton('core/session')->getFormKey()
+            "form_key" => Mage::getSingleton('core/session')->getFormKey(),
+            "_secure" => true,
         );
 
         return $this->getUrl("udpo/payment/addPickUpPayment", $params);
