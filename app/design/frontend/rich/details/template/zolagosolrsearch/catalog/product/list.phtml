@@ -220,8 +220,8 @@ $_products = $_cache['products'];
 
 						jQuery(window).on("resize", function () {
 							jQuery("#items-product .name_product").each(function(){
-								let t = jQuery(this);
-								let height = t.height();
+								var t = jQuery(this);
+								var height = t.height();
 								t.height("auto");
 
 								if (!t.data("origText")) t.data("origText", t.text());
