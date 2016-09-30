@@ -453,11 +453,11 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 		if(Mall.isMobile(Mall.Breakpoint.sm)){
 			return;
 		}
-		console.log("adjustDescriptionTabsHeight");
+		//console.log("adjustDescriptionTabsHeight");
 		var articleHeight = jQuery("[name=tabs]:checked ~ article").height();
 		var newHeightDelta = 180;
 
-		console.log(articleHeight);
+		//console.log(articleHeight);
 		jQuery("#product_long_box_desktop").height(articleHeight+newHeightDelta);
 	};
 	adjustDescriptionTabsHeight();
@@ -472,7 +472,7 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 		if(!Mall.isMobile(Mall.Breakpoint.sm)){
 			return;
 		}
-		console.log("adjustDescriptionTabsHeight2");
+		//console.log("adjustDescriptionTabsHeight2");
 		var articleVisible = jQuery("#product_long_box_mobile li article.collapse");
 
 		var visibleArticlesHeight = 0;
@@ -487,17 +487,22 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 		} else if(Mall.isMobile(Mall.Breakpoint.md)){
 			newHeightDelta = 210;
 		}
-		console.log(visibleArticlesHeight);
+		//console.log(visibleArticlesHeight);
 		jQuery("#product_long_box_mobile").height(visibleArticlesHeight + newHeightDelta);
 	};
 	adjustDescriptionTabsHeight2();
 	jQuery(window).resize(adjustDescriptionTabsHeight2);
 
-
+	jQuery("#product_long_box_mobile").on('show.bs.collapse', function () {
+		adjustDescriptionTabsHeight2();
+	});
 	jQuery("#product_long_box_mobile").on('shown.bs.collapse', function () {
 		adjustDescriptionTabsHeight2();
 	});
 
+	jQuery("#product_long_box_mobile").on('hide.bs.collapse', function () {
+		adjustDescriptionTabsHeight2();
+	});
 	jQuery("#product_long_box_mobile").on('hidden.bs.collapse', function () {
 		adjustDescriptionTabsHeight2();
 	});
