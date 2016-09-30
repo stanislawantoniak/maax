@@ -206,7 +206,7 @@ $_products = $_cache['products'];
 						Mall.translate.add("Available in several variants", "<?php echo Mage::helper('zolagosolrsearch')->__("Available in several variants"); ?>");
 						Mall.translate.add("Maximum quantity", "<?php echo Mage::helper('zolagosolrsearch')->__("Maximum quantity"); ?>");
 
-						Mall.initUrls("<?php echo Mage::getBaseUrl(); ?>", "<?php echo Mage::getUrl("/",array("_no_vendor"=>true)); ?>");
+						Mall.initUrls("<?php echo Mage::getBaseUrl(); ?>", "<?php echo Mage::getBaseUrl(); ?>");
 
 						<?php foreach ($_products as $product): ?>
 						Mall.wishlist.addProduct({
