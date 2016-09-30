@@ -478,12 +478,7 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 				visibleArticlesHeight += jQuery(article).height();
 			}
 		});
-		var newHeightDelta = 180;
-		if(Mall.isMobile(Mall.Breakpoint.sm)){
-			newHeightDelta = 200;
-		} else if(Mall.isMobile(Mall.Breakpoint.md)){
-			newHeightDelta = 210;
-		}
+		var newHeightDelta = 250;
 
 		jQuery("#product_long_box_mobile").height(visibleArticlesHeight + newHeightDelta);
 	};
