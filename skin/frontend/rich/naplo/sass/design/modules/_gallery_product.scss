@@ -138,9 +138,10 @@
   }
   #productGalleryThumbMedia, #productGalleryThumbMediaOpen {
     .rwd-item {
-      &.synced, &:hover {
+      &.synced,
+      &:hover {
         img {
-          border: 1px solid $color-gray4;
+          //border: 1px solid $galleryImageThumbBorderColor;
         }
       }
     }

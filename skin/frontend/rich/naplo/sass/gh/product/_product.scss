@@ -271,7 +271,7 @@ i.flag {
 	#box-social {
 		border-top:  1px solid $gray-lighter;
 		padding-top: 25px;
-		margin-top: 50px;
+		margin-top: 40px;
 		margin-bottom: 25px;
 		font-family: $font-family-base;
 		color: $text-color;
@@ -615,7 +615,8 @@ i.flag {
 		}
 		#qty-error{
 			display: none;
-			padding: 0!important;
+			padding: 10px 0 0 0 !important;
+			float: left;
 		}
 	}
 	.color-box-bundle,
