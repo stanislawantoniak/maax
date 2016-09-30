@@ -116,6 +116,11 @@ i.flag {
 	margin-top: 40px;
 	margin-bottom: -95px;
 	z-index: 100 !important;
+
+	article.content ul {
+		margin-bottom: 15px;
+	}
+
 	@media (max-width: $screen-xs-max) {
 		margin-top: 15px;
 	}
