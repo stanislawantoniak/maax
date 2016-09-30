@@ -115,10 +115,10 @@ i.flag {
 	padding: 0;
 	margin-top: 40px;
 	margin-bottom: -95px;
-	@media (max-width: 767px) {
+	@media (max-width: $screen-xs-max) {
 		margin-top: 15px;
 	}
-    //width: 100%;
+
 	.ui-tabs-panel {
 		border-radius: 0;
 		border: 1px solid $color_e8e8e8;
@@ -162,7 +162,6 @@ i.flag {
 	> .title_section {
       margin-bottom:0px;
       margin-left:0px;
-      padding-left:0px;
       width:100%;
 
       padding: 0;
@@ -265,6 +264,26 @@ i.flag {
           }
         }
       }
+	}
+
+
+	.product_long_box_desktop {
+		display: block;
+		@media (max-width: $screen-xs-max) {
+			display: none;
+		}
+	}
+	.product_long_box_mobile {
+		display: none;
+		@media (max-width: $screen-xs-max) {
+			display: block;
+		}
+		> li {
+			> article {
+				visibility: visible !important;
+				height: auto;
+			}
+		}
 	}
 }
 #product-shop {
