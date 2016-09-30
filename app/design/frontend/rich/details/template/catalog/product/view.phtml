@@ -450,14 +450,12 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 
 	var adjustDescriptionTabsHeight = function () {
 
-		if(Mall.isMobile(Mall.Breakpoint.sm)){
+		if(Mall.isMobile(Mall.Breakpoint.sm))
 			return;
-		}
-		//console.log("adjustDescriptionTabsHeight");
+
 		var articleHeight = jQuery("[name=tabs]:checked ~ article").height();
 		var newHeightDelta = 180;
 
-		//console.log(articleHeight);
 		jQuery("#product_long_box_desktop").height(articleHeight+newHeightDelta);
 	};
 	adjustDescriptionTabsHeight();
@@ -469,10 +467,9 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 
 
 	var adjustDescriptionTabsHeight2 = function () {
-		if(!Mall.isMobile(Mall.Breakpoint.sm)){
+		if(!Mall.isMobile(Mall.Breakpoint.sm))
 			return;
-		}
-		//console.log("adjustDescriptionTabsHeight2");
+
 		var articleVisible = jQuery("#product_long_box_mobile li article.collapse");
 
 		var visibleArticlesHeight = 0;
@@ -487,7 +484,7 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 		} else if(Mall.isMobile(Mall.Breakpoint.md)){
 			newHeightDelta = 210;
 		}
-		//console.log(visibleArticlesHeight);
+
 		jQuery("#product_long_box_mobile").height(visibleArticlesHeight + newHeightDelta);
 	};
 	adjustDescriptionTabsHeight2();
