@@ -48,8 +48,11 @@ class ZolagoOs_OrdersExport_Model_Integrator_Order
         foreach ($this->prepareOrderList($ordersList) as $item) {
             $response = $exportConnector->addOrders((array)$item);
 
-            if ($response->status)
+            if ($response->status){
                 $this->addOrderToConfirmMessage($item->order_id);
+                $this->fileLog("ORDER " . $item->order_id. " WAS EXPORTED", Zend_Log::INFO);
+            }
+
 
         }
 

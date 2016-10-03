@@ -115,8 +115,17 @@ class ZolagoOs_OrdersExport_Model_Export_Order
             $description = $this->shippingMethodsDescription()[$code];
         }
 
-        if (in_array($code, $this->getDeliveryMethodsRequiredDeliveryPointName()))
-            $description .= ' | ' . $params['delivery_data']->delivery_point_name;
+        if (in_array($code, $this->getDeliveryMethodsRequiredDeliveryPointName())) {
+            switch ($code){
+                case Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_INPOST_LOCKER:
+                    $description .= 'Symbol paczkomatu InPost:' . $params['delivery_data']->delivery_point_name;
+                    break;
+                case Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_PWR_LOCKER:
+                    $description .= 'Paczka w Ruchu punkt ID:' . $params['delivery_data']->delivery_point_name;
+                    break;
+
+            }
+        }
 
         return $description;
     }
@@ -227,7 +236,6 @@ class ZolagoOs_OrdersExport_Model_Export_Order
             $deliveryAddress->delivery_zip_code,
             $deliveryAddress->delivery_city,
             $deliveryAddress->delivery_street,
-            $deliveryAddress->phone,
         );
 
         return implode(' ', $result);
@@ -265,24 +273,13 @@ class ZolagoOs_OrdersExport_Model_Export_Order
 
         //NIP
         $result[] = "Delivery Data:".$this->_generateCustomerDeliveryAddress($params);
+        $result[] = "Telephone:".$deliveryAddress->phone;
         $result[] = "Invoice Data:".$this->_generateCustomerInvoiceAddress($params);
         $result[]= 'Payment Data:'.$this->paymentMethodDescription($params['payment_method']);
 
 
         //Delivery point name
         $result[] = $this->shippingMethodDescription($params);
-
-        if (in_array($code, $this->getDeliveryMethodsRequiredDeliveryPointName())) {
-            switch ($code){
-                case Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_INPOST_LOCKER:
-                    $result[] = 'Symbol paczkomatu InPost: ' . $params['delivery_data']->delivery_point_name;
-                    break;
-                case Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_PWR_LOCKER:
-                    $result[] = 'Paczka w Ruchu punkt ID: ' . $params['delivery_data']->delivery_point_name;
-                    break;
-
-            }
-        }
 
 
         return implode(";", $result);
@@ -296,9 +293,9 @@ class ZolagoOs_OrdersExport_Model_Export_Order
 
         $orders = [
             [
-                $this->toWindows1250($params['customer_email']),                                                  //(A)DKONTRAH        : String; - identyfikator kontrahenta (numer) (15)
+                $this->toWindows1250($params['customer_email']),                            //(A)DKONTRAH        : String; - identyfikator kontrahenta (numer) (15)
                 $params['order_date'],                                                      //(B)DATA            : TDateTime; - Data dokumentu
-                $this->toWindows1250(self::ORDER_DOC_NAME_ZA),                                                    //(C)NAZWADOK        : String; - nazwa dokumentu (10)  opis dozwolonych wartośći w pkt 7.
+                $this->toWindows1250(self::ORDER_DOC_NAME_ZA),                              //(C)NAZWADOK        : String; - nazwa dokumentu (10)  opis dozwolonych wartośći w pkt 7.
                 $params['order_id'],                                                        //(D)NRDOK           : String; - numer dokumentu (25)
                 '',                                                                         //(E)TERMIN          : TDateTime; - termin płatności (??????????)
                 $this->toWindows1250($this->paymentMethodDescription($params['payment_method'])),                 //(F)PLATNOSC        : String; - sposób płatności (35)
@@ -332,13 +329,13 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         $orderCustomerLine = [
             [
                 '',                                                             //(A)IDKONTRAH w kontrahent.txt jako pusta kolumna
-                $params['customer_email'],                                      //(B)NAZWASKR w kontrahent.txt jako adresu e-mail płatnika (ten sam co w dok.txt)
-                $this->_generateCustomerData($params),                          //(C)NAZWADL w kontrahent (to już dane płatnika konta jeśli potrzeba to oddzielone ";"
+                $this->toWindows1250($params['customer_email']),                                      //(B)NAZWASKR w kontrahent.txt jako adresu e-mail płatnika (ten sam co w dok.txt)
+                $this->toWindows1250($this->_generateCustomerData($params)),                          //(C)NAZWADL w kontrahent (to już dane płatnika konta jeśli potrzeba to oddzielone ";"
                 $nip,                                                           //(D)NIP
-                $deliveryAddress->delivery_city,                                //(E)MIEJSCOWOSC
+                $this->toWindows1250($deliveryAddress->delivery_city),                                //(E)MIEJSCOWOSC
                 $deliveryAddress->delivery_zip_code,                            //(F)KODPOCZTA
-                $deliveryAddress->delivery_city,                                //(G)POCZTA
-                $deliveryAddress->delivery_street,                              //(H)ULICA
+                $this->toWindows1250($deliveryAddress->delivery_city),                                //(G)POCZTA
+                $this->toWindows1250($deliveryAddress->delivery_street),                              //(H)ULICA
                 '',                                                             //(I)NRDOMU
                 '',                                                             //(J)NRLOKALU
                 '',                                                             //(K)puste
@@ -369,7 +366,7 @@ class ZolagoOs_OrdersExport_Model_Export_Order
                     'N',                                                                                                //PROCBONIF     : Currency; - bonifikata - liczone zgodnie z definicją dokumentu
                     'N',                                                                                                //CENA_UZG      : Boolean; - czy cena jest uzgodniona
                     'T',                                                                                                //CENA_BRUTTO   : Boolean; - czy cena jest od brutto (domyślnie FALSE)
-                    $orderItem['item_name'] . ' ' . $params['delivery_data']->delivery_point_name,                                                                            //Uwagi         : String; - uwagi;
+                    $this->toWindows1250($orderItem['item_name']),                                                                            //Uwagi         : String; - uwagi;
 
                     '',                                                                                                 //Cecha_1       : String; - wartość dla cechy 1;
                     '',                                                                                                 //Cecha_2       : String; - wartość dla cechy 1;
@@ -389,7 +386,7 @@ class ZolagoOs_OrdersExport_Model_Export_Order
                     $this->getDiscountPercent($orderItem),                                                              //PROCBONIF     : Currency; - bonifikata - liczone zgodnie z definicją dokumentu
                     'N',                                                                                                //CENA_UZG      : Boolean; - czy cena jest uzgodniona
                     'T',                                                                                                //CENA_BRUTTO   : Boolean; - czy cena jest od brutto (domyślnie FALSE)
-                    $orderItem['item_name'],                                                                            //Uwagi         : String; - uwagi;
+                    '',                                                                                                 //Uwagi         : String; - uwagi;
 
                     '',                                                                                                 //Cecha_1       : String; - wartość dla cechy 1;
                     '',                                                                                                 //Cecha_2       : String; - wartość dla cechy 1;
@@ -433,6 +430,10 @@ class ZolagoOs_OrdersExport_Model_Export_Order
             $this->pushOrderLineToFile($orders);
             $this->pushOrderItemsLineToFile($orderItemsLine);
             $this->pushOrderCustomerFile($orderCustomerLine);
+
+            Mage::log($orders);
+            Mage::log($orderItemsLine);
+            Mage::log($orderCustomerLine);
 
             $response = TRUE;
         } catch (Exception $e) {
