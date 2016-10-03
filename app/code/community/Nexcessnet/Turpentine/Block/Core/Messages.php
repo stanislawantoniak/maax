@@ -56,6 +56,7 @@ class Nexcessnet_Turpentine_Block_Core_Messages extends Mage_Core_Block_Messages
         'review',
         'wishlist',
         'core',
+        'newsletter'
     );
 
     /**
