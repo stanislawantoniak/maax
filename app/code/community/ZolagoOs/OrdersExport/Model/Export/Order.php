@@ -436,10 +436,6 @@ class ZolagoOs_OrdersExport_Model_Export_Order
             $this->pushOrderItemsLineToFile($orderItemsLine);
             $this->pushOrderCustomerFile($orderCustomerLine);
 
-            Mage::log($orders);
-            Mage::log($orderItemsLine);
-            Mage::log($orderCustomerLine);
-
             $response = TRUE;
         } catch (Exception $e) {
             $response = FALSE;
