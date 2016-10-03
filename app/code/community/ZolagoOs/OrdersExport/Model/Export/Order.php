@@ -263,14 +263,14 @@ class ZolagoOs_OrdersExport_Model_Export_Order
             $result[] = 'Firma: ' . $deliveryAddress->delivery_company_name;
 
         //NIP
-        $invoiceData = $params['invoice_data'];
-        $invoiceRequired = (bool)$invoiceData->invoice_required;
-
-        if ($invoiceRequired && !empty($invoiceData->invoice_address->invoice_tax_id))
-            $result[] = 'NIP: ' . $invoiceData->invoice_address->invoice_tax_id;
+        $result[] = "Delivery Data:".$this->_generateCustomerDeliveryAddress($params);
+        $result[] = "Invoice Data:".$this->_generateCustomerInvoiceAddress($params);
+        $result[]= 'Payment Data:'.$this->paymentMethodDescription($params['payment_method']);
 
 
         //Delivery point name
+        $result[] = $this->shippingMethodDescription($params);
+
         if (in_array($code, $this->getDeliveryMethodsRequiredDeliveryPointName())) {
             switch ($code){
                 case Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_INPOST_LOCKER:
@@ -308,11 +308,11 @@ class ZolagoOs_OrdersExport_Model_Export_Order
                 ($invoiceRequired) ? self::ORDER_DOC_NAME_FA : self::ORDER_DOC_NAME_PAR,    //(K)DOT_NAZWADOK    : String; - nazwa dokumentu powiązanego (10) (np KP do FA) (??????????)
                 '',                                                                         //(L)DOT_NRDOK       : String; - numer dokumentu powiązanego (25) (np KP do FA)
                 '',                                                                         //(M)ANULOWANY       : Boolean; - czy dokument został anulowany
-                $this->toWindows1250($this->_getOrderDetails($params)),                                            //(N)UWAGI           : String; - (Memo) Uwagi do dokumentu (??????????)
-                $this->_generateCustomerDeliveryAddress($params),                           //(O)NRZLEC          : String; - numer zlecenia (20)
-                $this->_generateCustomerInvoiceAddress($params),                            //(P)CECHA_1         : String; - Cecha 1 (35)
-                $this->paymentMethodDescription($params['payment_method']),                 //(Q)CECHA_2         : String; - Cecha 2 (35)
-                $this->shippingMethodDescription($params),                                  //(R)CECHA_3         : String; - Cecha 3 (35)
+                $this->toWindows1250($this->_getOrderDetails($params)),                     //(N)UWAGI           : String; - (Memo) Uwagi do dokumentu (??????????)
+                '',                                                                         //(O)NRZLEC          : String; - numer zlecenia (20)
+                '',                                                                         //(P)CECHA_1         : String; - Cecha 1 (35)
+                '',                                                                         //(Q)CECHA_2         : String; - Cecha 2 (35)
+                '',                                                                         //(R)CECHA_3         : String; - Cecha 3 (35)
                 '',                                                                         //(S)IDKONTRAHODB    : String; - identyfikator kontrahenta odbierającego dokument (numer) (15)
                 '',                                                                         //(T)DATAOBOW        : TDateTime; - data obowiązywania zamówienia
                 '',                                                                         //(U)CECHA_4         : String; - Cecha 4 (35)
