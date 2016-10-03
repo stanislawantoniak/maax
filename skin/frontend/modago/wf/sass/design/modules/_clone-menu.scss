@@ -19,6 +19,9 @@
         @include linearGradient($colorMainMenuSubItemGradientStart,$colorMainMenuSubItemGradientEnd);
         @include transition(all 0.2s ease-in-out);
         width: 860px;
+        @media (min-width: $screen-xs-max) and (max-width: $screen-md-min) {
+            width: 90%;
+        }
         .menu-3columns {
             padding: 0;
             .menus-column {

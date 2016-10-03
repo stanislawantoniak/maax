@@ -1,37 +1,35 @@
 #clone_submenu {
     ul {
-        position:relative !important;
+        position: relative !important;
         margin: 0px;
-        padding:47px 0;
+        padding: 47px 0;
         border: none;
-            > li {
-                > a {
-                   padding:6px 15px; 
-                }
+        @media (min-width: $screen-xs-max) and (max-width: $screen-md-min) {
+            padding-bottom: 10px;
+        }
+        > li {
+            > a {
+                padding: 6px 15px;
             }
-            dl {
-                @include max-screen($screen-sm-max) {
-                      width:155px;
-                }
-                dt {
-                    margin-bottom:10px;
-                }
-                dd {
-                    width: 85%;
-                    margin-bottom:10px;
-                }
-           
+        }
+        dl {
+
+            dt {
+                margin-bottom: 10px;
+            }
+            dd {
+                width: 85%;
+                margin-bottom: 10px;
+            }
 
         }
-    //END UL
+        //END UL
     }
 
     .media-column {
-        img {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-        }
+        position: absolute;
+        bottom: 0;
+        right: 0;
     }
-// END CLONE MENU
+    // END CLONE MENU
 } 
