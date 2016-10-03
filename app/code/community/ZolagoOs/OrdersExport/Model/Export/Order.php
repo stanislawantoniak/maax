@@ -264,7 +264,6 @@ class ZolagoOs_OrdersExport_Model_Export_Order
 
         $result[] = $this->_generateCustomerFLName($params);
 
-        $code = $params['delivery_method'];
         $deliveryAddress = $params['delivery_data']->delivery_address;
 
         //Company
@@ -274,7 +273,13 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         //NIP
         $result[] = "Delivery Data:".$this->_generateCustomerDeliveryAddress($params);
         $result[] = "Telephone:".$deliveryAddress->phone;
-        $result[] = "Invoice Data:".$this->_generateCustomerInvoiceAddress($params);
+
+        $invoiceAddress = $this->_generateCustomerInvoiceAddress($params);
+
+        if(!empty($invoiceAddress)){
+            $result[] = "Invoice Data:".$this->_generateCustomerInvoiceAddress($params);
+        }
+
         $result[]= 'Payment Data:'.$this->paymentMethodDescription($params['payment_method']);
 
 
