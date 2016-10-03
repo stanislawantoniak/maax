@@ -1,6 +1,4 @@
-
 /* CLONE MENU */
-
 #clone_submenu {
     background-color: transparent;
     font-family: $fontOpen;
@@ -24,22 +22,16 @@
         }
         .menu-3columns {
             padding: 0;
+            @media (min-width: $screen-xs-max) and (max-width: $screen-md-min) {
+                padding-bottom: 10px;
+            }
             .menus-column {
                 margin-top: 36px;
             }
-            .media-column {
 
-            }
         }
     }
 
-    .view-all-category {
-        font-size: 14px;
-        text-transform: lowercase;
-        color:$color_737373;
-        text-decoration: underline;
-        
-    }
     ul {
         box-shadow:none; 
         border: none;
@@ -108,32 +100,6 @@
                     position: absolute;
                 }
 
-            }
-
-        }
-        a.closeSubMenu:link,
-        a.closeSubMenu:visited {
-            border-radius:0;
-            cursor: pointer;
-            font-style: normal;
-            outline:none;
-            text-align:center;
-            border:none;
-            background:url('../images/sprites/sprite_clear.png') no-repeat 0 -1px !important;
-            line-height: 25px;
-            color:$gray-dark !important;
-            text-transform: uppercase;
-            font-size:12px;
-
-            &:hover {
-                background-position:0 -30px !important;
-                color:$color_fff !important;
-                outline:none !important;
-            }
-            &:active {
-                background-position:0 -58px !important;
-                outline:none;
-                color: $colorLinkHover !important;
             }
 
         }

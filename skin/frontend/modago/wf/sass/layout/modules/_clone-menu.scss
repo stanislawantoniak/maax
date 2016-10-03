@@ -4,9 +4,6 @@
         margin: 0px;
         padding: 47px 0;
         border: none;
-        @media (min-width: $screen-xs-max) and (max-width: $screen-md-min) {
-            padding-bottom: 10px;
-        }
         > li {
             > a {
                 padding: 6px 15px;
@@ -18,8 +15,13 @@
                 margin-bottom: 10px;
             }
             dd {
-                width: 85%;
+
                 margin-bottom: 10px;
+
+                //width: 85%;
+                //@media (min-width: $screen-xs-max) and (max-width: $screen-md-min) {
+                //    width: 99%;
+                //}
             }
 
         }
@@ -27,9 +29,7 @@
     }
 
     .media-column {
-        position: absolute;
-        bottom: 0;
-        right: 0;
+
     }
     // END CLONE MENU
 } 

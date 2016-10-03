@@ -10,8 +10,8 @@ $sizeTableBlocks = array(
 <ul class="menu-3columns">
     <li>
         <div class="clearfix">
-            <div class="col-md-9 menus-column" style="margin-bottom: 20px;">
-                <div class="box col-sm-3 col-xs-6 col-md-4 col-lg-4">
+            <div class="col-md-9 col-sm-12 menus-column" style="margin-bottom: 20px;">
+                <div class="box col-sm-4 col-xs-6 col-md-4 col-lg-4">
                     <dl>
                         <dt><a href="#" rel="category" data-description="KATEGORIA">KATEGORIA</a></dt>
                         <dd><a href="/dziewczynka-t-shirty-koszulki" data-description="T-shirty i bluzki">Bluzki i tuniki</a></dd>
@@ -24,7 +24,7 @@ $sizeTableBlocks = array(
                         <dd><a href="/dziewczynka-kamizelki-bezrekawniki" data-description="Kamizelki i bezrękawniki">Kamizelki i bezrękawniki</a></dd>
                     </dl>
                 </div>
-                <div class="box col-sm-3 col-xs-6 col-md-4 col-lg-4">
+                <div class="box col-sm-4 col-xs-6 col-md-4 col-lg-4">
                         <dl style="width: 240px;">
                         <br/>
                         <dd></dd>
@@ -36,7 +36,7 @@ $sizeTableBlocks = array(
                         <dd><a href="/dziewczynka-okrycia-glowy" data-description="Okrycia głowy">Dodatki</a></dd>
                     </dl>
                 </div>
-                <div class="box col-sm-3 col-xs-6 col-md-4 col-lg-4" style="padding-left: 90px;">
+                <div class="box col-sm-4 col-xs-6 col-md-4 col-lg-4" style="padding-left: 90px;">
                     <dl>
                         <dt><a href="#" rel="category" data-description="Rozmiary">Rozmiary</a></dt>
                         <dd><a href="" data-description="62 - 86 cm">62 - 98 cm</a></dd>
@@ -45,8 +45,8 @@ $sizeTableBlocks = array(
                     </dl>
                 </div>
             </div>
-            <div class="col-md-3 media-column hidden-xs hidden-sm hidden-xs hidden-sm">
-                <img src="/skin/frontend/modago/wf/images/wojcik-menu-dziewczynka.png" alt=""/>
+            <div class="col-md-3 media-column hidden-xs hidden-sm hidden-xs hidden-sm" style="position: absolute;bottom: 0;right: 0;">
+                <img src="/skin/frontend/modago/wf/images/dziewczynka-foto.png" alt=""/>
             </div>
         </div>
     </li>
@@ -64,8 +64,8 @@ EOD
 <ul class="menu-3columns">
     <li>
         <div class="clearfix">
-            <div class="col-md-9 menus-column" style="margin-bottom: 20px;">
-                <div class="box col-sm-3 col-xs-6 col-md-4 col-lg-4">
+            <div class="col-md-9 col-sm-12 menus-column" style="margin-bottom: 20px;">
+                <div class="box col-sm-4 col-xs-6 col-md-4 col-lg-4">
                     <dl>
                         <dt><a href="#" rel="category" data-description="KATEGORIA">KATEGORIA</a></dt>
                         <dd><a href="/chlopiec-t-shirty-koszulki" data-description="T-shirty, koszulki">T-shirty, koszulki</a></dd>                        
@@ -77,7 +77,7 @@ EOD
                         <dd><a href="/chlopiec-marynarki" data-description="Marynarki">Marynarki</a></dd>
                     </dl>
                 </div>
-                <div class="box col-sm-3 col-xs-6 col-md-4 col-lg-4" style="padding-left: 40px;">
+                <div class="box col-sm-4 col-xs-6 col-md-4 col-lg-4" style="padding-left: 40px;">
                     <dl>
                     <br>
                         <dd></dd>
@@ -89,7 +89,7 @@ EOD
                         <dd><a href="/chlopiec-okrycia-glowy" data-description="Okrycia głowy">Dodatki</a></dd>
                     </dl>
                 </div>
-                <div class="box col-sm-3 col-xs-6 col-md-4 col-lg-4" style="padding-left: 90px;">
+                <div class="box col-sm-4 col-xs-6 col-md-4 col-lg-4" style="padding-left: 90px;">
                     <dl>
                         <dt><a href="#" rel="category" data-description="Rozmiary">Rozmiary</a></dt>
                         <dd><a href="" data-description="62 - 86 cm">62 - 98 cm</a></dd>
@@ -99,7 +99,7 @@ EOD
                 </div>
             </div>
             <div class="col-md-3 media-column hidden-xs hidden-sm hidden-xs hidden-sm">
-                <img src="/skin/frontend/modago/wf/images/wojcik-menu-chlopiec.png" alt=""/>
+                <img src="/skin/frontend/modago/wf/images/chlopiec-foto.png" alt=""/>
             </div>
         </div>
     </li>
