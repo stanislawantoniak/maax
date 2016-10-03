@@ -108,11 +108,23 @@
             </action>
         </reference>
 
+        <!--<reference name="footer">-->
+            <!--<action method="setEsiOptions">-->
+                <!--<params>-->
+                    <!--<access>public</access>-->
+                    <!--<ttl>3600</ttl> &lt;!&ndash;1h&ndash;&gt;-->
+                <!--</params>-->
+            <!--</action>-->
+        <!--</reference>-->
+
         <reference name="footer">
             <action method="setEsiOptions">
                 <params>
-                    <access>public</access>
-                    <ttl>3600</ttl> <!--1h-->
+                    <access>private</access>
+                    <flush_events>
+                        <core_session_abstract_add_message/>
+                    </flush_events>
+                    <only_cache_if>no_text</only_cache_if>
                 </params>
             </action>
         </reference>
