@@ -127,7 +127,7 @@
 
             <core>
                 <rewrite>
-                <!--<messages>Nexcessnet_Turpentine_Block_Core_Messages</messages>-->
+                <messages>Nexcessnet_Turpentine_Block_Core_Messages</messages>
                 </rewrite>
             </core>
 
