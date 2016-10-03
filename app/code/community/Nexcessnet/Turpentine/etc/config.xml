@@ -124,13 +124,13 @@
             see observer_esi::addMessagesBlockRewrite . Leaving this rewrite
             here but commented out for clarity
             -->
-
+            <!--
             <core>
                 <rewrite>
-                <messages>Nexcessnet_Turpentine_Block_Core_Messages</messages>
+                    <messages>Nexcessnet_Turpentine_Block_Core_Messages</messages>
                 </rewrite>
             </core>
-
+            -->
             <!--
             Rewrite the poll ActivePoll block, as it uses its own custom 
             template setting methods.
