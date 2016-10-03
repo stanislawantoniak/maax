@@ -1,0 +1,46 @@
+<?php /* @var $this Zolago_Modago_Block_Sales_Order_Item_Renderer_Default */ ?>
+<?php
+$_item = $this->getItem();
+
+$_itemPriceInclTax = (float)$_item->getPriceInclTax();
+$_rowPriceInclTax = (float)$_item->getRowTotalInclTax();
+$_discountPercent = (float)$_item->getDiscountPercent();
+$_discountAmount = (float)$_item->getDiscountAmount();
+$_qty = round($_item->getQty());
+
+$_productMsrpPrice = $_itemPriceInclTax;
+if ($_item->getProduct()) {
+	$_productMsrpPrice = $_item->getProduct()->getPrice();
+}
+?>
+<tr>
+	<td colspan="2" style="padding-bottom:0" class="productNameColumn">
+		<?php echo $this->escapeHtml($_item->getName()); ?>
+	</td>
+	<td rowspan="2">
+		<?php echo str_replace(" ","&nbsp;",Mage::helper("core")->formatPrice($_itemPriceInclTax * $_qty, false)); ?>
+	</td>
+</tr>
+<tr>
+	<td width="50" style="padding-top:0;" class="imgColumn">
+		<img src="cid:<?php echo $_item->getId() ?>.jpg"
+		     alt="<?php echo $this->escapeHtml($this->getProductName()) ?>"
+		     width="53" height="69"/>
+	</td>
+	<td style="padding-top:0">
+		<?php if ($_options = $this->getOptionList()): ?>
+			<?php foreach ($_options as $_option) : ?>
+				<?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
+				<span style="font-size: 11px">
+					<?php echo $this->escapeHtml($_option['label']) ?>: <?php echo $this->escapeHtml($_formatedOptionValue['value']); ?>
+				</span><br/>
+			<?php endforeach; ?>
+		<?php endif; ?>
+		<span style="font-size: 11px">
+			Cena: <?php echo str_replace(" ","&nbsp;",Mage::helper("core")->formatPrice($_itemPriceInclTax, false)); ?>
+		</span><br/>
+		<span style="font-size: 11px">
+			Ilość: <?php echo $_qty; ?>
+		</span>
+	</td>
+</tr>
