@@ -227,6 +227,7 @@ class ZolagoOs_OrdersExport_Model_Export_Order
             $deliveryAddress->delivery_zip_code,
             $deliveryAddress->delivery_city,
             $deliveryAddress->delivery_street,
+            $deliveryAddress->phone,
         );
 
         return implode(' ', $result);
