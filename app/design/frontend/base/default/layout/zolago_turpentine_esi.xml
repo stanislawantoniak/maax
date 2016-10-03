@@ -120,11 +120,10 @@
         <reference name="footer">
             <action method="setEsiOptions">
                 <params>
-                    <access>private</access>
-                    <flush_events>
-                        <core_session_abstract_add_message/>
-                    </flush_events>
-                    <only_cache_if>no_text</only_cache_if>
+                    <params>
+                        <access>private</access>
+                        <only_cache_if>no_text</only_cache_if>
+                    </params>
                 </params>
             </action>
         </reference>
