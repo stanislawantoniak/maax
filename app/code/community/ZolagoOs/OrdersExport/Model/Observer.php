@@ -75,7 +75,12 @@ class ZolagoOs_OrdersExport_Model_Observer
 
         $model->setVendor($vendor);
         $model->setApiConnector($this->_getGHAPIConnector());
-        $model->sync();
+        $ordersExported = $model->sync();
+
+        if(!empty($ordersExported)){
+            $this->fileLog("ORDERS: " . implode(',', $ordersExported). " WAS EXPORTED", Zend_Log::INFO);
+        }
+
     }
 
     public function getHelper()

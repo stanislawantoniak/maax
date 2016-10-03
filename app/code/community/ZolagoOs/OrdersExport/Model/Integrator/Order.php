@@ -32,32 +32,31 @@ class ZolagoOs_OrdersExport_Model_Integrator_Order
      */
     public function sync()
     {
+        $ordersExported = [];
         $orders = $this->getGhApiVendorOrders();
 
         /* @var $exportConnector ZolagoOs_OrdersExport_Model_Export_Order */
         $exportConnector = $this->getExportConnector();
 
         if (!$orders->status)
-            return $this;
+            return $ordersExported;
 
         $ordersList = $orders->list;
 
         if (empty($ordersList))
-            return $this;
+            return $ordersExported;
 
         foreach ($this->prepareOrderList($ordersList) as $item) {
             $response = $exportConnector->addOrders((array)$item);
 
             if ($response->status){
                 $this->addOrderToConfirmMessage($item->order_id);
-                $this->fileLog("ORDER " . $item->order_id. " WAS EXPORTED", Zend_Log::INFO);
+                $ordersExported[] = $item->order_id;
             }
-
-
         }
 
         $this->confirmOrderMessages($ordersList);
-
+        return $ordersExported;
     }
 
 
