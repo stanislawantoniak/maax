@@ -1825,7 +1825,7 @@
       </action>
     </reference>
     <reference name="content">
-      <block type="core/template" name="contact.gallery" template="help/contact.phtml"/>
+      <block type="zolagoudqa/contact_vendor" name="contact.vendor" template="help/contact-vendor.phtml"/>
       <block type="core/template" name="messages.fix" template="help/messagesfix.phtml"/>
     </reference>
   </help_contact_index>
