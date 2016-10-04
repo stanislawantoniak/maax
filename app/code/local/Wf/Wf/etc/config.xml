@@ -57,7 +57,14 @@
 					<frontName>wf</frontName>
 				</args>
 			</zolagomodago>
-		</routers>
+            <mypromotions>
+                <args>
+                    <modules>
+                        <wf_wf before="Zolago_SalesRule">Wf_Wf</wf_wf>
+                    </modules>
+                </args>
+            </mypromotions>
+        </routers>
 		<translate>
 			<modules>
 				<Wf_Wf>
