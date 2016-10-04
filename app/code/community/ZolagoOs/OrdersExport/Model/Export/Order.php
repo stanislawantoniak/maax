@@ -288,61 +288,61 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         $orders = [
             [
 
-                //(A)DKONTRAH        : String; - identyfikator kontrahenta (numer) (15)
+                //1.DKONTRAH        : String; - identyfikator kontrahenta (numer) (15)
                 $this->getHelper()->toWindows1250($params['customer_email']),
 
-                //(B)DATA            : TDateTime; - Data dokumentu
+                //2.DATA            : TDateTime; - Data dokumentu
                 $params['order_date'],
 
-                //(C)NAZWADOK        : String; - nazwa dokumentu (10)  opis dozwolonych wartośći w pkt 7.
+                //3.NAZWADOK        : String; - nazwa dokumentu (10)  opis dozwolonych wartośći w pkt 7.
                 $this->getHelper()->toWindows1250(self::ORDER_DOC_NAME_ZA),
 
-                //(D)NRDOK           : String; - numer dokumentu (25)
+                //4.NRDOK           : String; - numer dokumentu (25)
                 $params['order_id'],
 
-                //(E)TERMIN          : TDateTime; - termin płatności
+                //5.TERMIN          : TDateTime; - termin płatności
                 '',
 
-                //(F)PLATNOSC        : String; - sposób płatności (35)
+                //6.PLATNOSC        : String; - sposób płatności (35)
                 $this->getHelper()->toWindows1250($this->paymentMethodDescription($params['payment_method'])),
 
-                //(G)SUMA            : Currency; - Wartość brutto dokumentu - liczone zgodnie z definicją dokumentu
+                //7.SUMA            : Currency; - Wartość brutto dokumentu - liczone zgodnie z definicją dokumentu
                 $this->getHelper()->formatToDocNumber($params['order_total']),
 
-                //(H)ILEPOZ          : Integer; - ilość pozycji
+                //8.ILEPOZ          : Integer; - ilość pozycji
                 count($params['order_items']),
 
-                //(I)GOTOWKA         : Currency; - zapłata gotówkowa przyjęta na dokumencie
+                //9.GOTOWKA         : Currency; - zapłata gotówkowa przyjęta na dokumencie
                 0,
 
-                //(J)DOT_DATA        : TDateTime; - data dokumentu powiązanego (np KP do FA)
+                //10.DOT_DATA        : TDateTime; - data dokumentu powiązanego (np KP do FA)
                 '',
 
-                //(K)DOT_NAZWADOK    : String; - nazwa dokumentu powiązanego (10) (np KP do FA)
+                //11.DOT_NAZWADOK    : String; - nazwa dokumentu powiązanego (10) (np KP do FA)
                 ($invoiceRequired) ? self::ORDER_DOC_NAME_FA : self::ORDER_DOC_NAME_PAR,
 
-                //(L)DOT_NRDOK       : String; - numer dokumentu powiązanego (25) (np KP do FA)
+                //12.DOT_NRDOK       : String; - numer dokumentu powiązanego (25) (np KP do FA)
                 '',
 
-                //(M)ANULOWANY       : Boolean; - czy dokument został anulowany
+                //13.ANULOWANY       : Boolean; - czy dokument został anulowany
                 '',
 
-                //(N)UWAGI           : String; - (Memo) Uwagi do dokumentu
+                //14.UWAGI           : String; - (Memo) Uwagi do dokumentu
                 $this->getHelper()->toWindows1250($this->_getOrderDetails($params)),
 
 
-                '', //(O)NRZLEC          : String; - numer zlecenia (20)
-                '', //(P)CECHA_1         : String; - Cecha 1 (35)
-                '', //(Q)CECHA_2         : String; - Cecha 2 (35)
-                '', //(R)CECHA_3         : String; - Cecha 3 (35)
-                '', //(S)IDKONTRAHODB    : String; - identyfikator kontrahenta odbierającego dokument (numer) (15)
-                '', //(T)DATAOBOW        : TDateTime; - data obowiązywania zamówienia
-                '', //(U)CECHA_4         : String; - Cecha 4 (35)
-                '', //(V)CECHA_5         : String; - Cecha 5 (35)
-                '', //(W)IDKONTRAHDOST   : String; - identyfikator kontrahenta dostawcy - (numer) (15);
-                '', //(X)MAGAZYN         : String; - numer magazynu
-                '', //(Y)WYDRUKOWANY     : Boolean;- czy dokument był drukowany na zwykłej drukarce;
-                '', //(Z)ZAFISKALIZOWANY : Boolean; - czy dokument był zafiskalizowany - wydrukowany na drukarce fiskalnej (parametr brany pod uwagę tylko dla dokum. podlegających fiskalizacji);
+                '', //15.NRZLEC          : String; - numer zlecenia (20)
+                '', //16.CECHA_1         : String; - Cecha 1 (35)
+                '', //17.CECHA_2         : String; - Cecha 2 (35)
+                '', //18.CECHA_3         : String; - Cecha 3 (35)
+                '', //19.IDKONTRAHODB    : String; - identyfikator kontrahenta odbierającego dokument (numer) (15)
+                '', //20.DATAOBOW        : TDateTime; - data obowiązywania zamówienia
+                '', //21.CECHA_4         : String; - Cecha 4 (35)
+                '', //22.CECHA_5         : String; - Cecha 5 (35)
+                '', //23.IDKONTRAHDOST   : String; - identyfikator kontrahenta dostawcy - (numer) (15);
+                '', //24MAGAZYN         : String; - numer magazynu
+                '', //25.WYDRUKOWANY     : Boolean;- czy dokument był drukowany na zwykłej drukarce;
+                '', //26.ZAFISKALIZOWANY : Boolean; - czy dokument był zafiskalizowany - wydrukowany na drukarce fiskalnej (parametr brany pod uwagę tylko dla dokum. podlegających fiskalizacji);
             ]
         ];
 
