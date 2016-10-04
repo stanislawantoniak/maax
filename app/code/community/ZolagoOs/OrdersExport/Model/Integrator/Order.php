@@ -55,7 +55,7 @@ class ZolagoOs_OrdersExport_Model_Integrator_Order
             }
         }
 
-        $this->confirmOrderMessages($ordersList);
+        //$this->confirmOrderMessages($ordersList);
         return $ordersExported;
     }
 

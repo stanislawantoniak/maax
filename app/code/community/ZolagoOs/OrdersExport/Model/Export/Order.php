@@ -25,7 +25,7 @@ class ZolagoOs_OrdersExport_Model_Export_Order
     const ORDER_DELIVERY_CODE_PACZKOMAT_INPOST = 'WYS7';
 
 
-    const ORDEREXPORT_DELIMETR_ORDERINFO = ";";
+    const ORDEREXPORT_DELIMETR_ORDERINFO = "^";
 
 
     public function getDirectoryPath()
@@ -281,6 +281,10 @@ class ZolagoOs_OrdersExport_Model_Export_Order
 
     private function _createOrderLine($params)
     {
+
+        $invoiceData = $params['invoice_data'];
+        $invoiceRequired = (bool)$invoiceData->invoice_required;
+
         $orders = [
             [
 
