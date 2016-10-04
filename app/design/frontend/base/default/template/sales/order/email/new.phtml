@@ -24,7 +24,7 @@ foreach ($poList as $po): /** @var Zolago_Po_Model_Po $po */ ?>
 
     <div style="border-bottom:5px solid white;line-height: 1.4em;margin:0;padding:0">
         <?php echo $helper->__("Shop:"); ?> <?php echo $po->getVendorName(); ?> <?php echo $count >= 2 ? $helper->__("(Shipment %d of %d)", $i++, $count): ""; ?><br/>
-        <a href="<?php echo Mage::getUrl("help/contact/vendor", array(
+        <a href="<?php echo Mage::getUrl("help/contact/index", array(
             "vendor" => $po->getVendor()->getId(),
             "po"     => $po->getId(),
             "token"  => $po->getContactToken()
