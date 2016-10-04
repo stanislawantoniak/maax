@@ -100,7 +100,7 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         $code = $params['delivery_method'];
         $description = $this->shippingMethodsDescription()[Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_STANDARD_COURIER];
         if (isset($this->shippingMethodsDescription()[$code])) {
-            $description = $this->shippingMethodsDescription()[$code];
+            $description = "Delivery Method:" . $this->shippingMethodsDescription()[$code];
         }
 
         if (in_array($code, $this->getDeliveryMethodsRequiredDeliveryPointName())) {
