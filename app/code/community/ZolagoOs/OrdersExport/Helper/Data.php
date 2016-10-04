@@ -54,6 +54,7 @@ class ZolagoOs_OrdersExport_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function toWindows1250($text)
     {
+        $text = trim($text);
         return iconv('UTF-8', "Windows-1250", $text);
     }
 

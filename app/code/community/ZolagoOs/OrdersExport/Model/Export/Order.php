@@ -292,7 +292,7 @@ class ZolagoOs_OrdersExport_Model_Export_Order
                 $this->getHelper()->toWindows1250($params['customer_email']),
 
                 //2.DATA            : TDateTime; - Data dokumentu
-                $params['order_date'],
+                trim($params['order_date']),
 
                 //3.NAZWADOK        : String; - nazwa dokumentu (10)  opis dozwolonych wartośći w pkt 7.
                 $this->getHelper()->toWindows1250(self::ORDER_DOC_NAME_ZA),
