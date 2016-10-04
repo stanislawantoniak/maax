@@ -401,11 +401,11 @@ class ZolagoOs_OrdersExport_Model_Export_Order
                     'T',                                                                                                //8.CENA_BRUTTO   : Boolean; - czy cena jest od brutto (domyślnie FALSE)
                     $this->getHelper()->toWindows1250(trim($orderItem['item_name'])),                                   //9.Uwagi         : String; - uwagi;
                     '',                                                                                                 //10.Cecha_1       : String; - wartość dla cechy 1;
-                    ' ',                                                                                                //11.Cecha_2       : String; - wartość dla cechy 1;
-                    ' ',                                                                                                //12.Cecha_3       : String; - wartość dla cechy 1;
+                    '',                                                                                                //11.Cecha_2       : String; - wartość dla cechy 1;
+                    '',                                                                                                //12.Cecha_3       : String; - wartość dla cechy 1;
                     '',                                                                                                 //13.MAG_OZNNRWYDR : String; - z jakiego magazynu realizować daną pozycję (jako identyfikator podać pole "Oznaczenie na wygruku" magazynu);
                     '',                                                                                                 //14.DATA_WAZNOSCI : TDateTimw; - data ważności towaru;
-                    ' ',                                                                                                //15.STAWKAVATIDENT: String; - wymuszona stawka VAT dla pozycji, gdny nie wystepuje to pobierana jest z kartoteki na datę dokumentu;
+                    '',                                                                                                //15.STAWKAVATIDENT: String; - wymuszona stawka VAT dla pozycji, gdny nie wystepuje to pobierana jest z kartoteki na datę dokumentu;
                 );
             } else {
                 //Price
@@ -421,11 +421,11 @@ class ZolagoOs_OrdersExport_Model_Export_Order
                     'T',                                                                                                //8.CENA_BRUTTO   : Boolean; - czy cena jest od brutto (domyślnie FALSE)
                     '',                                                                                                 //9.Uwagi         : String; - uwagi;
                     '',                                                                                                 //10.Cecha_1       : String; - wartość dla cechy 1;
-                    ' ',                                                                                                //11.Cecha_2       : String; - wartość dla cechy 1;
-                    ' ',                                                                                                //12.Cecha_3       : String; - wartość dla cechy 1;
+                    '',                                                                                                //11.Cecha_2       : String; - wartość dla cechy 1;
+                    '',                                                                                                //12.Cecha_3       : String; - wartość dla cechy 1;
                     '',                                                                                                 //13.MAG_OZNNRWYDR : String; - z jakiego magazynu realizować daną pozycję (jako identyfikator podać pole "Oznaczenie na wygruku" magazynu);
                     '',                                                                                                 //14.DATA_WAZNOSCI : TDateTimw; - data ważności towaru;
-                    ' ',                                                                                                //15.STAWKAVATIDENT: String; - wymuszona stawka VAT dla pozycji, gdny nie wystepuje to pobierana jest z kartoteki na datę dokumentu;
+                    '',                                                                                                //15.STAWKAVATIDENT: String; - wymuszona stawka VAT dla pozycji, gdny nie wystepuje to pobierana jest z kartoteki na datę dokumentu;
                 );
 
             }
