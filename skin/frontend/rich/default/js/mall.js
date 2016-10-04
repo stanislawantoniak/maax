@@ -597,7 +597,8 @@ var Mall = {
     validateAddingToCart: function(id){
         jQuery("#qty-error").hide();
         var quantity =  jQuery("#product-options input[name=quantity]").val();
-        var attrId = jQuery("ul.selectboxit-options li.selectboxit-focus").attr('data-val');
+        var attrId = jQuery(".sizes-content select option:selected").val();
+
         if(!attrId){
             return false;
         }
