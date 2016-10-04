@@ -206,7 +206,7 @@ $_products = $_cache['products'];
 						Mall.translate.add("Available in several variants", "<?php echo Mage::helper('zolagosolrsearch')->__("Available in several variants"); ?>");
 						Mall.translate.add("Maximum quantity", "<?php echo Mage::helper('zolagosolrsearch')->__("Maximum quantity"); ?>");
 
-						Mall.initUrls("<?php echo Mage::getBaseUrl(); ?>", "<?php echo Mage::getUrl("/",array("_no_vendor"=>true)); ?>");
+						Mall.initUrls("<?php echo Mage::getBaseUrl(); ?>", "<?php echo Mage::getBaseUrl(); ?>");
 
 						<?php foreach ($_products as $product): ?>
 						Mall.wishlist.addProduct({
@@ -220,8 +220,8 @@ $_products = $_cache['products'];
 
 						jQuery(window).on("resize", function () {
 							jQuery("#items-product .name_product").each(function(){
-								let t = jQuery(this);
-								let height = t.height();
+								var t = jQuery(this);
+								var height = t.height();
 								t.height("auto");
 
 								if (!t.data("origText")) t.data("origText", t.text());

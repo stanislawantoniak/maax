@@ -1923,6 +1923,12 @@
         <name>breadcrumbs</name>
       </action>
     </reference>
+    <reference name="head">
+      <action method="addItem">
+        <type>skin_js</type>
+        <script>js/mall/listing.js</script>
+      </action>
+    </reference>
     <remove name="my.account.wrapper"/>
     <reference name="content">
       <block type="wishlist/customer_wishlist" name="customer.wishlist" template="wishlist/view.phtml">

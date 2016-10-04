@@ -1,8 +1,0 @@
-<?php $_rma   = $this->getRma() ?>
-<?php $_order = $this->getOrder() ?>
-<?php if ($_rma && $_order): ?>
-	<?php $i=0; foreach ($_rma->getAllItems() as $_item): ?>
-		<?php if($_item->getOrderItem()->getParentItem()) continue; else $i++; ?>
-		<?php echo $this->getItemHtml($_item) ?>
-	<?php endforeach; ?>
-<?php endif; ?>

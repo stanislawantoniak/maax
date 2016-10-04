@@ -32,18 +32,18 @@
     margin-top: 6px;
     padding:0 20px;
     @media (max-width: $screen-xs-max) {
-      padding: 0;
+      padding: 0 10px;
     }
   }
   .price {
-    padding:0 10px;
+    padding:0 20px;
     @media (max-width: $screen-xs-max) {
-      padding:0;
+      padding: 0 10px;
     }
     .col-price {
-      padding:0 10px;
+      padding:0 10px 0 0;
       @media (max-width: $screen-xs-max) {
-        padding:0;
+        padding: 0 10px;
       }
     }
     position:relative;
@@ -101,7 +101,7 @@
       position:relative;
       z-index: 900;
       cursor: pointer;
-      text-align: center;
+      text-align: right;
 
       padding: 8px 0;
 
@@ -111,6 +111,19 @@
 
         @media (max-width: 340px) {
           padding: 8px;
+        }
+
+        .desktop-view {
+          @media (max-width: 638px) {
+            display: none;
+          }
+        }
+
+        .mobile-view {
+          display: none;
+          @media (max-width: 638px) {
+            display: inline;
+          }
         }
       }
       .icoLike, &.liked .icoLike {

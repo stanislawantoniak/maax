@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<config>
-    <modules>
-        <Modago_Integrator>
-            <active>true</active>
-            <codePool>community</codePool>
-        </Modago_Integrator>
-    </modules>
-</config>

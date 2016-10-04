@@ -91,12 +91,14 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 				<!-- END:/ PRODUCT SHOP -->
 			</div>
 		</div>
-		<div id="product_long_box" class="col-xs-12">
-			<ul class="title_section">
+		<div id="product_long_box" class="col-sm-12 col-xs-12">
+			<ul class="title_section product_long_box_desktop" id="product_long_box_desktop">
 				<li>
 					<input type="radio" name="tabs" id="tab-1" checked>
-					<label for="tab-1"><?php echo $this->__("Product description"); ?><i class="fa"
-																						 aria-hidden="true"></i></label>
+					<label for="tab-1">
+						<?php echo $this->__("Product description"); ?>
+						<i class="fa" aria-hidden="true"></i>
+					</label>
 					<article class="content">
 						<div class="inner">
 							<div>
@@ -108,8 +110,9 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 												<strong><?php echo array_key_exists('label', $attr) ? $attr['label'] : ""; ?>
 													: </strong>
 												<?php if ($attr['code'] == "color"): ?>
-													<span
-														itemprop="color"><?php echo $this->escapeHtml($attr['value']); ?></span>
+													<span itemprop="color">
+														<?php echo $this->escapeHtml($attr['value']); ?>
+													</span>
 												<?php elseif ($attr['code'] == "manufacturer"): ?>
 													<?php
 													$vendorsCollection = Mage::getModel("udropship/vendor")->getCollection();
@@ -122,8 +125,10 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 													$brandShopUrl = Mage::helper("umicrosite")->getVendorUrl($brandShop);
 													?>
 													<?php if ($brandShopProductId == $brandShopId): ?>
-														<h3 class="itemprop-brand"><a
-																href="<?php echo $brandShopUrl; ?>"><?php echo $brandShopName; ?></a>
+														<h3 class="itemprop-brand">
+															<a href="<?php echo $brandShopUrl; ?>">
+																<?php echo $brandShopName; ?>
+															</a>
 														</h3>
 													<?php else: ?>
 														<?php echo $this->escapeHtml($attr['value']); ?>
@@ -167,8 +172,8 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 				if (!empty($funding)) : ?>
 					<li>
 						<input type="radio" name="tabs" id="tab-4">
-						<label for="tab-4"><?php echo $this->__("Bailout"); ?><i class="fa"
-																				 aria-hidden="true"></i></label>
+						<label for="tab-4"><?php echo $this->__("Bailout"); ?>
+							<i class="fa" aria-hidden="true"></i></label>
 						<article class="content">
 							<div class="inner">
 								<?php echo $funding; ?>
@@ -179,9 +184,116 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 				if (!empty($deliveryReturn)) : ?>
 					<li>
 						<input type="radio" name="tabs" id="tab-5">
-						<label for="tab-5"><?php echo $this->__("Delivery and returns"); ?><i class="fa"
-																							  aria-hidden="true"></i></label>
+						<label for="tab-5"><?php echo $this->__("Delivery and returns"); ?>
+							<i class="fa" aria-hidden="true"></i>
+						</label>
 						<article class="content">
+							<div class="inner">
+								<?php echo $deliveryReturn; ?>
+							</div>
+						</article>
+					</li>
+				<?php endif; ?>
+			</ul>
+			<ul class="title_section product_long_box_mobile" id="product_long_box_mobile">
+				<li>
+					<label data-toggle="collapse" data-parent="#product_long_box_mobile" href="#collapseOne">
+						<?php echo $this->__("Product description"); ?>
+						<i class="fa" aria-hidden="true"></i>
+					</label>
+					<article id="collapseOne" class="content collapse in">
+						<div class="inner">
+							<div>
+								<div itemprop="description"><?php echo $productDescription; ?></div>
+								<?php if (!empty($attributesData)) : ?>
+									<ul class="list">
+										<?php foreach ($attributesData as $attr) : ?>
+											<li>
+												<strong><?php echo array_key_exists('label', $attr) ? $attr['label'] : ""; ?>
+													: </strong>
+												<?php if ($attr['code'] == "color"): ?>
+													<span itemprop="color">
+														<?php echo $this->escapeHtml($attr['value']); ?>
+													</span>
+												<?php elseif ($attr['code'] == "manufacturer"): ?>
+													<?php
+													$vendorsCollection = Mage::getModel("udropship/vendor")->getCollection();
+													$vendorsCollection->addFieldToFilter("vendor_name", array("like" => $attr['value']));
+													$brand = $vendorsCollection->getFirstItem();
+
+													$brandShopId = $brand->getId();
+													$brandShop = Mage::helper('udropship')->getVendor($brandShopId);
+													$brandShopName = $brandShop->getData("vendor_name");
+													$brandShopUrl = Mage::helper("umicrosite")->getVendorUrl($brandShop);
+													?>
+													<?php if ($brandShopProductId == $brandShopId): ?>
+														<h3 class="itemprop-brand">
+															<a href="<?php echo $brandShopUrl; ?>">
+																<?php echo $brandShopName; ?>
+															</a>
+														</h3>
+													<?php else: ?>
+														<?php echo $this->escapeHtml($attr['value']); ?>
+													<?php endif; ?>
+												<?php else: ?>
+													<?php if (array_key_exists('value', $attr) && !is_array($attr['value'])) : ?>
+														<?php echo $this->escapeHtml($attr['value']); ?>
+													<?php else: ?>
+														<?php echo implode(",", $attr['value']); ?>
+													<?php endif; ?>
+												<?php endif; ?>
+											</li>
+										<?php endforeach; ?>
+									</ul>
+								<?php endif; ?>
+							</div>
+						</div>
+					</article>
+				</li>
+				<li>
+					<label data-toggle="collapse" data-parent="#product_long_box_mobile" href="#collapseTwo">
+						<?php echo $this->__("Review"); ?>
+						<i class="fa" aria-hidden="true"></i>
+					</label>
+					<article id="collapseTwo" class="content collapse">
+						<div class="inner">
+							<?php echo $this->getChildHtml('product.review.section'); ?>
+						</div>
+					</article>
+				</li>
+				<?php if (!empty($installments)) : ?>
+					<li>
+						<label data-toggle="collapse" data-parent="#product_long_box_mobile" href="#collapseThree">
+							<?php echo $this->__("Hire purchase"); ?>
+							<i class="fa" aria-hidden="true"></i>
+						</label>
+						<article id="collapseThree" class="content collapse">
+							<div class="inner">
+								<?php echo $installments; ?>
+							</div>
+						</article>
+					</li>
+				<?php endif;
+				if (!empty($funding)) : ?>
+					<li>
+						<label data-toggle="collapse" data-parent="#product_long_box_mobile" href="#collapseFour">
+							<?php echo $this->__("Bailout"); ?>
+							<i class="fa" aria-hidden="true"></i>
+						</label>
+						<article id="collapseFour" class="content collapse">
+							<div class="inner">
+								<?php echo $funding; ?>
+							</div>
+						</article>
+					</li>
+				<?php endif;
+				if (!empty($deliveryReturn)) : ?>
+					<li>
+						<label data-toggle="collapse" data-parent="#product_long_box_mobile" href="#collapseFive">
+							<?php echo $this->__("Delivery and returns"); ?>
+							<i class="fa" aria-hidden="true"></i>
+						</label>
+						<article id="collapseFive" class="content collapse">
 							<div class="inner">
 								<?php echo $deliveryReturn; ?>
 							</div>
@@ -191,17 +303,17 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 			</ul>
 		</div>
 	</div>
-	
+
 	<div id="product_additions_1" class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
 		<?php echo $this->getChildHtml('upsell'); ?>
 	</div>
-	
+
 	<?php echo $this->getChildHtml('blogposts'); ?>
-	
+
 	<div id="product_additions_2" class="col-xs-12">
 		<?php echo $this->getChildHtml('crosssell'); ?>
 	</div>
-	
+
 </div>
 
 <div class="modal bs-example-modal-lg" id="popup-after-add-to-cart" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
@@ -336,11 +448,54 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 
 	Mall.product.sizetable.setContent(<?php echo $this->getSizeTableForJs();?>);
 
-	var f = function () {
-		jQuery("#product_long_box").height(
-			jQuery("[name=tabs]:checked ~ article").height() + 180
-		);
+	var adjustDescriptionTabsHeight = function () {
+
+		if(Mall.isMobile(Mall.Breakpoint.sm))
+			return;
+
+		var articleHeight = jQuery("[name=tabs]:checked ~ article").height();
+		var newHeightDelta = 180;
+
+		jQuery("#product_long_box_desktop").height(articleHeight+newHeightDelta);
 	};
-	f();
-	jQuery("[name=tabs]").change(f);
+	adjustDescriptionTabsHeight();
+	jQuery("[name=tabs]").change(adjustDescriptionTabsHeight);
+
+	jQuery(window).resize(adjustDescriptionTabsHeight);
+
+
+
+
+	var adjustDescriptionTabsHeight2 = function () {
+		if(!Mall.isMobile(Mall.Breakpoint.sm))
+			return;
+
+		var articleVisible = jQuery("#product_long_box_mobile li article.collapse");
+
+		var visibleArticlesHeight = 0;
+		jQuery(articleVisible).each(function(i, article){
+			if(jQuery(article).hasClass("in")){
+				visibleArticlesHeight += jQuery(article).height();
+			}
+		});
+		var newHeightDelta = 250;
+
+		jQuery("#product_long_box_mobile").height(visibleArticlesHeight + newHeightDelta);
+	};
+	adjustDescriptionTabsHeight2();
+	jQuery(window).resize(adjustDescriptionTabsHeight2);
+
+	jQuery("#product_long_box_mobile").on('show.bs.collapse', function () {
+		adjustDescriptionTabsHeight2();
+	});
+	jQuery("#product_long_box_mobile").on('shown.bs.collapse', function () {
+		adjustDescriptionTabsHeight2();
+	});
+
+	jQuery("#product_long_box_mobile").on('hide.bs.collapse', function () {
+		adjustDescriptionTabsHeight2();
+	});
+	jQuery("#product_long_box_mobile").on('hidden.bs.collapse', function () {
+		adjustDescriptionTabsHeight2();
+	});
 </script>
