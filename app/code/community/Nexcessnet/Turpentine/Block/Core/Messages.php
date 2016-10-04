@@ -358,7 +358,7 @@ class Nexcessnet_Turpentine_Block_Core_Messages extends Mage_Core_Block_Messages
      * @return boolean
      */
     protected function _isEsiRequest() {
-        return is_a(Mage::app()->getRequest(),
+        return is_subclass_of(Mage::app()->getRequest(),
             'Nexcessnet_Turpentine_Model_Dummy_Request');
     }
 }
