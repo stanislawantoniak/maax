@@ -173,7 +173,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 	<?php echo $this->getChildHtml('catalog.product.related'); ?>
 	<!--        catalog.product.related end-->
 
-	<div id="product-options" class="size-box-bundle">
+	<div id="product-options" class="size-box-bundle clearfix">
 		<div class="block_to_size">
 			<?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
 				<?php if (!empty($productAttrs)) : ?>
@@ -233,7 +233,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 			<span class="temporary-absence-product"><?php echo $hlp->__("Product temporary unavailable"); ?></span>
 		</div>
 	<?php endif; ?>
-	<div id="short-description-footer" class="col-sm-12 clearfix" style="z-index: 1;">
+	<div id="short-description-footer">
 		<div id="same-collection-header"></div>
 		<div id="same-product-list"></div>
 	</div>
