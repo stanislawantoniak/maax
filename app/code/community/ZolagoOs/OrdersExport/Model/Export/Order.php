@@ -25,6 +25,9 @@ class ZolagoOs_OrdersExport_Model_Export_Order
     const ORDER_DELIVERY_CODE_PACZKOMAT_INPOST = 'WYS7';
 
 
+    const ORDEREXPORT_DELIMETR_ORDERINFO = ";";
+
+
     public function getDirectoryPath()
     {
         $directory = $this->getHelper()->getExportDirectory();
@@ -50,22 +53,7 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         return $this->getDirectoryPath() . DS . 'kontrahent.txt';
     }
 
-    /**
-     * @param $value
-     * @return string
-     */
-    public function formatToDocNumber($value)
-    {
-        //Format liczb    : bez separatora tysiêcy, separator dziesiêtny "."
-        $decPoint = '.';
-        $thousandsSep = '';
-        return number_format($value, 2, $decPoint, $thousandsSep);
-    }
 
-
-    public function toWindows1250($text){
-        return iconv('UTF-8',"Windows-1250",$text);
-    }
     /**
      * @return array
      */
@@ -116,12 +104,12 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         }
 
         if (in_array($code, $this->getDeliveryMethodsRequiredDeliveryPointName())) {
-            switch ($code){
+            switch ($code) {
                 case Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_INPOST_LOCKER:
-                    $description .= 'Symbol paczkomatu InPost:' . $params['delivery_data']->delivery_point_name;
+                    $description .= self::ORDEREXPORT_DELIMETR_ORDERINFO . 'Symbol paczkomatu InPost:' . $params['delivery_data']->delivery_point_name;
                     break;
                 case Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_PWR_LOCKER:
-                    $description .= 'Paczka w Ruchu punkt ID:' . $params['delivery_data']->delivery_point_name;
+                    $description .= self::ORDEREXPORT_DELIMETR_ORDERINFO . 'Paczka w Ruchu punkt ID:' . $params['delivery_data']->delivery_point_name;
                     break;
 
             }
@@ -184,7 +172,7 @@ class ZolagoOs_OrdersExport_Model_Export_Order
 
         $discountPercent = ($orderItem['item_discount'] * 100) / $orderItem['item_value_before_discount'];
 
-        return $this->formatToDocNumber($discountPercent);
+        return $this->getHelper()->formatToDocNumber($discountPercent);
     }
 
 
@@ -203,7 +191,7 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         );
 
 
-        return implode('; ', $info);
+        return implode(self::ORDEREXPORT_DELIMETR_ORDERINFO, $info);
     }
 
     /**
@@ -267,80 +255,112 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         $deliveryAddress = $params['delivery_data']->delivery_address;
 
         //Company
-        if(!empty($deliveryAddress->delivery_company_name))
+        if (!empty($deliveryAddress->delivery_company_name))
             $result[] = 'Firma: ' . $deliveryAddress->delivery_company_name;
 
         //NIP
-        $result[] = "Delivery Data:".$this->_generateCustomerDeliveryAddress($params);
-        $result[] = "Telephone:".$deliveryAddress->phone;
+        $result[] = "Delivery Data:" . $this->_generateCustomerDeliveryAddress($params);
+        $result[] = "Telephone:" . $deliveryAddress->phone;
 
         $invoiceAddress = $this->_generateCustomerInvoiceAddress($params);
 
-        if(!empty($invoiceAddress)){
-            $result[] = "Invoice Data:".$this->_generateCustomerInvoiceAddress($params);
-        }
+        //if (!empty($invoiceAddress)) {
+        $result[] = "Invoice Data:" . $this->_generateCustomerInvoiceAddress($params);
+        //}
 
-        $result[]= 'Payment Data:'.$this->paymentMethodDescription($params['payment_method']);
+        $result[] = 'Payment Data:' . $this->paymentMethodDescription($params['payment_method']);
 
 
         //Delivery point name
         $result[] = $this->shippingMethodDescription($params);
 
 
-        return implode(";", $result);
+        return implode(self::ORDEREXPORT_DELIMETR_ORDERINFO, $result);
     }
 
 
-    public function addOrders($params)
+    private function _createOrderLine($params)
     {
-        $invoiceData = $params['invoice_data'];
-        $invoiceRequired = (bool)$invoiceData->invoice_required;
-
         $orders = [
             [
-                $this->toWindows1250($params['customer_email']),                            //(A)DKONTRAH        : String; - identyfikator kontrahenta (numer) (15)
-                $params['order_date'],                                                      //(B)DATA            : TDateTime; - Data dokumentu
-                $this->toWindows1250(self::ORDER_DOC_NAME_ZA),                              //(C)NAZWADOK        : String; - nazwa dokumentu (10)  opis dozwolonych wartośći w pkt 7.
-                $params['order_id'],                                                        //(D)NRDOK           : String; - numer dokumentu (25)
-                '',                                                                         //(E)TERMIN          : TDateTime; - termin płatności (??????????)
-                $this->toWindows1250($this->paymentMethodDescription($params['payment_method'])),                 //(F)PLATNOSC        : String; - sposób płatności (35)
-                $this->formatToDocNumber($params['order_total']),                           //(G)SUMA            : Currency; - Wartość brutto dokumentu - liczone zgodnie z definicją dokumentu
-                count($params['order_items']),                                              //(H)ILEPOZ          : Integer; - ilość pozycji
-                0,                                                                          //(I)GOTOWKA         : Currency; - zapłata gotówkowa przyjęta na dokumencie (??????????)
-                '',                                                                         //(J)DOT_DATA        : TDateTime; - data dokumentu powiązanego (np KP do FA) (??????????)
-                ($invoiceRequired) ? self::ORDER_DOC_NAME_FA : self::ORDER_DOC_NAME_PAR,    //(K)DOT_NAZWADOK    : String; - nazwa dokumentu powiązanego (10) (np KP do FA) (??????????)
-                '',                                                                         //(L)DOT_NRDOK       : String; - numer dokumentu powiązanego (25) (np KP do FA)
-                '',                                                                         //(M)ANULOWANY       : Boolean; - czy dokument został anulowany
-                $this->toWindows1250($this->_getOrderDetails($params)),                     //(N)UWAGI           : String; - (Memo) Uwagi do dokumentu (??????????)
-                '',                                                                         //(O)NRZLEC          : String; - numer zlecenia (20)
-                '',                                                                         //(P)CECHA_1         : String; - Cecha 1 (35)
-                '',                                                                         //(Q)CECHA_2         : String; - Cecha 2 (35)
-                '',                                                                         //(R)CECHA_3         : String; - Cecha 3 (35)
-                '',                                                                         //(S)IDKONTRAHODB    : String; - identyfikator kontrahenta odbierającego dokument (numer) (15)
-                '',                                                                         //(T)DATAOBOW        : TDateTime; - data obowiązywania zamówienia
-                '',                                                                         //(U)CECHA_4         : String; - Cecha 4 (35)
-                '',                                                                         //(V)CECHA_5         : String; - Cecha 5 (35)
-                '',                                                                         //(W)IDKONTRAHDOST   : String; - identyfikator kontrahenta dostawcy - (numer) (15);
-                '',                                                                         //(X)MAGAZYN         : String; - numer magazynu
-                '',                                                                         //(Y)WYDRUKOWANY     : Boolean;- czy dokument był drukowany na zwykłej drukarce;
-                '',                                                                         //(Z)ZAFISKALIZOWANY : Boolean; - czy dokument był zafiskalizowany - wydrukowany na drukarce fiskalnej (parametr brany pod uwagę tylko dla dokum. podlegających fiskalizacji);
+
+                //(A)DKONTRAH        : String; - identyfikator kontrahenta (numer) (15)
+                $this->getHelper()->toWindows1250($params['customer_email']),
+
+                //(B)DATA            : TDateTime; - Data dokumentu
+                $params['order_date'],
+
+                //(C)NAZWADOK        : String; - nazwa dokumentu (10)  opis dozwolonych wartośći w pkt 7.
+                $this->getHelper()->toWindows1250(self::ORDER_DOC_NAME_ZA),
+
+                //(D)NRDOK           : String; - numer dokumentu (25)
+                $params['order_id'],
+
+                //(E)TERMIN          : TDateTime; - termin płatności
+                '',
+
+                //(F)PLATNOSC        : String; - sposób płatności (35)
+                $this->getHelper()->toWindows1250($this->paymentMethodDescription($params['payment_method'])),
+
+                //(G)SUMA            : Currency; - Wartość brutto dokumentu - liczone zgodnie z definicją dokumentu
+                $this->getHelper()->formatToDocNumber($params['order_total']),
+
+                //(H)ILEPOZ          : Integer; - ilość pozycji
+                count($params['order_items']),
+
+                //(I)GOTOWKA         : Currency; - zapłata gotówkowa przyjęta na dokumencie
+                0,
+
+                //(J)DOT_DATA        : TDateTime; - data dokumentu powiązanego (np KP do FA)
+                '',
+
+                //(K)DOT_NAZWADOK    : String; - nazwa dokumentu powiązanego (10) (np KP do FA)
+                ($invoiceRequired) ? self::ORDER_DOC_NAME_FA : self::ORDER_DOC_NAME_PAR,
+
+                //(L)DOT_NRDOK       : String; - numer dokumentu powiązanego (25) (np KP do FA)
+                '',
+
+                //(M)ANULOWANY       : Boolean; - czy dokument został anulowany
+                '',
+
+                //(N)UWAGI           : String; - (Memo) Uwagi do dokumentu
+                $this->getHelper()->toWindows1250($this->_getOrderDetails($params)),
+
+
+                '', //(O)NRZLEC          : String; - numer zlecenia (20)
+                '', //(P)CECHA_1         : String; - Cecha 1 (35)
+                '', //(Q)CECHA_2         : String; - Cecha 2 (35)
+                '', //(R)CECHA_3         : String; - Cecha 3 (35)
+                '', //(S)IDKONTRAHODB    : String; - identyfikator kontrahenta odbierającego dokument (numer) (15)
+                '', //(T)DATAOBOW        : TDateTime; - data obowiązywania zamówienia
+                '', //(U)CECHA_4         : String; - Cecha 4 (35)
+                '', //(V)CECHA_5         : String; - Cecha 5 (35)
+                '', //(W)IDKONTRAHDOST   : String; - identyfikator kontrahenta dostawcy - (numer) (15);
+                '', //(X)MAGAZYN         : String; - numer magazynu
+                '', //(Y)WYDRUKOWANY     : Boolean;- czy dokument był drukowany na zwykłej drukarce;
+                '', //(Z)ZAFISKALIZOWANY : Boolean; - czy dokument był zafiskalizowany - wydrukowany na drukarce fiskalnej (parametr brany pod uwagę tylko dla dokum. podlegających fiskalizacji);
             ]
         ];
 
-        $deliveryAddress = $params['delivery_data']->delivery_address;
+        return $orders;
+    }
 
+    private function _createCustomerLine($params)
+    {
+        $invoiceData = $params['invoice_data'];
+        $invoiceRequired = (bool)$invoiceData->invoice_required;
         $nip = ($invoiceRequired) ? $invoiceData->invoice_address->invoice_tax_id : '';
-
+        $deliveryAddress = $params['delivery_data']->delivery_address;
         $orderCustomerLine = [
             [
                 '',                                                             //(A)IDKONTRAH w kontrahent.txt jako pusta kolumna
-                $this->toWindows1250($params['customer_email']),                                      //(B)NAZWASKR w kontrahent.txt jako adresu e-mail płatnika (ten sam co w dok.txt)
-                $this->toWindows1250($this->_generateCustomerData($params)),                          //(C)NAZWADL w kontrahent (to już dane płatnika konta jeśli potrzeba to oddzielone ";"
+                $this->getHelper()->toWindows1250($params['customer_email']),                                      //(B)NAZWASKR w kontrahent.txt jako adresu e-mail płatnika (ten sam co w dok.txt)
+                $this->getHelper()->toWindows1250($this->_generateCustomerData($params)),                          //(C)NAZWADL w kontrahent (to już dane płatnika konta jeśli potrzeba to oddzielone ";"
                 $nip,                                                           //(D)NIP
-                $this->toWindows1250($deliveryAddress->delivery_city),                                //(E)MIEJSCOWOSC
+                $this->getHelper()->toWindows1250($deliveryAddress->delivery_city),                                //(E)MIEJSCOWOSC
                 $deliveryAddress->delivery_zip_code,                            //(F)KODPOCZTA
-                $this->toWindows1250($deliveryAddress->delivery_city),                                //(G)POCZTA
-                $this->toWindows1250($deliveryAddress->delivery_street),                              //(H)ULICA
+                $this->getHelper()->toWindows1250($deliveryAddress->delivery_city),                                //(G)POCZTA
+                $this->getHelper()->toWindows1250($deliveryAddress->delivery_street),                              //(H)ULICA
                 '',                                                             //(I)NRDOMU
                 '',                                                             //(J)NRLOKALU
                 '',                                                             //(K)puste
@@ -349,7 +369,11 @@ class ZolagoOs_OrdersExport_Model_Export_Order
             ]
         ];
 
+        return $orderCustomerLine;
+    }
 
+    private function _createOrderItemsLine($params)
+    {
         $orderItems = $params["order_items"];
 
         $orderItemsLine = [];
@@ -367,11 +391,11 @@ class ZolagoOs_OrdersExport_Model_Export_Order
                     $params['order_id'],                                                                                //NRDOK         : String; - numer dokumentu (25)
                     $this->shippingMethodCode($params['delivery_method'], $params['payment_method']),                                                                  //KODTOW        : String; - indeks dokumentu (25)
                     1,                                                                                                  //ILOSC         : Currency; - ilość
-                    $this->formatToDocNumber($orderItem['item_value_after_discount']),                                  //CENA          : Currency; - cena netto przed bonifikatą
+                    $this->getHelper()->formatToDocNumber($orderItem['item_value_after_discount']),                                  //CENA          : Currency; - cena netto przed bonifikatą
                     'N',                                                                                                //PROCBONIF     : Currency; - bonifikata - liczone zgodnie z definicją dokumentu
                     'N',                                                                                                //CENA_UZG      : Boolean; - czy cena jest uzgodniona
                     'T',                                                                                                //CENA_BRUTTO   : Boolean; - czy cena jest od brutto (domyślnie FALSE)
-                    $this->toWindows1250($orderItem['item_name']),                                                                            //Uwagi         : String; - uwagi;
+                    $this->getHelper()->toWindows1250($orderItem['item_name']),                                                                            //Uwagi         : String; - uwagi;
 
                     '',                                                                                                 //Cecha_1       : String; - wartość dla cechy 1;
                     '',                                                                                                 //Cecha_2       : String; - wartość dla cechy 1;
@@ -387,7 +411,7 @@ class ZolagoOs_OrdersExport_Model_Export_Order
                     $params['order_id'],                                                                                //NRDOK         : String; - numer dokumentu (25)
                     $orderItem['item_sku'],                                                                             //KODTOW        : String; - indeks dokumentu (25)
                     (int)$orderItem['item_qty'],                                                                        //ILOSC         : Currency; - ilość
-                    $this->formatToDocNumber($orderItem['item_value_before_discount'] / (int)$orderItem['item_qty']),   //CENA          : Currency; - cena netto przed bonifikatą
+                    $this->getHelper()->formatToDocNumber($orderItem['item_value_before_discount'] / (int)$orderItem['item_qty']),   //CENA          : Currency; - cena netto przed bonifikatą
                     $this->getDiscountPercent($orderItem),                                                              //PROCBONIF     : Currency; - bonifikata - liczone zgodnie z definicją dokumentu
                     'N',                                                                                                //CENA_UZG      : Boolean; - czy cena jest uzgodniona
                     'T',                                                                                                //CENA_BRUTTO   : Boolean; - czy cena jest od brutto (domyślnie FALSE)
@@ -405,6 +429,19 @@ class ZolagoOs_OrdersExport_Model_Export_Order
 
             array_push($orderItemsLine, $itemData);
         }
+
+        return $orderItemsLine;
+    }
+
+
+    public function addOrders($params)
+    {
+        //Collect data
+        $orders = $this->_createOrderLine($params);
+        $orderCustomerLine = $this->_createCustomerLine($params);
+        $orderItemsLine = $this->_createOrderItemsLine($params);
+
+        //Write to file
         try {
             $this->_pushLinesToFiles($orders, $orderItemsLine, $orderCustomerLine);
 
