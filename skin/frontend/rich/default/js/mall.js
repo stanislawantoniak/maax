@@ -596,20 +596,18 @@ var Mall = {
 
     validateAddingToCart: function(id){
         jQuery("#qty-error").hide();
-        var quantity =  jQuery("#product-options input[name=quantity]").val();
-        var attrId = jQuery(".sizes-content select option:selected").val();
+        var selectedSizeOption = jQuery(".sizes-content select option:selected");
+        var quantity =  parseInt(jQuery("#product-options input[name=quantity]").val());
+        var attrId = parseInt(selectedSizeOption.val());
 
         if(!attrId){
             return false;
         }
-        var maxQty;
-        var minQty;
-        jQuery(".sizes-content select option").each(function(){
-            if(jQuery(this).val() == attrId){
-                maxQty = jQuery(this).attr('maxqty');
-                minQty = jQuery(this).attr('minqty');
-            }
-        });
+
+        var maxQty = parseInt(selectedSizeOption.attr('maxqty'));
+        var minQty = parseInt(selectedSizeOption.attr('minqty'));
+
+
         if(quantity >= minQty && quantity <= maxQty && quantity > 0){
             Mall.addToCart(id, quantity);
         }else{
