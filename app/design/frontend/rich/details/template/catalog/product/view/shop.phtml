@@ -292,7 +292,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 			});
 			jQuery("a.qty_more").click(function(e){
 				e.preventDefault();
-				var attrId = jQuery("ul.selectboxit-options li.selectboxit-focus").attr('data-val');
+				var attrId = jQuery(".sizes-content select option:selected").val();
 				if(!attrId){
 					jQuery("#qty-error").text('<?php echo $hlp->__("Choose size first"); ?>');
 					jQuery("#qty-error").show();
@@ -307,6 +307,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 					});
 					var quantity =  jQuery("input[name=quantity]").val();
 					jQuery("#qty-error").hide();
+
 					if(parseInt(quantity) < parseInt(maxQty)) {
 						quantity++;
 						jQuery("input[name=quantity]").val(quantity);
@@ -320,7 +321,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 			});
 			jQuery("a.qty_less").click(function(e){
 				e.preventDefault();
-				var attrId = jQuery("ul.selectboxit-options li.selectboxit-focus").attr('data-val');
+				var attrId = jQuery(".sizes-content select option:selected").val();
 				if(!attrId){
 					jQuery("#qty-error").text('<?php echo $hlp->__("Choose size first"); ?>');
 					jQuery("#qty-error").show();
