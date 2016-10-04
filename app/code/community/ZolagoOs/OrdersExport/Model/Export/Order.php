@@ -168,7 +168,7 @@ class ZolagoOs_OrdersExport_Model_Export_Order
     public function getDiscountPercent($orderItem)
     {
         if ((int)$orderItem['item_discount'] == 0)
-            return 'N';
+            return '';
 
         $discountPercent = ($orderItem['item_discount'] * 100) / $orderItem['item_value_before_discount'];
 
@@ -396,17 +396,16 @@ class ZolagoOs_OrdersExport_Model_Export_Order
                     $this->shippingMethodCode($params['delivery_method'], $params['payment_method']),                                                                  //KODTOW        : String; - indeks dokumentu (25)
                     1,                                                                                                  //ILOSC         : Currency; - ilość
                     $this->getHelper()->formatToDocNumber($orderItem['item_value_after_discount']),                                  //CENA          : Currency; - cena netto przed bonifikatą
-                    'N',                                                                                                //PROCBONIF     : Currency; - bonifikata - liczone zgodnie z definicją dokumentu
-                    'N',                                                                                                //CENA_UZG      : Boolean; - czy cena jest uzgodniona
+                    '',                                                                                                //PROCBONIF     : Currency; - bonifikata - liczone zgodnie z definicją dokumentu
+                    '',                                                                                                //CENA_UZG      : Boolean; - czy cena jest uzgodniona
                     'T',                                                                                                //CENA_BRUTTO   : Boolean; - czy cena jest od brutto (domyślnie FALSE)
-                    $this->getHelper()->toWindows1250($orderItem['item_name']),                                                                            //Uwagi         : String; - uwagi;
-
+                    $this->getHelper()->toWindows1250(trim($orderItem['item_name'])),                                   //Uwagi         : String; - uwagi;
                     '',                                                                                                 //Cecha_1       : String; - wartość dla cechy 1;
                     '',                                                                                                 //Cecha_2       : String; - wartość dla cechy 1;
                     '',                                                                                                 //Cecha_3       : String; - wartość dla cechy 1;
-
                     '',                                                                                                 //MAG_OZNNRWYDR : String; - z jakiego magazynu realizować daną pozycję (jako identyfikator podać pole "Oznaczenie na wygruku" magazynu);
-                    '',                                                                                                 //STAWKAVATIDENT: String; - wymuszona stawka VAT dla pozycji, gdny nie wystepuje to pobierana jest z kartoteki na datę dokumentu;
+                    '',                                                                                                 //DATA_WAZNOSCI : TDateTimw; - data ważności towaru;
+                    ' ',                                                                                                 //STAWKAVATIDENT: String; - wymuszona stawka VAT dla pozycji, gdny nie wystepuje to pobierana jest z kartoteki na datę dokumentu;
                 );
             } else {
 
@@ -417,14 +416,15 @@ class ZolagoOs_OrdersExport_Model_Export_Order
                     (int)$orderItem['item_qty'],                                                                        //ILOSC         : Currency; - ilość
                     $this->getHelper()->formatToDocNumber($orderItem['item_value_before_discount'] / (int)$orderItem['item_qty']),   //CENA          : Currency; - cena netto przed bonifikatą
                     $this->getDiscountPercent($orderItem),                                                              //PROCBONIF     : Currency; - bonifikata - liczone zgodnie z definicją dokumentu
-                    'N',                                                                                                //CENA_UZG      : Boolean; - czy cena jest uzgodniona
+                    '',                                                                                                //CENA_UZG      : Boolean; - czy cena jest uzgodniona
                     'T',                                                                                                //CENA_BRUTTO   : Boolean; - czy cena jest od brutto (domyślnie FALSE)
                     '',                                                                                                 //Uwagi         : String; - uwagi;
                     '',                                                                                                 //Cecha_1       : String; - wartość dla cechy 1;
                     '',                                                                                                 //Cecha_2       : String; - wartość dla cechy 1;
                     '',                                                                                                 //Cecha_3       : String; - wartość dla cechy 1;
                     '',                                                                                                 //MAG_OZNNRWYDR : String; - z jakiego magazynu realizować daną pozycję (jako identyfikator podać pole "Oznaczenie na wygruku" magazynu);
-                    '',                                                                                                 //STAWKAVATIDENT: String; - wymuszona stawka VAT dla pozycji, gdny nie wystepuje to pobierana jest z kartoteki na datę dokumentu;
+                    '',                                                                                                 //DATA_WAZNOSCI : TDateTimw; - data ważności towaru;
+                    ' ',                                                                                                 //STAWKAVATIDENT: String; - wymuszona stawka VAT dla pozycji, gdny nie wystepuje to pobierana jest z kartoteki na datę dokumentu;
                 );
 
             }
