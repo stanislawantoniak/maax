@@ -687,6 +687,16 @@ jQuery.noConflict();
 					}
 
 				});
+
+
+				$("html").click(function(event) {
+					if ($(event.target).closest('#nav_desc').length === 0) {
+						containerCloneMenu.html('');
+						$("#nav_desc a").find('i').removeClass('fa-angle-up').addClass('fa-angle-down');
+						$('#nav_desc').find('.active').removeClass('active');
+						jQuery("#clone_submenu").css("top",0);
+					}
+				});
 			}
 		}
 
