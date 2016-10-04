@@ -25,7 +25,7 @@ class ZolagoOs_OrdersExport_Model_Export_Order
     const ORDER_DELIVERY_CODE_PACZKOMAT_INPOST = 'WYS7';
 
 
-    const ORDEREXPORT_DELIMETR_ORDERINFO = ";";
+    const ORDEREXPORT_DELIMETR_ORDERINFO = "^";
 
 
     public function getDirectoryPath()
@@ -100,7 +100,7 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         $code = $params['delivery_method'];
         $description = $this->shippingMethodsDescription()[Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_STANDARD_COURIER];
         if (isset($this->shippingMethodsDescription()[$code])) {
-            $description = $this->shippingMethodsDescription()[$code];
+            $description = "Delivery Method:" . $this->shippingMethodsDescription()[$code];
         }
 
         if (in_array($code, $this->getDeliveryMethodsRequiredDeliveryPointName())) {
@@ -168,7 +168,7 @@ class ZolagoOs_OrdersExport_Model_Export_Order
     public function getDiscountPercent($orderItem)
     {
         if ((int)$orderItem['item_discount'] == 0)
-            return 'N';
+            return '';
 
         $discountPercent = ($orderItem['item_discount'] * 100) / $orderItem['item_value_before_discount'];
 
@@ -281,64 +281,68 @@ class ZolagoOs_OrdersExport_Model_Export_Order
 
     private function _createOrderLine($params)
     {
+
+        $invoiceData = $params['invoice_data'];
+        $invoiceRequired = (bool)$invoiceData->invoice_required;
+
         $orders = [
             [
 
-                //(A)DKONTRAH        : String; - identyfikator kontrahenta (numer) (15)
+                //1.DKONTRAH        : String; - identyfikator kontrahenta (numer) (15)
                 $this->getHelper()->toWindows1250($params['customer_email']),
 
-                //(B)DATA            : TDateTime; - Data dokumentu
+                //2.DATA            : TDateTime; - Data dokumentu
                 $params['order_date'],
 
-                //(C)NAZWADOK        : String; - nazwa dokumentu (10)  opis dozwolonych wartośći w pkt 7.
+                //3.NAZWADOK        : String; - nazwa dokumentu (10)  opis dozwolonych wartośći w pkt 7.
                 $this->getHelper()->toWindows1250(self::ORDER_DOC_NAME_ZA),
 
-                //(D)NRDOK           : String; - numer dokumentu (25)
+                //4.NRDOK           : String; - numer dokumentu (25)
                 $params['order_id'],
 
-                //(E)TERMIN          : TDateTime; - termin płatności
+                //5.TERMIN          : TDateTime; - termin płatności
                 '',
 
-                //(F)PLATNOSC        : String; - sposób płatności (35)
+                //6.PLATNOSC        : String; - sposób płatności (35)
                 $this->getHelper()->toWindows1250($this->paymentMethodDescription($params['payment_method'])),
 
-                //(G)SUMA            : Currency; - Wartość brutto dokumentu - liczone zgodnie z definicją dokumentu
+                //7.SUMA            : Currency; - Wartość brutto dokumentu - liczone zgodnie z definicją dokumentu
                 $this->getHelper()->formatToDocNumber($params['order_total']),
 
-                //(H)ILEPOZ          : Integer; - ilość pozycji
+                //8.ILEPOZ          : Integer; - ilość pozycji
                 count($params['order_items']),
 
-                //(I)GOTOWKA         : Currency; - zapłata gotówkowa przyjęta na dokumencie
+                //9.GOTOWKA         : Currency; - zapłata gotówkowa przyjęta na dokumencie
                 0,
 
-                //(J)DOT_DATA        : TDateTime; - data dokumentu powiązanego (np KP do FA)
+                //10.DOT_DATA        : TDateTime; - data dokumentu powiązanego (np KP do FA)
                 '',
 
-                //(K)DOT_NAZWADOK    : String; - nazwa dokumentu powiązanego (10) (np KP do FA)
+                //11.DOT_NAZWADOK    : String; - nazwa dokumentu powiązanego (10) (np KP do FA)
                 ($invoiceRequired) ? self::ORDER_DOC_NAME_FA : self::ORDER_DOC_NAME_PAR,
 
-                //(L)DOT_NRDOK       : String; - numer dokumentu powiązanego (25) (np KP do FA)
+                //12.DOT_NRDOK       : String; - numer dokumentu powiązanego (25) (np KP do FA)
                 '',
 
-                //(M)ANULOWANY       : Boolean; - czy dokument został anulowany
+                //13.ANULOWANY       : Boolean; - czy dokument został anulowany
                 '',
 
-                //(N)UWAGI           : String; - (Memo) Uwagi do dokumentu
+                //14.UWAGI           : String; - (Memo) Uwagi do dokumentu
                 $this->getHelper()->toWindows1250($this->_getOrderDetails($params)),
 
 
-                '', //(O)NRZLEC          : String; - numer zlecenia (20)
-                '', //(P)CECHA_1         : String; - Cecha 1 (35)
-                '', //(Q)CECHA_2         : String; - Cecha 2 (35)
-                '', //(R)CECHA_3         : String; - Cecha 3 (35)
-                '', //(S)IDKONTRAHODB    : String; - identyfikator kontrahenta odbierającego dokument (numer) (15)
-                '', //(T)DATAOBOW        : TDateTime; - data obowiązywania zamówienia
-                '', //(U)CECHA_4         : String; - Cecha 4 (35)
-                '', //(V)CECHA_5         : String; - Cecha 5 (35)
-                '', //(W)IDKONTRAHDOST   : String; - identyfikator kontrahenta dostawcy - (numer) (15);
-                '', //(X)MAGAZYN         : String; - numer magazynu
-                '', //(Y)WYDRUKOWANY     : Boolean;- czy dokument był drukowany na zwykłej drukarce;
-                '', //(Z)ZAFISKALIZOWANY : Boolean; - czy dokument był zafiskalizowany - wydrukowany na drukarce fiskalnej (parametr brany pod uwagę tylko dla dokum. podlegających fiskalizacji);
+                '', //15.NRZLEC          : String; - numer zlecenia (20)
+                '', //16.CECHA_1         : String; - Cecha 1 (35)
+                '', //17.CECHA_2         : String; - Cecha 2 (35)
+                '', //18.CECHA_3         : String; - Cecha 3 (35)
+                '', //19.IDKONTRAHODB    : String; - identyfikator kontrahenta odbierającego dokument (numer) (15)
+                '', //20.DATAOBOW        : TDateTime; - data obowiązywania zamówienia
+                '', //21.CECHA_4         : String; - Cecha 4 (35)
+                '', //22.CECHA_5         : String; - Cecha 5 (35)
+                '', //23.IDKONTRAHDOST   : String; - identyfikator kontrahenta dostawcy - (numer) (15);
+                '', //24MAGAZYN         : String; - numer magazynu
+                '', //25.WYDRUKOWANY     : Boolean;- czy dokument był drukowany na zwykłej drukarce;
+                '', //26.ZAFISKALIZOWANY : Boolean; - czy dokument był zafiskalizowany - wydrukowany na drukarce fiskalnej (parametr brany pod uwagę tylko dla dokum. podlegających fiskalizacji);
             ]
         ];
 
@@ -387,45 +391,45 @@ class ZolagoOs_OrdersExport_Model_Export_Order
                  * >> którą jest usługa wysyłki
                  */
                 $itemData = array(
-                    self::ORDER_DOC_NAME_ZA,                                                                            //NAZWADOK      : String; - nazwa dokumentu (10)
-                    $params['order_id'],                                                                                //NRDOK         : String; - numer dokumentu (25)
-                    $this->shippingMethodCode($params['delivery_method'], $params['payment_method']),                                                                  //KODTOW        : String; - indeks dokumentu (25)
-                    1,                                                                                                  //ILOSC         : Currency; - ilość
-                    $this->getHelper()->formatToDocNumber($orderItem['item_value_after_discount']),                                  //CENA          : Currency; - cena netto przed bonifikatą
-                    'N',                                                                                                //PROCBONIF     : Currency; - bonifikata - liczone zgodnie z definicją dokumentu
-                    'N',                                                                                                //CENA_UZG      : Boolean; - czy cena jest uzgodniona
-                    'T',                                                                                                //CENA_BRUTTO   : Boolean; - czy cena jest od brutto (domyślnie FALSE)
-                    $this->getHelper()->toWindows1250($orderItem['item_name']),                                                                            //Uwagi         : String; - uwagi;
-
-                    '',                                                                                                 //Cecha_1       : String; - wartość dla cechy 1;
-                    '',                                                                                                 //Cecha_2       : String; - wartość dla cechy 1;
-                    '',                                                                                                 //Cecha_3       : String; - wartość dla cechy 1;
-
-                    '',                                                                                                 //MAG_OZNNRWYDR : String; - z jakiego magazynu realizować daną pozycję (jako identyfikator podać pole "Oznaczenie na wygruku" magazynu);
-                    '',                                                                                                 //STAWKAVATIDENT: String; - wymuszona stawka VAT dla pozycji, gdny nie wystepuje to pobierana jest z kartoteki na datę dokumentu;
+                    self::ORDER_DOC_NAME_ZA,                                                                            //1.NAZWADOK      : String; - nazwa dokumentu (10)
+                    $params['order_id'],                                                                                //2.NRDOK         : String; - numer dokumentu (25)
+                    $this->shippingMethodCode($params['delivery_method'], $params['payment_method']),                   //3.KODTOW        : String; - indeks dokumentu (25)
+                    1,                                                                                                  //4.ILOSC         : Currency; - ilość
+                    $this->getHelper()->formatToDocNumber($orderItem['item_value_after_discount']),                     //5.CENA          : Currency; - cena netto przed bonifikatą
+                    '',                                                                                                 //6.PROCBONIF     : Currency; - bonifikata - liczone zgodnie z definicją dokumentu
+                    '',                                                                                                 //7.CENA_UZG      : Boolean; - czy cena jest uzgodniona
+                    'T',                                                                                                //8.CENA_BRUTTO   : Boolean; - czy cena jest od brutto (domyślnie FALSE)
+                    $this->getHelper()->toWindows1250(trim($orderItem['item_name'])),                                   //9.Uwagi         : String; - uwagi;
+                    '',                                                                                                 //10.Cecha_1       : String; - wartość dla cechy 1;
+                    '',                                                                                                //11.Cecha_2       : String; - wartość dla cechy 1;
+                    '',                                                                                                //12.Cecha_3       : String; - wartość dla cechy 1;
+                    '',                                                                                                 //13.MAG_OZNNRWYDR : String; - z jakiego magazynu realizować daną pozycję (jako identyfikator podać pole "Oznaczenie na wygruku" magazynu);
+                    '',                                                                                                 //14.DATA_WAZNOSCI : TDateTimw; - data ważności towaru;
+                    '',                                                                                                //15.STAWKAVATIDENT: String; - wymuszona stawka VAT dla pozycji, gdny nie wystepuje to pobierana jest z kartoteki na datę dokumentu;
                 );
             } else {
-
+                //Price
+                $price = $orderItem['item_value_before_discount'] / (int)$orderItem['item_qty'];
                 $itemData = array(
-                    self::ORDER_DOC_NAME_ZA,                                                                            //NAZWADOK      : String; - nazwa dokumentu (10)
-                    $params['order_id'],                                                                                //NRDOK         : String; - numer dokumentu (25)
-                    $orderItem['item_sku'],                                                                             //KODTOW        : String; - indeks dokumentu (25)
-                    (int)$orderItem['item_qty'],                                                                        //ILOSC         : Currency; - ilość
-                    $this->getHelper()->formatToDocNumber($orderItem['item_value_before_discount'] / (int)$orderItem['item_qty']),   //CENA          : Currency; - cena netto przed bonifikatą
-                    $this->getDiscountPercent($orderItem),                                                              //PROCBONIF     : Currency; - bonifikata - liczone zgodnie z definicją dokumentu
-                    'N',                                                                                                //CENA_UZG      : Boolean; - czy cena jest uzgodniona
-                    'T',                                                                                                //CENA_BRUTTO   : Boolean; - czy cena jest od brutto (domyślnie FALSE)
-                    '',                                                                                                 //Uwagi         : String; - uwagi;
-
-                    '',                                                                                                 //Cecha_1       : String; - wartość dla cechy 1;
-                    '',                                                                                                 //Cecha_2       : String; - wartość dla cechy 1;
-                    '',                                                                                                 //Cecha_3       : String; - wartość dla cechy 1;
-
-                    '',                                                                                                 //MAG_OZNNRWYDR : String; - z jakiego magazynu realizować daną pozycję (jako identyfikator podać pole "Oznaczenie na wygruku" magazynu);
-                    '',                                                                                                 //STAWKAVATIDENT: String; - wymuszona stawka VAT dla pozycji, gdny nie wystepuje to pobierana jest z kartoteki na datę dokumentu;
+                    self::ORDER_DOC_NAME_ZA,                                                                            //1.NAZWADOK      : String; - nazwa dokumentu (10)
+                    $params['order_id'],                                                                                //2.NRDOK         : String; - numer dokumentu (25)
+                    $orderItem['item_sku'],                                                                             //3.KODTOW        : String; - indeks dokumentu (25)
+                    (int)$orderItem['item_qty'],                                                                        //4.ILOSC         : Currency; - ilość
+                    $this->getHelper()->formatToDocNumber($price),                                                      //5.CENA          : Currency; - cena netto przed bonifikatą
+                    $this->getDiscountPercent($orderItem),                                                              //6.PROCBONIF     : Currency; - bonifikata - liczone zgodnie z definicją dokumentu
+                    '',                                                                                                 //7.CENA_UZG      : Boolean; - czy cena jest uzgodniona
+                    'T',                                                                                                //8.CENA_BRUTTO   : Boolean; - czy cena jest od brutto (domyślnie FALSE)
+                    '',                                                                                                 //9.Uwagi         : String; - uwagi;
+                    '',                                                                                                 //10.Cecha_1       : String; - wartość dla cechy 1;
+                    '',                                                                                                //11.Cecha_2       : String; - wartość dla cechy 1;
+                    '',                                                                                                //12.Cecha_3       : String; - wartość dla cechy 1;
+                    '',                                                                                                 //13.MAG_OZNNRWYDR : String; - z jakiego magazynu realizować daną pozycję (jako identyfikator podać pole "Oznaczenie na wygruku" magazynu);
+                    '',                                                                                                 //14.DATA_WAZNOSCI : TDateTimw; - data ważności towaru;
+                    '',                                                                                                //15.STAWKAVATIDENT: String; - wymuszona stawka VAT dla pozycji, gdny nie wystepuje to pobierana jest z kartoteki na datę dokumentu;
                 );
 
             }
+            unset($price);
 
             array_push($orderItemsLine, $itemData);
         }
