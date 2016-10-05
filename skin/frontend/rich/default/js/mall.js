@@ -593,22 +593,30 @@ var Mall = {
             return ;
         });
     },
-
-    validateAddingToCart: function(id){
-        jQuery("#qty-error").hide();
-        var selectedSizeOption = jQuery(".sizes-content select option:selected");
+    addToCartQtyValidation: function(id){
+        var selectedSizeOption = jQuery(".sizes-content select option").find(":selected");
         var quantity =  parseInt(jQuery("#product-options input[name=quantity]").val());
         var attrId = parseInt(selectedSizeOption.val());
 
-        if(!attrId){
+        if(!attrId)
             return false;
-        }
 
         var maxQty = parseInt(selectedSizeOption.attr('maxqty'));
         var minQty = parseInt(selectedSizeOption.attr('minqty'));
 
+        if(quantity >= minQty && quantity <= maxQty && quantity > 0)
+            return true;
 
-        if(quantity >= minQty && quantity <= maxQty && quantity > 0){
+
+        return false;
+    },
+
+    validateAddingToCart: function(id){
+        jQuery("#qty-error").hide();
+        var quantity =  parseInt(jQuery("#product-options input[name=quantity]").val());
+        var validQty = Mall.addToCartQtyValidation(id);
+
+        if(validQty){
             Mall.addToCart(id, quantity);
         }else{
             jQuery("#qty-error").show();
