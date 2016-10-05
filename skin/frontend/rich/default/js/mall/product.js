@@ -206,8 +206,6 @@ Mall.product = {
 			this.applyAdditionalRules(group, formGroupElement);
 		} else { //selectbox
 
-
-
 			var deskTopDevice = !Mall.getIsBrowserMobile();
 
 			//check if selectbox should be shown
@@ -235,6 +233,7 @@ Mall.product = {
             	var formGroupElementSelectClass = (deskTopDevice) ? '  mobile-native-select-w' : '  mobile-native-select-w';
             	var formGroupElementSelect = jQuery("<select/>", {
             		id: "select-data-id-" + group.id,
+					name: "size_select_box",
             		class: formGroupElementSelectClass
             	}).appendTo(formGroupElement);
 
