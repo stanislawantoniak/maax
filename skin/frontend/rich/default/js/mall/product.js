@@ -206,8 +206,6 @@ Mall.product = {
 			this.applyAdditionalRules(group, formGroupElement);
 		} else { //selectbox
 
-
-
 			var deskTopDevice = !Mall.getIsBrowserMobile();
 
 			//check if selectbox should be shown
@@ -235,6 +233,7 @@ Mall.product = {
             	var formGroupElementSelectClass = (deskTopDevice) ? '  mobile-native-select-w' : '  mobile-native-select-w';
             	var formGroupElementSelect = jQuery("<select/>", {
             		id: "select-data-id-" + group.id,
+					name: "size_select_box",
             		class: formGroupElementSelectClass
             	}).appendTo(formGroupElement);
 
@@ -1277,4 +1276,13 @@ Mall.product = {
 
 jQuery(document).ready(function() {
 	Mall.product.init();
+
+
+	jQuery('#product_long_box_tabs').tabCollapse({
+		tabsClass: 'hidden-xs',
+		accordionClass: 'visible-xs'
+	});
+	jQuery('#product_long_box_tabs').on('shown-accordion.bs.tabcollapse', function () {
+		//alert('accordion is shown now!');
+	});
 });

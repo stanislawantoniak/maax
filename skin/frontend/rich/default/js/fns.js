@@ -326,16 +326,13 @@ jQuery.noConflict();
 			var wrapperFormReview = $('#block-review-form');
 
 			$('.viewFormComments').on('click', function(event) {
-				event.preventDefault();var intFrameWidth = window.innerWidth;
+				event.preventDefault();
+				var intFrameWidth = window.innerWidth;
 				wrapperFormReview.slideToggle(200, function(){
 					var animeOffset = $("#block-review-form").offset().top - 80;
 					$('html, body').animate({
 						scrollTop: animeOffset
 					}, 800);
-
-                    $("#product_long_box").height(
-                        $("[name=tabs]:checked ~ article").height() + 140
-                    );
 				});
 
 			});
