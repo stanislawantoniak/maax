@@ -292,14 +292,15 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 			jQuery("a.qty_more").click(function(e){
 				e.preventDefault();
 				var attrId;
-				if(Mall.getIsBrowserMobile()){
-					attrId = jQuery(".sizes-content select option:selected").val();
+				var defaultText = jQuery(".size-box select").selectBoxIt().data("selectBox-selectBoxIt").options.defaultText;
+				if(Mall.getIsBrowserMobile() && jQuery(".size-box .selectboxit-text").text() != defaultText){
+						attrId = jQuery(".sizes-content select option:selected").val();
 				} else {
 					attrId = jQuery(".size-box ul.selectboxit-options li.selectboxit-focus").attr('data-val');
 				}
 
 
-				if(typeof attrId == 'undefined'){
+				if(!attrId){
 					jQuery("#qty-error").text('<?php echo $hlp->__("Choose size first"); ?>');
 					jQuery("#qty-error").show();
 				}else{
@@ -328,11 +329,13 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 			jQuery("a.qty_less").click(function(e){
 				e.preventDefault();
 				var attrId;
-				if(Mall.getIsBrowserMobile()){
+				var defaultText = jQuery(".size-box select").selectBoxIt().data("selectBox-selectBoxIt").options.defaultText;
+				if(Mall.getIsBrowserMobile() && jQuery(".size-box .selectboxit-text").text() != defaultText){
 					attrId = jQuery(".sizes-content select option:selected").val();
 				} else {
 					attrId = jQuery(".size-box ul.selectboxit-options li.selectboxit-focus").attr('data-val');
 				}
+
 				if(!attrId){
 					jQuery("#qty-error").text('<?php echo $hlp->__("Choose size first"); ?>');
 					jQuery("#qty-error").show();
