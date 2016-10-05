@@ -1277,4 +1277,13 @@ Mall.product = {
 
 jQuery(document).ready(function() {
 	Mall.product.init();
+
+
+	jQuery('#product_long_box_tabs').tabCollapse({
+		tabsClass: 'hidden-xs',
+		accordionClass: 'visible-xs'
+	});
+	jQuery('#product_long_box_tabs').on('shown-accordion.bs.tabcollapse', function () {
+		//alert('accordion is shown now!');
+	});
 });

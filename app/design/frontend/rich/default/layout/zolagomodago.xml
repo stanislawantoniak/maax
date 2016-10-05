@@ -695,6 +695,12 @@
       </action>
       <block type="zolagomodago/page_aside" name="aside.header.sliding" template="page/html/aside/header.menu.sliding.phtml"/>
     </reference>
+    <reference name="head">
+      <action method="addItem">
+        <type>js</type>
+        <script>bootstrap-tabcollapse.js</script>
+      </action>
+    </reference>
     <reference name="product.info">
       <block name="product.vendor.info" type="zolagocatalog/product_vendor_info"/>
       <block name="product.vendor.deliveryreturn" type="zolagocatalog/product_vendor_deliveryreturn"/>
