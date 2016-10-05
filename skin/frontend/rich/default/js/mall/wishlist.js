@@ -199,7 +199,6 @@ Mall.wishlist = {
      */
     removeFromWishlistFromProduct: function (id) {
         "use strict";
-
 	    var addedLikeBox = jQuery(".addedLike-box");
 	    var addLikeBox = jQuery(".addLike-box");
 	    var addingLikeBox = jQuery(".addingLike-box");
@@ -415,7 +414,6 @@ Mall.wishlist = {
      */
     removeFromSmallBlock: function (obj) {
         "use strict";
-
         // fetch id
         var id = jQuery(obj).attr("data-idproduct"),
             product,
@@ -444,7 +442,6 @@ Mall.wishlist = {
 		            html: (Mall.wishlist.getWishlistCount(id) > 0
 			            ? (Mall.wishlist.getWishlistCount(id) > 99 ? "99+" : Mall.wishlist.getWishlistCount(id)) : "") + " "
 	            }).appendTo(wrapper);
-
                 ico = jQuery("<span/>", {
                     "class": "icoLike"
                 }).appendTo(wrapper);
@@ -457,6 +454,10 @@ Mall.wishlist = {
                     "class": "toolLike"
                 }).appendTo(wrapper);
 
+                if (jQuery('.box_listing_product').size() < 2) {
+                    location.reload();
+                    return;
+                }
                 // replace blocks
 	            if(typeof unlikingOnWishlist != 'undefined' && unlikingOnWishlist) {
 		            //remove item
@@ -469,6 +470,8 @@ Mall.wishlist = {
 	            }
 				// set products count badge
                 Mall.wishlist.calculateWidths();
+                
+                
             }
         });
 
