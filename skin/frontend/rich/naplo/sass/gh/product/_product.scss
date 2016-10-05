@@ -132,54 +132,57 @@ i.flag {
 		}
 	}
 
-	.panel-group .panel {
-		margin-bottom: 15px;
-		border: none;
-	}
+	.panel-group {
+		.panel {
+			margin: -5px 0 10px 0;
+			border: none;
+			box-shadow: none;
 
-
-	.panel-default {
-		> .panel-heading {
-			font-weight: bold;
-			color: $gray-darker;
-			background-color: #fff;
-			border-radius: 0;
-			cursor: pointer;
-			text-transform: uppercase;
-			padding: 0;
-
-			.panel-title {
-				padding: 0;
-				font-size: 14px;
+			> .panel-heading {
+				font-weight: bold;
+				color: $gray-darker;
+				background-color: #fff;
+				border-radius: 0;
 				cursor: pointer;
+				text-transform: uppercase;
+				padding: 0;
 
-				label {
-					font-family: $fontRegular;
-					margin-bottom: 0px;
+				.panel-title {
+					padding: 0;
+					font-size: 14px;
 					cursor: pointer;
-					width: 100%;
-					padding: 10px 15px;
 
-					border-bottom: 1px solid #eeedf0;
+					label {
+						font-family: $fontRegular;
+						margin-bottom: 0px;
+						cursor: pointer;
+						width: 100%;
+						padding: 10px 15px;
+
+						border-bottom: 1px solid #eeedf0;
 
 
-					> .fa {
-						visibility: visible;
-						float: right;
-						right: 20px;
-						top: 10px;
-						z-index: 10;
-						&:before {
-							content: $fa-var-angle-down;
+						> .fa {
+							visibility: visible;
+							float: right;
+							right: 20px;
+							top: 10px;
+							z-index: 10;
+							&:before {
+								content: $fa-var-angle-down;
+							}
 						}
 					}
 				}
 			}
-		}
 
-		> .panel-collapse {
-			section.section .main {
-				padding: 0px;
+			> .panel-collapse {
+				.panel-body {
+					border: none;
+				}
+				section.section .main {
+					padding: 0px;
+				}
 			}
 		}
 	}
