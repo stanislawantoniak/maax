@@ -185,7 +185,7 @@ class ZolagoOs_OrdersExport_Model_Export_Order
     {
         $deliveryAddress = $params['delivery_data']->delivery_address;
         $info = trim($deliveryAddress->delivery_first_name) . ' ' . trim($deliveryAddress->delivery_last_name);
-        return $info;
+        return trim($info);
     }
 
     /**
