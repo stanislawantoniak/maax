@@ -593,30 +593,26 @@ var Mall = {
             return ;
         });
     },
-    addToCartQtyValidation: function(id){
-        var selectedSizeOption = jQuery(".sizes-content select option").find(":selected");
-        var quantity =  parseInt(jQuery("#product-options input[name=quantity]").val());
-        var attrId = parseInt(selectedSizeOption.val());
 
-        if(!attrId)
+    validateAddingToCart: function(id){
+        jQuery("#qty-error").hide();
+        var selectedSizeOption = jQuery(".sizes-content select option:selected");
+        var quantity =  parseInt(jQuery("#product-options input[name=quantity]").val());
+        if(Mall.getIsBrowserMobile() && jQuery(".size-box .selectboxit-text").text() != defaultText){
+            attrId = jQuery(".sizes-content select option:selected").val();
+        } else {
+            attrId = jQuery(".size-box ul.selectboxit-options li.selectboxit-focus").attr('data-val');
+        }
+
+        if(!attrId){
             return false;
+        }
 
         var maxQty = parseInt(selectedSizeOption.attr('maxqty'));
         var minQty = parseInt(selectedSizeOption.attr('minqty'));
 
-        if(quantity >= minQty && quantity <= maxQty && quantity > 0)
-            return true;
 
-
-        return false;
-    },
-
-    validateAddingToCart: function(id){
-        jQuery("#qty-error").hide();
-        var quantity =  parseInt(jQuery("#product-options input[name=quantity]").val());
-        var validQty = Mall.addToCartQtyValidation(id);
-
-        if(validQty){
+        if(quantity >= minQty && quantity <= maxQty && quantity > 0){
             Mall.addToCart(id, quantity);
         }else{
             jQuery("#qty-error").show();
