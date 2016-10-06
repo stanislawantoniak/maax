@@ -34,11 +34,10 @@ abstract class ZolagoOs_OrdersExport_Model_Export_Abstract
         } else {
             $fp = fopen($fileName, 'w');
         }
-
-        foreach ($line as $fields) {
-            fputcsv($fp, $fields, '	', ' ');
+        foreach ($line as $item) {
+            $l = implode(chr(9),$item).chr(13).chr(10);
+            fwrite($fp,$l);
         }
-
         fclose($fp);
     }
 
