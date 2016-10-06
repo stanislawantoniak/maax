@@ -35,6 +35,11 @@
             <wflookbookslider>
                 <class>Wf_Lookbookslider_Helper</class>
             </wflookbookslider>
+            <lookbookslider>
+                <rewrite>
+                    <data>Wf_Lookbookslider_Helper_Data</data>
+                </rewrite>
+            </lookbookslider>
         </helpers>
         <resources>
             <wflookbookslider_setup>
