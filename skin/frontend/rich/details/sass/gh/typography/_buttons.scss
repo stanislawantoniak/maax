@@ -81,7 +81,7 @@
 		@media (max-width: $screen-xs-max) {
 			padding: 10px 15px;
 			@media screen and (-webkit-min-device-pixel-ratio:0) {
-				font-weight: bold;
+				font-family: $fontBlack;
 			}
 		}
 		@media (max-width: 360px) {
