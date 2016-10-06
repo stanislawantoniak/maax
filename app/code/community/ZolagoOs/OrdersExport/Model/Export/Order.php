@@ -184,7 +184,8 @@ class ZolagoOs_OrdersExport_Model_Export_Order
     private function _generateCustomerData($params)
     {
         $deliveryAddress = $params['delivery_data']->delivery_address;
-        return trim($deliveryAddress->delivery_first_name . ' ' . $deliveryAddress->delivery_last_name);
+        $info = trim($deliveryAddress->delivery_first_name) . ' ' . trim($deliveryAddress->delivery_last_name);
+        return $info;
     }
 
     /**
@@ -226,9 +227,10 @@ class ZolagoOs_OrdersExport_Model_Export_Order
     {
         $result = [];
 
+        $result[] = $this->_generateCustomerData($params);
+
         $deliveryAddress = $params['delivery_data']->delivery_address;
 
-        $result[] = trim($deliveryAddress->delivery_first_name . ' ' . $deliveryAddress->delivery_last_name);
         //Company
         if (!empty($deliveryAddress->delivery_company_name))
             $result[] = 'Firma: ' . trim($deliveryAddress->delivery_company_name);
@@ -334,7 +336,7 @@ class ZolagoOs_OrdersExport_Model_Export_Order
             [
                 '',                                                             //(A)IDKONTRAH w kontrahent.txt jako pusta kolumna
                 $this->getHelper()->toWindows1250($params['customer_email']),                                      //(B)NAZWASKR w kontrahent.txt jako adresu e-mail płatnika (ten sam co w dok.txt)
-                $this->getHelper()->toWindows1250(trim($deliveryAddress->delivery_first_name . ' ' . $deliveryAddress->delivery_last_name)),                          //(C)NAZWADL w kontrahent (to już dane płatnika konta jeśli potrzeba to oddzielone ";"
+                $this->getHelper()->toWindows1250($this->_generateCustomerData($params)),                          //(C)NAZWADL w kontrahent (to już dane płatnika konta jeśli potrzeba to oddzielone ";"
                 $nip,                                                           //(D)NIP
                 $this->getHelper()->toWindows1250($deliveryAddress->delivery_city),                                //(E)MIEJSCOWOSC
                 $deliveryAddress->delivery_zip_code,                            //(F)KODPOCZTA
