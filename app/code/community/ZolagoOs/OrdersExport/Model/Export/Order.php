@@ -183,30 +183,9 @@ class ZolagoOs_OrdersExport_Model_Export_Order
      */
     private function _generateCustomerData($params)
     {
-
         $deliveryAddress = $params['delivery_data']->delivery_address;
-
-        $info = array(
-            $deliveryAddress->delivery_first_name . ' ' . $deliveryAddress->delivery_last_name
-        );
-
-
-        return implode(self::ORDEREXPORT_DELIMETR_ORDERINFO, $info);
-    }
-
-    /**
-     * Generate customer name: first name last name
-     * @param $params
-     * @return string
-     */
-    private function _generateCustomerFLName($params)
-    {
-        return implode(' ',
-            array(
-                $params['delivery_data']->delivery_address->delivery_first_name,
-                $params['delivery_data']->delivery_address->delivery_last_name
-            )
-        );
+        $info = trim($deliveryAddress->delivery_first_name) . ' ' . trim($deliveryAddress->delivery_last_name);
+        return $info;
     }
 
     /**
@@ -221,12 +200,11 @@ class ZolagoOs_OrdersExport_Model_Export_Order
 
         $deliveryAddress = $params['delivery_data']->delivery_address;
         $result = array(
-            $deliveryAddress->delivery_zip_code,
-            $deliveryAddress->delivery_city,
-            $deliveryAddress->delivery_street,
+            trim($deliveryAddress->delivery_zip_code),
+            trim($deliveryAddress->delivery_city),
+            trim($deliveryAddress->delivery_street),
         );
-
-        return implode(' ', $result);
+        return trim(implode(' ', $result));
     }
 
     private function _generateCustomerInvoiceAddress($params)
@@ -237,35 +215,34 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         if (!$invoiceRequired)
             return '';
 
-        return implode(' ',
-            array(
-                $invoiceData->invoice_address->invoice_zip_code,
-                $invoiceData->invoice_address->invoice_city,
-                $invoiceData->invoice_address->invoice_street
-            )
+        $data = array(
+            $invoiceData->invoice_address->invoice_zip_code,
+            $invoiceData->invoice_address->invoice_city,
+            $invoiceData->invoice_address->invoice_street
         );
+        return trim(implode(' ', $data));
     }
 
     private function _getOrderDetails($params)
     {
         $result = [];
 
-        $result[] = $this->_generateCustomerFLName($params);
+        $result[] = $this->_generateCustomerData($params);
 
         $deliveryAddress = $params['delivery_data']->delivery_address;
 
         //Company
         if (!empty($deliveryAddress->delivery_company_name))
-            $result[] = 'Firma: ' . $deliveryAddress->delivery_company_name;
+            $result[] = 'Firma: ' . trim($deliveryAddress->delivery_company_name);
 
         //NIP
         $result[] = "Delivery Data:" . $this->_generateCustomerDeliveryAddress($params);
-        $result[] = "Telephone:" . $deliveryAddress->phone;
+        $result[] = "Telephone:" . trim($deliveryAddress->phone);
 
         $invoiceAddress = $this->_generateCustomerInvoiceAddress($params);
 
         //if (!empty($invoiceAddress)) {
-        $result[] = "Invoice Data:" . $this->_generateCustomerInvoiceAddress($params);
+        $result[] = "Invoice Data:" . $invoiceAddress;
         //}
 
         $result[] = 'Payment Data:' . $this->paymentMethodDescription($params['payment_method']);
@@ -275,7 +252,7 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         $result[] = $this->shippingMethodDescription($params);
 
 
-        return implode(self::ORDEREXPORT_DELIMETR_ORDERINFO, $result);
+        return trim(implode(self::ORDEREXPORT_DELIMETR_ORDERINFO, $result));
     }
 
 
@@ -399,7 +376,7 @@ class ZolagoOs_OrdersExport_Model_Export_Order
                     '',                                                                                                 //6.PROCBONIF     : Currency; - bonifikata - liczone zgodnie z definicją dokumentu
                     '',                                                                                                 //7.CENA_UZG      : Boolean; - czy cena jest uzgodniona
                     'T',                                                                                                //8.CENA_BRUTTO   : Boolean; - czy cena jest od brutto (domyślnie FALSE)
-                    $this->getHelper()->toWindows1250(trim($orderItem['item_name'])),                                   //9.Uwagi         : String; - uwagi;
+                    '',                                   //9.Uwagi         : String; - uwagi;
                     '',                                                                                                 //10.Cecha_1       : String; - wartość dla cechy 1;
                     '',                                                                                                //11.Cecha_2       : String; - wartość dla cechy 1;
                     '',                                                                                                //12.Cecha_3       : String; - wartość dla cechy 1;
