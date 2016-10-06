@@ -173,7 +173,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 	<?php echo $this->getChildHtml('catalog.product.related'); ?>
 	<!--        catalog.product.related end-->
 
-	<div id="product-options" class="size-box-bundle">
+	<div id="product-options" class="size-box-bundle clearfix">
 		<div class="block_to_size">
 			<?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
 				<?php if (!empty($productAttrs)) : ?>
@@ -234,14 +234,12 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 		</div>
 	<?php endif; ?>
 	<div id="short-description-footer">
-		<div id="same-collection-header">
-		</div>
-		<div id="same-product-list">
-		</div>
+		<div id="same-collection-header"></div>
+		<div id="same-product-list"></div>
 	</div>
 
 	<div id="box-social" class="row">
-		<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+		<div class="col-lg-6 col-md-8 col-sm-12 col-xs-12">
 			<div class="product-likeboxes">
 				<div class="addLike-box" id="notadded-wishlist">
 					<!-- placebo -->
@@ -283,6 +281,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 				jQuery("#qty-error").hide();
 				var newMinQty = jQuery(this).attr('minqty');
 				var newMaxQty = jQuery(this).children('option:selected').attr('maxqty');
+
 				var currentQty = jQuery("input[name=quantity]").val();
 				if(parseInt(newMaxQty) < parseInt(currentQty)){
 					jQuery("input[name=quantity]").val(newMaxQty);
@@ -292,7 +291,15 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 			});
 			jQuery("a.qty_more").click(function(e){
 				e.preventDefault();
-				var attrId = jQuery("ul.selectboxit-options li.selectboxit-focus").attr('data-val');
+				var attrId;
+				var defaultText = jQuery(".size-box select").selectBoxIt().data("selectBox-selectBoxIt").options.defaultText;
+				if(Mall.getIsBrowserMobile() && jQuery(".size-box .selectboxit-text").text() != defaultText){
+						attrId = jQuery(".sizes-content select option:selected").val();
+				} else {
+					attrId = jQuery(".size-box ul.selectboxit-options li.selectboxit-focus").attr('data-val');
+				}
+
+
 				if(!attrId){
 					jQuery("#qty-error").text('<?php echo $hlp->__("Choose size first"); ?>');
 					jQuery("#qty-error").show();
@@ -307,6 +314,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 					});
 					var quantity =  jQuery("input[name=quantity]").val();
 					jQuery("#qty-error").hide();
+
 					if(parseInt(quantity) < parseInt(maxQty)) {
 						quantity++;
 						jQuery("input[name=quantity]").val(quantity);
@@ -320,7 +328,14 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 			});
 			jQuery("a.qty_less").click(function(e){
 				e.preventDefault();
-				var attrId = jQuery("ul.selectboxit-options li.selectboxit-focus").attr('data-val');
+				var attrId;
+				var defaultText = jQuery(".size-box select").selectBoxIt().data("selectBox-selectBoxIt").options.defaultText;
+				if(Mall.getIsBrowserMobile() && jQuery(".size-box .selectboxit-text").text() != defaultText){
+					attrId = jQuery(".sizes-content select option:selected").val();
+				} else {
+					attrId = jQuery(".size-box ul.selectboxit-options li.selectboxit-focus").attr('data-val');
+				}
+
 				if(!attrId){
 					jQuery("#qty-error").text('<?php echo $hlp->__("Choose size first"); ?>');
 					jQuery("#qty-error").show();

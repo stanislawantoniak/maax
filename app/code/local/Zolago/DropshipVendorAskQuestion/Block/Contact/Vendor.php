@@ -7,7 +7,7 @@ class Zolago_DropshipVendorAskQuestion_Block_Contact_Vendor extends Mage_Core_Bl
 		if($poId && $poToken) {
 			/** @var Zolago_Po_Model_Po $po */
 			$po = Mage::getModel('zolagopo/po')->load($poId);
-			if($po->getId() && $po->getContactToken() == $poToken) {
+			if($po->getId() && ($po->getContactToken() == $poToken)) {
 				$block = Mage::getModel('cms/block')
 					->setStoreId(Mage::app()->getStore()->getId())
 					->load('help-contact-vendor-po');

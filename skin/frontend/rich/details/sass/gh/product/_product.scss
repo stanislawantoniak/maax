@@ -114,37 +114,80 @@ i.flag {
 	border: none;
 	padding: 0;
 	margin-top: 40px;
-	margin-bottom: -95px;
+	//margin-bottom: -95px;
 	z-index: 100 !important;
 
-	article.content ul {
-		margin-bottom: 15px;
-	}
+
 
 	@media (max-width: $screen-xs-max) {
 		margin-top: 15px;
 	}
 
-	.ui-tabs-panel {
-		border-radius: 0;
-		border: 1px solid $color_e8e8e8;
+	.tab-content {
+		border: 1px solid #e8e8e8;
 		padding: 20px;
-	}
-	.ui-widget-header{
-		border: none;
-		background: none;
-		font-weight: normal;
-	}
-	.ui-tabs-nav li{
-		border-radius: 0;
-	}
-	.ui-tabs-nav li.ui-tabs-active{
-		padding-bottom:0;
-		background: $siteMainColor !important;
-		a{
-			color: $color_fff;
+
+		ul {
+			margin-bottom: 15px;
 		}
 	}
+
+	.panel-group {
+		.panel {
+			margin: -5px 0 10px 0;
+			border: none;
+			box-shadow: none;
+
+			> .panel-heading {
+				font-weight: bold;
+				color: $gray-darker;
+				background-color: #fff;
+				border-radius: 0;
+				cursor: pointer;
+				text-transform: uppercase;
+				padding: 0;
+
+				.panel-title {
+					padding: 0;
+					font-size: 14px;
+					cursor: pointer;
+
+					label {
+						font-family: $fontRegular;
+						margin-bottom: 0px;
+						cursor: pointer;
+						width: 100%;
+						padding: 10px 15px;
+
+						border-bottom: 1px solid #eeedf0;
+
+
+						> .fa {
+							visibility: visible;
+							float: right;
+							right: 20px;
+							top: 10px;
+							z-index: 10;
+							&:before {
+								content: $fa-var-angle-down;
+							}
+						}
+					}
+				}
+			}
+
+			> .panel-collapse {
+				.panel-body {
+					border: none;
+				}
+				section.section .main {
+					padding: 0px;
+				}
+			}
+		}
+	}
+
+
 	section {
 		color: $color_000;
 		font-family:$fontRegular;
@@ -264,7 +307,7 @@ i.flag {
             height: auto;
           }
 
-          > input:checked + label {
+          &.active > label {
             background: $siteMainColor !important;
             color: white;
           }
@@ -297,12 +340,12 @@ i.flag {
 	#box-social {
 		border-top:  1px solid $gray-lighter;
 		padding-top: 25px;
-		margin-top: 40px;
+		//margin-top: 40px;
 		margin-bottom: 25px;
 		font-family: $font-family-base;
 		color: $text-color;
 		@media (max-width: 767px) {
-			margin-top: 80px;
+			margin-top: 0px;
 			padding-top: 5px;
 			margin-bottom: 5px;
 		}
@@ -603,7 +646,7 @@ i.flag {
 
 	#product-options.size-box-bundle {
 		color: $color_7e7e7e;
-		padding-bottom: 40px;
+		//padding-bottom: 40px;
 		a.qty_less, a.qty_more {
 			display: block;
 		}
@@ -791,7 +834,7 @@ i.flag {
 		}
 	}
 	.size-box-bundle {
-		margin-bottom:20px;
+		margin-bottom:0px;
 		@media (min-width: 992px) and (max-width: 1197px){
 			margin-bottom:0px;
 		}

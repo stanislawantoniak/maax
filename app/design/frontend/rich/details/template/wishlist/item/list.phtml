@@ -34,69 +34,71 @@ $zssHelper = Mage::helper("zolagosolrsearch");
                                    data-sku="<?php echo $_product->getSku(); ?>"
                                    data-skuv="<?php echo $_product->getSkuv(); ?>"
                                    data-product-type="<?php echo $_product->getTypeId(); ?>">
-	                                <figure class="img_product boxed">
-	                                <figure class="img_product boxed">
-		                                <img src="<?php echo $_productImageUrl; ?>"
-		                                     alt="<?php $this->escapeHtml($product->getName()); ?>"
-		                                     class="img-responsive" />
-	                                </figure>
-                                    <div class="name_product">
-                                        <?php echo $this->escapeHtml($_product->getName()); ?>
-                                    </div>
+	                                <figure class="img_product">
+                                        <figure class="img_product">
+                                            <img src="<?php echo $_productImageUrl; ?>"
+                                                 alt="<?php $this->escapeHtml($product->getName()); ?>"
+                                                 class="img-responsive" />
+                                        </figure>
 
-                                    <div class="price clearfix">
-                                        <div class="col-price col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                                            <?php if (!$_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE && $_product->getPrice() != $_product->getFinalPrice()) : ?>
-                                                <span class="old">
-                                                    <?php echo $this->helper('core')->currency($product->getPrice(), true, false); ?>
-                                                </span>
-                                            <?php endif; ?>
-                                            <span>
-                                                <?php echo $this->helper('core')->currency($_product->getFinalPrice(), true, false); ?>
-                                            </span>
+                                        <div class="name_product">
+                                            <?php echo $this->escapeHtml($_product->getName()); ?>
                                         </div>
 
-                                        <div class="size-box-bundle col-lg-12 col-md-12 col-sm-12 col-xs-12 clearfix">
-                                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 clearfix quantity_block">
-                                                <?php if (	$_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE ||
-                                                    $_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE) : ?>
-                                                    <a href="#" class="qty_less" id="qty-less-<?php echo $_product->getId();?>" data-min_qty="<?php echo (int) $stockItem->getMinSaleQty(); ?>">-</a>
-                                                    <div class="qty qty-box" id="input-box-<?php echo $_product->getId();?>"
-                                                         title="<?php echo Mage::helper('zolagosolrsearch')->__("Maximum quantity&nbsp;%s", $maxSaleQty); ?>"
-                                                         data-toggle="tooltip" data-placemen="top"><input type="text" name="quantity" value="1"/></div>
-                                                    <a href="#" class="qty_more" id="qty-more-<?php echo $_product->getId();?>" data-qty="<?php echo $maxSaleQty; ?>">+</a>
-                                                <?php else: ?>
-                                                    <p class="variants"><?php echo Mage::helper('zolagosolrsearch')->__("Available in several variants"); ?></p>
+                                        <div class="price clearfix">
+                                            <div class="col-price col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                                <?php if (!$_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE && $_product->getPrice() != $_product->getFinalPrice()) : ?>
+                                                    <span class="old">
+                                                        <?php echo $this->helper('core')->currency($product->getPrice(), true, false); ?>
+                                                    </span>
                                                 <?php endif; ?>
+                                                <span>
+                                                    <?php echo $this->helper('core')->currency($_product->getFinalPrice(), true, false); ?>
+                                                </span>
                                             </div>
-                                            <div class="action-box-container col-lg-6 col-md-6 col-sm-6 col-xs-12 clearfix">
-                                                <div class="action-box-bundle clearfix">
+
+                                            <div class="size-box-bundle col-lg-12 col-md-12 col-sm-12 col-xs-12 clearfix">
+                                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 clearfix quantity_block">
                                                     <?php if (	$_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE ||
                                                         $_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE) : ?>
-                                                        <button class="btn button button-primary addBasket"
-                                                                onclick="Mall.validateAddingToCartListing(<?php echo $_product->getId(); ?>, <?php echo (int) $stockItem->getMinSaleQty(); ?>, <?php echo $maxSaleQty; ?>);return false;">
-                                                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                                                            <?php echo Mage::helper('zolagosolrsearch')->__("Add"); ?>
-                                                        </button>
+                                                        <a href="#" class="qty_less" id="qty-less-<?php echo $_product->getId();?>" data-min_qty="<?php echo (int) $stockItem->getMinSaleQty(); ?>">-</a>
+                                                        <div class="qty qty-box" id="input-box-<?php echo $_product->getId();?>"
+                                                             title="<?php echo Mage::helper('zolagosolrsearch')->__("Maximum quantity&nbsp;%s", $maxSaleQty); ?>"
+                                                             data-toggle="tooltip" data-placemen="top"><input type="text" name="quantity" value="1"/></div>
+                                                        <a href="#" class="qty_more" id="qty-more-<?php echo $_product->getId();?>" data-qty="<?php echo $maxSaleQty; ?>">+</a>
                                                     <?php else: ?>
-                                                        <span class="btn button button-primary addBasket">
-																			<i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                                                            <?php echo Mage::helper('zolagosolrsearch')->__("See"); ?>
-																		</span>
+                                                        <p class="variants"><?php echo Mage::helper('zolagosolrsearch')->__("Available in several variants"); ?></p>
                                                     <?php endif; ?>
+                                                </div>
+                                                <div class="action-box-container col-lg-6 col-md-6 col-sm-6 col-xs-12 clearfix">
+                                                    <div class="action-box-bundle clearfix">
+                                                        <?php if (	$_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE ||
+                                                            $_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE) : ?>
+                                                            <button class="btn button button-primary addBasket"
+                                                                    onclick="Mall.validateAddingToCartListing(<?php echo $_product->getId(); ?>, <?php echo (int) $stockItem->getMinSaleQty(); ?>, <?php echo $maxSaleQty; ?>);return false;">
+                                                                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                                                <?php echo Mage::helper('zolagosolrsearch')->__("Add"); ?>
+                                                            </button>
+                                                        <?php else: ?>
+                                                            <span class="btn button button-primary addBasket">
+                                                                                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                                                <?php echo Mage::helper('zolagosolrsearch')->__("See"); ?>
+                                                                            </span>
+                                                        <?php endif; ?>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="action-box col-lg-12 col-md-12 col-sm-12 col-xs-12 no-padding clearfix">
+                                                <div class="like liked" data-idproduct="<?php echo $_product->getId(); ?>">
+                                                    <span class="icoLike"></span>
+                                                    <span class="likeAdded"><i class="fa fa-list"></i>
+                                                        <elem class="desktop-view"><?php echo $_helper->__('Remove from the shopping list')?></elem>
+                                                        <elem class="mobile-view"><?php echo $_helper->__('Remove from the list')?></elem>
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="action-box col-lg-12 col-md-12 col-sm-12 col-xs-12 no-padding clearfix">
-                                            <div class="like liked" data-idproduct="<?php echo $_product->getId(); ?>">
-                                                <span class="icoLike"></span>
-                                                <span class="likeAdded"><i class="fa fa-list"></i>
-                                                    <elem class="desktop-view"><?php echo $_helper->__('Remove from the shopping list')?></elem>
-                                                    <elem class="mobile-view"><?php echo $_helper->__('Remove from the list')?></elem>
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    </figure>
 								</a>
                             </div>
                         </div>
