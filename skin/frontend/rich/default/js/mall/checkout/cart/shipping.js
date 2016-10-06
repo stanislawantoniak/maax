@@ -395,7 +395,6 @@
                     jQuery(".nearest_stores_container_list").slideToggle();
                 });
         },
-
         attachShowHideMapOnMobile: function(){
             if (Mall.getIsBrowserMobile())
                 Mall.Cart.Map.makeMapInvisible();
