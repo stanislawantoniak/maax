@@ -79,8 +79,14 @@ body.zolagomodago-index-index .benefits {
 
 		@media(max-width: 430px) {
 			.benefit-text {
+				margin-left: 10% !important;
 				background: none !important;
 				padding: 15px 5px 15px 10px !important;
+			}
+		}
+		@media(max-width: 350px) {
+			.benefit-text {
+				margin-left: 0 !important;
 			}
 		}
 		.benefit-text {
