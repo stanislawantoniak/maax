@@ -357,6 +357,67 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
 
+    public function getDeliveryPointCheckout() {
+
+        /** @var Zolago_Checkout_Helper_Data $helper */
+        $helper = Mage::helper("zolagocheckout");
+
+        $deliveryMethodData = $this->getMethodCodeByDeliveryType();
+        $deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
+
+
+        $deliveryPoint = new stdClass();
+        $deliveryPoint->id = NULL;
+
+        switch ($deliveryMethodCode) {
+            case ZolagoOs_PickupPoint_Helper_Data::CODE:
+                /* @var $pos  Zolago_Pos_Model_Pos */
+                $pos = $helper->getPickUpPoint();
+
+                $deliveryPoint->id = $pos->getId();
+                $deliveryPoint->name = $pos->getName();
+                $deliveryPoint->delivery_point_name = $pos->getId(); //this value will be saved to PO(delivery_point_name)
+                $deliveryPoint->city = $pos->getCity();
+                $deliveryPoint->street = $pos->getStreet();
+                $deliveryPoint->buildingNumber = "";
+                $deliveryPoint->postcode = $pos->getPostcode();
+                $deliveryPoint->locationDescription = "";
+
+
+                break;
+            case GH_Inpost_Model_Carrier::CODE:
+                /* @var $locker GH_Inpost_Model_Locker */
+                $locker = $helper->getInpostLocker();
+
+                $deliveryPoint->id = $locker->getId();
+                $deliveryPoint->name = $locker->getName();
+                $deliveryPoint->delivery_point_name = $locker->getName(); //this value will be saved to PO(delivery_point_name)
+                $deliveryPoint->city = $locker->getTown();
+                $deliveryPoint->street = $locker->getStreet();
+                $deliveryPoint->postcode = $locker->getPostcode();
+                $deliveryPoint->buildingNumber = $locker->getBuildingNumber();
+                $deliveryPoint->locationDescription = $locker->getLocationDescription();
+            break;
+            case Orba_Shipping_Model_Packstation_Pwr::CODE:
+                /* @var $locker ZolagoOs_Pwr_Model_Point */
+                $point = $helper->getPwrPoint();
+
+                $deliveryPoint->id = $point->getId();
+                $deliveryPoint->name = $point->getName();
+                $deliveryPoint->delivery_point_name = $point->getName();
+                $deliveryPoint->city = $point->getTown();
+                $deliveryPoint->street = $point->getStreet();
+                $deliveryPoint->postcode = $point->getPostcode();
+                $deliveryPoint->buildingNumber = $point->getBuildingNumber();
+                $deliveryPoint->locationDescription = $point->getLocationDescription();
+                break;
+        }
+        $deliveryPoint->method_code = $deliveryMethodCode;
+
+        return $deliveryPoint;
+    }
+
+
     /**
      * @param bool $includeTitle
      * @return mixed

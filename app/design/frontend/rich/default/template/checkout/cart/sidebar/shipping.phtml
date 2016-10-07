@@ -26,8 +26,26 @@ $selectedShipping = Mage::helper("zolagocheckout")->getSelectedShipping();
 foreach($selectedShipping["methods"] as $vid => $methodSelectedData){
     $sessionShippingMethod = $methodSelectedData;
 }
+
 $deliveryPoint = $this->getDeliveryPointCheckout();
-$deliveryPointName = $deliveryPoint->id ? $deliveryPoint->name : "";
+$saveBasketShippingUrl = Mage::getUrl("checkout/singlepage/saveBasketShipping", array("_secure" => true));
+
+$deliveryPointName = "";
+$deliveryPointJSONData = "";
+
+if ($deliveryPoint->id) {
+    $deliveryPointName = $deliveryPoint->name;
+    $deliveryPointJSONData = json_encode(
+        array(
+            'id' => $deliveryPoint->id,
+            'name' => $deliveryPoint->name,
+            'city' => $deliveryPoint->city,
+            'method_code' => $deliveryPoint->method_code,
+        )
+    );
+}
+
+
 /**
  * Totals
  */
@@ -38,10 +56,14 @@ $shippingTotal = empty($totals['shipping'])? 0:$totals["shipping"]->getAddress()
 $grandTotal = $totals["grand_total"]->getValue(); //Suma
 
 $deliveryMethods = $this->getMapDeliveryMethodsJSON($methods);
+
+
 ?>
 
 <script type="text/javascript">
     var sessionPointName = '<?php echo $deliveryPointName; ?>';
+    Mall.reg.set("sessionPointData", '<?php echo $deliveryPointJSONData; ?>');
+    Mall.reg.set("saveBasketShippingUrl", '<?php echo $saveBasketShippingUrl; ?>');
     Mall.reg.set("localeCode", '<?php echo substr(Mage::getStoreConfig('general/locale/code', Mage::app()->getStore()->getId()),0,2); ?>');
 
     Mall.translate.add("validation_please_select_shipping", "<?php echo $helper->__("Please select shipping");?>");

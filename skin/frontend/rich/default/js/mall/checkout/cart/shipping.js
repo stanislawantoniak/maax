@@ -121,9 +121,11 @@
 
             if (typeof self.getSelectedShipping().val() !== "undefined") {
                 jQuery.ajax({
-                    url: "/checkout/singlepage/saveBasketShipping/",
+                    url: Mall.reg.get("saveBasketShippingUrl"),
                     type: "POST",
                     data: jQuery("#cart-shipping-methods-form").serializeArray()
+                }).done(function(response){
+                    console.log(response);
                 });
             }
 
@@ -267,16 +269,23 @@
 
             jQuery("#cart-buy-overlay").removeClass("hidden");
             jQuery.ajax({
-                url: "/checkout/singlepage/saveBasketShipping/",
+                url: Mall.reg.get("saveBasketShippingUrl"),
                 type: "POST",
                 data: formData
             }).done(function (response) {
+                console.log(response);
                 jQuery("#cart-buy")
                     .prop("disabled", false);
                 jQuery("#cart-buy").find('i')
                     .removeClass('fa fa-spinner fa-spin');
 
                 jQuery("#cart-buy-overlay").addClass("hidden");
+                if(response.status){
+                    var sessionPointData = response.content.deliveryPoint;
+                    if(sessionPointData.id){
+                        Mall.reg.set("sessionPointData", JSON.stringify(sessionPointData, null, 2));
+                    }
+                }
             });
 
             Mall.Cart.Shipping.updateTotals();
@@ -343,11 +352,7 @@
                     });
             }
 
-            if (Mall.getIsBrowserMobile()) {
-                inpostModal.find('.select2').on('select2:open', function (e) {
-                    jQuery('.select2-search input').prop('focus', false);
-                });
-            }
+
             if (!Mall.getIsBrowserMobile()) {
                 jQuery("[name=shipping_select_city]").select2({
                     placeholder: Mall.translate.__("shipping_map_select_city"),
@@ -362,10 +367,7 @@
                     jQuery("[name=shipping_select_point]")
                         .attr("disabled", true)
                         .val("")
-                        .select2({
-                            dropdownParent: inpostModal,
-                            language: Mall.reg.get("localeCode")
-                        });
+                        .select2({dropdownParent: inpostModal,language: Mall.reg.get("localeCode")});
                 } else {
                     jQuery("[name=shipping_select_point]")
                         .attr("disabled", true)
@@ -377,16 +379,11 @@
             inpostModal.on('show.bs.modal', function () {
                 //Must wait until the render of the modal appear,
                 // that's why we use the resizeMap and NOT resizingMap!! ;-)
-                var sessionPoint = jQuery("[name=shipping_point_code]");
-
-                Mall.Cart.Map.resizeMap(sessionPoint.val());
+                var sessionPointData = jQuery.parseJSON(Mall.reg.get("sessionPointData"));
+                console.log(sessionPointData,sessionPointData.name);
+                Mall.Cart.Map.resizeMap(sessionPointData.name);
 
                 jQuery("#cart-shipping-methods input[name=shipping_point_code]").val("");
-
-                //Fix for iPhone and Android native browser
-                //jQuery('body').css('overflow','hidden');
-                //jQuery('body').css('position','fixed');
-                //--Fix for iPhone and Android native browser
             });
             inpostModal.on('hide.bs.modal', function () {
                 //If inPost selected but paczkomat not selected
@@ -406,16 +403,21 @@
             });
         },
         attachShowOnMapSavedInSessionPoint: function () {
-            var sessionPoint = jQuery("[name=shipping_point_code]");
+            var sessionPointData = jQuery.parseJSON(Mall.reg.get("sessionPointData"));
+            var sessionPointName = sessionPointData.name;
+            var shippingCarrierPoint = Mall.Cart.Shipping.carrierPoint;
+            console.log(sessionPointData);
+            if (shippingCarrierPoint !== sessionPointData.method_code)
+                return;
 
-            var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "']");
+            var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='" + shippingCarrierPoint + "']");
             var sessionPointTown = '';
 
             if (sessionPointName) {
-                sessionPointTown = sessionPoint.attr("data-town");
+                sessionPointTown = sessionPointData.city;
 
                 jQuery(".shipping_select_point_data").html("");
-                if(sessionPointTown.length > 0){
+                if (sessionPointTown.length > 0) {
                     if (!Mall.getIsBrowserMobile()) {
                         jQuery("[name=shipping_select_city]")
                             .val(sessionPointTown)
@@ -427,12 +429,9 @@
 
                     Mall.Cart.Map.searchOnMap(sessionPointTown, sessionPointName);
                 }
-
             }
-
         },
         attachShowHideNearestPointsList: function(){
-
             jQuery("body").delegate(".nearest_stores_container_link",
                 "click",
                 function (e) {
@@ -773,6 +772,7 @@
 
 
             if(typeof point !== "undefined"){
+                console.log(point);
                 //Show on map session paczkomat
                Mall.Cart.Map.showMarkerOnMap(point);
             }

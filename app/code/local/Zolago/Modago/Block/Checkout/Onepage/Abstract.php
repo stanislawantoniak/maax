@@ -78,6 +78,7 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
             $deliveryPoint->checkout->additionalInfo2 = $helper->__("We do not use it in any other way without your permission!");
             break;
         }
+        $deliveryPoint->method_code = $deliveryMethodCode;
 
         return $deliveryPoint;
     }

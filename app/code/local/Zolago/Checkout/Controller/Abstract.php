@@ -618,14 +618,23 @@ abstract class Zolago_Checkout_Controller_Abstract
 
         try {
             $this->importPostShippingData();
+            /** @var Zolago_Checkout_Helper_Data $helper */
+            $helper = Mage::helper("zolagocheckout");
+            $deliveryPointCheckout = $helper->getDeliveryPointCheckout();
+            if ($deliveryPointCheckout->id) {
+                $response = array(
+                    "status" => true,
+                    "content" => array("deliveryPoint" => (array)$helper->getDeliveryPointCheckout())
+                );
+            }
         } catch (Exception $ex) {
             $response = array(
-                            "status"=>0,
-                            "content"=>$ex->getMessage()
-                        );
+                "status" => 0,
+                "content" => $ex->getMessage()
+            );
         }
 
-        if($this->getRequest()->isAjax()) {
+        if ($this->getRequest()->isAjax()) {
             $this->_prepareJsonResponse($response);
         }
     }
