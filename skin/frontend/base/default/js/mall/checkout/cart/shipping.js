@@ -395,22 +395,24 @@
                     jQuery(".nearest_stores_container_list").slideToggle();
                 });
         },
+
         attachShowHideMapOnMobile: function(){
-            if(Mall.getIsBrowserMobile()){
-                jQuery(".map_delivery_container").hide();
-            }
+            if (Mall.getIsBrowserMobile())
+                Mall.Cart.Map.makeMapInvisible();
+
             jQuery(document).delegate(".map_delivery_container_show",
                 "click",
                 function (e) {
                     e.preventDefault();
                     Mall.Cart.Map.resizeMapMobile();
                     jQuery(this).text(Mall.translate.__("shipping_map_hide_map_link"));
-                    if (jQuery('.map_delivery_container').is(':visible')) {
+                    if (jQuery('.map_delivery_container').hasClass('map_delivery_container_visible')) {
                         jQuery(this).text(Mall.translate.__("shipping_map_show_map_link"));
+                        Mall.Cart.Map.makeMapInvisible();
                     } else {
                         jQuery(this).text(Mall.translate.__("shipping_map_hide_map_link"));
+                        Mall.Cart.Map.makeMapVisible();
                     }
-                    jQuery(".map_delivery_container").slideToggle();
                 });
         },
         selectMethod: function (e) {
@@ -661,6 +663,17 @@
             if(typeof Mall.Cart.Map.gmarkers[markerId] !== "undefined"){
                 google.maps.event.trigger(Mall.Cart.Map.gmarkers[markerId], "click");
             }
+        },
+
+        makeMapInvisible: function(){
+            jQuery(".map_delivery_container")
+                .removeClass("map_delivery_container_visible")
+                .css({"height": "0px", "overflow":"hidden", "z-index": "-1"});
+        },
+        makeMapVisible: function(){
+            jQuery(".map_delivery_container")
+                .addClass("map_delivery_container_visible")
+                .css({"height": "auto", "overflow":"visible", "z-index": "inherit"});
         },
 
         resizeMapMobile: function(){

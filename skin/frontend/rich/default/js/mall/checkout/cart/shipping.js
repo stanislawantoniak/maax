@@ -58,19 +58,30 @@
 
                         var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "']");
 
-                        inpostModal.find("[name=shipping_select_city]").val("").select2({
-                            placeholder: Mall.translate.__("shipping_map_select_city"),
-                            dropdownParent: inpostModal,
-                            language: Mall.reg.get("localeCode")
-                        });
 
-                        inpostModal.find("[name=shipping_select_point]")
-                            .attr("disabled", true)
-                            .val("")
-                            .select2({
+                        if (!Mall.getIsBrowserMobile()) {
+                            inpostModal.find("[name=shipping_select_city]").val("").select2({
+                                placeholder: Mall.translate.__("shipping_map_select_city"),
                                 dropdownParent: inpostModal,
                                 language: Mall.reg.get("localeCode")
                             });
+
+                            inpostModal.find("[name=shipping_select_point]")
+                                .attr("disabled", true)
+                                .val("")
+                                .select2({
+                                    dropdownParent: inpostModal,
+                                    language: Mall.reg.get("localeCode")
+                                });
+                        } else {
+                            inpostModal.find("[name=shipping_select_city]").val("");
+
+                            inpostModal.find("[name=shipping_select_point]")
+                                .attr("disabled", true)
+                                .val("");
+                        }
+
+
                     }
 
                     if (Object.keys(Mall.Cart.Map.deliverySet).length > 0) {
@@ -94,6 +105,7 @@
 
                         Mall.Cart.Map.map.setZoom(5);
                         Mall.Cart.Map.map.setCenter({lat: 52.229818, lng: 21.011864});
+
                     }
 
                 }
@@ -302,37 +314,64 @@
 
             var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='" + self.carrierPoint + "']");
 
-            jQuery("[name=shipping_select_point]")
-                .select2({dropdownParent: inpostModal,language: Mall.reg.get("localeCode")})
-                .change(function () {
-                    var el = jQuery(this), val = el.val();
-                    el.addClass("onchange_shipping_select_point");
-                    if (typeof val !== "undefined" && val.length > 0) {
-                        Mall.Cart.Map.showMarkerOnMap(val);
-                    }
+            if (!Mall.getIsBrowserMobile()) {
+                jQuery("[name=shipping_select_point]")
+                    .select2({dropdownParent: inpostModal,language: Mall.reg.get("localeCode")})
+                    .change(function () {
+                        var el = jQuery(this), val = el.val();
+                        el.addClass("onchange_shipping_select_point");
+                        if (typeof val !== "undefined" && val.length > 0) {
+                            Mall.Cart.Map.showMarkerOnMap(val);
+                        }
 
-                    jQuery(".nearest_stores_container_list").hide();
-                    jQuery(".nearest_stores_container_link").text(Mall.translate.__("shipping_map_show_nearest_link"));
+                        jQuery(".nearest_stores_container_list").hide();
+                        jQuery(".nearest_stores_container_link").text(Mall.translate.__("shipping_map_show_nearest_link"));
 
-                });
+                    });
+            } else {
+                jQuery("[name=shipping_select_point]")
+                    .change(function () {
+                        var el = jQuery(this), val = el.val();
+                        el.addClass("onchange_shipping_select_point");
+                        if (typeof val !== "undefined" && val.length > 0) {
+                            Mall.Cart.Map.showMarkerOnMap(val);
+                        }
+
+                        jQuery(".nearest_stores_container_list").hide();
+                        jQuery(".nearest_stores_container_link").text(Mall.translate.__("shipping_map_show_nearest_link"));
+
+                    });
+            }
+
             if (Mall.getIsBrowserMobile()) {
                 inpostModal.find('.select2').on('select2:open', function (e) {
                     jQuery('.select2-search input').prop('focus', false);
                 });
             }
-            jQuery("[name=shipping_select_city]").select2({
-                placeholder: Mall.translate.__("shipping_map_select_city"),
-                dropdownParent: inpostModal,
-                language: Mall.reg.get("localeCode")
-            });
-
-            if (firstTime) jQuery("[name=shipping_select_point]")
-                .attr("disabled", true)
-                .val("")
-                .select2({
+            if (!Mall.getIsBrowserMobile()) {
+                jQuery("[name=shipping_select_city]").select2({
+                    placeholder: Mall.translate.__("shipping_map_select_city"),
                     dropdownParent: inpostModal,
                     language: Mall.reg.get("localeCode")
                 });
+            }
+
+
+            if (firstTime) {
+                if (!Mall.getIsBrowserMobile()) {
+                    jQuery("[name=shipping_select_point]")
+                        .attr("disabled", true)
+                        .val("")
+                        .select2({
+                            dropdownParent: inpostModal,
+                            language: Mall.reg.get("localeCode")
+                        });
+                } else {
+                    jQuery("[name=shipping_select_point]")
+                        .attr("disabled", true)
+                        .val("");
+                }
+            }
 
 
             inpostModal.on('show.bs.modal', function () {
@@ -370,9 +409,12 @@
                 sessionPointTown = sessionPoint.attr("data-town");
 
                 jQuery(".shipping_select_point_data").html("");
-                jQuery("[name=shipping_select_city]")
-                    .val(sessionPointTown)
-                    .select2({dropdownParent: inpostModal, language: Mall.reg.get("localeCode")});
+                if (!Mall.getIsBrowserMobile()) {
+                    jQuery("[name=shipping_select_city]")
+                        .val(sessionPointTown)
+                        .select2({dropdownParent: inpostModal, language: Mall.reg.get("localeCode")});
+
+                }
 
                 Mall.Cart.Map.searchOnMap(sessionPointTown, sessionPointName);
             }
@@ -394,21 +436,22 @@
                 });
         },
         attachShowHideMapOnMobile: function(){
-            if(Mall.getIsBrowserMobile()){
-                jQuery(".map_delivery_container").hide();
-            }
+            if (Mall.getIsBrowserMobile())
+                Mall.Cart.Map.makeMapInvisible();
+
             jQuery(document).delegate(".map_delivery_container_show",
                 "click",
                 function (e) {
                     e.preventDefault();
                     Mall.Cart.Map.resizeMapMobile();
                     jQuery(this).text(Mall.translate.__("shipping_map_hide_map_link"));
-                    if (jQuery('.map_delivery_container').is(':visible')) {
+                    if (jQuery('.map_delivery_container').hasClass('map_delivery_container_visible')) {
                         jQuery(this).text(Mall.translate.__("shipping_map_show_map_link"));
+                        Mall.Cart.Map.makeMapInvisible();
                     } else {
                         jQuery(this).text(Mall.translate.__("shipping_map_hide_map_link"));
+                        Mall.Cart.Map.makeMapVisible();
                     }
-                    jQuery(".map_delivery_container").slideToggle();
                 });
         },
         selectMethod: function (e) {
@@ -588,12 +631,18 @@
                     //if nearest store marker clicked, but the city is different from selected
                     if (this.nearest === 1 && jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_city]").val() !== this.town) {
 
-                        jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_city]")
-                            .val(this.town)
-                            .select2({
-                                dropdownParent: inpostModal,
-                                language: Mall.reg.get("localeCode")
-                            });
+                        if (!Mall.getIsBrowserMobile()) {
+                            jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_city]")
+                                .val(this.town)
+                                .select2({
+                                    dropdownParent: inpostModal,
+                                    language: Mall.reg.get("localeCode")
+                                });
+                        } else {
+                            jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_city]")
+                                .val(this.town);
+                        }
+
                         jQuery(".shipping_select_point_data").html("");
 
                         Mall.Cart.Map.searchOnMap(this.town, this.name);
@@ -601,11 +650,14 @@
 
                     jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_point]").val(this.name);
                     if (!jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_point]").hasClass("onchange_shipping_select_point")) {
-                        jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_point]")
-                            .select2({
-                                dropdownParent: inpostModal,
-                                language: Mall.reg.get("localeCode")
-                            });
+                        if (!Mall.getIsBrowserMobile()) {
+                            jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_point]")
+                                .select2({
+                                    dropdownParent: inpostModal,
+                                    language: Mall.reg.get("localeCode")
+                                });
+                        }
+
                     }
                     jQuery("[name=shipping_select_point]").removeClass("onchange_shipping_select_point");
 
@@ -659,6 +711,17 @@
             if(typeof Mall.Cart.Map.gmarkers[markerId] !== "undefined"){
                 google.maps.event.trigger(Mall.Cart.Map.gmarkers[markerId], "click");
             }
+        },
+
+        makeMapInvisible: function(){
+            jQuery(".map_delivery_container")
+                .removeClass("map_delivery_container_visible")
+                .css({"height": "0px", "overflow":"hidden", "z-index": "-1"});
+        },
+        makeMapVisible: function(){
+            jQuery(".map_delivery_container")
+                .addClass("map_delivery_container_visible")
+                .css({"height": "auto", "overflow":"visible", "z-index": "inherit"});
         },
 
         resizeMapMobile: function(){
@@ -911,8 +974,12 @@
             }
 
             var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "']");
-            jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_point]")
-                .select2({dropdownParent: inpostModal, language: Mall.reg.get("localeCode")});
+
+            if (!Mall.getIsBrowserMobile()) {
+                jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_point]")
+                    .select2({dropdownParent: inpostModal, language: Mall.reg.get("localeCode")});
+            }
+
         }
     }
 
