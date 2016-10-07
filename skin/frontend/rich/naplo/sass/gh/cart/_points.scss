@@ -188,6 +188,27 @@
           }
           .gui-form-control-wrapper {
             padding-left: 8px;
+            @media(max-width: $screen-xs-max) {
+              margin-bottom: 5px;
+            }
+
+            select {
+              &:not(.select2-hidden-accessible) {
+                line-height: 28px;
+                background-color: #fff;
+                height: 28px;
+                color: #444;
+                padding-left: 8px;
+                border: 1px solid #aaa;
+                border-radius: 4px;
+                cursor: pointer;
+
+                &:disabled {
+                  background-color: #eee;
+                }
+              }
+            }
+
           }
 
           .map_delivery_container {
@@ -206,7 +227,7 @@
       .map_delivery_container_show {
         text-decoration: underline;
         display: none;
-        @media(max-width: $screen-xs) {
+        @media(max-width: $screen-xs-max) {
           display: block;
         }
       }
