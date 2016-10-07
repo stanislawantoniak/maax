@@ -922,9 +922,20 @@
                 jQuery("#" + Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapDelivery).css({"visibility": "visible", "display": "block"});
 
 
+
                 if(Mall.getIsBrowserMobile()){
-                    jQuery(".map_delivery_container_wrapper .map_delivery_container_show_up")
-                        .html('<a href="" class="map_delivery_container_show">'+Mall.translate.__("shipping_map_show_map_link")+'</a>');
+                    var isMapVisible = jQuery("#" + Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapDelivery)
+                        .parents(".map_delivery_container")
+                        .hasClass("map_delivery_container_visible");
+
+                    if(isMapVisible){
+                        jQuery(".map_delivery_container_wrapper .map_delivery_container_show_up")
+                            .html('<a href="" class="map_delivery_container_show">'+Mall.translate.__("shipping_map_hide_map_link")+'</a>');
+                    } else {
+                        jQuery(".map_delivery_container_wrapper .map_delivery_container_show_up")
+                            .html('<a href="" class="map_delivery_container_show">'+Mall.translate.__("shipping_map_show_map_link")+'</a>');
+                    }
+
                 }
 
                 if(markerToShow){
