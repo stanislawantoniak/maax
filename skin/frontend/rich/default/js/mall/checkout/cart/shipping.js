@@ -125,7 +125,7 @@
                     type: "POST",
                     data: jQuery("#cart-shipping-methods-form").serializeArray()
                 }).done(function(response){
-                    console.log(response);
+                    //console.log(response);
                 });
             }
 
@@ -273,7 +273,7 @@
                 type: "POST",
                 data: formData
             }).done(function (response) {
-                console.log(response);
+
                 jQuery("#cart-buy")
                     .prop("disabled", false);
                 jQuery("#cart-buy").find('i')
@@ -382,7 +382,6 @@
                 var sessionPointDataJSON = Mall.reg.get("sessionPointData");
                 if(sessionPointDataJSON.length > 0){
                     var sessionPointData = jQuery.parseJSON(Mall.reg.get("sessionPointData"));
-                    console.log(sessionPointData,sessionPointData.name);
                     Mall.Cart.Map.resizeMap(sessionPointData.name);
                 }
                 jQuery("#cart-shipping-methods input[name=shipping_point_code]").val("");
@@ -781,7 +780,6 @@
 
 
             if(typeof point !== "undefined"){
-                console.log(point);
                 //Show on map session paczkomat
                Mall.Cart.Map.showMarkerOnMap(point);
             }
