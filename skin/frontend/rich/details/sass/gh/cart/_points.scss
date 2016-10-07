@@ -1,3 +1,12 @@
+@media (max-width: $screen-xs-max) {
+    body.modal-open {
+        position: fixed;
+        width: 100%;
+        overflow: hidden;
+    }
+}
+
+
 #shopping-cart {
   #cart-shipping-methods-form {
     .data-validate {
