@@ -52,15 +52,22 @@ $isPickUpPaymentCanBeEntered = $this->isPickUpPaymentCanBeEntered();
 				</a> 
 			<?php endif;?>
 
-
 			<?php if($_statusModel->isShippingAvailable($_po)):?>
 				<?php if ($_hlp->isDeliveryPickUpPoint($_po) ): ?>
+					<?php if($_statusModel->isReadyToPickUp($_po)) :?>
 						<?php if ($_hlp->isPickUpPointConfirmAvailable($_po) ): ?>
 							<a class="btn-notification btn  btn-primary" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("confirmPickUp");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("Are you sure you want to confirm Pick Up?");?>" data-modal="true" href="#">
 								<i class="icon-ok"></i>
 								<?php echo $_hlp->__("Confirm Pick Up");?>
 							</a>
 						<?php endif; ?>
+					<?php else: ?>
+				
+					    <a class="btn-notification btn  btn-primary" data-placement="top" data-ok-url="<?php echo $this->getPoUrl("sendPickUpInfo");?>" data-layout="top" data-type="confirm" data-text="<?php echo $_hlp->__("Are you sure you want to send information about pick up to customer?");?>" data-modal="true" href="#">
+						<i class="icon-ok"></i>
+						<?php echo $_hlp->__("Send Pick Up Email");?>
+					    </a>
+					<?php endif; ?>
 				<?php else : ?>
 					<?php if($this->canUseCarrier()):?>
 						<button class="btn btn-primary" data-toggle="modal" href="#shippingModal"><?php echo $_hlp->__("Create shipping label");?></button>
@@ -96,14 +103,6 @@ $isPickUpPaymentCanBeEntered = $this->isPickUpPaymentCanBeEntered();
 					<?php endif; ?>
 
 				<?php endif;?>
-			<?php else:?>
-				<?php /* if($_po->getStockConfirm()):?>
-				<button class="btn  btn-success" disabled="disabled">
-					<i class="icon-barcode"></i>
-					<?php echo $_hlp->__("Stock checked");?>
-				</button>
-				<?php endif; */?>
-
 
 			<?php endif;?>
 				
