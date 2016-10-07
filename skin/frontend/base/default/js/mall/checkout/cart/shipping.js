@@ -769,10 +769,8 @@
             //Show on map session paczkomat
             if(typeof window.geoposition === "undefined"){
                 Mall.Cart.Shipping.attachShowOnMapSavedInSessionPoint();
-            }
-
-            //Show on map session paczkomat
-            if(typeof point !== "undefined"){
+            } else if(typeof point !== "undefined"){
+                //Show on map session paczkomat
                 Mall.Cart.Map.showMarkerOnMap(point);
             }
 
