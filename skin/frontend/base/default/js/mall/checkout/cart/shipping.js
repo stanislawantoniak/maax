@@ -343,6 +343,11 @@
                     });
             }
 
+            if (Mall.getIsBrowserMobile()) {
+                inpostModal.find('.select2').on('select2:open', function (e) {
+                    jQuery('.select2-search input').prop('focus', false);
+                });
+            }
             if (!Mall.getIsBrowserMobile()) {
                 jQuery("[name=shipping_select_city]").select2({
                     placeholder: Mall.translate.__("shipping_map_select_city"),
@@ -402,21 +407,27 @@
         },
         attachShowOnMapSavedInSessionPoint: function () {
             var sessionPoint = jQuery("[name=shipping_point_code]");
+
             var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "']");
-            var sessionPointTown;
+            var sessionPointTown = '';
 
             if (sessionPointName) {
                 sessionPointTown = sessionPoint.attr("data-town");
 
                 jQuery(".shipping_select_point_data").html("");
-                if (!Mall.getIsBrowserMobile()) {
-                    jQuery("[name=shipping_select_city]")
-                        .val(sessionPointTown)
-                        .select2({dropdownParent: inpostModal, language: Mall.reg.get("localeCode")});
+                if(sessionPointTown.length > 0){
+                    if (!Mall.getIsBrowserMobile()) {
+                        jQuery("[name=shipping_select_city]")
+                            .val(sessionPointTown)
+                            .select2({dropdownParent: inpostModal, language: Mall.reg.get("localeCode")});
+                    } else {
+                        jQuery("[name=shipping_select_city]")
+                            .val(sessionPointTown);
+                    }
 
+                    Mall.Cart.Map.searchOnMap(sessionPointTown, sessionPointName);
                 }
 
-                Mall.Cart.Map.searchOnMap(sessionPointTown, sessionPointName);
             }
 
         },
