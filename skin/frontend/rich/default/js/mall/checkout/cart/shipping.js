@@ -382,6 +382,11 @@
                 Mall.Cart.Map.resizeMap(sessionPoint.val());
 
                 jQuery("#cart-shipping-methods input[name=shipping_point_code]").val("");
+
+                //Fix for iPhone and Android native browser
+                jQuery('body').css('overflow','hidden');
+                jQuery('body').css('position','fixed');
+                //--Fix for iPhone and Android native browser
             });
             inpostModal.on('hide.bs.modal', function () {
                 //If inPost selected but paczkomat not selected
