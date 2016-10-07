@@ -213,6 +213,17 @@
 
           .map_delivery_container {
             padding-left: 0;
+
+            height: 0px !important;
+            overflow: hidden;
+            z-index: -9999;
+
+            &.map_delivery_container_visible {
+              height: auto !important;
+              overflow: visible;
+              z-index: inherit;
+            }
+
           }
         }
         .map_delivery_container_wrapper {

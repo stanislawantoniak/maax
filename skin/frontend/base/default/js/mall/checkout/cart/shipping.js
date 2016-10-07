@@ -379,8 +379,8 @@
                 jQuery("#cart-shipping-methods input[name=shipping_point_code]").val("");
 
                 //Fix for iPhone and Android native browser
-                jQuery('body').css('overflow','hidden');
-                jQuery('body').css('position','fixed');
+                //jQuery('body').css('overflow','hidden');
+                //jQuery('body').css('position','fixed');
                 //--Fix for iPhone and Android native browser
             });
             inpostModal.on('hide.bs.modal', function () {
@@ -715,13 +715,11 @@
 
         makeMapInvisible: function(){
             jQuery(".map_delivery_container")
-                .removeClass("map_delivery_container_visible")
-                .css({"height": "0px", "overflow":"hidden", "z-index": "-1"});
+                .removeClass("map_delivery_container_visible");
         },
         makeMapVisible: function(){
             jQuery(".map_delivery_container")
-                .addClass("map_delivery_container_visible")
-                .css({"height": "auto", "overflow":"visible", "z-index": "inherit"});
+                .addClass("map_delivery_container_visible");
         },
 
         resizeMapMobile: function(){
