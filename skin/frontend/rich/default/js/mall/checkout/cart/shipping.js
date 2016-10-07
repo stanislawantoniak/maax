@@ -816,18 +816,21 @@
             var pos;
             var closestStores = [];
 
-            for (var i = 0; i < Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.length; i++) {
-                pos = Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i];
-                // get the distance between user's location and this point
-                var dist = MapsHelper.Haversine(Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].latitude, Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].longitude, position.coords.latitude, position.coords.longitude);
+            if(typeof Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints !== "undefined"){
+                for (var i = 0; i < Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.length; i++) {
+                    pos = Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i];
+                    // get the distance between user's location and this point
+                    var dist = MapsHelper.Haversine(Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].latitude, Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].longitude, position.coords.latitude, position.coords.longitude);
 
-                // check if this is the shortest distance so far
-                if (dist < minDistance) {
-                    Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].distance = dist;
-                    Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].nearest = 1;
-                    closestStores.push(Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i]);
+                    // check if this is the shortest distance so far
+                    if (dist < minDistance) {
+                        Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].distance = dist;
+                        Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].nearest = 1;
+                        closestStores.push(Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i]);
+                    }
                 }
             }
+
 
             return closestStores;
         },
