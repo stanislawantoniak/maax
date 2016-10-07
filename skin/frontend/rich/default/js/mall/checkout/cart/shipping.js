@@ -767,9 +767,9 @@
             Mall.Cart.Map.map.setCenter(center);
 
             //Show on map session paczkomat
-            //if(typeof window.geoposition === "undefined"){
+            if(typeof window.geoposition === "undefined"){
                 Mall.Cart.Shipping.attachShowOnMapSavedInSessionPoint();
-            //}
+            }
 
             //Show on map session paczkomat
             if(typeof point !== "undefined"){
