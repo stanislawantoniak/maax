@@ -407,7 +407,7 @@
         },
         attachShowOnMapSavedInSessionPoint: function () {
             var sessionPoint = jQuery("[name=shipping_point_code]");
-            console.log(sessionPoint);
+
             var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "']");
             var sessionPointTown = '';
 
@@ -767,7 +767,6 @@
             Mall.Cart.Map.map.setCenter(center);
 
             //Show on map session paczkomat
-            console.log(window.geoposition);
             if(typeof window.geoposition === "undefined"){
                 Mall.Cart.Shipping.attachShowOnMapSavedInSessionPoint();
             }
