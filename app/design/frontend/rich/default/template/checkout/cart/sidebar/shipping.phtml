@@ -17,9 +17,6 @@ $costSumm = $this->getItemsShippingCost();
 $cost = $items->cost;
 
 $checkoutSession = Mage::getSingleton('checkout/session');
-
-/* @var $locker GH_Inpost_Model_Locker  */
-$locker		= $this->getInpostLocker();
 $inpostLogo	= $this->getSkinUrl('images/inpost/checkout-logo.png');
 
 $quote = $this->getQuote();
@@ -43,7 +40,7 @@ $deliveryMethods = $this->getMapDeliveryMethodsJSON($methods);
 ?>
 
 <script type="text/javascript">
-    var sessionPointName = '<?php echo $locker->getName(); ?>';
+    var sessionPointName = '<?php echo $deliveryPoint->name; ?>';
     Mall.reg.set("localeCode", '<?php echo substr(Mage::getStoreConfig('general/locale/code', Mage::app()->getStore()->getId()),0,2); ?>');
 
     Mall.translate.add("validation_please_select_shipping", "<?php echo $helper->__("Please select shipping");?>");
@@ -56,8 +53,6 @@ $deliveryMethods = $this->getMapDeliveryMethodsJSON($methods);
     Mall.translate.add("shipping_map_method_select", "<?php echo $helper->__("choose"); ?>");
 </script>
 <script type="text/javascript" src="<?php echo $this->getSkinUrl("js/mall/checkout/cart/shipping.js") ?>"></script>
-
-
 
 <?php if(!empty($rates)): ?>
 <fieldset id="cart-shipping-methods">

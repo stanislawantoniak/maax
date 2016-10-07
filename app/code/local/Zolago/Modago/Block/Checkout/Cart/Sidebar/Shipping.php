@@ -66,7 +66,7 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
                 break;
 			case $pwrCarrierCode:
                 $point = $this->getPwrPoint();
-				$additionalData = $this->getPwrLockerRender($point);
+				$additionalData = $this->getPwrPointRender($point);
                 break;
         }
         return $additionalData;
