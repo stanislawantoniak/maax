@@ -407,17 +407,15 @@
         },
         attachShowOnMapSavedInSessionPoint: function () {
             var sessionPointDataJSON = Mall.reg.get("sessionPointData");
-            console.log(sessionPointDataJSON);
             if (sessionPointDataJSON.length == 0) {
                 //No point in session
-                console.log("No point in session");
                 return;
             }
             var sessionPointData = jQuery.parseJSON(Mall.reg.get("sessionPointData"));
 
             var sessionPointName = sessionPointData.name;
             var shippingCarrierPoint = Mall.Cart.Shipping.carrierPoint;
-            console.log(sessionPointData);
+
             if (shippingCarrierPoint !== sessionPointData.method_code)
                 return;
 
