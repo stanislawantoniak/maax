@@ -206,7 +206,7 @@
       .map_delivery_container_show {
         text-decoration: underline;
         display: none;
-        @media(max-width: $screen-xs) {
+        @media(max-width: $screen-xs-max) {
           display: block;
         }
       }

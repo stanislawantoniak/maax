@@ -343,11 +343,6 @@
                     });
             }
 
-            if (Mall.getIsBrowserMobile()) {
-                inpostModal.find('.select2').on('select2:open', function (e) {
-                    jQuery('.select2-search input').prop('focus', false);
-                });
-            }
             if (!Mall.getIsBrowserMobile()) {
                 jQuery("[name=shipping_select_city]").select2({
                     placeholder: Mall.translate.__("shipping_map_select_city"),
@@ -382,6 +377,11 @@
                 Mall.Cart.Map.resizeMap(sessionPoint.val());
 
                 jQuery("#cart-shipping-methods input[name=shipping_point_code]").val("");
+
+                //Fix for iPhone and Android native browser
+                jQuery('body').css('overflow','hidden');
+                jQuery('body').css('position','fixed');
+                //--Fix for iPhone and Android native browser
             });
             inpostModal.on('hide.bs.modal', function () {
                 //If inPost selected but paczkomat not selected
