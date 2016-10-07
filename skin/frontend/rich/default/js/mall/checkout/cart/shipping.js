@@ -280,9 +280,9 @@
                     .removeClass('fa fa-spinner fa-spin');
 
                 jQuery("#cart-buy-overlay").addClass("hidden");
-                if(response.status){
+                if(response.status && response.content.length > 0){
                     var sessionPointData = response.content.deliveryPoint;
-                    if(sessionPointData.id){
+                    if(sessionPointData.length > 0 && sessionPointData.id){
                         Mall.reg.set("sessionPointData", JSON.stringify(sessionPointData, null, 2));
                     }
                 }
@@ -379,11 +379,14 @@
             inpostModal.on('show.bs.modal', function () {
                 //Must wait until the render of the modal appear,
                 // that's why we use the resizeMap and NOT resizingMap!! ;-)
-                var sessionPointData = jQuery.parseJSON(Mall.reg.get("sessionPointData"));
-                console.log(sessionPointData,sessionPointData.name);
-                Mall.Cart.Map.resizeMap(sessionPointData.name);
-
+                var sessionPointDataJSON = Mall.reg.get("sessionPointData");
+                if(sessionPointDataJSON.length > 0){
+                    var sessionPointData = jQuery.parseJSON(Mall.reg.get("sessionPointData"));
+                    console.log(sessionPointData,sessionPointData.name);
+                    Mall.Cart.Map.resizeMap(sessionPointData.name);
+                }
                 jQuery("#cart-shipping-methods input[name=shipping_point_code]").val("");
+
             });
             inpostModal.on('hide.bs.modal', function () {
                 //If inPost selected but paczkomat not selected
@@ -403,7 +406,15 @@
             });
         },
         attachShowOnMapSavedInSessionPoint: function () {
+            var sessionPointDataJSON = Mall.reg.get("sessionPointData");
+            console.log(sessionPointDataJSON);
+            if (sessionPointDataJSON.length == 0) {
+                //No point in session
+                console.log("No point in session");
+                return;
+            }
             var sessionPointData = jQuery.parseJSON(Mall.reg.get("sessionPointData"));
+
             var sessionPointName = sessionPointData.name;
             var shippingCarrierPoint = Mall.Cart.Shipping.carrierPoint;
             console.log(sessionPointData);
