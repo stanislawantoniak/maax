@@ -850,7 +850,7 @@
             if(typeof (pos.payment_point_description) !== "undefined"
                 && pos.payment_point_description.length > 0
             ){
-                payment_point_description = "<div><span><i class='fa fa-credit-card fa-1x'></i> " +pos.payment_point_description+ "</span></div>";
+                //payment_point_description = "<div><span><i class='fa fa-credit-card fa-1x'></i> " +pos.payment_point_description+ "</span></div>";
             }
             var pos_additional =
                 '<div>' + (pos.street ? pos.street : "") + ' ' + (pos.building_number ? pos.building_number : "") + '</div>' +
@@ -874,7 +874,7 @@
             if(typeof (pos.payment_point_description) !== "undefined"
                 && pos.payment_point_description.length > 0
             ){
-                payment_point_description = "<div><span><i class='fa fa-credit-card fa-1x'></i> " +pos.payment_point_description+ "</span></div>";
+                //payment_point_description = "<div><span><i class='fa fa-credit-card fa-1x'></i> " +pos.payment_point_description+ "</span></div>";
             }
 
             var pos_additional =
