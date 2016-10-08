@@ -635,11 +635,14 @@
                     zoomOnShowPointBigCities = 15;
 
                 google.maps.event.addListener(marker, "click", function () {
+                    //var infoWindowContent = Mall.Cart.Map.infowindow.getContent();
+
                     //this - clicked marker
                     /*
                      Jeśli kliknie się w dowolny paczkomat na mapie
                      szczegóły pojawiają się z lewej i punkt pojawia się w polu adresu
                      */
+
                     jQuery(".shipping_select_point_data").html(this.details);
                     Mall.Cart.Map.infowindow.setContent(this.html);
 
@@ -689,6 +692,7 @@
                     map.setZoom(((map.getZoom() > zoomOnShowPoint) ? map.getZoom() : zoomOnShowPoint));
 
                     Mall.Cart.Map.infowindow.open(map, this);
+
 
                     jQuery(".nearest_stores_container_list").hide();
                     jQuery(".nearest_stores_container_link").text(Mall.translate.__("shipping_map_show_nearest_link"));
