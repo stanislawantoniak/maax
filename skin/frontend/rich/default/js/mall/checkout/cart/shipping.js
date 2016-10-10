@@ -62,7 +62,6 @@
 
             jQuery(".data_shipping_item").click(function(){
 
-
                 var radio = jQuery(this).find("input[name=_shipping_method]");
                 radio.prop("checked",true);
 
