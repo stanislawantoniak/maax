@@ -94,9 +94,6 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
         $helper = Mage::helper("zolagocheckout");
 
         $deliveryMethodData = $helper->getMethodCodeByDeliveryType();
-        //Zend_Debug::dump($deliveryMethodData);
-        $deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
-        $deliveryMethodData = $helper->getMethodCodeByDeliveryType();
         $deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
 
         switch ($deliveryMethodCode) {
@@ -105,7 +102,8 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
                 $data = array(
                     "id" => $pos->getId(),
                     "city" => (string)ucwords(strtolower($pos->getCity())),
-                    "value" => $pos->getId()
+                    "value" => $pos->getId(),
+                    "delivery_method_code" => $deliveryMethodCode
                 );
                 break;
             case GH_Inpost_Model_Carrier::CODE:
@@ -115,7 +113,8 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
                 $data = array(
                     "id" => $locker->getId(),
                     "city" => (string)ucwords(strtolower($locker->getTown())),
-                    "value" => $locker->getName()
+                    "value" => $locker->getName(),
+                    "delivery_method_code" => $deliveryMethodCode
                 );
                 break;
             case Orba_Shipping_Model_Packstation_Pwr::CODE:
@@ -125,7 +124,8 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
                 $data = array(
                     "id" => $point->getId(),
                     "city" => (string)ucwords(strtolower($point->getTown())),
-                    "value" => $point->getName()
+                    "value" => $point->getName(),
+                    "delivery_method_code" => $deliveryMethodCode
                 );
                 break;
         }

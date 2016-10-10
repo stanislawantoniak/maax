@@ -87,7 +87,8 @@ $deliveryMethods = $this->getMapDeliveryMethodsJSON($methods);
                         <input type="hidden" name="shipping_point_code"
                                data-id="<?php echo $shippingPointCode["id"]; ?>"
                                data-town="<?php echo $shippingPointCode["city"]; ?>"
-                               value="<?php echo $shippingPointCode["value"]; ?>" />
+                               value="<?php echo $shippingPointCode["value"]; ?>"
+                               data-dmcode="<?php echo $shippingPointCode["delivery_method_code"]; ?>"/>
                     <?php endif; ?>
                 <?php endif; ?>
             <?php endif; ?>
