@@ -46,14 +46,16 @@
                 Mall.Cart.Shipping.carrierPoint = jQuery(this).find("input[name=_shipping_method]").attr("data-carrier-delivery-type");
 
                 var carrierMapPointsData = Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint];
-                var carrierMapPoints = carrierMapPointsData.mapPoints;
-                if (carrierMapPointsData && carrierMapPoints){
+
+                if (carrierMapPointsData) {
+                    var carrierMapPoints = carrierMapPointsData.mapPoints;
+                    if (carrierMapPoints){
 
                     //console.log(jQuery("[name=shipping_point_code]").val());
                     var testPoints = true;
-                    if(typeof jQuery("[name=shipping_point_code]").val() !== "undefined"){
+                    if (typeof jQuery("[name=shipping_point_code]").val() !== "undefined") {
                         testPoints = !carrierMapPoints.some(
-                            function(e){
+                            function (e) {
                                 //console.log("WOW 1");
                                 return e.name == jQuery("[name=shipping_point_code]").val()
                             }
@@ -105,8 +107,9 @@
 
                         if (typeof jQuery("[name=shipping_point_code]").attr("data-town") !== "undefined")
                             Mall.Cart.Map.refreshMap(
-                                Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.filter(function(e){
-                                    if(e.town==jQuery("[name=shipping_point_code]").attr("data-town")) return 1;}
+                                Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.filter(function (e) {
+                                        if (e.town == jQuery("[name=shipping_point_code]").attr("data-town")) return 1;
+                                    }
                                 ),
                                 Mall.Cart.Map.nearestStores
                             );
@@ -120,7 +123,7 @@
                         Mall.Cart.Map.map.setCenter({lat: 52.229818, lng: 21.011864});
 
                     }
-
+                }
                 }
 
                 jQuery(this).find("input[name=_shipping_method]")
