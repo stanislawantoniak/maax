@@ -943,11 +943,7 @@ i.flag {
 			&.visible-xs {
 				@media  (max-width: 814px) {
 					display:inline-block!important;
-					//float:right;
 					position: static;
-					//top: -23px;
-					//right: 11px;
-					//left: auto;
 				}
 			}
 
@@ -1148,6 +1144,12 @@ div[itemprop="description"] {
 		}
 	}
 }
+.temporary-absence-product-wrapper {
+	@media (min-width: $screen-xs-max) {
+		margin: 20px 0;
+	}
+}
+
 .temporary-absence-product {
 	font-size: 16px;
 	color:$colorAccentSite;

@@ -205,9 +205,9 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 			<a href="#" class="qty_more">+</a>
 			<label id="qty-error" class="error"><?php echo $hlp->__("Maximum quantity: %s", $maxQty); ?></label>
 		</div>
+		<?php if ($isSalable): ?>
 		<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 clearfix">
 			<div class="action-box-bundle clearfix">
-				<?php if ($isSalable): ?>
 					<?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE): ?>
 						<button class="btn button button-primary addBasket"
 								<?php if (isset($haveSizes) && $haveSizes == true): ?><?php if ($salableCount > 1): ?>title="<?php echo $hlp->__("Choose size first"); ?>"
@@ -221,12 +221,12 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 								data-toggle="tooltip" <?php endif; ?>data-placemen="top"<?php endif; ?>
 								id="add-to-cart"
 								onclick="Mall.validateSimpleAddingToCart(<?php echo $_product->getId(); ?>, <?php echo $minQty; ?>, <?php echo $maxQty; ?>, '<?php echo $_product->getTypeId(); ?>');return false;"><i class="fa fa-shopping-cart" aria-hidden="true"></i><?php echo $this->__("Add to cart");
-							?></button>
+							?>
+						</button>
 					<?php endif; ?>
-
-				<?php endif; ?>
 			</div>
 		</div>
+		<?php endif; ?>
 	</div>
 	<?php if (!$isSalable): ?>
 		<div class="temporary-absence-product-wrapper">
