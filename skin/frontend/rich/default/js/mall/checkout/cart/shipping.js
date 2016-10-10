@@ -121,11 +121,9 @@
 
             if (typeof self.getSelectedShipping().val() !== "undefined") {
                 jQuery.ajax({
-                    url: Mall.reg.get("saveBasketShippingUrl"),
+                    url: "/checkout/singlepage/saveBasketShipping/",
                     type: "POST",
                     data: jQuery("#cart-shipping-methods-form").serializeArray()
-                }).done(function(response){
-                    //console.log(response);
                 });
             }
 
@@ -269,23 +267,16 @@
 
             jQuery("#cart-buy-overlay").removeClass("hidden");
             jQuery.ajax({
-                url: Mall.reg.get("saveBasketShippingUrl"),
+                url: "/checkout/singlepage/saveBasketShipping/",
                 type: "POST",
                 data: formData
             }).done(function (response) {
-
                 jQuery("#cart-buy")
                     .prop("disabled", false);
                 jQuery("#cart-buy").find('i')
                     .removeClass('fa fa-spinner fa-spin');
 
                 jQuery("#cart-buy-overlay").addClass("hidden");
-                if(response.status && response.content.length > 0){
-                    var sessionPointData = response.content.deliveryPoint;
-                    if(sessionPointData.length > 0 && sessionPointData.id){
-                        Mall.reg.set("sessionPointData", JSON.stringify(sessionPointData, null, 2));
-                    }
-                }
             });
 
             Mall.Cart.Shipping.updateTotals();
@@ -352,7 +343,11 @@
                     });
             }
 
-
+            if (Mall.getIsBrowserMobile()) {
+                inpostModal.find('.select2').on('select2:open', function (e) {
+                    jQuery('.select2-search input').prop('focus', false);
+                });
+            }
             if (!Mall.getIsBrowserMobile()) {
                 jQuery("[name=shipping_select_city]").select2({
                     placeholder: Mall.translate.__("shipping_map_select_city"),
@@ -367,7 +362,10 @@
                     jQuery("[name=shipping_select_point]")
                         .attr("disabled", true)
                         .val("")
-                        .select2({dropdownParent: inpostModal,language: Mall.reg.get("localeCode")});
+                        .select2({
+                            dropdownParent: inpostModal,
+                            language: Mall.reg.get("localeCode")
+                        });
                 } else {
                     jQuery("[name=shipping_select_point]")
                         .attr("disabled", true)
@@ -379,13 +377,16 @@
             inpostModal.on('show.bs.modal', function () {
                 //Must wait until the render of the modal appear,
                 // that's why we use the resizeMap and NOT resizingMap!! ;-)
-                var sessionPointDataJSON = Mall.reg.get("sessionPointData");
-                if(sessionPointDataJSON.length > 0){
-                    var sessionPointData = jQuery.parseJSON(Mall.reg.get("sessionPointData"));
-                    Mall.Cart.Map.resizeMap(sessionPointData.name);
-                }
+                var sessionPoint = jQuery("[name=shipping_point_code]");
+
+                Mall.Cart.Map.resizeMap(sessionPoint.val());
+
                 jQuery("#cart-shipping-methods input[name=shipping_point_code]").val("");
 
+                //Fix for iPhone and Android native browser
+                //jQuery('body').css('overflow','hidden');
+                //jQuery('body').css('position','fixed');
+                //--Fix for iPhone and Android native browser
             });
             inpostModal.on('hide.bs.modal', function () {
                 //If inPost selected but paczkomat not selected
@@ -405,27 +406,16 @@
             });
         },
         attachShowOnMapSavedInSessionPoint: function () {
-            var sessionPointDataJSON = Mall.reg.get("sessionPointData");
-            if (sessionPointDataJSON.length == 0) {
-                //No point in session
-                return;
-            }
-            var sessionPointData = jQuery.parseJSON(Mall.reg.get("sessionPointData"));
+            var sessionPoint = jQuery("[name=shipping_point_code]");
 
-            var sessionPointName = sessionPointData.name;
-            var shippingCarrierPoint = Mall.Cart.Shipping.carrierPoint;
-
-            if (shippingCarrierPoint !== sessionPointData.method_code)
-                return;
-
-            var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='" + shippingCarrierPoint + "']");
+            var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "']");
             var sessionPointTown = '';
 
             if (sessionPointName) {
-                sessionPointTown = sessionPointData.city;
+                sessionPointTown = sessionPoint.attr("data-town");
 
                 jQuery(".shipping_select_point_data").html("");
-                if (sessionPointTown.length > 0) {
+                if(sessionPointTown.length > 0){
                     if (!Mall.getIsBrowserMobile()) {
                         jQuery("[name=shipping_select_city]")
                             .val(sessionPointTown)
@@ -437,9 +427,12 @@
 
                     Mall.Cart.Map.searchOnMap(sessionPointTown, sessionPointName);
                 }
+
             }
+
         },
         attachShowHideNearestPointsList: function(){
+
             jQuery("body").delegate(".nearest_stores_container_link",
                 "click",
                 function (e) {
@@ -635,14 +628,11 @@
                     zoomOnShowPointBigCities = 15;
 
                 google.maps.event.addListener(marker, "click", function () {
-                    //var infoWindowContent = Mall.Cart.Map.infowindow.getContent();
-
                     //this - clicked marker
                     /*
                      Jeśli kliknie się w dowolny paczkomat na mapie
                      szczegóły pojawiają się z lewej i punkt pojawia się w polu adresu
                      */
-
                     jQuery(".shipping_select_point_data").html(this.details);
                     Mall.Cart.Map.infowindow.setContent(this.html);
 
@@ -692,7 +682,6 @@
                     map.setZoom(((map.getZoom() > zoomOnShowPoint) ? map.getZoom() : zoomOnShowPoint));
 
                     Mall.Cart.Map.infowindow.open(map, this);
-
 
                     jQuery(".nearest_stores_container_list").hide();
                     jQuery(".nearest_stores_container_link").text(Mall.translate.__("shipping_map_show_nearest_link"));
@@ -785,7 +774,7 @@
 
             if(typeof point !== "undefined"){
                 //Show on map session paczkomat
-               Mall.Cart.Map.showMarkerOnMap(point);
+                Mall.Cart.Map.showMarkerOnMap(point);
             }
 
         },

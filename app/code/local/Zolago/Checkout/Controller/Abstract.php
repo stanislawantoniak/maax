@@ -3,7 +3,7 @@
  * Define multi logic here
  */
 require_once Mage::getConfig()->getModuleDir("controllers", "Mage_Checkout") .
-DS . "OnepageController.php";
+    DS . "OnepageController.php";
 
 abstract class Zolago_Checkout_Controller_Abstract
     extends Mage_Checkout_OnepageController {
@@ -66,9 +66,9 @@ abstract class Zolago_Checkout_Controller_Abstract
                 $request = $this->getRequest();
                 $data = $request->getParam('billing')['use_for_shipping'] ? $request->getParam('billing') : $request->getParam('shipping');
                 $customer
-                ->setFirstname($data['firstname'])
-                ->setLastname($data['lastname'])
-                ->setPhone($data['telephone']);
+                    ->setFirstname($data['firstname'])
+                    ->setLastname($data['lastname'])
+                    ->setPhone($data['telephone']);
                 $session->setCustomer($customer);
             }
         }
@@ -77,12 +77,12 @@ abstract class Zolago_Checkout_Controller_Abstract
             $this->importPostData();
         } catch (Exception $ex) {
             $response = array(
-                            "status" => false,
-                            "content" => array(
-                                "redirect"	=> null,
-                                "message"	=> $ex->getMessage()
-                            )
-                        );
+                "status" => false,
+                "content" => array(
+                    "redirect"	=> null,
+                    "message"	=> $ex->getMessage()
+                )
+            );
             Mage::logException($ex);
             return $this->_prepareJsonResponse($response);
         }
@@ -112,15 +112,15 @@ abstract class Zolago_Checkout_Controller_Abstract
 
 
                     if (in_array($carrier,
-                                 array(
-                                     Orba_Shipping_Model_Carrier_Default::CODE,
-                                     Orba_Shipping_Model_Post::CODE,
-                                     GH_Inpost_Model_Carrier::CODE,
-                                     ZolagoOs_PickupPoint_Helper_Data::CODE,
-                                     Orba_Shipping_Model_Packstation_Pwr::CODE
-                                 )
-                                )
-                       ) {
+                        array(
+                            Orba_Shipping_Model_Carrier_Default::CODE,
+                            Orba_Shipping_Model_Post::CODE,
+                            GH_Inpost_Model_Carrier::CODE,
+                            ZolagoOs_PickupPoint_Helper_Data::CODE,
+                            Orba_Shipping_Model_Packstation_Pwr::CODE
+                        )
+                    )
+                    ) {
                         /** @var Zolago_Checkout_Helper_Data $helper */
                         $helper = Mage::helper("zolagocheckout");
 
@@ -165,22 +165,22 @@ abstract class Zolago_Checkout_Controller_Abstract
 
         if(!isset($oldResponse['redirect'])) {
             $urlArray = array(
-                            "*",
-                            $logged ? "singlepage" : "guest",
-                            $success ? "success" : "error"
-                        );
+                "*",
+                $logged ? "singlepage" : "guest",
+                $success ? "success" : "error"
+            );
             $redirect = Mage::getUrl(implode("/", $urlArray));
         } else {
             $redirect = $oldResponse['redirect'];
         }
 
         $newResponse = array(
-                           "status" => $success,
-                           "content" => array(
-                               "redirect"	=> $redirect,
-                               "message"	=> isset($oldResponse['error_messages']) ? $oldResponse['error_messages'] : false
-                           )
-                       );
+            "status" => $success,
+            "content" => array(
+                "redirect"	=> $redirect,
+                "message"	=> isset($oldResponse['error_messages']) ? $oldResponse['error_messages'] : false
+            )
+        );
 
         // Part for tag manager script and GA
         if ($success) {
@@ -196,8 +196,8 @@ abstract class Zolago_Checkout_Controller_Abstract
         if($success) {
             if($logged && isset($customer)) {
                 $customer->setData('salesmanago_cart_event_id', '')
-                ->getResource()
-                ->saveAttribute($customer, 'salesmanago_cart_event_id');
+                    ->getResource()
+                    ->saveAttribute($customer, 'salesmanago_cart_event_id');
             }
             if(isset($_COOKIE['smCartEventId'])) {
                 /** @var Zolago_SalesManago_Helper_Data $salesmanagoHelper */
@@ -248,7 +248,7 @@ abstract class Zolago_Checkout_Controller_Abstract
             throw new Mage_Core_Exception($methodResponse['message']);
         }
         /**
-          shipping_method[vendor_id]:udtiership_1
+        shipping_method[vendor_id]:udtiership_1
          */
         if ($shippingMethod = $request->getParam("shipping_method")) {
 
@@ -303,12 +303,12 @@ abstract class Zolago_Checkout_Controller_Abstract
             }
         }
         /**
-         account[firstname]:abc
-         account[lastname]:abc
-         account[email]:abc
-         account[phone]:abc
-         account[password]:abc
-         account[password_confirmation]:abc
+        account[firstname]:abc
+        account[lastname]:abc
+        account[email]:abc
+        account[phone]:abc
+        account[password]:abc
+        account[password_confirmation]:abc
          */
         $accountData = $request->getParam("account");
         if(is_array($accountData)) {
@@ -496,16 +496,16 @@ abstract class Zolago_Checkout_Controller_Abstract
                 continue;
             }
             $details['methods'][$vId] = array(
-                                            'code' => $code,
-                                            'cost' => (float)$rate->getCost(),
-                                            'price' => (float)$rate->getPrice(),
-                                            'price_excl' => (float)Mage::helper('udropship')->getShippingPrice($rate->getPrice(), $vendor, $address, 'base'),
-                                            'price_incl' => (float)Mage::helper('udropship')->getShippingPrice($rate->getPrice(), $vendor, $address, 'incl'),
-                                            'tax' => (float)Mage::helper('udropship')->getShippingPrice($rate->getPrice(), $vendor, $address, 'tax'),
-                                            'carrier_title' => $rate->getCarrierTitle(),
-                                            'method_title' => $rate->getMethodTitle(),
-                                            'is_free_shipping' => (int)$rate->getIsFwFreeShipping()
-                                        );
+                'code' => $code,
+                'cost' => (float)$rate->getCost(),
+                'price' => (float)$rate->getPrice(),
+                'price_excl' => (float)Mage::helper('udropship')->getShippingPrice($rate->getPrice(), $vendor, $address, 'base'),
+                'price_incl' => (float)Mage::helper('udropship')->getShippingPrice($rate->getPrice(), $vendor, $address, 'incl'),
+                'tax' => (float)Mage::helper('udropship')->getShippingPrice($rate->getPrice(), $vendor, $address, 'tax'),
+                'carrier_title' => $rate->getCarrierTitle(),
+                'method_title' => $rate->getMethodTitle(),
+                'is_free_shipping' => (int)$rate->getIsFwFreeShipping()
+            );
         }
 
 
@@ -521,16 +521,16 @@ abstract class Zolago_Checkout_Controller_Abstract
             return;
         }
         $response = array(
-                        "status"=>true,
-                        "content" => array()
-                    );
+            "status"=>true,
+            "content" => array()
+        );
         try {
             $this->importPostData();
         } catch (Exception $ex) {
             $response = array(
-                            "status"=>0,
-                            "content"=>$ex->getMessage()
-                        );
+                "status"=>0,
+                "content"=>$ex->getMessage()
+            );
         }
 
         // part for GTM datalayer
@@ -565,17 +565,17 @@ abstract class Zolago_Checkout_Controller_Abstract
             return;
         }
         $response = array(
-                        "status"=>true,
-                        "content" => array()
-                    );
+            "status"=>true,
+            "content" => array()
+        );
 
         try {
             $this->importPostData();
         } catch (Exception $ex) {
             $response = array(
-                            "status"=>0,
-                            "content"=>$ex->getMessage()
-                        );
+                "status"=>0,
+                "content"=>$ex->getMessage()
+            );
         }
 
         // part for GTM dataLayer
@@ -612,29 +612,20 @@ abstract class Zolago_Checkout_Controller_Abstract
     public function saveBasketShippingAction() {
 
         $response = array(
-                        "status"=>true,
-                        "content" => array()
-                    );
+            "status"=>true,
+            "content" => array()
+        );
 
         try {
             $this->importPostShippingData();
-            /** @var Zolago_Checkout_Helper_Data $helper */
-            $helper = Mage::helper("zolagocheckout");
-            $deliveryPointCheckout = $helper->getDeliveryPointCheckout();
-            if ($deliveryPointCheckout->id) {
-                $response = array(
-                    "status" => true,
-                    "content" => array("deliveryPoint" => (array)$helper->getDeliveryPointCheckout())
-                );
-            }
         } catch (Exception $ex) {
             $response = array(
-                "status" => 0,
-                "content" => $ex->getMessage()
+                "status"=>0,
+                "content"=>$ex->getMessage()
             );
         }
 
-        if ($this->getRequest()->isAjax()) {
+        if($this->getRequest()->isAjax()) {
             $this->_prepareJsonResponse($response);
         }
     }
@@ -678,10 +669,10 @@ abstract class Zolago_Checkout_Controller_Abstract
         $isSubscribed = Mage::getModel("zolagonewsletter/inviter")->isEmailSubscribed($email);
 
         $response = array(
-                        "status"=>$isExits,
-                        "content" => '',
-                        "subscribed" =>$isSubscribed
-                    );
+            "status"=>$isExits,
+            "content" => '',
+            "subscribed" =>$isSubscribed
+        );
 
         $this->_prepareJsonResponse($response);
 
@@ -701,8 +692,8 @@ abstract class Zolago_Checkout_Controller_Abstract
         $isExits = $isExitsZip === false ? false : true;
 
         $response = array(
-                        "status" => $isExits,
-                        "content" => '');
+            "status" => $isExits,
+            "content" => '');
 
         $this->_prepareJsonResponse($response);
     }

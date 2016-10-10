@@ -26,26 +26,8 @@ $selectedShipping = Mage::helper("zolagocheckout")->getSelectedShipping();
 foreach($selectedShipping["methods"] as $vid => $methodSelectedData){
     $sessionShippingMethod = $methodSelectedData;
 }
-
 $deliveryPoint = $this->getDeliveryPointCheckout();
-$saveBasketShippingUrl = Mage::getUrl("checkout/singlepage/saveBasketShipping", array("_secure" => true));
-
-$deliveryPointName = "";
-$deliveryPointJSONData = "";
-
-if ($deliveryPoint->id) {
-    $deliveryPointName = $deliveryPoint->name;
-    $deliveryPointJSONData = json_encode(
-        array(
-            'id' => $deliveryPoint->id,
-            'name' => $deliveryPoint->name,
-            'city' => $deliveryPoint->city,
-            'method_code' => $deliveryPoint->method_code,
-        )
-    );
-}
-
-
+$deliveryPointName = $deliveryPoint->id ? $deliveryPoint->name : "";
 /**
  * Totals
  */
@@ -56,14 +38,10 @@ $shippingTotal = empty($totals['shipping'])? 0:$totals["shipping"]->getAddress()
 $grandTotal = $totals["grand_total"]->getValue(); //Suma
 
 $deliveryMethods = $this->getMapDeliveryMethodsJSON($methods);
-
-
 ?>
 
 <script type="text/javascript">
     var sessionPointName = '<?php echo $deliveryPointName; ?>';
-    Mall.reg.set("sessionPointData", '<?php echo $deliveryPointJSONData; ?>');
-    Mall.reg.set("saveBasketShippingUrl", '<?php echo $saveBasketShippingUrl; ?>');
     Mall.reg.set("localeCode", '<?php echo substr(Mage::getStoreConfig('general/locale/code', Mage::app()->getStore()->getId()),0,2); ?>');
 
     Mall.translate.add("validation_please_select_shipping", "<?php echo $helper->__("Please select shipping");?>");
@@ -81,20 +59,20 @@ $deliveryMethods = $this->getMapDeliveryMethodsJSON($methods);
 <fieldset id="cart-shipping-methods">
     <form action="<?php echo $this->getUrl('checkout/singlepage/saveBasketShipping') ?>" method="post" id="cart-shipping-methods-form">
 
-    <script type="text/javascript">
-        (function(){
-            Mall.reg.set("extra_charges", <?php echo Mage::helper("core")->jsonEncode($extraCharges); ?>);
-            Mall.reg.set("vendors", <?php echo $vendorsJ; ?>);
-            Mall.reg.set("vendor_costs", <?php echo Mage::helper("core")->jsonEncode($vednorCosts); ?>);
-            Mall.reg.set("inpost_logo", '<?php echo $inpostLogo; ?>');
+        <script type="text/javascript">
+            (function(){
+                Mall.reg.set("extra_charges", <?php echo Mage::helper("core")->jsonEncode($extraCharges); ?>);
+                Mall.reg.set("vendors", <?php echo $vendorsJ; ?>);
+                Mall.reg.set("vendor_costs", <?php echo Mage::helper("core")->jsonEncode($vednorCosts); ?>);
+                Mall.reg.set("inpost_logo", '<?php echo $inpostLogo; ?>');
 
-            Mall.reg.set("quote_grand_total", <?php echo $grandTotal; ?>);
-            Mall.reg.set("quote_products_total", <?php echo $productsPriceTotal; ?>);
-            Mall.reg.set("quote_discount_total", <?php echo $discountTotal; ?>);
+                Mall.reg.set("quote_grand_total", <?php echo $grandTotal; ?>);
+                Mall.reg.set("quote_products_total", <?php echo $productsPriceTotal; ?>);
+                Mall.reg.set("quote_discount_total", <?php echo $discountTotal; ?>);
 
-            Mall.reg.set("deliverySet", <?php echo $deliveryMethods; ?>);
-        })();
-    </script>
+                Mall.reg.set("deliverySet", <?php echo $deliveryMethods; ?>);
+            })();
+        </script>
 
         <div class="shipping-collect">
             <?php if (!empty($selectedShipping) && isset($selectedShipping["methods"])): ?>
@@ -115,91 +93,91 @@ $deliveryMethods = $this->getMapDeliveryMethodsJSON($methods);
             <?php endif; ?>
         </div>
 
-    <div class="shipping-method-selected" <?php if(empty($sessionShippingMethod)): ?>style="display:none;"<?php endif; ?>>
-        <header>
-            <h2><?php echo $this->__("Your shopping"); ?></h2>
-        </header>
-        <ul id="product_summary" class="shipping-method-selected" <?php if(empty($sessionShippingMethod)): ?>style="display:none;"<?php endif; ?>>
-            <?php echo $this->getChildHtml('totals'); ?>
-        </ul>
-        <?php if (empty($sessionShippingMethod)): ?>
-            <div class="shipping-method-selected-container">
-                <div data-item="method"></div>
-                <div class="shipping-data-additional">
-                    <div data-item="additional"></div>
-                    <div data-item="description"></div>
-                    <div class="pull-left"><div data-item="logo"></div></div>
-                    <?php if (count($methods) > 1): ?>
-                        <div class="pull-right">
-                            <a class="button button-third large pull-right" id="change-shipping-type">
-                                <?php echo $helper->__("Change"); ?>
-                            </a>
-                        </div>
-                    <?php endif; ?>
+        <div class="shipping-method-selected" <?php if(empty($sessionShippingMethod)): ?>style="display:none;"<?php endif; ?>>
+            <header>
+                <h2><?php echo $this->__("Your shopping"); ?></h2>
+            </header>
+            <ul id="product_summary" class="shipping-method-selected" <?php if(empty($sessionShippingMethod)): ?>style="display:none;"<?php endif; ?>>
+                <?php echo $this->getChildHtml('totals'); ?>
+            </ul>
+            <?php if (empty($sessionShippingMethod)): ?>
+                <div class="shipping-method-selected-container">
+                    <div data-item="method"></div>
+                    <div class="shipping-data-additional">
+                        <div data-item="additional"></div>
+                        <div data-item="description"></div>
+                        <div class="pull-left"><div data-item="logo"></div></div>
+                        <?php if (count($methods) > 1): ?>
+                            <div class="pull-right">
+                                <a class="button button-third large pull-right" id="change-shipping-type">
+                                    <?php echo $helper->__("Change"); ?>
+                                </a>
+                            </div>
+                        <?php endif; ?>
+                    </div>
                 </div>
-            </div>
-            <br />
+                <br />
             <?php else: ?>
 
+                <?php foreach ($methods as $method): ?>
+                    <?php
+
+                    $formattedCost = '';
+                    if (isset($vednorCosts[$method['vendor_id']][$method['code']])) {
+                        $costSum = $vednorCosts[$method['vendor_id']][$method['code']];
+                        $formattedCost = Mage::helper('core')->currency($costSum, true, false);
+                    }
+
+                    $daysInTransit = !empty($method["days_in_transit"]) ? $helper->__("ships within %s days", $method["days_in_transit"]) : "";
+                    ?>
+                    <?php if ($method['code'] ==$sessionShippingMethod): ?>
+                        <div class="shipping-method-selected-container">
+                            <div data-item="method"><?php echo $this->escapeHtml($method['method_title']); ?></div>
+
+
+                            <div class="shipping-data-additional">
+                                <div data-item="additional">
+                                    <?php if ($deliveryPoint->id): ?>
+                                        <?php echo $this->getDeliveryDataAdditional($method["delivery_type"], $selectedShipping["shipping_point_code"]); ?>
+                                    <?php endif; ?>
+                                </div>
+                                <div data-item="description"><?php echo $daysInTransit; ?></div>
+
+                                <div class="pull-left">
+                                    <div data-item="logo"><?php echo Mage::helper("zolagocheckout")->getCarrierLogo($method["delivery_type"]); ?></div>
+                                </div>
+                                <?php if (count($methods) > 1): ?>
+                                    <div class="pull-right">
+                                        <a class="button button-third large pull-right" id="change-shipping-type">
+                                            <?php echo $helper->__("Change"); ?>
+                                        </a>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                        <br />
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
+        <div class="shipping-method-selector" <?php if(!empty($sessionShippingMethod)): ?>style="display:none;"<?php endif; ?>>
+            <header>
+                <h2><?php echo $this->__("Select delivery"); ?></h2>
+            </header>
+            <div class="data-validate"></div>
             <?php foreach ($methods as $method): ?>
                 <?php
-
                 $formattedCost = '';
                 if (isset($vednorCosts[$method['vendor_id']][$method['code']])) {
                     $costSum = $vednorCosts[$method['vendor_id']][$method['code']];
                     $formattedCost = Mage::helper('core')->currency($costSum, true, false);
                 }
-
+                $carrierLogo = Mage::helper("zolagocheckout")->getCarrierLogo($method["delivery_type"]);
                 $daysInTransit = !empty($method["days_in_transit"]) ? $helper->__("ships within %s days", $method["days_in_transit"]) : "";
+
                 ?>
-                <?php if ($method['code'] ==$sessionShippingMethod): ?>
-                    <div class="shipping-method-selected-container">
-                        <div data-item="method"><?php echo $this->escapeHtml($method['method_title']); ?></div>
-
-
-                        <div class="shipping-data-additional">
-                            <div data-item="additional">
-                                <?php if ($deliveryPoint->id): ?>
-                                    <?php echo $this->getDeliveryDataAdditional($method["delivery_type"], $selectedShipping["shipping_point_code"]); ?>
-                                <?php endif; ?>
-                            </div>
-                            <div data-item="description"><?php echo $daysInTransit; ?></div>
-
-                            <div class="pull-left">
-                                <div data-item="logo"><?php echo Mage::helper("zolagocheckout")->getCarrierLogo($method["delivery_type"]); ?></div>
-                            </div>
-                            <?php if (count($methods) > 1): ?>
-                                <div class="pull-right">
-                                    <a class="button button-third large pull-right" id="change-shipping-type">
-                                        <?php echo $helper->__("Change"); ?>
-                                    </a>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                    <br />
-                <?php endif; ?>
-            <?php endforeach; ?>
-            <?php endif; ?>
-    </div>
-    <div class="shipping-method-selector" <?php if(!empty($sessionShippingMethod)): ?>style="display:none;"<?php endif; ?>>
-        <header>
-            <h2><?php echo $this->__("Select delivery"); ?></h2>
-        </header>
-        <div class="data-validate"></div>
-        <?php foreach ($methods as $method): ?>
-            <?php
-            $formattedCost = '';
-            if (isset($vednorCosts[$method['vendor_id']][$method['code']])) {
-                $costSum = $vednorCosts[$method['vendor_id']][$method['code']];
-                $formattedCost = Mage::helper('core')->currency($costSum, true, false);
-            }
-            $carrierLogo = Mage::helper("zolagocheckout")->getCarrierLogo($method["delivery_type"]);
-            $daysInTransit = !empty($method["days_in_transit"]) ? $helper->__("ships within %s days", $method["days_in_transit"]) : "";
-
-            ?>
-            <div class="panel panel-default data_shipping_item">
-                <div class="panel-body">
+                <div class="panel panel-default data_shipping_item">
+                    <div class="panel-body">
 
                         <div class="pull-left">
                             <div class="form-group form-radio">
@@ -237,25 +215,25 @@ $deliveryMethods = $this->getMapDeliveryMethodsJSON($methods);
 
                         <div class="pull-right delivery_type_cost"><?php echo $formattedCost; ?></div>
 
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+
+
+
+
+
+        <?php else: ?>
+            <div class="panel panel-default panel-color">
+                <div class="panel-body">
+                    <dl class="pull-left">
+                        <?php echo $this->__('No delivery method available'); ?>
+                    </dl>
                 </div>
             </div>
-        <?php endforeach; ?>
-    </div>
-
-
-
-
-
-    <?php else: ?>
-        <div class="panel panel-default panel-color">
-            <div class="panel-body">
-                <dl class="pull-left">
-                    <?php echo $this->__('No delivery method available'); ?>
-                </dl>
-            </div>
-        </div>
-    <?php endif; ?>
-</form>
+        <?php endif; ?>
+    </form>
 </fieldset>
 
 <?php /** @see checkout/cart/sidebar/shipping/additional.phtml */
