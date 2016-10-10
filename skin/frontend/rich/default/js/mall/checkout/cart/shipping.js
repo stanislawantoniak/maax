@@ -130,21 +130,21 @@
 
                                 self.implementMapSelections(false);
 
-                                if (typeof jQuery("[name=shipping_point_code]").attr("data-town") !== "undefined"
-                                    && jQuery("[name=shipping_point_code]").attr("data-dmcode") == Mall.Cart.Shipping.carrierPoint
-                                ){
-
-                                    Mall.Cart.Map.refreshMap(
-                                        collectCityPoints,
-                                        Mall.Cart.Map.nearestStores
-                                    );
-                                } else {
-                                    Mall.Cart.Map.refreshMap(
-                                        Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints,
-                                        Mall.Cart.Map.nearestStores
-                                    );
-
-                                }
+                                //if (typeof jQuery("[name=shipping_point_code]").attr("data-town") !== "undefined"
+                                //    && jQuery("[name=shipping_point_code]").attr("data-dmcode") == Mall.Cart.Shipping.carrierPoint
+                                //){
+                                //
+                                //    Mall.Cart.Map.refreshMap(
+                                //        collectCityPoints,
+                                //        Mall.Cart.Map.nearestStores
+                                //    );
+                                //} else {
+                                //    Mall.Cart.Map.refreshMap(
+                                //        Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints,
+                                //        Mall.Cart.Map.nearestStores
+                                //    );
+                                //
+                                //}
 
                                 Mall.Cart.Map.map.setZoom(5);
                                 Mall.Cart.Map.map.setCenter({lat: 52.229818, lng: 21.011864});
@@ -442,9 +442,52 @@
 
 
             inpostModal.on('show.bs.modal', function () {
+                ////Must wait until the render of the modal appear,
+                //// that's why we use the resizeMap and NOT resizingMap!! ;-)
+                //var sessionPoint = jQuery("[name=shipping_point_code]");
+                //
+                //
+                //if (typeof jQuery("[name=shipping_point_code]").attr("data-town") !== "undefined"
+                //    && jQuery("[name=shipping_point_code]").attr("data-dmcode") == Mall.Cart.Shipping.carrierPoint
+                //){
+                //    var collectCityPoints = self.collectSessionPointCity();
+                //    Mall.Cart.Map.refreshMap(
+                //        collectCityPoints,
+                //        Mall.Cart.Map.nearestStores
+                //    );
+                //} else {
+                //    Mall.Cart.Map.refreshMap(
+                //        Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints,
+                //        Mall.Cart.Map.nearestStores
+                //    );
+                //
+                //}
+                //
+                //Mall.Cart.Map.resizeMap(sessionPoint.val());
+                //
+                //jQuery("#cart-shipping-methods input[name=shipping_point_code]").val("");
+            });
+            inpostModal.on('shown.bs.modal', function() {
                 //Must wait until the render of the modal appear,
                 // that's why we use the resizeMap and NOT resizingMap!! ;-)
                 var sessionPoint = jQuery("[name=shipping_point_code]");
+
+
+                if (typeof jQuery("[name=shipping_point_code]").attr("data-town") !== "undefined"
+                    && jQuery("[name=shipping_point_code]").attr("data-dmcode") == Mall.Cart.Shipping.carrierPoint
+                ){
+                    var collectCityPoints = self.collectSessionPointCity();
+                    Mall.Cart.Map.refreshMap(
+                        collectCityPoints,
+                        Mall.Cart.Map.nearestStores
+                    );
+                } else {
+                    Mall.Cart.Map.refreshMap(
+                        Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints,
+                        Mall.Cart.Map.nearestStores
+                    );
+
+                }
 
                 Mall.Cart.Map.resizeMap(sessionPoint.val());
 
