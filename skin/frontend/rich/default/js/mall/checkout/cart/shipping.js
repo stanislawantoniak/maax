@@ -34,6 +34,8 @@
 
             self.attachShippingFormValidation();
 
+            var testPointsData = self.analizeMapPoints();
+
             jQuery("#change-shipping-type").click(function () {
                 jQuery(".shipping-method-selector").slideDown();
                 jQuery(".shipping-method-selected").slideUp();
@@ -51,21 +53,10 @@
                     var carrierMapPoints = carrierMapPointsData.mapPoints;
                     if (carrierMapPoints){
 
-                    //console.log(jQuery("[name=shipping_point_code]").val());
-                    var testPoints = true;
-                    if (typeof jQuery("[name=shipping_point_code]").val() !== "undefined") {
-                        testPoints = !carrierMapPoints.some(
-                            function (e) {
-                                //console.log("WOW 1");
-                                return e.name == jQuery("[name=shipping_point_code]").val()
-                            }
-                        );
-                    }
-
-                    //console.log(testPoints);
+                    var testPoints = (typeof testPointsData[Mall.Cart.Shipping.carrierPoint] !== "undefined") ? testPointsData[Mall.Cart.Shipping.carrierPoint] : true;
 
                     if (testPoints) {
-                        console.log("WOW 2");
+
                         jQuery(".shipping_select_point_data").html("");
                         jQuery("[name=shipping_point_code]").val("");
                         jQuery("[name=shipping_point_code]").attr("data-id", "");
@@ -175,6 +166,33 @@
             self.attachShowHideNearestPointsList();
 
             if (Object.keys(Mall.Cart.Map.deliverySet).length > 0) Mall.Cart.Map.initMap();
+        },
+        analizeMapPoints: function () {
+            //Check all the map points and discover is there session deliveryPoint among them
+            var testPointsResult = {};
+            jQuery.each(Mall.Cart.Map.deliverySet,
+                function (code, deliverySet) {
+                    var carrierMapPointsData = Mall.Cart.Map.deliverySet[code];
+
+                    if (carrierMapPointsData) {
+                        var carrierMapPoints = carrierMapPointsData.mapPoints;
+                        if (carrierMapPoints) {
+                            var testPoints = true;
+
+                            if (typeof jQuery("[name=shipping_point_code]").val() !== "undefined") {
+                                testPoints = !carrierMapPoints.some(
+                                    function (e) {
+                                        return e.name == jQuery("[name=shipping_point_code]").val();
+                                    }
+                                );
+                            }
+                            testPointsResult[code] = testPoints;
+                        }
+                    }
+
+                });
+
+            return {};
         },
         attachShippingFormValidation: function(){
             jQuery("#cart-shipping-methods-form").validate({
