@@ -17,9 +17,6 @@ $costSumm = $this->getItemsShippingCost();
 $cost = $items->cost;
 
 $checkoutSession = Mage::getSingleton('checkout/session');
-
-/* @var $locker GH_Inpost_Model_Locker  */
-$locker		= $this->getInpostLocker();
 $inpostLogo	= $this->getSkinUrl('images/inpost/checkout-logo.png');
 
 $quote = $this->getQuote();
@@ -30,6 +27,7 @@ foreach($selectedShipping["methods"] as $vid => $methodSelectedData){
     $sessionShippingMethod = $methodSelectedData;
 }
 $deliveryPoint = $this->getDeliveryPointCheckout();
+$deliveryPointName = $deliveryPoint->id ? $deliveryPoint->name : "";
 /**
  * Totals
  */
@@ -40,19 +38,10 @@ $shippingTotal = empty($totals['shipping'])? 0:$totals["shipping"]->getAddress()
 $grandTotal = $totals["grand_total"]->getValue(); //Suma
 
 $deliveryMethods = $this->getMapDeliveryMethodsJSON($methods);
-
- ?>
-
-<?php
-$inPostData = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost::getPopulateMapData();
-$inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "";
 ?>
 
 <script type="text/javascript">
-    var inPostPointsData = '<?php echo $inPostPoints; ?>';
-    var inPostPoints = (inPostPointsData.length > 0) ? jQuery.parseJSON(inPostPointsData) : [];
-
-    var sessionPointName = '<?php echo $locker->getName(); ?>';
+    var sessionPointName = '<?php echo $deliveryPointName; ?>';
     Mall.reg.set("localeCode", '<?php echo substr(Mage::getStoreConfig('general/locale/code', Mage::app()->getStore()->getId()),0,2); ?>');
 
     Mall.translate.add("validation_please_select_shipping", "<?php echo $helper->__("Please select shipping");?>");
@@ -66,26 +55,24 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
 </script>
 <script type="text/javascript" src="<?php echo $this->getSkinUrl("js/mall/checkout/cart/shipping.js") ?>"></script>
 
-
-
 <?php if(!empty($rates)): ?>
 <fieldset id="cart-shipping-methods">
     <form action="<?php echo $this->getUrl('checkout/singlepage/saveBasketShipping') ?>" method="post" id="cart-shipping-methods-form">
 
-    <script type="text/javascript">
-        (function(){
-            Mall.reg.set("extra_charges", <?php echo Mage::helper("core")->jsonEncode($extraCharges); ?>);
-            Mall.reg.set("vendors", <?php echo $vendorsJ; ?>);
-            Mall.reg.set("vendor_costs", <?php echo Mage::helper("core")->jsonEncode($vednorCosts); ?>);
-            Mall.reg.set("inpost_logo", '<?php echo $inpostLogo; ?>');
+        <script type="text/javascript">
+            (function(){
+                Mall.reg.set("extra_charges", <?php echo Mage::helper("core")->jsonEncode($extraCharges); ?>);
+                Mall.reg.set("vendors", <?php echo $vendorsJ; ?>);
+                Mall.reg.set("vendor_costs", <?php echo Mage::helper("core")->jsonEncode($vednorCosts); ?>);
+                Mall.reg.set("inpost_logo", '<?php echo $inpostLogo; ?>');
 
-            Mall.reg.set("quote_grand_total", <?php echo $grandTotal; ?>);
-            Mall.reg.set("quote_products_total", <?php echo $productsPriceTotal; ?>);
-            Mall.reg.set("quote_discount_total", <?php echo $discountTotal; ?>);
+                Mall.reg.set("quote_grand_total", <?php echo $grandTotal; ?>);
+                Mall.reg.set("quote_products_total", <?php echo $productsPriceTotal; ?>);
+                Mall.reg.set("quote_discount_total", <?php echo $discountTotal; ?>);
 
-            Mall.reg.set("deliverySet", <?php echo $deliveryMethods; ?>);
-        })();
-    </script>
+                Mall.reg.set("deliverySet", <?php echo $deliveryMethods; ?>);
+            })();
+        </script>
 
         <div class="shipping-collect">
             <?php if (!empty($selectedShipping) && isset($selectedShipping["methods"])): ?>
@@ -249,6 +236,7 @@ $inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "
 </form>
 </fieldset>
 
-<?php echo $this->getChildHtml('checkout_cart_shipping_additional'); ?>
+<?php /** @see checkout/cart/sidebar/shipping/additional.phtml */
+echo $this->getChildHtml('checkout_cart_shipping_additional'); ?>
 
 <script type="text/javascript" src="//maps.google.com/maps/api/js?v=3&key=AIzaSyB6jZPjPGQrn83VpCi-yoxCSwCgZN2kbd4"></script>

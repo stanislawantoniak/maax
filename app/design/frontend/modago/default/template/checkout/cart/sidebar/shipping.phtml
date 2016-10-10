@@ -17,9 +17,6 @@ $costSumm = $this->getItemsShippingCost();
 $cost = $items->cost;
 
 $checkoutSession = Mage::getSingleton('checkout/session');
-
-/* @var $locker GH_Inpost_Model_Locker  */
-$locker		= $this->getInpostLocker();
 $inpostLogo	= $this->getSkinUrl('images/inpost/checkout-logo.png');
 
 $quote = $this->getQuote();
@@ -30,6 +27,7 @@ foreach($selectedShipping["methods"] as $vid => $methodSelectedData){
     $sessionShippingMethod = $methodSelectedData;
 }
 $deliveryPoint = $this->getDeliveryPointCheckout();
+$deliveryPointName = $deliveryPoint->id ? $deliveryPoint->name : "";
 /**
  * Totals
  */
@@ -43,7 +41,7 @@ $deliveryMethods = $this->getMapDeliveryMethodsJSON($methods);
 ?>
 
 <script type="text/javascript">
-    var sessionPointName = '<?php echo $locker->getName(); ?>';
+    var sessionPointName = '<?php echo $deliveryPointName; ?>';
     Mall.reg.set("localeCode", '<?php echo substr(Mage::getStoreConfig('general/locale/code', Mage::app()->getStore()->getId()),0,2); ?>');
 
     Mall.translate.add("validation_please_select_shipping", "<?php echo $helper->__("Please select shipping");?>");
@@ -57,26 +55,24 @@ $deliveryMethods = $this->getMapDeliveryMethodsJSON($methods);
 </script>
 <script type="text/javascript" src="<?php echo $this->getSkinUrl("js/mall/checkout/cart/shipping.js") ?>"></script>
 
-
-
 <?php if(!empty($rates)): ?>
 <fieldset id="cart-shipping-methods">
     <form action="<?php echo $this->getUrl('checkout/singlepage/saveBasketShipping') ?>" method="post" id="cart-shipping-methods-form">
 
-    <script type="text/javascript">
-        (function(){
-            Mall.reg.set("extra_charges", <?php echo Mage::helper("core")->jsonEncode($extraCharges); ?>);
-            Mall.reg.set("vendors", <?php echo $vendorsJ; ?>);
-            Mall.reg.set("vendor_costs", <?php echo Mage::helper("core")->jsonEncode($vednorCosts); ?>);
-            Mall.reg.set("inpost_logo", '<?php echo $inpostLogo; ?>');
+        <script type="text/javascript">
+            (function(){
+                Mall.reg.set("extra_charges", <?php echo Mage::helper("core")->jsonEncode($extraCharges); ?>);
+                Mall.reg.set("vendors", <?php echo $vendorsJ; ?>);
+                Mall.reg.set("vendor_costs", <?php echo Mage::helper("core")->jsonEncode($vednorCosts); ?>);
+                Mall.reg.set("inpost_logo", '<?php echo $inpostLogo; ?>');
 
-            Mall.reg.set("quote_grand_total", <?php echo $grandTotal; ?>);
-            Mall.reg.set("quote_products_total", <?php echo $productsPriceTotal; ?>);
-            Mall.reg.set("quote_discount_total", <?php echo $discountTotal; ?>);
+                Mall.reg.set("quote_grand_total", <?php echo $grandTotal; ?>);
+                Mall.reg.set("quote_products_total", <?php echo $productsPriceTotal; ?>);
+                Mall.reg.set("quote_discount_total", <?php echo $discountTotal; ?>);
 
-            Mall.reg.set("deliverySet", <?php echo $deliveryMethods; ?>);
-        })();
-    </script>
+                Mall.reg.set("deliverySet", <?php echo $deliveryMethods; ?>);
+            })();
+        </script>
 
         <div class="shipping-collect">
             <?php if (!empty($selectedShipping) && isset($selectedShipping["methods"])): ?>

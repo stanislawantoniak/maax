@@ -18,7 +18,7 @@
 
                             Mall.Cart.Map.deliverySet[this.e].mapPoints =
                                 JSON.parse(sessionStorage.getItem(this.e)).map_points;
-                         }).bind({e: e})
+                        }).bind({e: e})
                     });
                 } else {
                     Mall.Cart.Map.deliverySet[e].mapPoints =
@@ -34,6 +34,8 @@
 
             self.attachShippingFormValidation();
 
+            var testPointsData = self.analizeMapPoints();
+
             jQuery("#change-shipping-type").click(function () {
                 jQuery(".shipping-method-selector").slideDown();
                 jQuery(".shipping-method-selected").slideUp();
@@ -45,11 +47,16 @@
             jQuery(".data_shipping_item").click(function(){
                 Mall.Cart.Shipping.carrierPoint = jQuery(this).find("input[name=_shipping_method]").attr("data-carrier-delivery-type");
 
-                if (Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint] && Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints){
+                var carrierMapPointsData = Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint];
 
-                    if (!Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.some(
-                            function(e){return e.name == jQuery("[name=shipping_point_code]").val()}
-                        )) {
+                if (carrierMapPointsData) {
+                    var carrierMapPoints = carrierMapPointsData.mapPoints;
+                    if (carrierMapPoints){
+
+                    var testPoints = (typeof testPointsData[Mall.Cart.Shipping.carrierPoint] !== "undefined") ? testPointsData[Mall.Cart.Shipping.carrierPoint] : true;
+
+                    if (testPoints) {
+
                         jQuery(".shipping_select_point_data").html("");
                         jQuery("[name=shipping_point_code]").val("");
                         jQuery("[name=shipping_point_code]").attr("data-id", "");
@@ -57,19 +64,29 @@
 
                         var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "']");
 
-                        inpostModal.find("[name=shipping_select_city]").val("").select2({
-                            placeholder: Mall.translate.__("shipping_map_select_city"),
-                            dropdownParent: inpostModal,
-                            language: Mall.reg.get("localeCode")
-                        });
 
-                        inpostModal.find("[name=shipping_select_point]")
-                            .attr("disabled", true)
-                            .val("")
-                            .select2({
+                        if (!Mall.getIsBrowserMobile()) {
+                            inpostModal.find("[name=shipping_select_city]").val("").select2({
+                                placeholder: Mall.translate.__("shipping_map_select_city"),
                                 dropdownParent: inpostModal,
                                 language: Mall.reg.get("localeCode")
                             });
+
+                            inpostModal.find("[name=shipping_select_point]")
+                                .attr("disabled", true)
+                                .val("")
+                                .select2({
+                                    dropdownParent: inpostModal,
+                                    language: Mall.reg.get("localeCode")
+                                });
+                        } else {
+                            inpostModal.find("[name=shipping_select_city]").val("");
+
+                            inpostModal.find("[name=shipping_select_point]")
+                                .attr("disabled", true)
+                                .val("");
+                        }
+
 
                     }
 
@@ -81,8 +98,9 @@
 
                         if (typeof jQuery("[name=shipping_point_code]").attr("data-town") !== "undefined")
                             Mall.Cart.Map.refreshMap(
-                                Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.filter(function(e){
-                                    if(e.town==jQuery("[name=shipping_point_code]").attr("data-town")) return 1;}
+                                Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.filter(function (e) {
+                                        if (e.town == jQuery("[name=shipping_point_code]").attr("data-town")) return 1;
+                                    }
                                 ),
                                 Mall.Cart.Map.nearestStores
                             );
@@ -96,7 +114,7 @@
                         Mall.Cart.Map.map.setCenter({lat: 52.229818, lng: 21.011864});
 
                     }
-
+                }
                 }
 
                 jQuery(this).find("input[name=_shipping_method]")
@@ -148,6 +166,33 @@
             self.attachShowHideNearestPointsList();
 
             if (Object.keys(Mall.Cart.Map.deliverySet).length > 0) Mall.Cart.Map.initMap();
+        },
+        analizeMapPoints: function () {
+            //Check all the map points and discover is there session deliveryPoint among them
+            var testPointsResult = {};
+            jQuery.each(Mall.Cart.Map.deliverySet,
+                function (code, deliverySet) {
+                    var carrierMapPointsData = Mall.Cart.Map.deliverySet[code];
+
+                    if (carrierMapPointsData) {
+                        var carrierMapPoints = carrierMapPointsData.mapPoints;
+                        if (carrierMapPoints) {
+                            var testPoints = true;
+
+                            if (typeof jQuery("[name=shipping_point_code]").val() !== "undefined") {
+                                testPoints = !carrierMapPoints.some(
+                                    function (e) {
+                                        return e.name == jQuery("[name=shipping_point_code]").val();
+                                    }
+                                );
+                            }
+                            testPointsResult[code] = testPoints;
+                        }
+                    }
+
+                });
+
+            return {};
         },
         attachShippingFormValidation: function(){
             jQuery("#cart-shipping-methods-form").validate({
@@ -306,38 +351,64 @@
 
             var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='" + self.carrierPoint + "']");
 
-            jQuery("[name=shipping_select_point]")
-                .select2({dropdownParent: inpostModal,language: Mall.reg.get("localeCode")})
-                .change(function () {
-                    var el = jQuery(this), val = el.val();
-                    el.addClass("onchange_shipping_select_point");
-                    if (typeof val !== "undefined" && val.length > 0) {
-                        Mall.Cart.Map.showMarkerOnMap(val);
-                    }
+            if (!Mall.getIsBrowserMobile()) {
+                jQuery("[name=shipping_select_point]")
+                    .select2({dropdownParent: inpostModal,language: Mall.reg.get("localeCode")})
+                    .change(function () {
+                        var el = jQuery(this), val = el.val();
+                        el.addClass("onchange_shipping_select_point");
+                        if (typeof val !== "undefined" && val.length > 0) {
+                            Mall.Cart.Map.showMarkerOnMap(val);
+                        }
 
+                        jQuery(".nearest_stores_container_list").hide();
+                        jQuery(".nearest_stores_container_link").text(Mall.translate.__("shipping_map_show_nearest_link"));
 
-                    jQuery(".nearest_stores_container_list").hide();
-                    jQuery(".nearest_stores_container_link").text(Mall.translate.__("shipping_map_show_nearest_link"));
+                    });
+            } else {
+                jQuery("[name=shipping_select_point]")
+                    .change(function () {
+                        var el = jQuery(this), val = el.val();
+                        el.addClass("onchange_shipping_select_point");
+                        if (typeof val !== "undefined" && val.length > 0) {
+                            Mall.Cart.Map.showMarkerOnMap(val);
+                        }
 
-                });
+                        jQuery(".nearest_stores_container_list").hide();
+                        jQuery(".nearest_stores_container_link").text(Mall.translate.__("shipping_map_show_nearest_link"));
+
+                    });
+            }
+
             if (Mall.getIsBrowserMobile()) {
                 inpostModal.find('.select2').on('select2:open', function (e) {
                     jQuery('.select2-search input').prop('focus', false);
                 });
             }
-            jQuery("[name=shipping_select_city]").select2({
-                placeholder: Mall.translate.__("shipping_map_select_city"),
-                dropdownParent: inpostModal,
-                language: Mall.reg.get("localeCode")
-            });
-
-            if (firstTime) jQuery("[name=shipping_select_point]")
-                .attr("disabled", true)
-                .val("")
-                .select2({
+            if (!Mall.getIsBrowserMobile()) {
+                jQuery("[name=shipping_select_city]").select2({
+                    placeholder: Mall.translate.__("shipping_map_select_city"),
                     dropdownParent: inpostModal,
                     language: Mall.reg.get("localeCode")
                 });
+            }
+
+
+            if (firstTime) {
+                if (!Mall.getIsBrowserMobile()) {
+                    jQuery("[name=shipping_select_point]")
+                        .attr("disabled", true)
+                        .val("")
+                        .select2({
+                            dropdownParent: inpostModal,
+                            language: Mall.reg.get("localeCode")
+                        });
+                } else {
+                    jQuery("[name=shipping_select_point]")
+                        .attr("disabled", true)
+                        .val("");
+                }
+            }
 
 
             inpostModal.on('show.bs.modal', function () {
@@ -368,20 +439,28 @@
         },
         attachShowOnMapSavedInSessionPoint: function () {
             var sessionPoint = jQuery("[name=shipping_point_code]");
+
             var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "']");
-            var sessionPointTown;
+            var sessionPointTown = '';
 
             if (sessionPointName) {
                 sessionPointTown = sessionPoint.attr("data-town");
 
                 jQuery(".shipping_select_point_data").html("");
-                jQuery("[name=shipping_select_city]")
-                    .val(sessionPointTown)
-                    .select2({dropdownParent: inpostModal, language: Mall.reg.get("localeCode")});
+                if(sessionPointTown.length > 0){
+                    if (!Mall.getIsBrowserMobile()) {
+                        jQuery("[name=shipping_select_city]")
+                            .val(sessionPointTown)
+                            .select2({dropdownParent: inpostModal, language: Mall.reg.get("localeCode")});
+                    } else {
+                        jQuery("[name=shipping_select_city]")
+                            .val(sessionPointTown);
+                    }
 
-                Mall.Cart.Map.searchOnMap(sessionPointTown, sessionPointName);
+                    Mall.Cart.Map.searchOnMap(sessionPointTown, sessionPointName);
+                }
+
             }
-
 
         },
         attachShowHideNearestPointsList: function(){
@@ -400,21 +479,22 @@
                 });
         },
         attachShowHideMapOnMobile: function(){
-            if(Mall.getIsBrowserMobile()){
-                jQuery(".map_delivery_container").hide();
-            }
+            if (Mall.getIsBrowserMobile())
+                Mall.Cart.Map.makeMapInvisible();
+
             jQuery(document).delegate(".map_delivery_container_show",
                 "click",
                 function (e) {
                     e.preventDefault();
                     Mall.Cart.Map.resizeMapMobile();
                     jQuery(this).text(Mall.translate.__("shipping_map_hide_map_link"));
-                    if (jQuery('.map_delivery_container').is(':visible')) {
+                    if (jQuery('.map_delivery_container').hasClass('map_delivery_container_visible')) {
                         jQuery(this).text(Mall.translate.__("shipping_map_show_map_link"));
+                        Mall.Cart.Map.makeMapInvisible();
                     } else {
                         jQuery(this).text(Mall.translate.__("shipping_map_hide_map_link"));
+                        Mall.Cart.Map.makeMapVisible();
                     }
-                    jQuery(".map_delivery_container").slideToggle();
                 });
         },
         selectMethod: function (e) {
@@ -490,7 +570,6 @@
         gmarkersNameRelation: [],
 
         initMap: function() {
-
             this.map = null;
             this.gmarkers = [];
             this.gmarkersNameRelation = [];
@@ -595,12 +674,18 @@
                     //if nearest store marker clicked, but the city is different from selected
                     if (this.nearest === 1 && jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_city]").val() !== this.town) {
 
-                        jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_city]")
-                            .val(this.town)
-                            .select2({
-                                dropdownParent: inpostModal,
-                                language: Mall.reg.get("localeCode")
-                            });
+                        if (!Mall.getIsBrowserMobile()) {
+                            jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_city]")
+                                .val(this.town)
+                                .select2({
+                                    dropdownParent: inpostModal,
+                                    language: Mall.reg.get("localeCode")
+                                });
+                        } else {
+                            jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_city]")
+                                .val(this.town);
+                        }
+
                         jQuery(".shipping_select_point_data").html("");
 
                         Mall.Cart.Map.searchOnMap(this.town, this.name);
@@ -608,11 +693,14 @@
 
                     jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_point]").val(this.name);
                     if (!jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_point]").hasClass("onchange_shipping_select_point")) {
-                        jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_point]")
-                            .select2({
-                                dropdownParent: inpostModal,
-                                language: Mall.reg.get("localeCode")
-                            });
+                        if (!Mall.getIsBrowserMobile()) {
+                            jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_point]")
+                                .select2({
+                                    dropdownParent: inpostModal,
+                                    language: Mall.reg.get("localeCode")
+                                });
+                        }
+
                     }
                     jQuery("[name=shipping_select_point]").removeClass("onchange_shipping_select_point");
 
@@ -668,6 +756,15 @@
             }
         },
 
+        makeMapInvisible: function(){
+            jQuery(".map_delivery_container")
+                .removeClass("map_delivery_container_visible");
+        },
+        makeMapVisible: function(){
+            jQuery(".map_delivery_container")
+                .addClass("map_delivery_container_visible");
+        },
+
         resizeMapMobile: function(){
             if (map === null)
                 return;
@@ -706,8 +803,9 @@
                 Mall.Cart.Shipping.attachShowOnMapSavedInSessionPoint();
             }
 
-            //Show on map session paczkomat
+
             if(typeof point !== "undefined"){
+                //Show on map session paczkomat
                 Mall.Cart.Map.showMarkerOnMap(point);
             }
 
@@ -757,18 +855,21 @@
             var pos;
             var closestStores = [];
 
-            for (var i = 0; i < Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.length; i++) {
-                pos = Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i];
-                // get the distance between user's location and this point
-                var dist = MapsHelper.Haversine(Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].latitude, Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].longitude, position.coords.latitude, position.coords.longitude);
+            if(typeof Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints !== "undefined"){
+                for (var i = 0; i < Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.length; i++) {
+                    pos = Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i];
+                    // get the distance between user's location and this point
+                    var dist = MapsHelper.Haversine(Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].latitude, Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].longitude, position.coords.latitude, position.coords.longitude);
 
-                // check if this is the shortest distance so far
-                if (dist < minDistance) {
-                    Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].distance = dist;
-                    Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].nearest = 1;
-                    closestStores.push(Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i]);
+                    // check if this is the shortest distance so far
+                    if (dist < minDistance) {
+                        Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].distance = dist;
+                        Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].nearest = 1;
+                        closestStores.push(Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i]);
+                    }
                 }
             }
+
 
             return closestStores;
         },
@@ -782,7 +883,7 @@
             if(typeof (pos.payment_point_description) !== "undefined"
                 && pos.payment_point_description.length > 0
             ){
-                payment_point_description = "<div><span><i class='fa fa-credit-card fa-1x'></i> " +pos.payment_point_description+ "</span></div>";
+                //payment_point_description = "<div><span><i class='fa fa-credit-card fa-1x'></i> " +pos.payment_point_description+ "</span></div>";
             }
             var pos_additional =
                 '<div>' + (pos.street ? pos.street : "") + ' ' + (pos.building_number ? pos.building_number : "") + '</div>' +
@@ -806,7 +907,7 @@
             if(typeof (pos.payment_point_description) !== "undefined"
                 && pos.payment_point_description.length > 0
             ){
-                payment_point_description = "<div><span><i class='fa fa-credit-card fa-1x'></i> " +pos.payment_point_description+ "</span></div>";
+                //payment_point_description = "<div><span><i class='fa fa-credit-card fa-1x'></i> " +pos.payment_point_description+ "</span></div>";
             }
 
             var pos_additional =
@@ -866,9 +967,20 @@
                 jQuery("#" + Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapDelivery).css({"visibility": "visible", "display": "block"});
 
 
+
                 if(Mall.getIsBrowserMobile()){
-                    jQuery(".map_delivery_container_wrapper .map_delivery_container_show_up")
-                        .html('<a href="" class="map_delivery_container_show">'+Mall.translate.__("shipping_map_show_map_link")+'</a>');
+                    var isMapVisible = jQuery("#" + Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapDelivery)
+                        .parents(".map_delivery_container")
+                        .hasClass("map_delivery_container_visible");
+
+                    if(isMapVisible){
+                        jQuery(".map_delivery_container_wrapper .map_delivery_container_show_up")
+                            .html('<a href="" class="map_delivery_container_show">'+Mall.translate.__("shipping_map_hide_map_link")+'</a>');
+                    } else {
+                        jQuery(".map_delivery_container_wrapper .map_delivery_container_show_up")
+                            .html('<a href="" class="map_delivery_container_show">'+Mall.translate.__("shipping_map_show_map_link")+'</a>');
+                    }
+
                 }
 
                 if(markerToShow){
@@ -918,8 +1030,12 @@
             }
 
             var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "']");
-            jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_point]")
-                .select2({dropdownParent: inpostModal, language: Mall.reg.get("localeCode")});
+
+            if (!Mall.getIsBrowserMobile()) {
+                jQuery("div[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "'] select[name=shipping_select_point]")
+                    .select2({dropdownParent: inpostModal, language: Mall.reg.get("localeCode")});
+            }
+
         }
     }
 

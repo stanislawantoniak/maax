@@ -1,3 +1,15 @@
+@media (max-width: $screen-xs-max) {
+    body.modal-open {
+        position: fixed;
+        width: 100%;
+        overflow: hidden;
+    }
+    .modal {
+        -webkit-overflow-scrolling: auto;
+    }
+}
+
+
 #shopping-cart {
   #cart-shipping-methods-form {
     .data-validate {
@@ -11,10 +23,10 @@
   #cart-shipping-methods {
     margin-bottom: 10px;
     header {
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       h2 {
         font-size: 18px;
-        font-family: latoregular, sans-serif;
+        font-family: $fontRegular;
         margin: 0;
         padding: 0;
         text-transform: uppercase;
@@ -61,11 +73,20 @@
 
   .shipping-method-selected {
     margin-bottom: 10px;
+
+    .price {
+      font-family: $fontOpen;
+    }
     .shipping-method-selected-container {
       margin-bottom: 40px;
 
       [data-item="description"] {
         margin-bottom: 5px;
+      }
+
+      .checkout-logo {
+        height: 52px;
+        max-width: 84px;
       }
     }
   }
@@ -79,25 +100,23 @@
       float: left;
       line-height: 25px;
     }
+
+    .delivery_type_cost {
+      font-family: $fontOpen;
+    }
   }
 
-  .button-third {
-    &.reverted {
-      margin: 20px 0 0 0;
+  .pointselect-container {
+    @media (min-width: $screen-sm) {
+      text-align: right;
+      padding-right: 0;
+    }
+    .pointselect {
+      margin: 20px 0 0 0 !important;
       width: 170px;
+      padding: 6px 3px;
       @media (min-width: $screen-sm) {
         width: 100%;
-      }
-      background: #1e1e1e;
-      border: 2px solid #1e1e1e;
-      box-shadow: inset 1px 1px 0 0 #1e1e1e;
-      color: #FFFFFF;
-      padding: 3px;
-      text-transform: uppercase;
-      &:hover {
-        background: #515151;
-        box-shadow: inset 1px 1px 0 0 #515151;
-        border-color: #515151;
       }
     }
   }
@@ -105,7 +124,7 @@
   //Modal content
   .carrier-points-modal {
     .modal-dialog.modal-lg {
-      @media(max-width:767px) {
+      @media(max-width: 767px) {
         margin: 30px auto;
       }
       width: 1150px;
@@ -124,14 +143,13 @@
       }
     }
 
-    .select2-container--default .select2-results>.select2-results__options {
+    .select2-container--default .select2-results > .select2-results__options {
       overflow-x: hidden !important;
     }
 
     .modal-body {
       overflow-x: hidden !important;
-      .shipping_select_point_data
-      {
+      .shipping_select_point_data {
         margin: 20px 0;
         padding-left: 8px;
         .row {
@@ -182,10 +200,44 @@
           }
           .gui-form-control-wrapper {
             padding-left: 8px;
+            @media(max-width: $screen-xs-max) {
+              margin-bottom: 5px;
+            }
+
+            select {
+              &:not(.select2-hidden-accessible) {
+                line-height: 28px;
+                background-color: #fff;
+                height: 28px;
+                color: #444;
+                padding-left: 8px;
+                border: 1px solid #aaa;
+                border-radius: 4px;
+                cursor: pointer;
+
+                &:disabled {
+                  background-color: #eee;
+                }
+              }
+            }
+
           }
 
           .map_delivery_container {
             padding-left: 0;
+
+            @media(max-width: $screen-xs-max) {
+              height: 0px !important;
+              overflow: hidden;
+              z-index: -9999;
+
+              &.map_delivery_container_visible {
+                height: auto !important;
+                overflow: visible;
+                z-index: inherit;
+              }
+            }
+
           }
         }
         .map_delivery_container_wrapper {
@@ -196,11 +248,20 @@
 
       .delivery-marker-window {
         max-width: 200px;
+
+        .pointselect {
+          margin: 20px 0 0 0 !important;
+          width: 170px;
+          padding: 6px 3px;
+          @media (min-width: $screen-sm) {
+            width: 100%;
+          }
+        }
       }
       .map_delivery_container_show {
         text-decoration: underline;
         display: none;
-        @media(max-width: $screen-xs) {
+        @media(max-width: $screen-xs-max) {
           display: block;
         }
       }
@@ -220,29 +281,8 @@
         color: $gray;
       }
 
-      a.btn_black {
-        display: -moz-inline-stack;
-        display: inline-block;
-        vertical-align: middle;
-        zoom: 1;
-        background: #000;
-        line-height: 22px;
-        height: 22px;
-        width: 72px;
-        border: none;
-        color: #fff;
-        font-size: 12px;
-        text-align: center;
-        text-transform: uppercase;
-        float: left;
-      }
     }
 
   }
 
-}
-
-
-#discount_voucher {
-  margin-bottom: 30px !important;
 }
