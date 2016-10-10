@@ -45,12 +45,25 @@
             jQuery(".data_shipping_item").click(function(){
                 Mall.Cart.Shipping.carrierPoint = jQuery(this).find("input[name=_shipping_method]").attr("data-carrier-delivery-type");
 
-                if (Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint]
-                    && Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints){
+                var carrierMapPointsData = Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint];
+                var carrierMapPoints = carrierMapPointsData.mapPoints;
+                if (carrierMapPointsData && carrierMapPoints){
 
-                    if (!Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.some(
-                            function(e){return e.name == jQuery("[name=shipping_point_code]").val()}
-                        )) {
+                    //console.log(jQuery("[name=shipping_point_code]").val());
+                    var testPoints = true;
+                    if(typeof jQuery("[name=shipping_point_code]").val() !== "undefined"){
+                        testPoints = !carrierMapPoints.some(
+                            function(e){
+                                //console.log("WOW 1");
+                                return e.name == jQuery("[name=shipping_point_code]").val()
+                            }
+                        );
+                    }
+
+                    //console.log(testPoints);
+
+                    if (testPoints) {
+                        console.log("WOW 2");
                         jQuery(".shipping_select_point_data").html("");
                         jQuery("[name=shipping_point_code]").val("");
                         jQuery("[name=shipping_point_code]").attr("data-id", "");
