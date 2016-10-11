@@ -102,8 +102,8 @@
 
                             self.implementMapSelections(false);
 
-                            if(!Mall.getIsBrowserMobile()){
-                                if (typeof jQuery("[name=shipping_point_code]").attr("data-town") !== "undefined")
+                            if (!Mall.getIsBrowserMobile()) {
+                                if (typeof jQuery("[name=shipping_point_code]").attr("data-town") !== "undefined") {
                                     Mall.Cart.Map.refreshMap(
                                         Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.filter(function (e) {
                                                 if (e.town == jQuery("[name=shipping_point_code]").attr("data-town")) return 1;
@@ -111,11 +111,12 @@
                                         ),
                                         Mall.Cart.Map.nearestStores
                                     );
-                                else
+                                } else {
                                     Mall.Cart.Map.refreshMap(
                                         Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints,
                                         Mall.Cart.Map.nearestStores
                                     );
+                                }
                             } else {
                                 Mall.Cart.Map.resizeMapMobile();
                             }
@@ -201,7 +202,7 @@
 
                 });
 
-            return {};
+            return testPointsResult;
         },
         attachShippingFormValidation: function(){
             jQuery("#cart-shipping-methods-form").validate({
