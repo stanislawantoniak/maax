@@ -138,8 +138,7 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
                     </div>
                 <?php endif; ?><!-- inclusive price starts here -->
                 <?php if ($this->helper('tax')->displayCartPriceInclTax() || $this->helper('tax')->displayCartBothPrices()): ?>
-                    <div class="cena"><?php if($_item->getProduct()->getStrikeoutPrice() != $_item->getProduct()->getFinalPrice()) : ?><span class="stara_cena" style="padding-top: 5px;"><?php echo Mage::helper('core')->currency($_item->getProduct()->getStrikeoutPrice(), true, false); ?></span><?php endif; ?>
-                        <?php $_incl = $this->helper('checkout')->getPriceInclTax($_item); ?>
+                    <div class="cena"><?php $_incl = $this->helper('checkout')->getPriceInclTax($_item); ?>
                         <?php if (Mage::helper('weee')->typeOfDisplay($_item, array(1, 4), 'sales') && $_item->getWeeeTaxAppliedAmount()): ?>
                         <span class="cart-tax-total" onclick="taxToggle('unit-item-tax-details<?php echo $_item->getId(); ?>', this, 'cart-tax-total-expanded');">
             <?php else: ?>
