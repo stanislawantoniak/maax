@@ -406,6 +406,8 @@ Mall.listing = {
 		var saleFlagLabel = "",
 			promoFlagLabel = "",
 			isNewLabel = "";
+
+		var flag = product[15];
 		if(product[12] > 0 && product[12] == 1){
 			promoFlagLabel = '<div class="label-product"><div class="listing-label type-label-sale"><div class="flag-sale"></div></div></div>';
 		}
@@ -422,7 +424,7 @@ Mall.listing = {
 		return "<div id='prod-" + product[0] + "' class='item col-phone col-xs-4 col-sm-6 col-md-4 col-lg-4 size14'>"+
             "<div class='box_listing_product'>"+
                 "<a href='" + product[2] +"' data-entity='" + product[0] +"' data-sku='" + product[10] + "' data-skuv='" + product[11] + "'>"+
-					saleFlagLabel + promoFlagLabel + isNewLabel +
+					saleFlagLabel + promoFlagLabel + isNewLabel + bestsellerLabel +
                     "<figure class='img_product boxed' style='padding-bottom: " + product[8] +"%'>"+
                         "<img src='" + Mall.productImagesUrl + product[7] + "' alt='" + product[1] + "' class='img-responsive'>"+
                     "</figure>"+
