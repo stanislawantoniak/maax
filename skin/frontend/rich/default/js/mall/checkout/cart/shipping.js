@@ -48,10 +48,7 @@
                 e.preventDefault();
                 var radio = jQuery(this).find("input[name=_shipping_method]");
                 if(radio.data("select-shipping-method-trigger") == 0){
-                   //Mall.Cart.Map.showMobileModalPreloader();
-                    if(Mall.getIsBrowserMobile()){
-                        jQuery("#mapPreloader").modal("show");
-                    }
+                   Mall.Cart.Map.showAjaxLoading();
                 }
                 jQuery(this).find("input[name=_shipping_method]")
                     .prop("checked",true)
@@ -422,7 +419,7 @@
 
 
             inpostModal.on('show.bs.modal', function () {
-                Mall.Cart.Map.hideMobileModalPreloader();
+                Mall.Cart.Map.hideAjaxLoading();
                 //Must wait until the render of the modal appear,
                 // that's why we use the resizeMap and NOT resizingMap!! ;-)
                 var sessionPoint = jQuery("[name=shipping_point_code]");
@@ -776,16 +773,40 @@
                 .addClass("map_delivery_container_visible");
         },
 
+        /**
+         * var and function that stores / generates ajax loader div
+         */
+        _ajax_loader: '',
+        getAjaxLoader: function(){
+            if(!this._ajax_loader.length) {
+                var ajaxLoaderId = 'ajax-filter-loader';
+                var overlay = jQuery("<div>").css({
+                    "background":	"rgba(255,255,255,0.8) \
+					url('/skin/frontend/rich/default/images/default-ajax-loader.gif') \
+					center center no-repeat",
+                    "position":		"fixed",
+                    "width":		"100%",
+                    "height":		"100%",
+                    "left":			"0",
+                    "top":			"0",
+                    "z-index":		"1000000",
+                    "color":		"#fff"
+                }).attr("id", ajaxLoaderId);
+                jQuery("body").append(jQuery(overlay));
+                this._ajax_loader = jQuery('#'+ajaxLoaderId);
+            }
+            return this._ajax_loader;
+        },
 
-        showMobileModalPreloader: function(){
+        showAjaxLoading: function(){
             if(Mall.getIsBrowserMobile()){
-                jQuery("#mapPreloader").modal("show");
+                this.getAjaxLoader().show();
             }
         },
 
-        hideMobileModalPreloader: function(){
-            if(Mall.getIsBrowserMobile()){
-                jQuery("#mapPreloader").modal("hide");
+        hideAjaxLoading: function(){
+            if(Mall.getIsBrowserMobile()){            
+            this.getAjaxLoader().hide();
             }
         },
 
