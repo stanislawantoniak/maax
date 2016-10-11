@@ -424,7 +424,7 @@ i.flag {
 	#short-description-block {
 		margin-left:0px;
 		padding-left:0px;
-		overflow:hidden;
+		//overflow:hidden;
 	}
 	#short-description {
 		padding-left:0px;
@@ -951,6 +951,10 @@ i.flag {
 		}
 		.size-box {
 			margin-bottom: 20px;
+
+			.selectboxit-container {
+				z-index: 200;
+			}
 		}
 	}
 	.action-box-bundle {
