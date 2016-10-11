@@ -2,10 +2,6 @@ footer.footer {
   color: $color_8a8a8a;
   background-color: $backgroundColorFooter;
 
-  //margin-top: 20px;
-  //padding-top: 20px;
-
-
   a {
     color: $colorLinkHover;
     &:hover {
@@ -427,13 +423,16 @@ footer.footer {
     }
   }
 
-  .fa {
-    float: left;
-    margin: 0;
-    margin-right: 11px;
-    font-size: 16px;
-    color: #fff;
+  .footer-links {
+    .fa {
+      float: left;
+      margin: 0;
+      margin-right: 11px;
+      font-size: 16px;
+      color: #fff;
+    }
   }
+
 
   .footer_block {
     border-bottom: 1px solid #000;
@@ -445,7 +444,13 @@ footer.footer {
   }
 }
 
+#persistent-forget-desktop {
+  text-align: right;
 
+  &:not(:empty) {
+    padding: 25px 0px;
+  }
+}
 .vc_separator .vc_sep_holder {
   height: 1px;
   position: relative;
