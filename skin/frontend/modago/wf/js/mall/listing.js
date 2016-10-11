@@ -414,18 +414,6 @@ Mall.listing = {
 		if(flag){
 			flagLabel = '<div class="label-product"><div class="listing-label type-label-'+flag+'"><div class="flag-'+flag+'"></div></div></div>';
 		}
-		// if(product[12] > 0 && product[12] == 1){
-		// 	promoFlagLabel = '<div class="label-product"><div class="listing-label type-label-sale"><div class="flag-sale"></div></div></div>';
-		// }
-		// if(product[12] > 0 && product[12] == 2){
-		// 	saleFlagLabel = '<div class="label-product"><div class="listing-label type-label-promotion"><div class="flag-promotion"></div></div></div>';
-		// }
-		// if(product[13] > 0 && product[13] == 1){
-		// 	isNewLabel = '<div class="label-product"><div class="listing-label type-label-new"><div class="flag-new"></div></div></div>';
-		// }
-		// if(product[14] > 0 && product[14] == 1){
-		// 	bestsellerLabel = '<div class="label-product"><div class="listing-label type-label-bestseller"><div class="flag-bestseller"></div></div></div>';
-		// }
 
 		return "<div id='prod-" + product[0] + "' class='item col-phone col-xs-4 col-sm-6 col-md-4 col-lg-4 size14'>"+
             "<div class='box_listing_product'>"+
