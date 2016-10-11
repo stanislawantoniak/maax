@@ -407,13 +407,16 @@ Mall.listing = {
 			promoFlagLabel = "",
 			isNewLabel = "";
 		if(product[12] > 0 && product[12] == 1){
-			promoFlagLabel = '<div class="label-product"><div class="listing-label type-label-3"><div class="sale">'+Mall.translate.__("Promotion")+'</div></div></div>';
+			promoFlagLabel = '<div class="label-product"><div class="listing-label type-label-sale"><div class="flag-sale">'+Mall.translate.__("Promotion")+'</div></div></div>';
 		}
 		if(product[12] > 0 && product[12] == 2){
-			saleFlagLabel = '<div class="label-product"><div class="listing-label type-label-2"><div class="sale">'+Mall.translate.__("Sale")+'</div></div></div>';
+			saleFlagLabel = '<div class="label-product"><div class="listing-label type-label-promotion"><div class="flag-promotion">'+Mall.translate.__("Sale")+'</div></div></div>';
 		}
 		if(product[13] > 0 && product[13] == 1){
-			isNewLabel = '<div class="label-product"><div class="listing-label type-label-1"><div class="sale">'+Mall.translate.__("New")+'</div></div></div>';
+			isNewLabel = '<div class="label-product"><div class="listing-label type-label-new"><div class="flag-new">'+Mall.translate.__("New")+'</div></div></div>';
+		}
+		if(product[14] > 0 && product[14] == 1){
+			bestsellerLabel = '<div class="label-product"><div class="listing-label type-label-bestseller"><div class="flag-bestseller">'+Mall.translate.__("New")+'</div></div></div>';
 		}
 
 		return "<div id='prod-" + product[0] + "' class='item col-phone col-xs-4 col-sm-6 col-md-4 col-lg-4 size14'>"+
