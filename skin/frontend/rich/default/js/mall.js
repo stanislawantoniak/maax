@@ -598,6 +598,7 @@ var Mall = {
         jQuery("#qty-error").hide();
         var selectedSizeOption = jQuery(".sizes-content select option:selected");
         var quantity =  parseInt(jQuery("#product-options input[name=quantity]").val());
+        var attrId;
         var defaultText = jQuery(".size-box select").selectBoxIt().data("selectBox-selectBoxIt").options.defaultText;
         if(Mall.getIsBrowserMobile() && jQuery(".size-box .selectboxit-text").text() != defaultText){
             attrId = jQuery(".sizes-content select option:selected").val();

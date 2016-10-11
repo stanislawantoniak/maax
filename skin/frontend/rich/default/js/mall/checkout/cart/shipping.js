@@ -102,8 +102,8 @@
 
                             self.implementMapSelections(false);
 
-                            if(!Mall.getIsBrowserMobile()){
-                                if (typeof jQuery("[name=shipping_point_code]").attr("data-town") !== "undefined")
+                            if (!Mall.getIsBrowserMobile()) {
+                                if (typeof jQuery("[name=shipping_point_code]").attr("data-town") !== "undefined") {
                                     Mall.Cart.Map.refreshMap(
                                         Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.filter(function (e) {
                                                 if (e.town == jQuery("[name=shipping_point_code]").attr("data-town")) return 1;
@@ -111,11 +111,12 @@
                                         ),
                                         Mall.Cart.Map.nearestStores
                                     );
-                                else
+                                } else {
                                     Mall.Cart.Map.refreshMap(
                                         Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints,
                                         Mall.Cart.Map.nearestStores
                                     );
+                                }
                             } else {
                                 Mall.Cart.Map.resizeMapMobile();
                             }
@@ -137,7 +138,7 @@
 
             if (typeof self.getSelectedShipping().val() !== "undefined") {
                 jQuery.ajax({
-                    url: "/checkout/singlepage/saveBasketShipping/",
+                    url: Mall.reg.get("saveBasketShippingUrl"),
                     type: "POST",
                     data: jQuery("#cart-shipping-methods-form").serializeArray()
                 });
@@ -201,7 +202,7 @@
 
                 });
 
-            return {};
+            return testPointsResult;
         },
         attachShippingFormValidation: function(){
             jQuery("#cart-shipping-methods-form").validate({
@@ -310,7 +311,7 @@
 
             jQuery("#cart-buy-overlay").removeClass("hidden");
             jQuery.ajax({
-                url: "/checkout/singlepage/saveBasketShipping/",
+                url: Mall.reg.get("saveBasketShippingUrl"),
                 type: "POST",
                 data: formData
             }).done(function (response) {
@@ -772,31 +773,6 @@
         makeMapVisible: function(){
             jQuery(".map_delivery_container")
                 .addClass("map_delivery_container_visible");
-        },
-
-        /**
-         * var and function that stores / generates ajax loader div
-         */
-        _ajax_loader: '',
-        getAjaxLoader: function(){
-            if(!this._ajax_loader.length) {
-                var ajaxLoaderId = 'ajax-filter-loader';
-                var overlay = jQuery("<div>").css({
-                    "background":	"rgba(255,255,255,0.8) \
-					url('/skin/frontend/rich/default/images/default-ajax-loader.gif') \
-					center center no-repeat",
-                    "position":		"fixed",
-                    "width":		"100%",
-                    "height":		"100%",
-                    "left":			"0",
-                    "top":			"0",
-                    "z-index":		"1000000",
-                    "color":		"#fff"
-                }).attr("id", ajaxLoaderId);
-                jQuery("body").append(jQuery(overlay));
-                this._ajax_loader = jQuery('#'+ajaxLoaderId);
-            }
-            return this._ajax_loader;
         },
 
 

@@ -42,6 +42,7 @@ $deliveryMethods = $this->getMapDeliveryMethodsJSON($methods);
 
 <script type="text/javascript">
     var sessionPointName = '<?php echo $deliveryPointName; ?>';
+    Mall.reg.set("saveBasketShippingUrl", '<?php echo Mage::getUrl("checkout/singlepage/saveBasketShipping", array("_secure" => true)); ?>');
     Mall.reg.set("localeCode", '<?php echo substr(Mage::getStoreConfig('general/locale/code', Mage::app()->getStore()->getId()),0,2); ?>');
 
     Mall.translate.add("validation_please_select_shipping", "<?php echo $helper->__("Please select shipping");?>");
