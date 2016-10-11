@@ -44,7 +44,13 @@
                 jQuery("[name=_shipping_method]").prop("checked", false);
             });
 
-            jQuery(".data_shipping_item").click(function(){
+            jQuery(".data_shipping_item").click(function(e){
+                e.preventDefault();
+
+                jQuery(this).find("input[name=_shipping_method]")
+                    .prop("checked",true)
+                    .change();
+
                 Mall.Cart.Shipping.carrierPoint = jQuery(this).find("input[name=_shipping_method]").attr("data-carrier-delivery-type");
 
                 var carrierMapPointsData = Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint];
@@ -96,19 +102,24 @@
 
                             self.implementMapSelections(false);
 
-                            if (typeof jQuery("[name=shipping_point_code]").attr("data-town") !== "undefined")
-                                Mall.Cart.Map.refreshMap(
-                                    Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.filter(function (e) {
-                                            if (e.town == jQuery("[name=shipping_point_code]").attr("data-town")) return 1;
-                                        }
-                                    ),
-                                    Mall.Cart.Map.nearestStores
-                                );
-                            else
-                                Mall.Cart.Map.refreshMap(
-                                    Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints,
-                                    Mall.Cart.Map.nearestStores
-                                );
+                            if(!Mall.getIsBrowserMobile()){
+                                if (typeof jQuery("[name=shipping_point_code]").attr("data-town") !== "undefined")
+                                    Mall.Cart.Map.refreshMap(
+                                        Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.filter(function (e) {
+                                                if (e.town == jQuery("[name=shipping_point_code]").attr("data-town")) return 1;
+                                            }
+                                        ),
+                                        Mall.Cart.Map.nearestStores
+                                    );
+                                else
+                                    Mall.Cart.Map.refreshMap(
+                                        Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints,
+                                        Mall.Cart.Map.nearestStores
+                                    );
+                            } else {
+                                Mall.Cart.Map.resizeMapMobile();
+                            }
+
 
                             Mall.Cart.Map.map.setZoom(5);
                             Mall.Cart.Map.map.setCenter({lat: 52.229818, lng: 21.011864});
@@ -117,9 +128,7 @@
                     }
                 }
 
-                jQuery(this).find("input[name=_shipping_method]")
-                    .prop("checked",true)
-                    .change();
+
             });
 
             if (jQuery("#cart-shipping-methods [name=_shipping_method]").length == 1) {
@@ -765,6 +774,32 @@
                 .addClass("map_delivery_container_visible");
         },
 
+        /**
+         * var and function that stores / generates ajax loader div
+         */
+        _ajax_loader: '',
+        getAjaxLoader: function(){
+            if(!this._ajax_loader.length) {
+                var ajaxLoaderId = 'ajax-filter-loader';
+                var overlay = jQuery("<div>").css({
+                    "background":	"rgba(255,255,255,0.8) \
+					url('/skin/frontend/rich/default/images/default-ajax-loader.gif') \
+					center center no-repeat",
+                    "position":		"fixed",
+                    "width":		"100%",
+                    "height":		"100%",
+                    "left":			"0",
+                    "top":			"0",
+                    "z-index":		"1000000",
+                    "color":		"#fff"
+                }).attr("id", ajaxLoaderId);
+                jQuery("body").append(jQuery(overlay));
+                this._ajax_loader = jQuery('#'+ajaxLoaderId);
+            }
+            return this._ajax_loader;
+        },
+
+
         resizeMapMobile: function(){
             if (map === null)
                 return;
@@ -827,6 +862,7 @@
 
             if (jQuery("[name=shipping_select_city]") || jQuery("[name=shipping_select_city]").val().length === 0) {
                 Mall.Cart.Map.refreshMap([], Mall.Cart.Map.nearestStores);
+
                 jQuery("#" + Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapDelivery)
                     .css({"visibility": "visible", "display": "block"});
             }
@@ -964,7 +1000,9 @@
 
                 Mall.Cart.Map.constructShippingPointSelect(pointsOnMap);
                 Mall.Cart.Map.refreshMap(pointsOnMap, Mall.Cart.Map.nearestStores);
-                jQuery("#" + Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapDelivery).css({"visibility": "visible", "display": "block"});
+
+                jQuery("#" + Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapDelivery)
+                    .css({"visibility": "visible", "display": "block"});
 
 
 

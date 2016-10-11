@@ -46,10 +46,7 @@
 
             jQuery(".data_shipping_item").click(function(e){
                 e.preventDefault();
-                var radio = jQuery(this).find("input[name=_shipping_method]");
-                if(radio.data("select-shipping-method-trigger") == 0){
-                   Mall.Cart.Map.showAjaxLoading();
-                }
+
                 jQuery(this).find("input[name=_shipping_method]")
                     .prop("checked",true)
                     .change();
@@ -105,19 +102,24 @@
 
                             self.implementMapSelections(false);
 
-                            if (typeof jQuery("[name=shipping_point_code]").attr("data-town") !== "undefined")
-                                Mall.Cart.Map.refreshMap(
-                                    Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.filter(function (e) {
-                                            if (e.town == jQuery("[name=shipping_point_code]").attr("data-town")) return 1;
-                                        }
-                                    ),
-                                    Mall.Cart.Map.nearestStores
-                                );
-                            else
-                                Mall.Cart.Map.refreshMap(
-                                    Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints,
-                                    Mall.Cart.Map.nearestStores
-                                );
+                            if(!Mall.getIsBrowserMobile()){
+                                if (typeof jQuery("[name=shipping_point_code]").attr("data-town") !== "undefined")
+                                    Mall.Cart.Map.refreshMap(
+                                        Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.filter(function (e) {
+                                                if (e.town == jQuery("[name=shipping_point_code]").attr("data-town")) return 1;
+                                            }
+                                        ),
+                                        Mall.Cart.Map.nearestStores
+                                    );
+                                else
+                                    Mall.Cart.Map.refreshMap(
+                                        Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints,
+                                        Mall.Cart.Map.nearestStores
+                                    );
+                            } else {
+                                Mall.Cart.Map.resizeMapMobile();
+                            }
+
 
                             Mall.Cart.Map.map.setZoom(5);
                             Mall.Cart.Map.map.setCenter({lat: 52.229818, lng: 21.011864});
@@ -419,7 +421,6 @@
 
 
             inpostModal.on('show.bs.modal', function () {
-                Mall.Cart.Map.hideAjaxLoading();
                 //Must wait until the render of the modal appear,
                 // that's why we use the resizeMap and NOT resizingMap!! ;-)
                 var sessionPoint = jQuery("[name=shipping_point_code]");
@@ -798,17 +799,6 @@
             return this._ajax_loader;
         },
 
-        showAjaxLoading: function(){
-            if(Mall.getIsBrowserMobile()){
-                this.getAjaxLoader().show();
-            }
-        },
-
-        hideAjaxLoading: function(){
-            if(Mall.getIsBrowserMobile()){            
-            this.getAjaxLoader().hide();
-            }
-        },
 
         resizeMapMobile: function(){
             if (map === null)
