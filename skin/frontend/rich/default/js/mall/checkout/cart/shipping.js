@@ -44,9 +44,18 @@
                 jQuery("[name=_shipping_method]").prop("checked", false);
             });
 
-            jQuery(".data_shipping_item").click(function(){
-
-                Mall.Cart.Map.showMobileModalPreloader();
+            jQuery(".data_shipping_item").click(function(e){
+                e.preventDefault();
+                var radio = jQuery(this).find("input[name=_shipping_method]");
+                if(radio.data("select-shipping-method-trigger") == 0){
+                   //Mall.Cart.Map.showMobileModalPreloader();
+                    if(Mall.getIsBrowserMobile()){
+                        jQuery("#mapPreloader").modal("show");
+                    }
+                }
+                jQuery(this).find("input[name=_shipping_method]")
+                    .prop("checked",true)
+                    .change();
 
                 Mall.Cart.Shipping.carrierPoint = jQuery(this).find("input[name=_shipping_method]").attr("data-carrier-delivery-type");
 
@@ -120,9 +129,7 @@
                     }
                 }
 
-                jQuery(this).find("input[name=_shipping_method]")
-                    .prop("checked",true)
-                    .change();
+
             });
 
             if (jQuery("#cart-shipping-methods [name=_shipping_method]").length == 1) {
