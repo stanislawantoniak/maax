@@ -45,6 +45,9 @@
             });
 
             jQuery(".data_shipping_item").click(function(){
+
+                Mall.Cart.Map.showMobileModalPreloader();
+
                 Mall.Cart.Shipping.carrierPoint = jQuery(this).find("input[name=_shipping_method]").attr("data-carrier-delivery-type");
 
                 var carrierMapPointsData = Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint];
@@ -412,6 +415,7 @@
 
 
             inpostModal.on('show.bs.modal', function () {
+                Mall.Cart.Map.hideMobileModalPreloader();
                 //Must wait until the render of the modal appear,
                 // that's why we use the resizeMap and NOT resizingMap!! ;-)
                 var sessionPoint = jQuery("[name=shipping_point_code]");
@@ -765,6 +769,19 @@
                 .addClass("map_delivery_container_visible");
         },
 
+
+        showMobileModalPreloader: function(){
+            if(Mall.getIsBrowserMobile()){
+                jQuery("#mapPreloader").modal("show");
+            }
+        },
+
+        hideMobileModalPreloader: function(){
+            if(Mall.getIsBrowserMobile()){
+                jQuery("#mapPreloader").modal("hide");
+            }
+        },
+
         resizeMapMobile: function(){
             if (map === null)
                 return;
@@ -827,6 +844,7 @@
 
             if (jQuery("[name=shipping_select_city]") || jQuery("[name=shipping_select_city]").val().length === 0) {
                 Mall.Cart.Map.refreshMap([], Mall.Cart.Map.nearestStores);
+
                 jQuery("#" + Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapDelivery)
                     .css({"visibility": "visible", "display": "block"});
             }
@@ -964,7 +982,9 @@
 
                 Mall.Cart.Map.constructShippingPointSelect(pointsOnMap);
                 Mall.Cart.Map.refreshMap(pointsOnMap, Mall.Cart.Map.nearestStores);
-                jQuery("#" + Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapDelivery).css({"visibility": "visible", "display": "block"});
+
+                jQuery("#" + Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapDelivery)
+                    .css({"visibility": "visible", "display": "block"});
 
 
 
