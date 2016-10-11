@@ -35,7 +35,6 @@
             self.attachShippingFormValidation();
 
             var testPointsData = self.analizeMapPoints();
-            var collectCityPoints = self.collectSessionPointCity();
 
             jQuery("#change-shipping-type").click(function () {
                 jQuery(".shipping-method-selector").slideDown();
@@ -97,21 +96,19 @@
 
                             self.implementMapSelections(false);
 
-                            if (typeof jQuery("[name=shipping_point_code]").attr("data-town") !== "undefined"
-                                && jQuery("[name=shipping_point_code]").attr("data-dmcode") == Mall.Cart.Shipping.carrierPoint
-                            ){
-
+                            if (typeof jQuery("[name=shipping_point_code]").attr("data-town") !== "undefined")
                                 Mall.Cart.Map.refreshMap(
-                                    collectCityPoints,
+                                    Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.filter(function (e) {
+                                            if (e.town == jQuery("[name=shipping_point_code]").attr("data-town")) return 1;
+                                        }
+                                    ),
                                     Mall.Cart.Map.nearestStores
                                 );
-                            } else {
+                            else
                                 Mall.Cart.Map.refreshMap(
                                     Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints,
                                     Mall.Cart.Map.nearestStores
                                 );
-
-                            }
 
                             Mall.Cart.Map.map.setZoom(5);
                             Mall.Cart.Map.map.setCenter({lat: 52.229818, lng: 21.011864});
@@ -195,19 +192,7 @@
 
                 });
 
-            return testPointsResult;
-        },
-        collectSessionPointCity: function () {
-            var sessionTown = jQuery("[name=shipping_point_code]").attr("data-town");
-            var sessionDeliveryMethodCode = jQuery("[name=shipping_point_code]").attr("data-dmcode");
-            var mapPoints = {};
-            if (typeof sessionTown !== "undefined"){
-                mapPoints = Mall.Cart.Map.deliverySet[sessionDeliveryMethodCode].mapPoints.filter(function (e) {
-                    if (e.town == sessionTown) return 1;
-                });
-            }
-
-            return mapPoints;
+            return {};
         },
         attachShippingFormValidation: function(){
             jQuery("#cart-shipping-methods-form").validate({
