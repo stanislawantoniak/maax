@@ -36,6 +36,7 @@
 
             var testPointsData = self.analizeMapPoints();
             var collectCityPoints = self.collectSessionPointCity();
+
             jQuery("#change-shipping-type").click(function () {
                 jQuery(".shipping-method-selector").slideDown();
                 jQuery(".shipping-method-selected").slideUp();
@@ -44,117 +45,84 @@
                 jQuery("[name=_shipping_method]").prop("checked", false);
             });
 
-            //jQuery("[data-select-shipping-method-trigger=0]").change(function (e) {
-            //    //1. populate popup
-            //    var deliveryType = jQuery(this).attr("data-carrier-delivery-type");
-            //    var deliverySelectPointsModal = jQuery("div.modal[data-carrier-points='"+deliveryType+"']");
-            //
-            //    if (deliveryType == "zolagopickuppoint" && deliverySelectPointsModal.find("[name=shipping_select_pos] option").length == 1) {
-            //        //but if there is one POS available it is selected already
-            //        deliverySelectPointsModal.find('a[data-select-shipping-method-trigger="1"]').click();
-            //    } else {
-            //        deliverySelectPointsModal.modal("show");
-            //    }
-            //
-            //    if (Object.keys(Mall.Cart.Map.deliverySet).length > 0) Mall.Cart.Map.handleGeoLocation();
-            //});
-
-
             jQuery(".data_shipping_item").click(function(){
+                Mall.Cart.Shipping.carrierPoint = jQuery(this).find("input[name=_shipping_method]").attr("data-carrier-delivery-type");
 
-                var radio = jQuery(this).find("input[name=_shipping_method]");
-                radio.prop("checked",true);
+                var carrierMapPointsData = Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint];
 
-                if(radio.data("select-shipping-method-trigger") == 0){
-                    //1. populate popup
-                    var deliveryType = radio.attr("data-carrier-delivery-type");
+                if (carrierMapPointsData) {
+                    var carrierMapPoints = carrierMapPointsData.mapPoints;
+                    if (carrierMapPoints){
 
-                    var deliverySelectPointsModal = jQuery("div.modal[data-carrier-points='"+deliveryType+"']");
+                        var testPoints = (typeof testPointsData[Mall.Cart.Shipping.carrierPoint] !== "undefined") ? testPointsData[Mall.Cart.Shipping.carrierPoint] : true;
 
-                    if (deliveryType == "zolagopickuppoint" && deliverySelectPointsModal.find("[name=shipping_select_pos] option").length == 1) {
-                        //but if there is one POS available it is selected already
-                        deliverySelectPointsModal.find('a[data-select-shipping-method-trigger="1"]').click();
-                    } else {
-                        deliverySelectPointsModal.modal("show");
-                    }
+                        if (testPoints) {
 
+                            jQuery(".shipping_select_point_data").html("");
+                            jQuery("[name=shipping_point_code]").val("");
+                            jQuery("[name=shipping_point_code]").attr("data-id", "");
+                            jQuery("[name=shipping_point_code]").attr("data-town", "");
 
-                    Mall.Cart.Shipping.carrierPoint = jQuery(this).find("input[name=_shipping_method]").attr("data-carrier-delivery-type");
-
-                    var carrierMapPointsData = Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint];
-
-                    if (carrierMapPointsData) {
-                        var carrierMapPoints = carrierMapPointsData.mapPoints;
-                        if (carrierMapPoints){
-
-                            var testPoints = (typeof testPointsData[Mall.Cart.Shipping.carrierPoint] !== "undefined") ? testPointsData[Mall.Cart.Shipping.carrierPoint] : true;
-
-                            if (testPoints) {
-
-                                jQuery(".shipping_select_point_data").html("");
-                                jQuery("[name=shipping_point_code]").val("");
-                                jQuery("[name=shipping_point_code]").attr("data-id", "");
-                                jQuery("[name=shipping_point_code]").attr("data-town", "");
-
-                                var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "']");
+                            var inpostModal = jQuery(".carrier-points-modal[data-carrier-points='" + Mall.Cart.Shipping.carrierPoint + "']");
 
 
-                                if (!Mall.getIsBrowserMobile()) {
-                                    inpostModal.find("[name=shipping_select_city]").val("").select2({
-                                        placeholder: Mall.translate.__("shipping_map_select_city"),
+                            if (!Mall.getIsBrowserMobile()) {
+                                inpostModal.find("[name=shipping_select_city]").val("").select2({
+                                    placeholder: Mall.translate.__("shipping_map_select_city"),
+                                    dropdownParent: inpostModal,
+                                    language: Mall.reg.get("localeCode")
+                                });
+
+                                inpostModal.find("[name=shipping_select_point]")
+                                    .attr("disabled", true)
+                                    .val("")
+                                    .select2({
                                         dropdownParent: inpostModal,
                                         language: Mall.reg.get("localeCode")
                                     });
+                            } else {
+                                inpostModal.find("[name=shipping_select_city]").val("");
 
-                                    inpostModal.find("[name=shipping_select_point]")
-                                        .attr("disabled", true)
-                                        .val("")
-                                        .select2({
-                                            dropdownParent: inpostModal,
-                                            language: Mall.reg.get("localeCode")
-                                        });
-                                } else {
-                                    inpostModal.find("[name=shipping_select_city]").val("");
+                                inpostModal.find("[name=shipping_select_point]")
+                                    .attr("disabled", true)
+                                    .val("");
+                            }
 
-                                    inpostModal.find("[name=shipping_select_point]")
-                                        .attr("disabled", true)
-                                        .val("");
-                                }
 
+                        }
+
+                        if (Object.keys(Mall.Cart.Map.deliverySet).length > 0) {
+
+                            Mall.Cart.Map.initMap();
+
+                            self.implementMapSelections(false);
+
+                            if (typeof jQuery("[name=shipping_point_code]").attr("data-town") !== "undefined"
+                                && jQuery("[name=shipping_point_code]").attr("data-dmcode") == Mall.Cart.Shipping.carrierPoint
+                            ){
+
+                                Mall.Cart.Map.refreshMap(
+                                    collectCityPoints,
+                                    Mall.Cart.Map.nearestStores
+                                );
+                            } else {
+                                Mall.Cart.Map.refreshMap(
+                                    Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints,
+                                    Mall.Cart.Map.nearestStores
+                                );
 
                             }
 
-                            if (Object.keys(Mall.Cart.Map.deliverySet).length > 0) {
+                            Mall.Cart.Map.map.setZoom(5);
+                            Mall.Cart.Map.map.setCenter({lat: 52.229818, lng: 21.011864});
 
-                                Mall.Cart.Map.initMap();
-
-                                self.implementMapSelections(false);
-
-                                //if (typeof jQuery("[name=shipping_point_code]").attr("data-town") !== "undefined"
-                                //    && jQuery("[name=shipping_point_code]").attr("data-dmcode") == Mall.Cart.Shipping.carrierPoint
-                                //){
-                                //
-                                //    Mall.Cart.Map.refreshMap(
-                                //        collectCityPoints,
-                                //        Mall.Cart.Map.nearestStores
-                                //    );
-                                //} else {
-                                //    Mall.Cart.Map.refreshMap(
-                                //        Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints,
-                                //        Mall.Cart.Map.nearestStores
-                                //    );
-                                //
-                                //}
-
-                                Mall.Cart.Map.map.setZoom(5);
-                                Mall.Cart.Map.map.setCenter({lat: 52.229818, lng: 21.011864});
-
-                            }
                         }
                     }
-
-                    if (Object.keys(Mall.Cart.Map.deliverySet).length > 0) Mall.Cart.Map.handleGeoLocation();
                 }
+
+                jQuery(this).find("input[name=_shipping_method]")
+                    .prop("checked",true)
+                    .change();
             });
 
             if (jQuery("#cart-shipping-methods [name=_shipping_method]").length == 1) {
@@ -180,7 +148,24 @@
             });
 
             self.implementMapSelections(true);
+
+            jQuery("[data-select-shipping-method-trigger=0]").change(function (e) {
+                //1. populate popup
+                var deliveryType = jQuery(this).attr("data-carrier-delivery-type");
+                var deliverySelectPointsModal = jQuery("div.modal[data-carrier-points='"+deliveryType+"']");
+
+                if (deliveryType == "zolagopickuppoint" && deliverySelectPointsModal.find("[name=shipping_select_pos] option").length == 1) {
+                    //but if there is one POS available it is selected already
+                    deliverySelectPointsModal.find('a[data-select-shipping-method-trigger="1"]').click();
+                } else {
+                    deliverySelectPointsModal.modal("show");
+                }
+
+                if (Object.keys(Mall.Cart.Map.deliverySet).length > 0) Mall.Cart.Map.handleGeoLocation();
+            });
+
             self.attachShowHideMapOnMobile();
+
             self.attachShowHideNearestPointsList();
 
             if (Object.keys(Mall.Cart.Map.deliverySet).length > 0) Mall.Cart.Map.initMap();
@@ -442,52 +427,9 @@
 
 
             inpostModal.on('show.bs.modal', function () {
-                ////Must wait until the render of the modal appear,
-                //// that's why we use the resizeMap and NOT resizingMap!! ;-)
-                //var sessionPoint = jQuery("[name=shipping_point_code]");
-                //
-                //
-                //if (typeof jQuery("[name=shipping_point_code]").attr("data-town") !== "undefined"
-                //    && jQuery("[name=shipping_point_code]").attr("data-dmcode") == Mall.Cart.Shipping.carrierPoint
-                //){
-                //    var collectCityPoints = self.collectSessionPointCity();
-                //    Mall.Cart.Map.refreshMap(
-                //        collectCityPoints,
-                //        Mall.Cart.Map.nearestStores
-                //    );
-                //} else {
-                //    Mall.Cart.Map.refreshMap(
-                //        Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints,
-                //        Mall.Cart.Map.nearestStores
-                //    );
-                //
-                //}
-                //
-                //Mall.Cart.Map.resizeMap(sessionPoint.val());
-                //
-                //jQuery("#cart-shipping-methods input[name=shipping_point_code]").val("");
-            });
-            inpostModal.on('shown.bs.modal', function() {
                 //Must wait until the render of the modal appear,
                 // that's why we use the resizeMap and NOT resizingMap!! ;-)
                 var sessionPoint = jQuery("[name=shipping_point_code]");
-
-
-                if (typeof jQuery("[name=shipping_point_code]").attr("data-town") !== "undefined"
-                    && jQuery("[name=shipping_point_code]").attr("data-dmcode") == Mall.Cart.Shipping.carrierPoint
-                ){
-                    var collectCityPoints = self.collectSessionPointCity();
-                    Mall.Cart.Map.refreshMap(
-                        collectCityPoints,
-                        Mall.Cart.Map.nearestStores
-                    );
-                } else {
-                    Mall.Cart.Map.refreshMap(
-                        Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints,
-                        Mall.Cart.Map.nearestStores
-                    );
-
-                }
 
                 Mall.Cart.Map.resizeMap(sessionPoint.val());
 
