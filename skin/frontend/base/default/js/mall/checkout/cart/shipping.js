@@ -138,7 +138,7 @@
 
             if (typeof self.getSelectedShipping().val() !== "undefined") {
                 jQuery.ajax({
-                    url: "/checkout/singlepage/saveBasketShipping/",
+                    url: Mall.reg.get("saveBasketShippingUrl"),
                     type: "POST",
                     data: jQuery("#cart-shipping-methods-form").serializeArray()
                 });
@@ -311,7 +311,7 @@
 
             jQuery("#cart-buy-overlay").removeClass("hidden");
             jQuery.ajax({
-                url: "/checkout/singlepage/saveBasketShipping/",
+                url: Mall.reg.get("saveBasketShippingUrl"),
                 type: "POST",
                 data: formData
             }).done(function (response) {
