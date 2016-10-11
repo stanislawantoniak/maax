@@ -105,19 +105,19 @@
 
                             self.implementMapSelections(false);
 
-                            if (typeof jQuery("[name=shipping_point_code]").attr("data-town") !== "undefined")
-                                Mall.Cart.Map.refreshMap(
-                                    Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.filter(function (e) {
-                                            if (e.town == jQuery("[name=shipping_point_code]").attr("data-town")) return 1;
-                                        }
-                                    ),
-                                    Mall.Cart.Map.nearestStores
-                                );
-                            else
-                                Mall.Cart.Map.refreshMap(
-                                    Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints,
-                                    Mall.Cart.Map.nearestStores
-                                );
+                            // if (typeof jQuery("[name=shipping_point_code]").attr("data-town") !== "undefined")
+                            //     Mall.Cart.Map.refreshMap(
+                            //         Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.filter(function (e) {
+                            //                 if (e.town == jQuery("[name=shipping_point_code]").attr("data-town")) return 1;
+                            //             }
+                            //         ),
+                            //         Mall.Cart.Map.nearestStores
+                            //     );
+                            // else
+                            //     Mall.Cart.Map.refreshMap(
+                            //         Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints,
+                            //         Mall.Cart.Map.nearestStores
+                            //     );
 
                             Mall.Cart.Map.map.setZoom(5);
                             Mall.Cart.Map.map.setCenter({lat: 52.229818, lng: 21.011864});
