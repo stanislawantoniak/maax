@@ -32,11 +32,6 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
 				<span><?php echo $this->getQty($_item); ?></span>
 			</div>
 			<div class="cena">
-				<?php if(round($_productMsrpPrice,2)>$_itemPriceInclTax):?>
-				<span class="stara_cena">
-					<?php echo Mage::helper("core")->formatPrice($_productMsrpPrice, false);?>
-				</span>
-				<?php endif;?>
 				<span class="cena_zakupu">
 					<?php echo Mage::helper("core")->formatPrice($_itemPriceInclTax, false);?>
 				</span>
