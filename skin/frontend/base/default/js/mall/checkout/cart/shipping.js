@@ -116,6 +116,8 @@
                                         Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints,
                                         Mall.Cart.Map.nearestStores
                                     );
+                            } else {
+                                Mall.Cart.Map.resizeMapMobile();
                             }
 
 
