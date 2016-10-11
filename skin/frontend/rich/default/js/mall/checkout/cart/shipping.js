@@ -774,31 +774,6 @@
                 .addClass("map_delivery_container_visible");
         },
 
-        /**
-         * var and function that stores / generates ajax loader div
-         */
-        _ajax_loader: '',
-        getAjaxLoader: function(){
-            if(!this._ajax_loader.length) {
-                var ajaxLoaderId = 'ajax-filter-loader';
-                var overlay = jQuery("<div>").css({
-                    "background":	"rgba(255,255,255,0.8) \
-					url('/skin/frontend/rich/default/images/default-ajax-loader.gif') \
-					center center no-repeat",
-                    "position":		"fixed",
-                    "width":		"100%",
-                    "height":		"100%",
-                    "left":			"0",
-                    "top":			"0",
-                    "z-index":		"1000000",
-                    "color":		"#fff"
-                }).attr("id", ajaxLoaderId);
-                jQuery("body").append(jQuery(overlay));
-                this._ajax_loader = jQuery('#'+ajaxLoaderId);
-            }
-            return this._ajax_loader;
-        },
-
 
         resizeMapMobile: function(){
             if (map === null)
