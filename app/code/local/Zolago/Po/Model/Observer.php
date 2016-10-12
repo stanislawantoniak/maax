@@ -138,6 +138,8 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 		Mage::helper('udropship')->processQueue();
 	}
 	
+	
+	
 	/**
 	 * Status change
 	 * @param Mage_Core_Model_Observer $observer
@@ -149,7 +151,9 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 			$oldStatus = $observer->getEvent()->getOldStatus();
 			$newStatus = $observer->getEvent()->getNewStatus();
 			// Status changed to shipped
-			if($oldStatus!=$newStatus && $newStatus==Zolago_Po_Model_Po_Status::STATUS_SHIPPED){
+			if($oldStatus!=$newStatus && 
+			    ($newStatus==Zolago_Po_Model_Po_Status::STATUS_SHIPPED 
+			    || $newStatus==Zolago_Po_Model_Po_Status::STATUS_TO_PICK)){
 				/** @var Zolago_Po_Helper_Data $helper */
 				$helper = Mage::helper("zolagopo");
 				// Register for use by email template block
