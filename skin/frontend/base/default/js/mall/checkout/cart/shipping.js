@@ -55,6 +55,8 @@
 
                 var carrierMapPointsData = Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint];
 
+                if(Object.keys(Mall.Cart.Map.deliverySet).length > 0){Mall.Cart.Map.resizeMap();}
+
                 if (carrierMapPointsData) {
                     var carrierMapPoints = carrierMapPointsData.mapPoints;
                     if (carrierMapPoints){
@@ -96,7 +98,7 @@
 
                         }
 
-                        if (Object.keys(Mall.Cart.Map.deliverySet).length > 0) {
+                        if (jQuery.inArray(Mall.Cart.Shipping.carrierPoint, Object.keys(Mall.Cart.Map.deliverySet)) !== -1) {
 
                             Mall.Cart.Map.initMap();
 
@@ -112,6 +114,7 @@
                                         Mall.Cart.Map.nearestStores
                                     );
                                 } else {
+                                    console.log("refresh map");
                                     Mall.Cart.Map.refreshMap(
                                         Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints,
                                         Mall.Cart.Map.nearestStores
@@ -128,7 +131,6 @@
                         }
                     }
                 }
-
 
             });
 
