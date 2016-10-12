@@ -22,31 +22,32 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
         $this->getLayout()->getBlock('head')->setTitle($this->__('My Account'));
         $this->renderLayout();
     }
+	
+	/**
+	 * Override logout - add message from cms block
+	 */
+	public function logoutAction() {
+		// Do parent logout
+		parent::logoutAction();
+		
+		// Generate cms block
+		try{
+			$cms = $this->getLayout()->
+				createBlock("cms/block")->
+				setBlockId("customer-logout-forget")->
+				toHtml();
+		}catch(Exception $e){
+			$cms = $this->__("Log out success");
+			Mage::logException($e);
+		}
+		Mage::getSingleton('core/session')->addSuccess($cms);		
+		return $this->getResponse()->setRedirect('/?salt='.uniqid());
+//		return $this->_redirect("/?salt=".uniqid());
+	}
 
-    /**
-     * Override logout - add message from cms block
-     */
-    public function logoutAction() {
-        // Do parent logout
-        parent::logoutAction();
-
-        // Generate cms block
-        try {
-            $cms = $this->getLayout()->
-                   createBlock("cms/block")->
-                   setBlockId("customer-logout-forget")->
-                   toHtml();
-        } catch(Exception $e) {
-            $cms = $this->__("Log out success");
-            Mage::logException($e);
-        }
-        Mage::getSingleton('core/session')->addSuccess($cms);
-        return $this->_redirect("/");
-    }
-
-    /*
-     * Privacy setting action
-     */
+	/*
+	 * Privacy setting action
+	 */
     public function privacyAction()
     {
         $this->loadLayout();
