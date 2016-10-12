@@ -67,6 +67,9 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         );
     }
 
+    /**
+     * @return array
+     */
     public function shippingMethodsDescription()
     {
         return array(
@@ -74,15 +77,17 @@ class ZolagoOs_OrdersExport_Model_Export_Order
             Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_INPOST_LOCKER => 'Paczkomaty InPost',
             Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_POLISH_POST => 'Poczta Polska',
             Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_PWR_LOCKER => 'Paczka w Ruchu',
+            Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_PICKUPPOINT => 'Odbiór osobisty',
         );
     }
 
     /**
-     * @param $code
+     * @param $params
      * @return mixed
      */
-    public function paymentMethodDescription($code)
+    public function paymentMethodDescription($params)
     {
+        $code = $params['payment_method'];
         return isset($this->paymentMethodsDescription()[$code]) ? $this->paymentMethodsDescription()[$code] : $code;
     }
 
@@ -95,13 +100,16 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         return [Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_INPOST_LOCKER, Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_PWR_LOCKER];
     }
 
+    /**
+     * @param $params
+     * @return mixed|string
+     */
     public function shippingMethodDescription($params)
     {
         $code = $params['delivery_method'];
         $description = $this->shippingMethodsDescription()[Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_STANDARD_COURIER];
-        if (isset($this->shippingMethodsDescription()[$code])) {
+        if (isset($this->shippingMethodsDescription()[$code]))
             $description = "Delivery Method:" . $this->shippingMethodsDescription()[$code];
-        }
 
         if (in_array($code, $this->getDeliveryMethodsRequiredDeliveryPointName())) {
             switch ($code) {
@@ -110,6 +118,9 @@ class ZolagoOs_OrdersExport_Model_Export_Order
                     break;
                 case Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_PWR_LOCKER:
                     $description .= self::ORDEREXPORT_DELIMETR_ORDERINFO . 'Paczka w Ruchu punkt ID:' . $params['delivery_data']->delivery_point_name;
+                    break;
+                case Zolago_Po_Model_Po::GH_API_DELIVERY_METHOD_PICKUPPOINT:
+                    $description .= self::ORDEREXPORT_DELIMETR_ORDERINFO . 'POS ID:' . $params['delivery_data']->pos_id;
                     break;
 
             }
@@ -190,23 +201,40 @@ class ZolagoOs_OrdersExport_Model_Export_Order
 
     /**
      *
-     * Generate customer address: postcode city street
+     * Adres dla dostawy
      *
      * @param $params
      * @return string
      */
     private function _generateCustomerDeliveryAddress($params)
     {
-
         $deliveryAddress = $params['delivery_data']->delivery_address;
-        $result = array(
-            trim($deliveryAddress->delivery_zip_code),
-            trim($deliveryAddress->delivery_city),
-            trim($deliveryAddress->delivery_street),
+
+        $data = array(
+            $deliveryAddress->delivery_first_name . ' ' . $deliveryAddress->delivery_last_name,
+            $deliveryAddress->delivery_street,
+            $deliveryAddress->delivery_city,
+            $deliveryAddress->delivery_zip_code,
+            $deliveryAddress->delivery_country
         );
-        return trim(implode(' ', $result));
+        if (!empty($deliveryAddress->phone))
+            $data[] = 'Tel:' . $deliveryAddress->phone;
+
+        if (!empty($deliveryAddress->invoice_tax_id))
+            $data[] = 'NIP:' . $deliveryAddress->invoice_tax_id;
+
+        if (!empty($deliveryAddress->delivery_company_name))
+            $data[] = 'Firma:' . $deliveryAddress->delivery_company_name;
+
+        return implode(' ', $data);
     }
 
+    /**
+     * Adres rozliczeniowy
+     *
+     * @param $params
+     * @return string
+     */
     private function _generateCustomerInvoiceAddress($params)
     {
         $invoiceData = $params['invoice_data'];
@@ -215,47 +243,49 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         if (!$invoiceRequired)
             return '';
 
+        $invoiceAddress = $invoiceData->invoice_address;
         $data = array(
-            $invoiceData->invoice_address->invoice_zip_code,
-            $invoiceData->invoice_address->invoice_city,
-            $invoiceData->invoice_address->invoice_street
+            $invoiceAddress->invoice_first_name . ' ' . $invoiceAddress->invoice_last_name,
+            $invoiceAddress->invoice_street,
+            $invoiceAddress->invoice_city,
+            $invoiceAddress->invoice_zip_code,
+            $invoiceAddress->invoice_country
         );
+
+        if (!empty($invoiceAddress->invoice_tax_id))
+            $data[] = 'NIP:' . $invoiceAddress->invoice_tax_id;
+
+        if (!empty($invoiceAddress->invoice_company_name))
+            $data[] = 'Firma:' . $invoiceAddress->invoice_company_name;
+
         return trim(implode(' ', $data));
     }
 
+    /**
+     * @param $params
+     * @return string
+     */
     private function _getOrderDetails($params)
     {
         $result = [];
 
-        $result[] = $this->_generateCustomerData($params);
-
-        $deliveryAddress = $params['delivery_data']->delivery_address;
-
-        //Company
-        if (!empty($deliveryAddress->delivery_company_name))
-            $result[] = 'Firma: ' . trim($deliveryAddress->delivery_company_name);
-
-        //NIP
         $result[] = "Delivery Data:" . $this->_generateCustomerDeliveryAddress($params);
-        $result[] = "Telephone:" . trim($deliveryAddress->phone);
-
-        $invoiceAddress = $this->_generateCustomerInvoiceAddress($params);
-
-        //if (!empty($invoiceAddress)) {
-        $result[] = "Invoice Data:" . $invoiceAddress;
-        //}
-
-        $result[] = 'Payment Data:' . $this->paymentMethodDescription($params['payment_method']);
-
-
         //Delivery point name
         $result[] = $this->shippingMethodDescription($params);
 
+        $result[] = "Invoice Data:" . $this->_generateCustomerInvoiceAddress($params);
+        $result[] = 'Payment Data:' . $this->paymentMethodDescription($params);
 
         return trim(implode(self::ORDEREXPORT_DELIMETR_ORDERINFO, $result));
     }
 
 
+    /**
+     * Prepare data for dok.txt
+     *
+     * @param $params
+     * @return array
+     */
     private function _createOrderLine($params)
     {
 
@@ -269,7 +299,7 @@ class ZolagoOs_OrdersExport_Model_Export_Order
                 $this->getHelper()->toWindows1250($params['customer_email']),
 
                 //2.DATA            : TDateTime; - Data dokumentu
-                trim($params['order_date']),
+                $params['order_date'],
 
                 //3.NAZWADOK        : String; - nazwa dokumentu (10)  opis dozwolonych wartośći w pkt 7.
                 $this->getHelper()->toWindows1250(self::ORDER_DOC_NAME_ZA),
@@ -281,7 +311,7 @@ class ZolagoOs_OrdersExport_Model_Export_Order
                 '',
 
                 //6.PLATNOSC        : String; - sposób płatności (35)
-                $this->getHelper()->toWindows1250($this->paymentMethodDescription($params['payment_method'])),
+                $this->getHelper()->toWindows1250($this->paymentMethodDescription($params)),
 
                 //7.SUMA            : Currency; - Wartość brutto dokumentu - liczone zgodnie z definicją dokumentu
                 $this->getHelper()->formatToDocNumber($params['order_total']),
@@ -326,6 +356,12 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         return $orders;
     }
 
+    /**
+     * Prepare data for kontrahent.txt
+     *
+     * @param $params
+     * @return array
+     */
     private function _createCustomerLine($params)
     {
         $invoiceData = $params['invoice_data'];
@@ -353,6 +389,11 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         return $orderCustomerLine;
     }
 
+    /**
+     * Prepare data for poz.txt
+     * @param $params
+     * @return array
+     */
     private function _createOrderItemsLine($params)
     {
         $orderItems = $params["order_items"];
@@ -361,7 +402,10 @@ class ZolagoOs_OrdersExport_Model_Export_Order
         foreach ($orderItems as $orderItem) {
             $orderItem = (array)$orderItem;
 
-            if ((int)$orderItem['is_delivery_item'] == 1) {
+            if (
+                (int)$orderItem['is_delivery_item'] == 1
+                && (int)$orderItem['item_value_after_discount'] == 0 //W momencie kiedy przesyłka ma wartość 0zł to taka pozycja nie powinna być dodawana do faktury
+            ) {
                 /**
                  * >> ### WYSYŁKA
                  * >> Dodatkowo do każdego pliku poz.txt powinniśmy dodawać dodatkową pozycję
@@ -384,7 +428,9 @@ class ZolagoOs_OrdersExport_Model_Export_Order
                     '',                                                                                                 //14.DATA_WAZNOSCI : TDateTimw; - data ważności towaru;
                     '',                                                                                                //15.STAWKAVATIDENT: String; - wymuszona stawka VAT dla pozycji, gdny nie wystepuje to pobierana jest z kartoteki na datę dokumentu;
                 );
-            } else {
+            }
+
+            if ((int)$orderItem['is_delivery_item'] == 0) {
                 //Price
                 $price = $orderItem['item_value_before_discount'] / (int)$orderItem['item_qty'];
                 $itemData = array(

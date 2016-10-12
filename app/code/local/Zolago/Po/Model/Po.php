@@ -32,6 +32,7 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 	const GH_API_DELIVERY_METHOD_INPOST_LOCKER = 'inpost_parcel_locker';
 	const GH_API_DELIVERY_METHOD_POLISH_POST = 'polish_post';
 	const GH_API_DELIVERY_METHOD_PWR_LOCKER = 'pwr_parcel_locker';
+	const GH_API_DELIVERY_METHOD_PICKUPPOINT = 'pickuppoint';
 	
 	/**
 	 * Email template for new status
@@ -1022,6 +1023,9 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 				break;
 			case Orba_Shipping_Model_Packstation_Pwr::CODE:
 				$dMethod = self::GH_API_DELIVERY_METHOD_PWR_LOCKER; // Paczka w Ruchu
+				break;
+			case ZolagoOs_PickupPoint_Helper_Data::CODE:
+				$dMethod = self::GH_API_DELIVERY_METHOD_PICKUPPOINT; // Odbiór osobisty
 				break;
 			default:
 				$dMethod = self::GH_API_DELIVERY_METHOD_STANDARD_COURIER;
