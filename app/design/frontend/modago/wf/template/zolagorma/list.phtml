@@ -45,16 +45,9 @@
 						<td>
 							<table class="rma-items-table">
 								<tbody>
-								<?php
-
-
-								foreach($rma->getItemsCollection() as $itemData):?>
+								<?php foreach($rma->getItemsCollection() as $item):?>
 									<?php /* @var Zolago_Rma_Model_Rma_Item $item */ ?>
-									<?php
-									Mage::log($itemData->getData(), null, "rma1.log");
-									$item = $itemData->getPoItem();
-									Mage::log($item->getData(), null, "rma2.log");
-									?>
+									<?php $item = $item->getPoItem(); ?>
 									<?php if($item->getId()): ?>
 										<?php /* @var Zolago_Po_Model_Po_Item $item */ ?>
 										<?php $thumbUrl = $this->getItemThumb($item); ?>
