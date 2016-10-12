@@ -369,9 +369,13 @@ $colorMainMenuSubItemGradientEnd: #FFF;
       &.type-label-new {
         background: $backgroundColorFlagNew;
       }
-      &.type-label-sale, &.type-label-bestseller {
+      &.type-label-sale {
         background: $backgroundColorFlagSale;
       }
+
+        &.type-label-bestseller {
+            background: $backgroundColorFlagBestseller;
+        }
       &.type-label-promotion {
         background: $backgroundColorFlagPromotion;
       }
@@ -569,8 +573,10 @@ $backgroundColorFooter:                 $color_262626;
 
 /* LISTING */
 $backgroundColorFlagNew:                $color_7fce25;
+$backgroundColorFlagBestseller:         $color_3ca89b;
 $backgroundColorFlagSale:               $color_de0e59;
 $backgroundColorFlagPromotion:          $color_ec4920;
+
 $boxShadowListingColor:                 $color_f5f3f4;
 
 
