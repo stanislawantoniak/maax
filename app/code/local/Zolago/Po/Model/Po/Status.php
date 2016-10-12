@@ -53,8 +53,12 @@ class Zolago_Po_Model_Po_Status
 	 * czeka na płatność
 	 */
     const STATUS_PAYMENT    = Zolago_Po_Model_Source::UDPO_STATUS_PAYMENT;// 12
-
-	static function getFinishStatuses() {
+    	/*
+    	 * gotowe do odbioru
+    	 */
+    const STATUS_TO_PICK    = Zolago_Po_Model_Source::UDPO_STATUS_TO_PICK; 
+    
+	static function getFinishStatuses() {	
 		return array(
 			self::STATUS_CANCELED,
 			self::STATUS_DELIVERED,
@@ -289,6 +293,19 @@ class Zolago_Po_Model_Po_Status
 	 * @param Zolago_Po_Model_Po|int $po
 	 * @return boolean
 	 */
+	public function isReadyToPickUp($po) {
+		switch ($this->_getStatus($po)) {
+			case self::STATUS_TO_PICK:
+				return true;
+			break;
+		}
+		return false;
+	}
+	
+	/**
+	 * @param Zolago_Po_Model_Po|int $po
+	 * @return boolean
+	 */
 	public function isConfirmSendAvailable($po) {
 		switch ($this->_getStatus($po)) {
 			case self::STATUS_READY:
@@ -318,6 +335,7 @@ class Zolago_Po_Model_Po_Status
 	public function isShippingAvailable($po) {
 		switch ($this->_getStatus($po)) {
 			case self::STATUS_EXPORTED:
+			case self::STATUS_TO_PICK:
 				return true;
 			break;
 		}

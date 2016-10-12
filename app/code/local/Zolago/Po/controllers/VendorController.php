@@ -1411,6 +1411,26 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         return $this->_redirectReferer();
     }
 
+    
+    /**
+     * change status and send mail to customer (pick up is ready)
+     */
+
+    public function sendPickUpInfoAction() {
+        try {
+            $udpo = $this->_registerPo();
+            $udpo->getStatusModel()->changeStatus($udpo,Zolago_Po_Model_Po_Status::STATUS_TO_PICK);            
+            $this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("You have send mail to customer"));
+        } catch (Mage_Core_Exception $e) {
+            $this->_getSession()->addError($e->getMessage());
+        } catch (Exception $e) {
+            Mage::logException($e);
+            $this->_getSession()->addError(Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator."));
+        }
+
+        return $this->_redirectReferer();
+    }
+
     /**
      *
      * @return type
