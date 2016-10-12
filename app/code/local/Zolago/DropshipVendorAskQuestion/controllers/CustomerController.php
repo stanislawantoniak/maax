@@ -80,9 +80,11 @@ class Zolago_DropshipVendorAskQuestion_CustomerController extends ZolagoOs_OmniC
 
 
         //END PARRENT::POSTACTION
-        $obj = Zend_Uri_Http::fromString($this->_getRefererUrl());
-        $obj->addReplaceQueryParameters(array('salt'=>uniqid()));
-        $this->getResponse()->setRedirect($obj->getUri());
+//        $obj = Zend_Uri_Http::fromString($this->_getRefererUrl());
+//        $obj->addReplaceQueryParameters(array('salt'=>uniqid()));
+//        $this->getResponse()->setRedirect($obj->getUri());
+
+        $this->_redirectReferer();
 	return $this;
     }
 }
