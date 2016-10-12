@@ -244,19 +244,20 @@ class ZolagoOs_OrdersExport_Model_Export_Order
             return '';
 
         $invoiceAddress = $invoiceData->invoice_address;
-        $data = array(
-            $invoiceAddress->invoice_first_name . ' ' . $invoiceAddress->invoice_last_name,
-            $invoiceAddress->invoice_street,
-            $invoiceAddress->invoice_city,
-            $invoiceAddress->invoice_zip_code,
-            $invoiceAddress->invoice_country
-        );
+        $data = [];
+        if (!empty($invoiceAddress->invoice_company_name)) {
+            $data[] = 'Firma:' . $invoiceAddress->invoice_company_name;
+        } else {
+            $data[] = $invoiceAddress->invoice_first_name . ' ' . $invoiceAddress->invoice_last_name;
+        }
+
+        $data[] = $invoiceAddress->invoice_street;
+        $data[] = $invoiceAddress->invoice_city;
+        $data[] = $invoiceAddress->invoice_zip_code;
+        $data[] = $invoiceAddress->invoice_country;
 
         if (!empty($invoiceAddress->invoice_tax_id))
             $data[] = 'NIP:' . $invoiceAddress->invoice_tax_id;
-
-        if (!empty($invoiceAddress->invoice_company_name))
-            $data[] = 'Firma:' . $invoiceAddress->invoice_company_name;
 
         return trim(implode(' ', $data));
     }
@@ -404,7 +405,7 @@ class ZolagoOs_OrdersExport_Model_Export_Order
 
             if (
                 (int)$orderItem['is_delivery_item'] == 1
-                && (int)$orderItem['item_value_after_discount'] == 0 //W momencie kiedy przesyłka ma wartość 0zł to taka pozycja nie powinna być dodawana do faktury
+                && (float)$orderItem['item_value_after_discount'] !== 0 //W momencie kiedy przesyłka ma wartość 0zł to taka pozycja nie powinna być dodawana do faktury
             ) {
                 /**
                  * >> ### WYSYŁKA
