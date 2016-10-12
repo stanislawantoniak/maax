@@ -114,7 +114,6 @@
                                         Mall.Cart.Map.nearestStores
                                     );
                                 } else {
-                                    console.log("refresh map");
                                     Mall.Cart.Map.refreshMap(
                                         Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints,
                                         Mall.Cart.Map.nearestStores
