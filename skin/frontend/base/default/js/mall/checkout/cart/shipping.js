@@ -156,10 +156,10 @@
 
             self.implementMapSelections(true);
 
-            jQuery("[data-select-shipping-method-trigger=0]").change(function (e) {
+            jQuery("[data-select-shipping-method-trigger=0]").change(function () {
                 //1. populate popup
                 var deliveryType = jQuery(this).attr("data-carrier-delivery-type");
-                var deliverySelectPointsModal = jQuery("div.modal[data-carrier-points='"+deliveryType+"']");
+                var deliverySelectPointsModal = jQuery("div.modal[data-carrier-points='" + deliveryType + "']");
 
                 if (deliveryType == "zolagopickuppoint" && deliverySelectPointsModal.find("[name=shipping_select_pos] option").length == 1) {
                     //but if there is one POS available it is selected already
@@ -168,7 +168,9 @@
                     deliverySelectPointsModal.modal("show");
                 }
 
-                if (Object.keys(Mall.Cart.Map.deliverySet).length > 0) Mall.Cart.Map.handleGeoLocation();
+                if (jQuery.inArray(deliveryType, Object.keys(Mall.Cart.Map.deliverySet)) !== -1) {
+                    Mall.Cart.Map.handleGeoLocation();
+                }
             });
 
             self.attachShowHideMapOnMobile();
@@ -867,21 +869,24 @@
             var pos;
             var closestStores = [];
 
-            if(typeof Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints !== "undefined"){
-                for (var i = 0; i < Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.length; i++) {
-                    pos = Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i];
-                    // get the distance between user's location and this point
-                    var dist = MapsHelper.Haversine(Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].latitude, Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].longitude, position.coords.latitude, position.coords.longitude);
+            if(typeof Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint] == "undefined")
+                return closestStores;
 
-                    // check if this is the shortest distance so far
-                    if (dist < minDistance) {
-                        Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].distance = dist;
-                        Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].nearest = 1;
-                        closestStores.push(Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i]);
-                    }
+            if(typeof Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints == "undefined")
+                return closestStores;
+
+            for (var i = 0; i < Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.length; i++) {
+                pos = Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i];
+                // get the distance between user's location and this point
+                var dist = MapsHelper.Haversine(Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].latitude, Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].longitude, position.coords.latitude, position.coords.longitude);
+
+                // check if this is the shortest distance so far
+                if (dist < minDistance) {
+                    Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].distance = dist;
+                    Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].nearest = 1;
+                    closestStores.push(Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i]);
                 }
             }
-
 
             return closestStores;
         },
