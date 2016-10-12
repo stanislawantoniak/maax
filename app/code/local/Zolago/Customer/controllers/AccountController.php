@@ -9,69 +9,68 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 	/**
 	 * Override index
 	 */
-    public function indexAction()
-    {
-        $this->loadLayout();
-        $this->_initLayoutMessages('customer/session');
-        $this->_initLayoutMessages('catalog/session');
-        $this->_initLayoutMessages(array('catalog/session', 'udqa/session'));
+	public function indexAction()
+	{
+		$this->loadLayout();
+		$this->_initLayoutMessages('customer/session');
+		$this->_initLayoutMessages('catalog/session');
+		$this->_initLayoutMessages(array('catalog/session', 'udqa/session'));
 
-        $this->getLayout()->getBlock('content')->append(
-            $this->getLayout()->createBlock('customer/account_dashboard')
-        );
-        $this->getLayout()->getBlock('head')->setTitle($this->__('My Account'));
-        $this->renderLayout();
-    }
-	
+		$this->getLayout()->getBlock('content')->append(
+			$this->getLayout()->createBlock('customer/account_dashboard')
+		);
+		$this->getLayout()->getBlock('head')->setTitle($this->__('My Account'));
+		$this->renderLayout();
+	}
+
 	/**
 	 * Override logout - add message from cms block
 	 */
 	public function logoutAction() {
 		// Do parent logout
 		parent::logoutAction();
-		
+
 		// Generate cms block
 		try{
 			$cms = $this->getLayout()->
-				createBlock("cms/block")->
-				setBlockId("customer-logout-forget")->
-				toHtml();
+			createBlock("cms/block")->
+			setBlockId("customer-logout-forget")->
+			toHtml();
 		}catch(Exception $e){
 			$cms = $this->__("Log out success");
 			Mage::logException($e);
 		}
-		Mage::getSingleton('core/session')->addSuccess($cms);		
-		return $this->getResponse()->setRedirect('/?salt='.uniqid());
-//		return $this->_redirect("/?salt=".uniqid());
+		Mage::getSingleton('core/session')->addSuccess($cms);
+		return $this->_redirect("/");
 	}
 
 	/*
 	 * Privacy setting action
 	 */
-    public function privacyAction()
-    {
-        $this->loadLayout();
-        $this->_initLayoutMessages('customer/session');
-        $this->_initLayoutMessages('catalog/session');
+	public function privacyAction()
+	{
+		$this->loadLayout();
+		$this->_initLayoutMessages('customer/session');
+		$this->_initLayoutMessages('catalog/session');
 
-        $block = $this->getLayout()->getBlock('notification-settings-general-subscription');
-        if ($block) {
-            $block->setRefererUrl($this->_getRefererUrl());
-        }
+		$block = $this->getLayout()->getBlock('notification-settings-general-subscription');
+		if ($block) {
+			$block->setRefererUrl($this->_getRefererUrl());
+		}
 
 
-        $this->getLayout()->getBlock('head')->setTitle($this->__('Account Information'));
-        $this->getLayout()->getBlock('messages')->setEscapeMessageFlag(true);
-        $this->renderLayout();
-    }
-	
+		$this->getLayout()->getBlock('head')->setTitle($this->__('Account Information'));
+		$this->getLayout()->getBlock('messages')->setEscapeMessageFlag(true);
+		$this->renderLayout();
+	}
+
 	/**
 	 * Privacy setting action save
 	 */
-    public function privacyPostAction()
-    {
+	public function privacyPostAction()
+	{
 		if(!$this->getRequest()->isPost() || !$this->_validateFormKey()){
-            $this->_redirect('*/*/');
+			$this->_redirect('*/*/');
 			return;
 		}
 		$session = Mage::getSingleton('customer/session');
@@ -81,130 +80,130 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 			$customer->setForgetMe($value);
 			$resource = $customer->getResource();
 			/* @var $resource Mage_Customer_Model_Resource_Customer */
-			
+
 			$resource->saveAttribute($customer, "forget_me");
-			
+
 			Mage::dispatchEvent("customer_privacy_changed", array(
 				"customer"=>$customer
 			));
 		} catch (Mage_Core_Exception $e) {
-			 $session->addError($this->__($e->getMessage()));
-			 return $this->_redirectReferer();
+			$session->addError($this->__($e->getMessage()));
+			return $this->_redirectReferer();
 		} catch (Exception $e) {
-			 $session->addError($this->__("Some error occured!"));
-			 Mage::logException($e);
-			 return $this->_redirectReferer();
+			$session->addError($this->__("Some error occured!"));
+			Mage::logException($e);
+			return $this->_redirectReferer();
 		}
 		$session->addSuccess($this->__("Your privacy has been saved"));
 		return $this->_redirectReferer();
-    }
+	}
 
 
 	/**
 	 * Override mesagge
 	 */
 	public function loginPostAction() {
-		
-			$isPersistent = 1;//$this->_getSession()->getCustomer()->getRememeberMe();
-			// Apply setting of persistance
-			//$this->getRequest()->setPost("persistent_remember_me", $isPersistent);
-			//$this->getRequest()->setParam("persistent_remember_me", $isPersistent);
-			
+
+		$isPersistent = 1;//$this->_getSession()->getCustomer()->getRememeberMe();
+		// Apply setting of persistance
+		//$this->getRequest()->setPost("persistent_remember_me", $isPersistent);
+		//$this->getRequest()->setParam("persistent_remember_me", $isPersistent);
+
 		if(!$this->getRequest()->isPost()){
-            $this->_redirect('*/*/');
+			$this->_redirect('*/*/');
 			return;
 		}
-		
+
 		if (!$this->_validateFormKey()) {
-            $this->_redirect('*/*/');
-            return;
-        }
+			$this->_redirect('*/*/');
+			return;
+		}
 
-        if ($this->_getSession()->isLoggedIn()) {
-            $this->_redirect('*/*/');
-            return;
-        }
+		if ($this->_getSession()->isLoggedIn()) {
+			$this->_redirect('*/*/');
+			return;
+		}
 
-        //trim username
-        $login = $this->getRequest()->getPost('login');
-        $login['username'] = trim($login['username']);
-        $this->getRequest()->setPost('login', $login);
+		//trim username
+		$login = $this->getRequest()->getPost('login');
+		$login['username'] = trim($login['username']);
+		$this->getRequest()->setPost('login', $login);
 
-        parent::loginPostAction();
-		
-		
-		
+		parent::loginPostAction();
+
+
+
 		// Add success if login sucessful (by core session - visable in both customer / checkout)
-        if ($this->_getSession()->isLoggedIn()) {
-			
-            Mage::getSingleton('core/session')->addSuccess(
-                Mage::helper("zolagocustomer")->__("You have been logged in")
-            );
+		if ($this->_getSession()->isLoggedIn()) {
 
-	        if($this->getRequest()->getPost('redirect') === 'mypromotions') {
-		        $this->_redirect("mypromotions");
-	        } elseif(strpos($_SERVER['HTTP_REFERER'],'mypromotions') !== false) {
-		        $this->_redirectReferer();
-	        } elseif ($this->getRequest()->getParams('is_checkout') == 0) {
-                $this->_redirect("customer/account");
-            }
+			Mage::getSingleton('core/session')->addSuccess(
+				Mage::helper("zolagocustomer")->__("You have been logged in")
+			);
 
-        }
+			if($this->getRequest()->getPost('redirect') === 'mypromotions') {
+				$this->_redirect("mypromotions");
+			} elseif(strpos($_SERVER['HTTP_REFERER'],'mypromotions') !== false) {
+				$this->_redirectReferer();
+			} elseif ($this->getRequest()->getParams('is_checkout') == 0) {
+				$this->_redirect("customer/account");
+			}
+
+		}
 	}
 
-    /**
-     * Action predispatch
-     *
-     * Check customer authentication for some actions
-     */
-    public function preDispatch()
-    {
-        // a brute-force protection here would be nice
+	/**
+	 * Action predispatch
+	 *
+	 * Check customer authentication for some actions
+	 */
+	public function preDispatch()
+	{
+		// a brute-force protection here would be nice
 
-        parent::preDispatch();
+		parent::preDispatch();
 
-        $action = $this->getRequest()->getActionName();
+		$action = $this->getRequest()->getActionName();
 
-        if (preg_match("/^(forgotpasswordmessage)/i", $action)) {
-            if ($this->getFlag($action, "no-dispatch")) {
-                unset($this->_flags[$action]['no-dispatch']);
-                $this->getResponse()->clearHeader('Location');
-                $this->getResponse()->setHttpResponseCode(200);
-            }
-        }
+		if (preg_match("/^(forgotpasswordmessage)/i", $action)) {
+			if ($this->getFlag($action, "no-dispatch")) {
+				unset($this->_flags[$action]['no-dispatch']);
+				$this->getResponse()->clearHeader('Location');
+				$this->getResponse()->setHttpResponseCode(200);
+			}
+		}
 
-        // Skip logout error - @httpdocs changes
-        if($this->getRequest()->getActionName()=="logout"){
-            $this->setFlag('', 'no-dispatch', false);
-        }
+		// Skip logout error - @httpdocs changes
+		if($this->getRequest()->getActionName()=="logout"){
+			$this->setFlag('', 'no-dispatch', false);
+		}
 
-        if (!$this->getRequest()->isDispatched()) {
-            return;
-        }
-    }
-	
-    public function editPostAction() {
-        if (!$this->_validateFormKey()) {
-            return $this->_redirect('*/*/edit');
-        }
+		if (!$this->getRequest()->isDispatched()) {
+			return;
+		}
+	}
 
-        if ($this->getRequest()->isPost()) {
-            /** @var $customer Mage_Customer_Model_Customer */
-            $customer = $this->_getSession()->getCustomer();
-            $origEmail = trim($customer->getEmail());
-            $postEmail = trim($this->getRequest()->getParam('email'));
+	public function editPostAction() {
+		if (!$this->_validateFormKey()) {
+			return $this->_redirect('*/*/edit');
+		}
 
-	        $postFirstname = $this->getRequest()->getParam('firstname');
-	        if($postFirstname !== null) {
-		        $postFirstname = trim($postFirstname);
-	        }
+		if ($this->getRequest()->isPost()) {
+			/** @var $customer Mage_Customer_Model_Customer */
+			$customer = $this->_getSession()->getCustomer();
+			$origEmail = trim($customer->getEmail());
+			$postEmail = trim($this->getRequest()->getParam('email'));
 
-	        $postLastname = $this->getRequest()->getParam('lastname');
-	        if($postLastname !== null) {
-		        $postLastname = trim($postLastname);
-	        }
+			$postFirstname = $this->getRequest()->getParam('firstname');
+			if($postFirstname !== null) {
+				$postFirstname = trim($postFirstname);
+			}
 
-	        $postPhone = trim($this->getRequest()->getParam('phone'));
+			$postLastname = $this->getRequest()->getParam('lastname');
+			if($postLastname !== null) {
+				$postLastname = trim($postLastname);
+			}
+
+			$postPhone = trim($this->getRequest()->getParam('phone'));
 			$postErrors = false;
 
 			if (($postFirstname === "" && $customer->getFirstname()) || ($postLastname === "" && $customer->getLastname())) {
@@ -214,54 +213,54 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 				$postErrors = true;
 			}
 
-	        if($postPhone === "" && $customer->getPhone()) {
-		        $this->_getSession()->addError(
-			        Mage::helper("zolagocustomer")->__("You cannot remove your phone")
-		        );
-		        $postErrors = true;
-	        }
+			if($postPhone === "" && $customer->getPhone()) {
+				$this->_getSession()->addError(
+					Mage::helper("zolagocustomer")->__("You cannot remove your phone")
+				);
+				$postErrors = true;
+			}
 
-	        if($postErrors) {
-		        return $this->_redirect('*/*/edit');
-	        }
+			if($postErrors) {
+				return $this->_redirect('*/*/edit');
+			}
 
-            if(empty($postEmail)){
-                $postEmail = $origEmail;
-                $this->getRequest()->setParam("email", $origEmail);
-            }
-            
-            if($origEmail==$postEmail){
-                parent::editPostAction();
-	            return $this->_redirectReferer();
-            }
-            
-            if(!Zend_Validate::is($postEmail, 'EmailAddress')){
-                parent::editPostAction();
-	            return $this->_redirectReferer();
-            }
-            
-            // Email validated & changed
-            // Set orign email
-            try{
-                $this->getRequest()->setParam("email", $origEmail);
-                $this->_registerEmailToken($customer, $postEmail);
-                $this->_getSession()->addSuccess(
-                        Mage::helper("zolagocustomer")
-                            ->__("New email address will be set after confirmation. Check your new-email account. Change request expires after %s hours.", 
-                                Zolago_Customer_Model_Emailtoken::HOURS_EXPIRE)
-                );
-            }catch(Exception $e){
-                Mage::logException($e);
-                $this->_getSession()->addError(Mage::helper("customer")
-                    ->__('Cannot save the customer.'));
-                    
-                return $this->_redirectReferer();
-            }
-        }
-        
-        parent::editPostAction();
-	    return $this->_redirectReferer();
-    }
+			if(empty($postEmail)){
+				$postEmail = $origEmail;
+				$this->getRequest()->setParam("email", $origEmail);
+			}
+
+			if($origEmail==$postEmail){
+				parent::editPostAction();
+				return $this->_redirectReferer();
+			}
+
+			if(!Zend_Validate::is($postEmail, 'EmailAddress')){
+				parent::editPostAction();
+				return $this->_redirectReferer();
+			}
+
+			// Email validated & changed
+			// Set orign email
+			try{
+				$this->getRequest()->setParam("email", $origEmail);
+				$this->_registerEmailToken($customer, $postEmail);
+				$this->_getSession()->addSuccess(
+					Mage::helper("zolagocustomer")
+						->__("New email address will be set after confirmation. Check your new-email account. Change request expires after %s hours.",
+							Zolago_Customer_Model_Emailtoken::HOURS_EXPIRE)
+				);
+			}catch(Exception $e){
+				Mage::logException($e);
+				$this->_getSession()->addError(Mage::helper("customer")
+					->__('Cannot save the customer.'));
+
+				return $this->_redirectReferer();
+			}
+		}
+
+		parent::editPostAction();
+		return $this->_redirectReferer();
+	}
 
 	/**
 	 * Success Registration
@@ -375,105 +374,105 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 		return $this->_redirectReferer();
 	}
 
-    /**
-     * Forgot customer password action
-     */
-    public function forgotPasswordPostAction()
-    {
-        $email = (string) $this->getRequest()->getPost('email');
-        $email = trim($email);
-        if ($email) {
-            if (!Zend_Validate::is($email, 'EmailAddress')) {
-                $this->_getSession()->setForgottenEmail($email);
-                $this->_getSession()->addError($this->__('Invalid email address.'));
-                $this->_redirect('*/*/forgotpassword');
-                return;
-            }
+	/**
+	 * Forgot customer password action
+	 */
+	public function forgotPasswordPostAction()
+	{
+		$email = (string) $this->getRequest()->getPost('email');
+		$email = trim($email);
+		if ($email) {
+			if (!Zend_Validate::is($email, 'EmailAddress')) {
+				$this->_getSession()->setForgottenEmail($email);
+				$this->_getSession()->addError($this->__('Invalid email address.'));
+				$this->_redirect('*/*/forgotpassword');
+				return;
+			}
 
-            /** @var $customer Mage_Customer_Model_Customer */
-            $customer = $this->_getModel('customer/customer')
-                ->setWebsiteId(Mage::app()->getStore()->getWebsiteId())
-                ->loadByEmail($email);
+			/** @var $customer Mage_Customer_Model_Customer */
+			$customer = $this->_getModel('customer/customer')
+				->setWebsiteId(Mage::app()->getStore()->getWebsiteId())
+				->loadByEmail($email);
 
-            if ($customer->getId()) {
-                try {
-                    $newResetPasswordLinkToken =  $this->_getHelper('customer')->generateResetPasswordLinkToken();
-                    $customer->changeResetPasswordLinkToken($newResetPasswordLinkToken);
-                    $customer->sendPasswordResetConfirmationEmail();
-                } catch (Exception $exception) {
-                    $this->_getSession()->addError($exception->getMessage());
-                    $this->_redirect('*/*/forgotpassword');
-                    return;
-                }
-            }
-            $this->_getSession()->setData("forgotpassword_customer_email", $this->_getHelper("customer")
-                ->escapeHtml($email));
-            $this->_redirect('*/*/forgotpasswordmessage');
-            return;
-        } else {
-            $this->_getSession()->addError($this->__('Please enter your email.'));
-            $this->_redirect('*/*/forgotpassword');
-            return;
-        }
-    }
+			if ($customer->getId()) {
+				try {
+					$newResetPasswordLinkToken =  $this->_getHelper('customer')->generateResetPasswordLinkToken();
+					$customer->changeResetPasswordLinkToken($newResetPasswordLinkToken);
+					$customer->sendPasswordResetConfirmationEmail();
+				} catch (Exception $exception) {
+					$this->_getSession()->addError($exception->getMessage());
+					$this->_redirect('*/*/forgotpassword');
+					return;
+				}
+			}
+			$this->_getSession()->setData("forgotpassword_customer_email", $this->_getHelper("customer")
+				->escapeHtml($email));
+			$this->_redirect('*/*/forgotpasswordmessage');
+			return;
+		} else {
+			$this->_getSession()->addError($this->__('Please enter your email.'));
+			$this->_redirect('*/*/forgotpassword');
+			return;
+		}
+	}
 
-    public function forgotPasswordMessageAction()
-    {
-        $this->loadLayout();
-        $this->renderLayout();
-    }
+	public function forgotPasswordMessageAction()
+	{
+		$this->loadLayout();
+		$this->renderLayout();
+	}
 
-    /**
-     * Display reset forgotten password form
-     *
-     * User is redirected on this action when he clicks on the corresponding link in password reset confirmation email
-     *
-     */
-    public function resetPasswordAction()
-    {
-        $resetPasswordLinkToken = (string) $this->getRequest()->getQuery('token');
-        $customerId = (int) $this->getRequest()->getQuery('id');
-        try {
-            $this->_validateResetPasswordLinkToken($customerId, $resetPasswordLinkToken);
-            $this->loadLayout();
-            // Pass received parameters to the reset forgotten password form
-            $customer = $this->_getModel("customer/customer")->load($customerId);
-            $this->getLayout()->getBlock('resetPassword')
-                ->setCustomerId($customerId)
-                ->setResetPasswordLinkToken($resetPasswordLinkToken)
-                ->setEmail($customer->getEmail());
+	/**
+	 * Display reset forgotten password form
+	 *
+	 * User is redirected on this action when he clicks on the corresponding link in password reset confirmation email
+	 *
+	 */
+	public function resetPasswordAction()
+	{
+		$resetPasswordLinkToken = (string) $this->getRequest()->getQuery('token');
+		$customerId = (int) $this->getRequest()->getQuery('id');
+		try {
+			$this->_validateResetPasswordLinkToken($customerId, $resetPasswordLinkToken);
+			$this->loadLayout();
+			// Pass received parameters to the reset forgotten password form
+			$customer = $this->_getModel("customer/customer")->load($customerId);
+			$this->getLayout()->getBlock('resetPassword')
+				->setCustomerId($customerId)
+				->setResetPasswordLinkToken($resetPasswordLinkToken)
+				->setEmail($customer->getEmail());
 
-            // autologin
-            $this->_saveRestorePasswordParameters($customerId,$resetPasswordLinkToken);
-            $this->_getSession()->setCustomerAsLoggedIn($customer);
+			// autologin
+			$this->_saveRestorePasswordParameters($customerId,$resetPasswordLinkToken);
+			$this->_getSession()->setCustomerAsLoggedIn($customer);
 
-            $this->renderLayout();
-        } catch (Exception $exception) {
-	        $this->_getSession()->getMessages(true);
-            $this->_getSession()->addError( $this->_getHelper('customer')->__('Your password reset link has expired.'));
-            $this->_redirect('*/*/forgotpassword');
-        }
-    }
+			$this->renderLayout();
+		} catch (Exception $exception) {
+			$this->_getSession()->getMessages(true);
+			$this->_getSession()->addError( $this->_getHelper('customer')->__('Your password reset link has expired.'));
+			$this->_redirect('*/*/forgotpassword');
+		}
+	}
 
-    protected function _registerEmailToken(
-        Mage_Customer_Model_Customer $customer, $newEmail
-    ){
-        // Save Model
-        $model = Mage::getModel("zolagocustomer/emailtoken");
-        $model->setData(array(
-            "customer_id" => $customer->getId(),
-            "token" => Mage::helper("zolagocustomer")->generateToken(),
-            "new_email" => $newEmail
-        ));
-        $model->save();
+	protected function _registerEmailToken(
+		Mage_Customer_Model_Customer $customer, $newEmail
+	){
+		// Save Model
+		$model = Mage::getModel("zolagocustomer/emailtoken");
+		$model->setData(array(
+			"customer_id" => $customer->getId(),
+			"token" => Mage::helper("zolagocustomer")->generateToken(),
+			"new_email" => $newEmail
+		));
+		$model->save();
 
-        if(!$model->sendMessage()){
-            throw new Exception(Mage::helper("customer")
-                ->__('Cannot send email'));
-        }
-        
-    }
-	
+		if(!$model->sendMessage()){
+			throw new Exception(Mage::helper("customer")
+				->__('Cannot send email'));
+		}
+
+	}
+
 	/**
 	 * Handle checkout context login
 	 * @return type
@@ -532,17 +531,17 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 
 		$customer = $this->_getCustomer();
 		$data = $this->getRequest()->getPost();
-        if(isset($data['email'])){
-            $data['email'] = trim($data['email']);
-        }
+		if(isset($data['email'])){
+			$data['email'] = trim($data['email']);
+		}
 		try {
 			$errors = $this->_getCustomerErrors($data);
 			if (empty($errors)) {
 				unset($data['agreement']);
-                $data['is_subscribed'] = isset($data['is_subscribed']) ? 1 : 0;
+				$data['is_subscribed'] = isset($data['is_subscribed']) ? 1 : 0;
 				$customer->setData($data);
 				/* needed for proper newsletter handling */
-                /* needed for proper salesmanago cart sync */
+				/* needed for proper salesmanago cart sync */
 				$customer->setIsJustRegistered(true);
 				$customer->save();
 				$this->_dispatchRegisterSuccess($customer);
