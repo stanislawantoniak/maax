@@ -55,6 +55,8 @@
 
                 var carrierMapPointsData = Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint];
 
+                if(Object.keys(Mall.Cart.Map.deliverySet).length > 0){Mall.Cart.Map.resizeMap();}
+
                 if (carrierMapPointsData) {
                     var carrierMapPoints = carrierMapPointsData.mapPoints;
                     if (carrierMapPoints){
@@ -96,14 +98,14 @@
 
                         }
 
-                        if (Object.keys(Mall.Cart.Map.deliverySet).length > 0) {
+                        if (jQuery.inArray(Mall.Cart.Shipping.carrierPoint, Object.keys(Mall.Cart.Map.deliverySet)) !== -1) {
 
                             Mall.Cart.Map.initMap();
 
                             self.implementMapSelections(false);
 
-                            if(!Mall.getIsBrowserMobile()){
-                                if (typeof jQuery("[name=shipping_point_code]").attr("data-town") !== "undefined")
+                            if (!Mall.getIsBrowserMobile()) {
+                                if (typeof jQuery("[name=shipping_point_code]").attr("data-town") !== "undefined") {
                                     Mall.Cart.Map.refreshMap(
                                         Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.filter(function (e) {
                                                 if (e.town == jQuery("[name=shipping_point_code]").attr("data-town")) return 1;
@@ -111,11 +113,12 @@
                                         ),
                                         Mall.Cart.Map.nearestStores
                                     );
-                                else
+                                } else {
                                     Mall.Cart.Map.refreshMap(
                                         Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints,
                                         Mall.Cart.Map.nearestStores
                                     );
+                                }
                             } else {
                                 Mall.Cart.Map.resizeMapMobile();
                             }
@@ -128,7 +131,6 @@
                     }
                 }
 
-
             });
 
             if (jQuery("#cart-shipping-methods [name=_shipping_method]").length == 1) {
@@ -137,7 +139,7 @@
 
             if (typeof self.getSelectedShipping().val() !== "undefined") {
                 jQuery.ajax({
-                    url: "/checkout/singlepage/saveBasketShipping/",
+                    url: Mall.reg.get("saveBasketShippingUrl"),
                     type: "POST",
                     data: jQuery("#cart-shipping-methods-form").serializeArray()
                 });
@@ -155,10 +157,10 @@
 
             self.implementMapSelections(true);
 
-            jQuery("[data-select-shipping-method-trigger=0]").change(function (e) {
+            jQuery("[data-select-shipping-method-trigger=0]").change(function () {
                 //1. populate popup
                 var deliveryType = jQuery(this).attr("data-carrier-delivery-type");
-                var deliverySelectPointsModal = jQuery("div.modal[data-carrier-points='"+deliveryType+"']");
+                var deliverySelectPointsModal = jQuery("div.modal[data-carrier-points='" + deliveryType + "']");
 
                 if (deliveryType == "zolagopickuppoint" && deliverySelectPointsModal.find("[name=shipping_select_pos] option").length == 1) {
                     //but if there is one POS available it is selected already
@@ -167,7 +169,9 @@
                     deliverySelectPointsModal.modal("show");
                 }
 
-                if (Object.keys(Mall.Cart.Map.deliverySet).length > 0) Mall.Cart.Map.handleGeoLocation();
+                if (jQuery.inArray(deliveryType, Object.keys(Mall.Cart.Map.deliverySet)) !== -1) {
+                    Mall.Cart.Map.handleGeoLocation();
+                }
             });
 
             self.attachShowHideMapOnMobile();
@@ -201,7 +205,7 @@
 
                 });
 
-            return {};
+            return testPointsResult;
         },
         attachShippingFormValidation: function(){
             jQuery("#cart-shipping-methods-form").validate({
@@ -310,7 +314,7 @@
 
             jQuery("#cart-buy-overlay").removeClass("hidden");
             jQuery.ajax({
-                url: "/checkout/singlepage/saveBasketShipping/",
+                url: Mall.reg.get("saveBasketShippingUrl"),
                 type: "POST",
                 data: formData
             }).done(function (response) {
@@ -866,21 +870,24 @@
             var pos;
             var closestStores = [];
 
-            if(typeof Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints !== "undefined"){
-                for (var i = 0; i < Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.length; i++) {
-                    pos = Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i];
-                    // get the distance between user's location and this point
-                    var dist = MapsHelper.Haversine(Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].latitude, Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].longitude, position.coords.latitude, position.coords.longitude);
+            if(typeof Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint] == "undefined")
+                return closestStores;
 
-                    // check if this is the shortest distance so far
-                    if (dist < minDistance) {
-                        Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].distance = dist;
-                        Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].nearest = 1;
-                        closestStores.push(Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i]);
-                    }
+            if(typeof Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints == "undefined")
+                return closestStores;
+
+            for (var i = 0; i < Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints.length; i++) {
+                pos = Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i];
+                // get the distance between user's location and this point
+                var dist = MapsHelper.Haversine(Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].latitude, Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].longitude, position.coords.latitude, position.coords.longitude);
+
+                // check if this is the shortest distance so far
+                if (dist < minDistance) {
+                    Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].distance = dist;
+                    Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i].nearest = 1;
+                    closestStores.push(Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].mapPoints[i]);
                 }
             }
-
 
             return closestStores;
         },
