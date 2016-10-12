@@ -460,7 +460,11 @@
                 sessionPointTown = sessionPoint.attr("data-town");
 
                 jQuery(".shipping_select_point_data").html("");
-                if(sessionPointTown.length > 0){
+
+                if(typeof sessionPointTown == "undefined")
+                    return;
+
+                if( sessionPointTown.length > 0){
                     if (!Mall.getIsBrowserMobile()) {
                         jQuery("[name=shipping_select_city]")
                             .val(sessionPointTown)
@@ -974,6 +978,10 @@
 
 
         searchOnMap: function(q, markerToShow) {
+
+            if(jQuery.inArray(Mall.Cart.Shipping.carrierPoint, Object.keys(Mall.Cart.Map.deliverySet)) == -1)
+                return;
+
             Mall.Cart.Map._makeMapRequest({town: q}, Mall.Cart.Map.deliverySet[Mall.Cart.Shipping.carrierPoint].urlData, function (response) {
                 Mall.Cart.Map.gmarkers = [];  //to collect only filtered markers (used in showMarkerWindow)
                 var data = jQuery.parseJSON(response);
