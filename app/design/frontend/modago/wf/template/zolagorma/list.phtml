@@ -45,7 +45,10 @@
 						<td>
 							<table class="rma-items-table">
 								<tbody>
-								<?php foreach($rma->getItemsCollection() as $item):?>
+								<?php
+
+								Mage::log($rma->getItemsCollection(), null, "rma.log");
+								foreach($rma->getItemsCollection() as $item):?>
 									<?php /* @var Zolago_Rma_Model_Rma_Item $item */ ?>
 									<?php $item = $item->getPoItem(); ?>
 									<?php if($item->getId()): ?>
