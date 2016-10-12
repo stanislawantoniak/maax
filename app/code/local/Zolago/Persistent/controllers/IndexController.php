@@ -12,7 +12,12 @@ class Zolago_Persistent_IndexController extends Mage_Persistent_IndexController
 			return $this->_redirect("customer/account/privacy");
 		}
 		if(!$this->_getHelper()->isPersistent()){
-			return $this->_redirectReferer();
+		        $url = $this->_getRefererUrl();
+			$obj = Zend_Uri_Http::fromString($url);
+		        $obj->addReplaceQueryParameters(array('salt'=>uniqid()));
+ 	                $url = $obj->getUri();
+ 	                return $this->getResponse()->setRedirect($url);
+//			return $this->_redirectReferer();
 		}
 		$this->loadLayout();
 		$this->renderLayout();
@@ -38,7 +43,7 @@ class Zolago_Persistent_IndexController extends Mage_Persistent_IndexController
 		Mage::getSingleton('persistent/observer')->setQuoteGuest();
 
 		$session->addSuccess($this->__("Your persistent has been cleared"));
-		$this->_redirect("/");
+		return $this->getResponse()->setRedirect('/?salt='.uniqid());
 	}
 	
 }
