@@ -1873,11 +1873,14 @@
 				return null;
 			},
 
-            getCODExtraChargeForVendor: function(methodCode){
+            getCODExtraChargeForVendor: function (methodCode, selectedPayment) {
+                if (selectedPayment !== 'cashondelivery')
+                    return null;
+
                 var codExtraCharges = this.getCODExtraCharges();
-                if(typeof codExtraCharges == "object" &&
+                if (typeof codExtraCharges == "object" &&
                     typeof codExtraCharges == "object" &&
-                    typeof codExtraCharges[methodCode] != "undefined"){
+                    typeof codExtraCharges[methodCode] != "undefined") {
                     return codExtraCharges[methodCode];
                 }
                 return null;
@@ -2091,13 +2094,14 @@
 					discountTotal = 0,
 					deliverypayment = checkout.getStepByCode("shippingpayment"),
 					selectedMethod = deliverypayment.getMethodCode(),
-					discountObject = this.content.find(".total_discount");
+					discountObject = this.content.find(".total_discount"),
+                    selectedPayment = deliverypayment.getSelectedPayment();
 			
 				discountTotal = discountObject.length ? 
 					parseFloat(discountObject.data('price')) * -1 : 0;
 			
 				// Prepare costs for vendors and totals
-              var vendorCODExtraCharge = deliverypayment.getCODExtraChargeForVendor(selectedMethod);
+              var vendorCODExtraCharge = deliverypayment.getCODExtraChargeForVendor(selectedMethod, selectedPayment);
 				this.content.find(".panel-vendor.panel-footer").each(function(){
 					var el = jQuery(this);
 					var vendorId = el.data("vendorId");
@@ -2115,7 +2119,7 @@
 				
 				this.content.find(".total_shipping").html(Mall.currency(shippingTotal + vendorCODExtraCharge));
 				this.content.find(".total_value").html(
-						Mall.currency(shippingTotal + subTotal + discountTotal)
+						Mall.currency(shippingTotal + subTotal + discountTotal + vendorCODExtraCharge)
 				);
 			},
 			
