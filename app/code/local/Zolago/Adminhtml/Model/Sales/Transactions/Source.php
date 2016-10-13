@@ -28,15 +28,19 @@ class Zolago_Adminhtml_Model_Sales_Transactions_Source extends Varien_Object
         $orders = array();
 
         $dateModel = Mage::getModel('core/date');
-        $collection = Mage::getModel('sales/order_item')->getCollection();
+        $collection = Mage::getResourceModel('udpo/po_item_collection');
+
         $collection->getSelect()->join(
-            array('order' => $collection->getTable('sales/order')),
-            'main_table.order_id=order.entity_id',
-            array('*')
+            array('order' => $collection->getTable('udpo/po')),
+            'main_table.parent_id=`order`.entity_id',
+            array('order.grand_total_incl_tax','order.increment_id','item_entity_id'=>'main_table.entity_id')
        );
+        $collection->getSelect()
+            ->columns('concat(main_table.entity_id,"_",order.entity_id) as unique_id');
+
         $collection->getSelect()->join(
             array('order_payment' => $collection->getTable('sales/order_payment')),
-            'order_payment.parent_id=main_table.order_id',
+            'order_payment.parent_id=`order`.entity_id',
             array('*')
         );
 
@@ -45,30 +49,30 @@ class Zolago_Adminhtml_Model_Sales_Transactions_Source extends Varien_Object
 
         //Last 2 month orders
         $collection->addAttributeToFilter('order.created_at', array("gteq" => new Zend_Db_Expr("DATE_SUB(CURDATE(), INTERVAL 2 MONTH)")));
-
+        $collection->setRowIdFieldName('unique_id');
         $collection->getSelect()->order("order.created_at DESC");
-
-        $_resource = Mage::getSingleton('catalog/product')->getResource();
 
         $options = array();
         foreach ($collection as $collectionItem) {
-            $options[$collectionItem->getEntityId()]["increment_id"] = $collectionItem->getIncrementId();
-            $options[$collectionItem->getEntityId()]["date"] = date('d.m.Y', $dateModel->timestamp(strtotime($collectionItem->getCreatedAt())));
-            $options[$collectionItem->getEntityId()]["order_total"] = Mage::helper('core')->currency($collectionItem->getBaseGrandTotal(), true, false);
-            $options[$collectionItem->getEntityId()]["customer_firstname"] = $collectionItem->getData('customer_firstname');
-            $options[$collectionItem->getEntityId()]["customer_lastname"] = $collectionItem->getData('customer_lastname');
-            $options[$collectionItem->getEntityId()]["customer_email"] = $collectionItem->getData('customer_email');
-            $options[$collectionItem->getEntityId()]["payment_method"] = $collectionItem->getData('method');
+            $parentId = $collectionItem->getParentId();
 
-            $options[$collectionItem->getEntityId()]["items"][$collectionItem->getItemId()] = array(
+            $options[$parentId]["increment_id"] = $collectionItem->getIncrementId();
+            $options[$parentId]["date"] = date('d.m.Y', $dateModel->timestamp(strtotime($collectionItem->getCreatedAt())));
+            $options[$parentId]["order_total"] = Mage::helper('core')->currency($collectionItem->getGrandTotalInclTax(), true, false);
+            $options[$parentId]["customer_firstname"] = $collectionItem->getData('customer_firstname');
+            $options[$parentId]["customer_lastname"] = $collectionItem->getData('customer_lastname');
+            $options[$parentId]["customer_email"] = $collectionItem->getData('customer_email');
+            $options[$parentId]["payment_method"] = $collectionItem->getData('method');
+
+            $options[$parentId]["items"][$collectionItem->getItemEntityId()] = array(
                 "id" => $collectionItem->getProductId(),
                 "name" => $collectionItem->getName(),
-                "sku" => $_resource->getAttributeRawValue($collectionItem->getProductId(),  "skuv", 0)
+                "sku" => $collectionItem->getVendorSku()
             );
         }
 
         foreach ($options as $orderId => $option) {
-            $out = "<div class='banktransfer-row'>";
+            $out = "<div class='banktransfer-row' title='" . $option["increment_id"] . "'>";
             $out .= "<div class='banktransfer-item banktransfer-left'><b>" . $option["increment_id"] . "</b><br> ".$option['customer_firstname']." ".$option['customer_lastname']."<br>".$option['customer_email']."</div>";
 
 
