@@ -18,4 +18,13 @@ class ZolagoOs_OmniChannelPo_Model_Mysql4_Po_Item_Collection extends Mage_Sales_
         $this->addFieldToFilter('parent_id', $poId);
         return $this;
     }
+
+    /**
+     * @param $fieldName
+     * @return Varien_Data_Collection_Db
+     */
+    public function setRowIdFieldName($fieldName)
+    {
+        return $this->_setIdFieldName($fieldName);
+    }
 }
