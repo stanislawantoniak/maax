@@ -7,6 +7,7 @@ class Zolago_Po_Model_Resource_Po_Collection
 	protected $_vendorJoined = false;
 	protected $_productJoined = false;
 	protected $_allocationsJoined = false;
+	protected $_transactionsJoined = false;
 	
 	public function addAlertFilter($int) {
 		$this->getSelect()->where("main_table.alert & ".(int)$int);
@@ -23,7 +24,14 @@ class Zolago_Po_Model_Resource_Po_Collection
 	    return $this->_joinVendorTable();
 	}
 	public function addPaymentStatuses() {
-		return $this->_joinAllocationsTable();
+		if (Mage::helper('zolagopayment')->getConfigUseAllocation()){
+			// use allocation logic
+			return $this->_joinAllocationsTable();
+		} else {
+			// simplified logic
+			return $this->_joinTransactionsTable();
+		}
+
 	}
 
 /*	public function getAllIds($limit = null, $offset = null) {
@@ -281,11 +289,31 @@ class Zolago_Po_Model_Resource_Po_Collection
         
     }
 
-	protected function _joinAllocationsTable() {
-		if(!$this->_allocationsJoined) {
+	/**
+	 * @return $this
+	 */
+	protected function _joinTransactionsTable()
+	{
+		if (!$this->_transactionsJoined) {
 			$this->getSelect()->joinLeft(
-				array("allocation"=>$this->getTable("zolagopayment/allocation")),
-				"allocation.po_id = main_table.entity_id AND allocation.allocation_type = '".Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT."'",
+				array("transaction" => $this->getTable("sales/payment_transaction")),
+				"transaction.order_id = main_table.order_id",
+				"IF(SUM(transaction.txn_amount)>=main_table.grand_total_incl_tax,1,0) AS payment_status"
+			);
+			$this->_transactionsJoined = true;
+		}
+		return $this;
+	}
+
+	/**
+	 * @return $this
+	 */
+	protected function _joinAllocationsTable()
+	{
+		if (!$this->_allocationsJoined) {
+			$this->getSelect()->joinLeft(
+				array("allocation" => $this->getTable("zolagopayment/allocation")),
+				"allocation.po_id = main_table.entity_id AND allocation.allocation_type = '" . Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT . "'",
 				"IF(SUM(allocation.allocation_amount)>=main_table.grand_total_incl_tax,1,0) AS payment_status"
 			);
 			$this->_allocationsJoined = true;
