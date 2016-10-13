@@ -33,7 +33,7 @@ class Zolago_Adminhtml_Model_Sales_Transactions_Source extends Varien_Object
         $collection->getSelect()->join(
             array('order' => $collection->getTable('udpo/po')),
             'main_table.parent_id=`order`.entity_id',
-            array('order.grand_total_incl_tax','order.increment_id','item_entity_id'=>'main_table.entity_id')
+            array('order.grand_total_incl_tax','order.increment_id','item_entity_id'=>'main_table.entity_id','order.order_id')
        );
         $collection->getSelect()
             ->columns('concat(main_table.entity_id,"_",order.entity_id) as unique_id');
@@ -54,7 +54,7 @@ class Zolago_Adminhtml_Model_Sales_Transactions_Source extends Varien_Object
 
         $options = array();
         foreach ($collection as $collectionItem) {
-            $parentId = $collectionItem->getParentId();
+            $parentId = $collectionItem->getOrderId();
 
             $options[$parentId]["increment_id"] = $collectionItem->getIncrementId();
             $options[$parentId]["date"] = date('d.m.Y', $dateModel->timestamp(strtotime($collectionItem->getCreatedAt())));
