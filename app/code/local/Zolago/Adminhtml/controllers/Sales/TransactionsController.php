@@ -118,6 +118,21 @@ class Zolago_Adminhtml_Sales_TransactionsController
                     $this->_getSession()->addSuccess($this->__('Bank payment has been successfully changed.'));
                 }
 
+                $_poS = $order->getPoListByOrder();
+                $newStatus = Zolago_Po_Model_Po_Status::STATUS_PENDING;
+                foreach ($_poS as $_po) {
+                    if($_po->getDebtAmount() >= 0){
+                        Mage::log($_po->getDebtAmount());
+                        $statusModel = $_po->getStatusModel();
+                        if(!$statusModel->isManulaStatusAvailable($_po)) {
+                            throw new Mage_Core_Exception(
+                                Mage::helper("zolagopo")->__("Status cannot be changed.")
+                            );
+                        }
+                        $statusModel->changeStatus($_po, $newStatus);
+                    }
+                }
+
             } catch (Exception $e) {
                 Mage::logException($e);
                 $this->_getSession()->addError($e->getMessage());
