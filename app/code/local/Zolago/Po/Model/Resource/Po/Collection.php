@@ -27,11 +27,10 @@ class Zolago_Po_Model_Resource_Po_Collection
 		if (Mage::helper('zolagopayment')->getConfigUseAllocation()){
 			// use allocation logic
 			return $this->_joinAllocationsTable();
-		} else {
-			// simplified logic
-			return $this->_joinTransactionsTable();
 		}
 
+		// simplified logic
+		return $this->_joinTransactionsTable();
 	}
 
 /*	public function getAllIds($limit = null, $offset = null) {
@@ -55,9 +54,18 @@ class Zolago_Po_Model_Resource_Po_Collection
 		$idsSelect->reset(Zend_Db_Select::ORDER);
 		$idsSelect->reset(Zend_Db_Select::LIMIT_COUNT);
 		$idsSelect->reset(Zend_Db_Select::LIMIT_OFFSET);
-		if(!$this->_allocationsJoined) {
-			$idsSelect->reset(Zend_Db_Select::COLUMNS);
+		if (Mage::helper('zolagopayment')->getConfigUseAllocation()){
+			// use allocation logic
+			if(!$this->_allocationsJoined) {
+				$idsSelect->reset(Zend_Db_Select::COLUMNS);
+			}
+		} else {
+			// simplified logic
+			if(!$this->_transactionsJoined) {
+				$idsSelect->reset(Zend_Db_Select::COLUMNS);
+			}
 		}
+
 		$idsSelect->columns($this->getResource()->getIdFieldName(), 'main_table');
 		$idsSelect->limit($limit, $offset);
 		return $idsSelect;
