@@ -1,0 +1,35 @@
+#clone_submenu {
+    ul {
+        position: relative !important;
+        margin: 0px;
+        padding: 47px 0;
+        border: none;
+        > li {
+            > a {
+                padding: 6px 15px;
+            }
+        }
+        dl {
+
+            dt {
+                margin-bottom: 10px;
+            }
+            dd {
+
+                margin-bottom: 10px;
+
+                //width: 85%;
+                //@media (min-width: $screen-xs-max) and (max-width: $screen-md-min) {
+                //    width: 99%;
+                //}
+            }
+
+        }
+        //END UL
+    }
+
+    .media-column {
+
+    }
+    // END CLONE MENU
+} 

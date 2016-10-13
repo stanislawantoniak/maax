@@ -1,0 +1,51 @@
+#help-mobile-menu {
+  h1 {
+    font-size: 18px;
+    padding-bottom: 12px;
+    padding-top: 12px;
+    text-align: center;
+    text-transform: uppercase;
+  }
+  @media (max-width: $screen-xs-max) {
+	  border-bottom:1px solid $color_ebebeb;	
+  }
+}
+
+#help-contact-msg-fix{
+  .visible-xs {
+
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 0px;
+    min-height: 0px;
+    ul.messages {
+      margin-bottom: 10px!important;
+    }
+  }
+
+}
+
+#contact-container {
+  @media (max-width: $screen-xs-max) {
+	h1 {
+		text-align:center;
+	}
+  }
+  margin-bottom:40px;
+  h1 {
+	padding:15px 0px 25px 0px;
+  }
+  border-top-width: 0px;
+
+  ul.form-list {
+    padding-left: 0;
+    list-style: none;
+  }
+}
+
+
+.buttons-set button {
+  margin-bottom: 20px;
+  float: right;
+  margin-top: -34px;
+}

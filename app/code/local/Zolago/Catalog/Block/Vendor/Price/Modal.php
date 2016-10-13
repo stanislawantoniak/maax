@@ -92,7 +92,7 @@ class Zolago_Catalog_Block_Vendor_Price_Modal extends Zolago_Catalog_Block_Vendo
 		
 		$options = $priceType->getSource()->getAllOptions();
 
-		$reponse = null;
+		$response = null;
 
 		$catalogProductResourceModel = Mage::getResourceModel('catalog/product');
 
@@ -109,8 +109,8 @@ class Zolago_Catalog_Block_Vendor_Price_Modal extends Zolago_Catalog_Block_Vendo
 		foreach($options as &$option){
 			if($option['value']==""){
 				$option['price'] = $product->getPrice();
-			}elseif($reponse && isset($reponse[$option['label']])){
-				$option['price'] = $reponse[$option['label']];
+			}elseif($response && isset($response[$option['label']])){
+				$option['price'] = $response[$option['label']];
 			}else{
 				$option['price'] = "";
 			}

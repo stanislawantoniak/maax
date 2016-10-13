@@ -35,6 +35,18 @@ class Zolago_Pos_Model_Form_Fieldset_Maps extends Zolago_Common_Model_Form_Field
 
     }
 
+	protected function _addFieldMapNotes()
+	{
+		$this->_fieldset->addField('map_notes', 'text', array(
+			'name' => 'map_notes',
+			'label' => $this->_helper->__('Notes'),
+			'class' => 'form-control',
+			"maxlength" => 100,
+			"form_group_wrapper_class" => "map-fields"
+		));
+
+	}
+
     protected function _addFieldMapPhone()
     {
         $this->_fieldset->addField('map_phone', 'text', array(

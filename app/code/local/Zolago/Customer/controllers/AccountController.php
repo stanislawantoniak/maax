@@ -40,8 +40,9 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 			$cms = $this->__("Log out success");
 			Mage::logException($e);
 		}
-		Mage::getSingleton('core/session')->addSuccess($cms);
-		return $this->_redirect("/");
+		Mage::getSingleton('core/session')->addSuccess($cms);		
+		return $this->getResponse()->setRedirect('/?salt='.uniqid());
+//		return $this->_redirect("/?salt=".uniqid());
 	}
 
 	/*

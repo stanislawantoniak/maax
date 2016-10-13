@@ -1,0 +1,28 @@
+#navCategory {
+	background:$color_fff;
+	h3 {
+		text-transform: uppercase;
+		font-size: 18px;
+        font-weight: 900;
+	}
+	.backToCategory {
+		text-transform: uppercase;
+		font-size: 12px;
+		line-height: 37px;
+        &:hover {
+            text-decoration: underline;
+        }
+	}
+	#nav_category_mobile {
+		> li {
+		    > a:link,
+		    > a:visited {
+		    border-top:1px solid $color_dedce1;
+		    line-height: 26px;
+		    }
+            > a:hover {
+                text-decoration: underline;
+            }
+		}
+	}
+}

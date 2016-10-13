@@ -1,0 +1,35 @@
+.brandshop-breadcrumps,
+ol.breadcrumb {
+	background:none;
+	font: $fontBreadCrumb;
+	a:link,
+	a:visited {
+		color:$colorBreadCrumb;
+		font: $fontBreadCrumb;
+	}
+	a:hover {
+		text-decoration: underline;
+	}
+	&.active {
+		color:$colorBreadCrumb;
+	}
+}
+
+ol.breadcrumb{
+	li {
+		font: $fontBreadCrumb;
+		text-transform: uppercase;
+		&:not(:first-child):before {
+			font: $fontBreadCrumb;
+			text-align: right;
+			color:$colorBreadCrumb;
+		}
+	}
+}
+
+.brandshop-breadcrumps{
+	a::before{
+		font-family: "FontAwesome";
+		content: "\f104";
+	}
+}

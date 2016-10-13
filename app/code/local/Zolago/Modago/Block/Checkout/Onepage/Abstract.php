@@ -5,6 +5,7 @@
 abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checkout_Block_Onepage_Abstract {
 
 
+
     /**
      * @param $deliveryMethod
      * @param $deliveryPointIdentifier
@@ -71,7 +72,7 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
         $deliveryPoint->id = NULL;
         $deliveryPoint->checkout = new stdClass();
         switch ($deliveryMethodCode) {
-        case 'zolagopickuppoint':
+        case ZolagoOs_PickupPoint_Helper_Data::CODE:
             /* @var $pos  Zolago_Pos_Model_Pos */
             $pos = $helper->getPickUpPoint();
 
@@ -89,7 +90,7 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
             $deliveryPoint->checkout->additionalInfo1 = "";
             $deliveryPoint->checkout->additionalInfo2 = "";
             break;
-        case 'ghinpost':
+        case GH_Inpost_Model_Carrier::CODE:
             /* @var $locker GH_Inpost_Model_Locker */
             $locker = $helper->getInpostLocker();
 
@@ -107,7 +108,7 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
             $deliveryPoint->checkout->additionalInfo1 = $helper->__("The phone number is required to receive package from locker.") . "<br/>";
             $deliveryPoint->checkout->additionalInfo2 = $helper->__("We do not use it in any other way without your permission!");
             break;
-        case 'zolagopwr':
+        case Orba_Shipping_Model_Packstation_Pwr::CODE:
             /* @var $locker ZolagoOs_Pwr_Model_Point */
             $point = $helper->getPwrPoint();
 
@@ -138,6 +139,30 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
         $locker = $helper->getInpostLocker();
         return $locker;
     }
+
+    /**
+     * clear delivery settings from session if delivery code is not allowed
+     */
+    public function clearDelivery($code) {
+        $checkoutSession = Mage::getSingleton('checkout/session');
+        if (!is_array($checkoutSession->getData("shipping_method"))) {
+            return;
+        }
+        foreach ($checkoutSession->getData("shipping_method") as $method) {
+            if ($code == $method) {
+                $checkoutSession->setData('shipping_method',null);
+                $checkoutSession->setData('delivery_point_name',null);
+                $address = $this->getQuote()->getShippingAddress();
+                $address->setShippingMethod(null);
+                $address->setUdropshipShippingDetails(null);
+                $address->save();
+//                Mage::getSingleton('core/session')->addError('Your delivery method has been disabled');
+
+            }
+        }
+
+    }
+
     /**
      * @return ZolagoOs_Pwr_Model_Point
      */
@@ -148,6 +173,11 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
         return $point;
     }
 
+
+
+    /**
+     * @return string
+     */
     public function getLastTelephoneForLocker() {
         $shippingAddress = $this->getQuote()->getShippingAddress();
         $tel = $shippingAddress->getTelephone();
@@ -182,9 +212,22 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
 
         return $shipping;
     }
-
+    public function calculateSumVolume() {
+        $quote = $this->getQuote();
+        $items = $quote->getAllVisibleItems();
+        $sum = 0;
+        foreach ($items as $item) {
+            $value = Mage::getModel('catalog/product')->load($item->getProduct()->getId())->getDeliveryVolume();
+            if ($value === null) {
+                $value = Mage::getStoreConfig('shipping/option/default_delivery_volume');
+            }
+            $sum += $value*($item->getQty());
+        }
+        return $sum;
+    }
     public function getRateItems()
     {
+        $sumVolume = $this->calculateSumVolume();
         $rates = array();
 
         $methodsByCode = array();
@@ -202,7 +245,6 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
             $shippingMethods[$shippingItem->getMethodCode()] = $shippingItem->getData();
 
         }
-
         foreach ($qRates as $cCode => $cRates) {
 
             foreach ($cRates as $rate) {
@@ -250,15 +292,28 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
         }
         $methodToFind = array();
         $cost = array();
-
         foreach ($allMethodsByCode as $code => $methodDataArr) {
             foreach ($methodDataArr as $methodData) {
                 $vendorId = $methodData['vendor_id'];
                 $methodToFind[$code][$vendorId] = $vendorId;
-                $cost[$code][] = $methodData['cost'];
+                $extraCharge = 0;
+                $costVal = $methodData['cost'];
+                $extraCharge = (int)Mage::getStoreConfig('carriers/'.$methodData["delivery_type"].'/cod_extra_charge');
+                $deliveryVolumeLimit = (int)Mage::getStoreConfig('carriers/'.$methodData["delivery_type"].'/delivery_volume_limit');
+                if (!empty($deliveryVolumeLimit)) {
+                    if ($sumVolume > $deliveryVolumeLimit) {
+
+                        unset($methodsByCode[$code]);
+                        $this->clearDelivery($code);
+                    }
+                }
+                if($extraCharge && Mage::getSingleton('checkout/session')->getPayment()['method'] == 'cashondelivery') {
+                    $costVal = $costVal + $extraCharge;
+                }
+                $cost[$code][] = $costVal;
+
             }
         }
-
 
         //Find intersecting method for all vendors
         $allVendorsMethod = array();

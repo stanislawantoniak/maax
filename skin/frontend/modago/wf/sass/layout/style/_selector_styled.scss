@@ -1,0 +1,154 @@
+.selectboxit-container {
+
+  span {
+    height: 35px;
+    line-height: 35px;
+  }
+
+  .selectboxit {
+    background-image: none;
+    border-radius: 0;
+    background-color: $color_fff;
+    border: 1px solid #D5D5D5;
+    height: 35px;
+    line-height: 35px;
+
+    &:hover {
+      background-color: $color_fff;
+
+    }
+    &:focus {
+      background-color: $color_fff;
+      box-shadow: none;
+
+    }
+    .selectboxit-text {
+      color: $colorTextSelectboxit;
+      text-decoration: none;
+      font-family: $fontRegular;
+      font-size: 13px;
+      font-weight: normal;
+    }
+    .selectboxit-arrow-container {
+      background: url('../images/selectboxit/select-arrow.png');
+      height: 35px;
+      width: 35px;
+
+      background-repeat: no-repeat;
+      background-position: 65% 50%;
+      text-overflow: ellipsis;
+
+      .caret {
+        border: none;
+      }
+      .selectboxit-arrow {
+        border: none;
+      }
+    }
+  }
+  .selectboxit-options {
+    a {
+      height: 35px;
+      line-height: 35px;
+    }
+  }
+  .selectboxit-list {
+    max-height: 230px;
+    border-radius: 0;
+    background-color: $color_fff;
+    border: 1px solid #D5D5D5;
+    z-index: 100;
+    box-shadow: none;
+    .selectboxit-option {
+      .selectboxit-option-anchor {
+        font-size: 13px;
+        font-weight: normal;
+        color: $colorTextSelectboxit;
+        text-decoration: none;
+      }
+    }
+    .selectboxit-focus {
+      .selectboxit-option-anchor {
+        color: $colorTextSelectboxit;
+        background: $color_fff;
+        background-image: none;
+        background-repeat: repeat-x;
+      }
+    }
+    .selectboxit-disabled {
+      .selectboxit-option-anchor {
+        color: $colorTextSelectboxit;
+      }
+    }
+  }
+}
+
+/*Product page size select*/
+.size-box {
+  .selectboxit {
+    width: 167px;
+  }
+}
+
+/*Cart qty select*/
+.cart-qty-field {
+  .selectboxit {
+    width: 60px;
+  }
+}
+
+/*Sort select on listing*/
+.sort-by-container {
+  .selectboxit-container {
+//    pointer-events: none;
+    .selectboxit {
+      width: 160px;
+    }
+  }
+}
+
+
+/*Rma*/
+
+.condition-wrapper {
+  .selectboxit-container {
+    width: 100%;
+          @media (min-width: $screen-xs-min) and (max-width: $screen-xs-max) {
+            width: 80%;
+          }
+    span {
+      height: auto;
+    }
+    .selectboxit {
+      width: 100%;
+      display: block;
+      .selectboxit-text {
+        height: 100%;
+      }
+    }
+  }
+  &.has-error {
+    .selectboxit-container {
+      .selectboxit {
+        border-color: $colorAccentError;
+      }
+    }
+  }
+  &.has-success {
+    .selectboxit-container {
+      .selectboxit {
+        border-color: $colorAccentValid;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+      }
+    }
+  }
+}
+
+/*Contact vendor select*/
+#question-form {
+  .selectboxit-container {
+    .selectboxit {
+      width: 300px;
+    }
+  }
+}

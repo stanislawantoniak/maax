@@ -1,0 +1,111 @@
+/* CLONE MENU */
+#clone_submenu {
+    background-color: transparent;
+    font-family: $fontOpen;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 1000;
+    margin-top: -5px;
+
+
+    .clone_submenu-content {
+        border: 1px solid $colorDropdownBorder;
+        box-shadow: 0 2px 0 $colorDropdownBorder;
+        text-align: left;
+        overflow: hidden;
+        @include linearGradient($colorMainMenuSubItemGradientStart,$colorMainMenuSubItemGradientEnd);
+        @include transition(all 0.2s ease-in-out);
+        width: 860px;
+        @media (min-width: $screen-xs-max) and (max-width: $screen-md-min) {
+            width: 90%;
+        }
+        .menu-3columns {
+            padding: 0;
+            @media (min-width: $screen-xs-max) and (max-width: $screen-md-min) {
+                padding-bottom: 10px;
+            }
+            .menus-column {
+                margin-top: 36px;
+            }
+
+        }
+    }
+
+    ul {
+        box-shadow:none; 
+        border: none;
+        background:transparent;
+        list-style: none;
+            a {
+                color:$color_656565;
+            }
+        .box [rel=category] {
+            font-size: 14px;
+        }
+        .box [rel=category] {
+            color: $color_3d3d3d;
+
+            text-transform: uppercase;
+            &:hover {
+                color: $colorLinkHover;
+                text-decoration: none;
+            }
+        }
+        dl {
+            dt {
+                color: $color_3d3d3d;
+                font-family: $fontBlack;
+                a:link,
+                a:visited {
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: $color_000;
+                }
+                a:hover {
+                    color: $colorLinkHover;
+                    text-decoration: none;
+                }
+            }
+            dd {
+                color: $color_000;
+
+                a {
+                    font-family: $fontOpen;
+                    color: $color_737373;
+                    font-weight: normal;
+                    font-style: normal;
+                    font-size: 14px;
+                    line-height: 22px !important;
+                }
+
+                a:link,
+                a:visited {
+
+                }
+                a:hover {
+                    color: $colorLinkHover;
+                    text-decoration: none;
+                }
+
+                span.menu-label {
+                    color: #fff;
+                    background-color: $menuLabelBackground;
+                    padding: 4px 5px;
+                    font-size: 9px;
+                    line-height: 10px;
+                    font-weight: bold;
+                    text-transform: uppercase;
+                    margin: 0 5px;
+                    position: absolute;
+                }
+
+            }
+
+        }
+    //END UL
+    }
+// END CLONE MENU
+} 
+
+/* CLONE MENU */

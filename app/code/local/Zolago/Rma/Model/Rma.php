@@ -383,6 +383,30 @@ class Zolago_Rma_Model_Rma extends ZolagoOs_Rma_Model_Rma
 		return $this->_refundAmount;
 	}
 
+	/**
+	 * @return float
+	 */
+	public function getRmaSimpleRefundAmount(){
+		if(!isset($this->_refundSimpleAmount)) {
+
+			$customerId = $this->getCustomerId();
+			$order = $this->getOrder();
+			$orderId = $order->getId();
+			$paymentId = $this->getOrder()->getPayment()->getId();
+			$existTransactions = Mage::getModel('sales/order_payment_transaction')->getCollection()
+				->addFieldToFilter('order_id', $orderId)
+				->addFieldToFilter('customer_id', $customerId)
+				->addFieldToFilter('txn_type', Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND)
+				->addFieldToFilter('payment_id', $paymentId);
+
+			$amount = 0;
+			foreach($existTransactions as $existTransaction){
+				$amount +=  abs($existTransaction->getTxnAmount());
+			}
+			$this->_refundSimpleAmount = $amount;
+		}
+		return $this->_refundSimpleAmount;
+	}
 
 	public function getRmaRefundAmountMax() {
 		if(!isset($this->_refundAmountMax)) {
@@ -392,7 +416,7 @@ class Zolago_Rma_Model_Rma extends ZolagoOs_Rma_Model_Rma
                 if ($item->getPoItem()->getId()) {
                     $amount += $item->getPoItem()->getFinalItemPrice();
                 } else {
-                    $amount += $this->getPo()->getShippingAmountIncl();
+                    $amount += $item->getPrice();
                 }
 			}
 			$this->_refundAmountMax = $amount;
@@ -453,6 +477,40 @@ class Zolago_Rma_Model_Rma extends ZolagoOs_Rma_Model_Rma
 				if($transactions->getSize() == count($txnIds)) {
 					return true;
 				}
+			}
+		}
+		return false;
+	}
+
+	public function isAlreadySimpleReturned(){
+		$customerId = $this->getCustomerId();
+		$order = $this->getOrder();
+		$orderId = $order->getId();
+		$paymentId = $this->getOrder()->getPayment()->getId();
+
+		/* @var $collection Mage_Catalog_Model_Resource_Category_Collection */
+		$existTransactions = Mage::getModel('sales/order_payment_transaction')->getCollection()
+			->addFieldToFilter('order_id', $orderId)
+			->addFieldToFilter('customer_id', $customerId)
+			->addFieldToFilter('txn_type', Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND)
+			->addFieldToFilter('payment_id', $paymentId);
+
+		$sumRefunds = 0;
+		foreach($existTransactions as $existTransaction){
+			$sumRefunds +=  abs($existTransaction->getTxnAmount());
+		}
+
+		if(round($sumRefunds,4) != round($this->getRmaRefundAmountMax(),4)) {
+			return false;
+		} else {
+			$acceptedRefund = true;
+			foreach($existTransactions as $existTransaction) {
+				if($existTransaction->getTxnStatus() != Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED){
+					$acceptedRefund = false;
+				}
+			}
+			if($acceptedRefund == true){
+				return true;
 			}
 		}
 		return false;
