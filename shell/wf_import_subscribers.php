@@ -84,11 +84,7 @@ class Wf_Import_Subscribers extends Mage_Shell_Abstract
             return;
         }
 
-
-        //3.1 Select already existing magento store subscribers
-
         $tableSubscribersName = $setup->getTable('newsletter/subscriber');
-
         $insertQuery = sprintf("INSERT IGNORE INTO  %s (store_id,subscriber_email,subscriber_status) VALUES %s", $tableSubscribersName, implode(",", $subscriberData));
         $writeConnection->query($insertQuery);
 
