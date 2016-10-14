@@ -13,6 +13,11 @@
             </wfoldstorecustomer>
             <wfoldstorecustomer_resource>
                 <class>Wf_OldStoreCustomer_Model_Resource</class>
+                <entities>
+                    <customer>
+                        <table>wfoldstorecustomer_customer</table>
+                    </customer>
+                </entities>
             </wfoldstorecustomer_resource>
         </models>
         <blocks>
