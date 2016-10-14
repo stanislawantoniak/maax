@@ -26,8 +26,15 @@ $table = $this->getConnection()
             'nullable' => false,
             'default' => 0
         ))
-    // czy ma konto
-    ->addColumn('has_account', Varien_Db_Ddl_Table::TYPE_BOOLEAN, null,
+    // czy ma konto in old store
+    ->addColumn('has_account_in_old_store', Varien_Db_Ddl_Table::TYPE_BOOLEAN, null,
+        array(
+            'nullable' => false,
+            'default' => 0
+        ))
+
+    // czy ma konto in new store
+    ->addColumn('has_account_in_new_store', Varien_Db_Ddl_Table::TYPE_BOOLEAN, null,
         array(
             'nullable' => false,
             'default' => 0
