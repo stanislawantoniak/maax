@@ -175,6 +175,15 @@ class Zolago_Catalog_Model_Observer
                                     'value'     => $storeModel->getAttributeBaseStore(),
                                     'note'      => $hlp->__('From this store view labels will be taken if not present. If you do not specify a store view then the default (Admin) labels will be used')
                                 ));
+            $fieldset->addField('store_virtual_root_category', 'text', array(
+                'name'      => 'store[virtual_root_category]',
+                'label'     => $hlp->__('Virtual root category name'),
+                'value'     => $storeModel->getVirtualRootCategory(),
+                'required'  => false,
+                'disabled'  => $storeModel->isReadOnly(),
+                'note' 	    => $hlp->__('This name will be used in hamburger menu as root category name')
+            ));
+
         }
     }
 
