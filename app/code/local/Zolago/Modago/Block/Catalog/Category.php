@@ -21,16 +21,28 @@ class Zolago_Modago_Block_Catalog_Category extends Mage_Core_Block_Template
         $categories = $ccModel->getCategories($rootCatId);
 
         $catTree = array();
-        foreach ($categories as $cat) {
+        $store = Mage::app()->getStore();        
+        if ($virtual = trim($store->getVirtualRootCategory())) {
+            $catTree[-1] = array (
+                'name' => $virtual,
+		'url'         => '#',
+                'category_id' => -1,
+		'dropdown'    => $this->getLayout()->createBlock('cms/block')->setBlockId("navigation-dropdown-c--1")->toHtml(),
+                'ids'         => implode(',', $ccModel->getResource()->getChildren($ccModel->load($rootCatId), true))
+
+            );
+        } else {
+            foreach ($categories as $cat) {
             /** @var Varien_Data_Tree_Node $cat */
-            $catId   = (int)$cat->getId();
-            $catTree[$catId] = array(
+                $catId   = (int)$cat->getId();
+                $catTree[$catId] = array(
 				'name'        => $cat->getName(),
 				'url'         => rtrim(Mage::getUrl($cat->getRequestPath()), "/"),
 				'category_id' => $catId,
 				'dropdown'    => $this->getLayout()->createBlock('cms/block')->setBlockId("navigation-dropdown-c-{$catId}")->toHtml(),
-                'ids'         => implode(',', $ccModel->getResource()->getChildren($ccModel->load($catId), true))
-			);
+                    'ids'         => implode(',', $ccModel->getResource()->getChildren($ccModel->load($catId), true))
+		    	);
+            }
         }
         return $catTree;
     }
