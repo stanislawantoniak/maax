@@ -39,10 +39,15 @@ $reasonOptions = $this->getRmaReasons();
 										}
 										?>
 										</td>
-									<td><?php echo $_item->getName(); ?> <em class="text-muted"> (<?php
-											foreach($_item->getOrderItem()->getProductOptions()['attributes_info'] as $key=>$val){
-												echo $val['label'].": ".$val['value'];
-											} ?>
+									<td>
+										<?php echo $_item->getName(); ?> <em class="text-muted"> (<?php
+											$productOptions = $_item->getOrderItem()->getProductOptions();
+											if(isset($productOptions['attributes_info'])){
+												foreach($productOptions['attributes_info'] as $key=>$val){
+													echo $val['label'].": ".$val['value'];
+												}
+											}
+											 ?>
 											)</em>
 									</td>
 								</tr>
