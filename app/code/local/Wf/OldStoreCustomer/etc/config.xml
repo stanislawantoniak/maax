@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Wf_OldStoreCustomer>
+            <version>0.0.1</version>
+        </Wf_OldStoreCustomer>
+    </modules>
+    <global>
+        <models>
+            <wfoldstorecustomer>
+                <class>Wf_OldStoreCustomer_Model</class>
+                <resourceModel>wfoldstorecustomer_resource</resourceModel>
+            </wfoldstorecustomer>
+            <wfoldstorecustomer_resource>
+                <class>Wf_OldStoreCustomer_Model_Resource</class>
+            </wfoldstorecustomer_resource>
+        </models>
+        <blocks>
+            <wfoldstorecustomer>
+                <class>Wf_OldStoreCustomer_Block</class>
+            </wfoldstorecustomer>
+        </blocks>
+        <helpers>
+            <wfoldstorecustomer>
+                <class>Wf_OldStoreCustomer_Helper</class>
+            </wfoldstorecustomer>
+        </helpers>
+        <resources>
+            <wfoldstorecustomer_setup>
+                <setup>
+                    <module>Wf_OldStoreCustomer</module>
+                </setup>
+            </wfoldstorecustomer_setup>
+        </resources>
+    </global>
+</config>
