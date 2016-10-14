@@ -38,4 +38,15 @@
             </wfoldstorecustomer_setup>
         </resources>
     </global>
+    <frontend>
+        <translate>
+            <modules>
+                <Wf_OldStoreCustomer>
+                    <files>
+                        <default>Wf_OldStoreCustomer.csv</default>
+                    </files>
+                </Wf_OldStoreCustomer>
+            </modules>
+        </translate>
+    </frontend>
 </config>
