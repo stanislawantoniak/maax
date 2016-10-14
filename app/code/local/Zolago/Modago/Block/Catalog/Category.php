@@ -56,7 +56,21 @@ class Zolago_Modago_Block_Catalog_Category extends Mage_Core_Block_Template
      */
     public function getMainCategoriesMobile()
     {
-        return $this->getMenuMainCategories();
+        $categories = $this->getMenuMainCategories();
+        $store = Mage::app()->getStore();        
+        if ($virtual = trim($store->getVirtualRootCategory())) {
+            $tmp = array(
+                'name' => $virtual,
+                'url' => '#',
+                'category_id' => -1,
+                'level' => 1,
+                'solr_product_count' => 1,
+                'image' => '',
+                'has_dropdown' => $categories
+            );
+            $categories = array($tmp);
+        }
+        return $categories;
     }
 
     /**
