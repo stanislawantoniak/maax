@@ -149,12 +149,12 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 		if($this->oldStoreMessage($login['username'], Mage::app()->getWebsite()->getId())){
 			if($this->getRequest()->getParam("is_checkout")){
 				Mage::getSingleton('core/session')->addError(
-					Mage::helper("zolagocustomer")->__("CHECKOUT PRZEPRASZAMY, NIE MASZ JUŻ KONTA W NASZYM SKLEPIE<br><br>
+					Mage::helper("zolagocustomer")->__("PRZEPRASZAMY, NIE MASZ JUŻ KONTA W NASZYM SKLEPIE<br><br>
 					Stworzyliśmy zupełnie nowy, wygodniejszy sklep internetowy i niestety konta założone w poprzedniej wersji sklepu nie działają w obecnym. Podczas składania zamówienia możesz założyć nowe konto lub zrobić zakupy jako gość. ")
 				);
 			} else {
 				Mage::getSingleton('core/session')->addError(
-					Mage::helper("zolagocustomer")->__("LOGIN PRZEPRASZAMY, NIE MASZ JUŻ KONTA W NASZYM SKLEPIE <br><br>					
+					Mage::helper("zolagocustomer")->__("PRZEPRASZAMY, NIE MASZ JUŻ KONTA W NASZYM SKLEPIE <br><br>					
 					Stworzyliśmy zupełnie nowy, wygodniejszy sklep internetowy i niestety konta założone w poprzedniej wersji sklepu nie działają w obecnym. Załóż konto w nowym sklepie, aby mieć dostęp do wszystkich nowych funkcji. Rejestracja zajmie Ci zaledwie chwilkę. ")
 				);
 
