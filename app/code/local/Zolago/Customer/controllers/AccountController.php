@@ -99,6 +99,23 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 		return $this->_redirectReferer();
     }
 
+	public function oldStoreMessage($email, $websiteId)
+	{
+		/** @var $customer Mage_Customer_Model_Customer */
+		$customer = Mage::getModel('customer/customer')
+			->setWebsiteId($websiteId);
+		$customer->loadByEmail($email);
+
+		if (!$customer->getId()) {
+			$oldStoreCustomersCollection = Mage::getModel('wfoldstorecustomer/customer')->getCollection();
+			$oldStoreCustomersCollection->addFieldToFilter("has_account_in_new_store", 1);
+			if($oldStoreCustomersCollection->getFirstItem()->getId()){
+				return TRUE;
+			}
+		}
+		return FALSE;
+
+	}
 
 	/**
 	 * Override mesagge
@@ -128,13 +145,35 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
         //trim username
         $login = $this->getRequest()->getPost('login');
         $login['username'] = trim($login['username']);
+
+		if($this->oldStoreMessage($login['username'], Mage::app()->getWebsite()->getId())){
+			if($this->getRequest()->getParam("is_checkout")){
+				Mage::getSingleton('core/session')->addError(
+					Mage::helper("zolagocustomer")->__("CHECKOUT PRZEPRASZAMY, NIE MASZ JUŻ KONTA W NASZYM SKLEPIE<br><br>
+					Stworzyliśmy zupełnie nowy, wygodniejszy sklep internetowy i niestety konta założone w poprzedniej wersji sklepu nie działają w obecnym. Podczas składania zamówienia możesz założyć nowe konto lub zrobić zakupy jako gość. ")
+				);
+			} else {
+				Mage::getSingleton('core/session')->addError(
+					Mage::helper("zolagocustomer")->__("LOGIN PRZEPRASZAMY, NIE MASZ JUŻ KONTA W NASZYM SKLEPIE <br><br>					
+					Stworzyliśmy zupełnie nowy, wygodniejszy sklep internetowy i niestety konta założone w poprzedniej wersji sklepu nie działają w obecnym. Załóż konto w nowym sklepie, aby mieć dostęp do wszystkich nowych funkcji. Rejestracja zajmie Ci zaledwie chwilkę. ")
+				);
+
+
+			}
+
+			$this->_loginPostRedirect();
+			return;
+		}
+
+
+
         $this->getRequest()->setPost('login', $login);
 
         parent::loginPostAction();
 		
 		
 		
-		// Add success if login sucessful (by core session - visable in both customer / checkout)
+		// Add success if login successful (by core session - visible in both customer / checkout)
         if ($this->_getSession()->isLoggedIn()) {
 			
             Mage::getSingleton('core/session')->addSuccess(
