@@ -407,7 +407,7 @@ $isPickUpPaymentCanBeEntered = $this->isPickUpPaymentCanBeEntered();
 							<?php if($_po->isDeliveryInpost()):?>
 								<button class="btn btn-xs" data-address-id="<?php echo $_po->getShippingAddress()->getId();?>" data-toggle="modal" href="#editShippingInpostAddressModal"><i class="icon-pencil"></i></button>
 							<?php else:?>
-								<button class="btn btn-xs" data-address-id="<?php echo $_po->getShippingAddress()->getId();?>" data-toggle="modal" href="#editShippingAddressModal"><i class="icon-pencil"></i></button>
+								<button class="btn btn-xs" data-address-id="<?php echo $_po->getShippingAddress()->getId();?>" data-toggle="modal" href="#editShippingMethodModal"><i class="icon-pencil"></i></button>
 							<?php endif;?>
 						</div>
 					</div>
@@ -684,20 +684,20 @@ if ($isPickUpPaymentCanBeEntered)
 	echo $this->getChildHtml("vendor_po_edit_shipping_cost");
 	
 /*******************************************************************************
- *	Shippign address modal
+ *	Shipping address modal
  *******************************************************************************/
 	if($_po->isDeliveryInpost()){
 		echo $this->getChild("vendor_po_edit_inpost_shipping_address")->
 		setAddress($_po->getShippingAddress())->
 		toHtml();
 	}else{
-		echo $this->getChild("vendor_po_edit_shipping_address")->
+		echo $this->getChild("vendor_po_edit_shipping_method")->
 		setAddress($_po->getShippingAddress())->
 		toHtml();
 	}
 
 /*******************************************************************************
- *	Billign address modal
+ *	Billing address modal
  *******************************************************************************/
 	echo $this->getChild("vendor_po_edit_billing_address")->
 		setAddress($_po->getBillingAddress())->
