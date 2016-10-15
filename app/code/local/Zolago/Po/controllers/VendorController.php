@@ -1045,6 +1045,141 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         return Mage::getUrl("*/*/edit", array("id"=>$this->_registerPo()->getId()))."#".$anchor;
     }
 
+    public function saveShippingMethod() {
+        $req	=	$this->getRequest();
+        $data	=	$req->getPost();
+        $type	=	$req->getParam("type");
+        $isAjax =	$req->isAjax();
+
+        try {
+            $po = $this->_registerPo();
+        } catch (Mage_Core_Exception $e) {
+            $this->_getSession()->addError($e->getMessage());
+            return $this->_redirectReferer();
+        } catch (Exception $e) {
+            Mage::logException($e);
+            $this->_getSession()->addError(Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator."));
+            return $this->_redirectReferer();
+        }
+
+        /* @var $po Zolago_Po_Model_Po */
+        $session = $this->_getSession();
+        /* @var $session Zolago_Dropship_Model_Session */
+
+
+        if (!$po->getId()) {
+            $this->getResponse()->setBody(Zend_Json::encode(array(
+                "status" => 0,
+                "content" => Mage::helper("zolagopo")->__("Wrong PO Id")
+            )));
+            return;
+        }
+
+        if ($po->getVendor()->getId() != $session->getVendor()->getId()) {
+            $this->getResponse()->setBody(Zend_Json::encode(array(
+                "status" => 0,
+                "content" => Mage::helper("zolagopo")->__("You have no access to this PO")
+            )));
+            return;
+        }
+
+        $response = array(
+            "status" => 1,
+            "content" => array()
+        );
+
+        try {
+            if(!$po->getStatusModel()->isEditingAvailable($po)) {
+                throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("Order cannot be edited."));
+            }
+            if(isset($data['add_own']) && $data['add_own']==1) {
+                if($type==Mage_Sales_Model_Order_Address::TYPE_SHIPPING) {
+                    $orignAddress = $po->getOrder()->getShippingAddress();
+                    $oldAddress = $po->getShippingAddress();
+                } else {
+                    $orignAddress = $po->getOrder()->getBillingAddress();
+                    $oldAddress = $po->getBillingAddress();
+                }
+                $newAddress = clone $orignAddress;
+
+                //validate address data start
+                $errors = false;
+                $langHelper = Mage::helper("zolagopo");
+                if(!$data['firstname']) {
+                    $errors = true;
+                    $session->addError($langHelper->__("Invalid first name"));
+                }
+                if(!$data['lastname']) {
+                    $errors = true;
+                    $session->addError($langHelper->__("Invalid last name"));
+                }
+                if(!$data['telephone'] && $type==Mage_Sales_Model_Order_Address::TYPE_SHIPPING) {
+                    $errors = true;
+                    $session->addError($langHelper->__("Invalid telephone"));
+                }
+                if(!$data['street']) {
+                    $errors = true;
+                    $session->addError($langHelper->__("Invalid street"));
+                }
+                if(!$data['city']) {
+                    $errors = true;
+                    $session->addError($langHelper->__("Invalid city"));
+                }
+                if(!$data['postcode'] || !preg_match('/^\d{2}-\d{3}$/',$data['postcode'])) {
+                    $errors = true;
+                    $session->addError($langHelper->__("Invalid postcode"));
+                }
+                //validate address data end
+
+                if($errors) {
+                    $this->_redirectReferer();
+                } else {
+                    $newAddress->addData($data);
+                    if ($type == Mage_Sales_Model_Order_Address::TYPE_SHIPPING) {
+                        $po->setOwnShippingAddress($newAddress);
+                    } else {
+                        $po->setOwnBillingAddress($newAddress);
+                    }
+
+
+                    Mage::dispatchEvent("zolagopo_po_address_change", array(
+                        "po" => $po,
+                        "new_address" => $newAddress,
+                        "old_address" => $oldAddress,
+                        "type" => $type
+                    ));
+
+                    $po->save();
+
+                    $session->addSuccess(Mage::helper("zolagopo")->__("Address changed"));
+                    $response['content']['reload'] = 1;
+                }
+            }
+        } catch(Mage_Core_Exception $e) {
+            $response = array(
+                "status"	=>0,
+                "content"	=>$e->getMessage()
+            );
+            if(!$isAjax) {
+                $session->addError($e->getMessage());
+            }
+        } catch(Exception $e) {
+            Mage::logException($e);
+            $response = array(
+                "status"=>0,
+                "content"=>Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator.")
+            );
+            if(!$isAjax) {
+                $session->addError(Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator."));
+            }
+        }
+        if($isAjax) {
+            $this->getResponse()->setHeader("content-type", "application/json");
+            $this->getResponse()->setBody(Zend_Json::encode($response));
+        } else {
+            $this->_redirectReferer();
+        }
+    }
 
     public function saveAddressAction() {
         $req	=	$this->getRequest();
@@ -1068,26 +1203,26 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         /* @var $session Zolago_Dropship_Model_Session */
 
 
-        if(!$po->getId()) {
+        if (!$po->getId()) {
             $this->getResponse()->setBody(Zend_Json::encode(array(
-                                              "status"=>0,
-                                              "content"=>Mage::helper("zolagopo")->__("Wrong PO Id")
-                                          )));
+                "status" => 0,
+                "content" => Mage::helper("zolagopo")->__("Wrong PO Id")
+            )));
             return;
         }
 
-        if($po->getVendor()->getId()!=$session->getVendor()->getId()) {
+        if ($po->getVendor()->getId() != $session->getVendor()->getId()) {
             $this->getResponse()->setBody(Zend_Json::encode(array(
-                                              "status"=>0,
-                                              "content"=>Mage::helper("zolagopo")->__("You have no access to this PO")
-                                          )));
+                "status" => 0,
+                "content" => Mage::helper("zolagopo")->__("You have no access to this PO")
+            )));
             return;
         }
 
         $response = array(
-                        "status"=>1,
-                        "content"=>array()
-                    );
+            "status" => 1,
+            "content" => array()
+        );
 
         try {
             if(!$po->getStatusModel()->isEditingAvailable($po)) {
