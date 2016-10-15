@@ -10,7 +10,7 @@ class Zolago_Po_Block_Vendor_Po_Edit_ShippingMethod
 	);
 	
 	public function getFormUrl() {
-		return $this->getPoUrl("saveAddress", array("type"=>$this->getType()));
+		return $this->getPoUrl("saveShippingMethod", array("type"=>$this->getType()));
 	}
 	
 	public function isSameAsOrigin($type) {
