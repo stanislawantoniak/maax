@@ -556,3 +556,12 @@ table.foot-empty-cells tfoot td:empty {
 /*	background-color: #60a1ea !important; */
 	background-color: #999 !important;
 }
+
+#editShippingMethodModal input[name=delivery_method] {
+    height: 0;
+    visibility: hidden;
+    width: 0;
+}
+#editShippingMethodModal .tab-content {
+    padding: 20px;
+}

@@ -38,12 +38,11 @@ class Zolago_Po_Block_Vendor_Po_Edit_ShippingMethod
 		}
 	}
 
-
 	/**
 	 *
 	 * @return array
 	 */
-	public function getEditableShippingMethods()
+	public function getAvailableShippingMethods()
 	{
 		$collection = Mage::getModel("udropship/shipping")->getCollection();
 		$collection->joinDeliveryType();
@@ -57,5 +56,37 @@ class Zolago_Po_Block_Vendor_Po_Edit_ShippingMethod
 			);
 		}
 		return $methods;
+	}
+
+	/**
+	 *
+	 * @return array
+	 */
+	public function getEditableShippingMethods()
+	{
+		$forms = array();
+		$methods = $this->getAvailableShippingMethods();
+
+		//Construct edit delivery method form
+		if(empty($methods))
+			return $methods;
+
+		foreach($methods as $code => $method){
+			$forms['methods'][$code] = $method;
+			switch($code){
+				case GH_Inpost_Model_Carrier::CODE :
+					$forms['tabs']['ghinpost']['methods'][] = $code;
+					$forms['tabs']['ghinpost']['template'] = 'vendor_po_edit_shipping_method_ghinpost';
+					$forms['methods'][$code]['form_link'] = 'ghinpost';
+					break;
+				default:
+					$forms['tabs']['default']['methods'][] = $code;
+					$forms['tabs']['default']['template'] = 'vendor_po_edit_shipping_method_default';
+					$forms['methods'][$code]['form_link'] = 'default';
+
+			}
+		}
+
+		return $forms;
 	}
 }
