@@ -19,6 +19,16 @@ $_modagoHlp = Mage::helper("zolagocommon");
 <script type="text/javascript">
     var localeCode = '<?php echo substr(Mage::getStoreConfig('general/locale/code', Mage::app()->getStore()->getId()),0,2); ?>';
     var poId = "<?php echo $poId; ?>";
+
+    var Inpost = [];
+    Inpost['pwr_shipping_map_method_select'] = "<?php echo $_hlp->__("Choose point"); ?>";
+
+    Inpost['validation_please_select_shipping'] = "<?php echo $_hlp->__("City");?>";
+    Inpost['shipping_map_select_city'] = "<?php echo $_hlp->__("City"); ?>";
+    Inpost['shipping_map_select_locker'] = "<?php echo $_hlp->__("City"); ?>";
+    Inpost['shipping_map_nearest'] = "<?php echo $_hlp->__("City"); ?>";
+    Inpost['shipping_map_method_select'] = "<?php echo $_hlp->__("Choose locker"); ?>";
+
 </script>
 <!-- Modal <?php echo $_type;?> address -->
 <div class="modal fade" id="editShippingMethodModal">
