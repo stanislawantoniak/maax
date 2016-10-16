@@ -4,7 +4,7 @@
 <?php $_po = $this->getPo();
 $poUdropshipMethod = $_po->getUdropshipMethod();
 //Zend_Debug::dump($poUdropshipMethod);
-//Zend_Debug::dump($_po->getData("delivery_point_name"));
+//Zend_Debug::dump($_po->getData());
 
 $deliveryMethodInfo = $_po->getOmniChannelMethodInfoByMethod();
 $deliveryCode = $deliveryMethodInfo->getDeliveryCode();
@@ -35,7 +35,7 @@ $_modagoHlp = Mage::helper("zolagocommon");
                             <?php foreach ($editableShippingMethods['methods'] as $deliveryMethod): ?>
                                 <li class="nav-item <?php if($deliveryMethod['udropship_method'] ==$poUdropshipMethod): ?>active<?php endif; ?>">
                                     <a nav-link data-toggle="pill" href="#<?php echo $deliveryMethod['form_link']; ?>">
-                                        <input type="radio" name="delivery_method" id="method_<?php echo $deliveryMethod['delivery_code']; ?>" value="<?php echo $deliveryMethod['delivery_code']; ?>" autocomplete="off" <?php if($deliveryMethod['udropship_method'] ==$poUdropshipMethod): ?>checked<?php endif; ?>>
+                                        <input type="radio" name="udropship_method" id="method_<?php echo $deliveryMethod['delivery_code']; ?>" value="<?php echo $deliveryMethod['udropship_method']; ?>" autocomplete="off" <?php if($deliveryMethod['udropship_method'] ==$poUdropshipMethod): ?>checked<?php endif; ?>>
                                         <?php echo $deliveryMethod['title']; ?>
                                     </a>
                                 </li>
@@ -92,14 +92,13 @@ $_modagoHlp = Mage::helper("zolagocommon");
             }
         });
 
-
         form.find('button[name=restore]').click(function() {
             form.validate().settings.ignore = "*";
             form.submit();
         });
 
         jQuery('a[data-toggle="pill"]').on('shown.bs.tab', function (e) {
-            jQuery(e.target).find("input[name=delivery_method]").prop("checked", true);
+            jQuery(e.target).find("input[name=udropship_method]").prop("checked", true);
         });
     });
 </script>

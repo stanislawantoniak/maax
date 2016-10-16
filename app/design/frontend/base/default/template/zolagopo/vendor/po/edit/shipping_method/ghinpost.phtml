@@ -28,11 +28,6 @@ $udropshipHlp = Mage::helper('udropship');
     Inpost['shipping_map_select_city'] = "<?php echo $_hlp->__("City"); ?>";
     Inpost['shipping_map_select_locker'] = "<?php echo $_hlp->__("City"); ?>";
     Inpost['shipping_map_nearest'] = "<?php echo $_hlp->__("City"); ?>";
-    Inpost['shipping_map_show_nearest_link'] = "<?php echo $_modagoHlp->__("show nearest"); ?>";
-    Inpost['shipping_map_hide_nearest_link'] = "<?php echo $_modagoHlp->__("hide nearest"); ?>";
-    Inpost['shipping_map_show_map_link'] = "<?php echo $_modagoHlp->__("show map"); ?>";
-    Inpost['shipping_map_hide_map_link'] = "<?php echo $_modagoHlp->__("hide map"); ?>";
-    Inpost['shipping_map_method_select'] = "<?php echo $_modagoHlp->__("choose"); ?>";
 
 </script>
 
@@ -43,8 +38,8 @@ $udropshipHlp = Mage::helper('udropship');
             <div class="col-sm-6 col-md-6 gui-form-control-wrapper">
                 <div class="gui-form-control">
                     <label for="name" class="gui-label"><?php echo $_hlp->__("City"); ?></label>
-                    <select name="shipping_select_city" style="width: 100%;"  class="select2">
-                        <option value=""><?php echo $_hlp->__("Select City"); ?></option>
+                    <select name="shipping_select_city" class="select2" style="width: 100%;"  data-placeholder="<?php echo $_hlp->__("Select City"); ?>">
+                        <option value="0"><?php echo $_hlp->__("Select City"); ?></option>
                         <?php foreach ($inPostData["filters"] as $city => $value): ?>
                             <option value="<?php echo $city; ?>"><?php echo $city; ?></option>
                         <?php endforeach; ?>
@@ -54,14 +49,14 @@ $udropshipHlp = Mage::helper('udropship');
             <div class="col-sm-6 col-md-6 gui-form-control-wrapper">
                 <div class="gui-form-control">
                     <label for="name" class="gui-label"><?php echo $_hlp->__("Address"); ?></label>
-                    <select class="select2" style="width: 100%;"   name="shipping_select_point" data-default="">
-                        <option value=""><?php echo $_hlp->__("Choose city first"); ?></option>
+                    <select  class="select2" style="width: 100%;"  data-placeholder="<?php echo $_hlp->__("Choose city first"); ?>"  name="delivery_point_name" data-default="">
+                        <option value="0"><?php echo $_hlp->__("Choose city first"); ?></option>
                     </select>
                 </div>
             </div>
 
         </div>
-        <div class="row clearfix map_filter_container form-group invoice-data" style="min-height: 100px;margin: 0 20px;">
+        <div class="clearfix map_filter_container invoice-data" style="min-height: 100px;">
             <!--Selected Point here-->
             <div class="shipping_select_point_data">
                 <div class="row">

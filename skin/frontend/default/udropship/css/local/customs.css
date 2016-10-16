@@ -557,11 +557,14 @@ table.foot-empty-cells tfoot td:empty {
 	background-color: #999 !important;
 }
 
-#editShippingMethodModal input[name=delivery_method] {
+#editShippingMethodModal input[name=udropship_method] {
     height: 0;
     visibility: hidden;
     width: 0;
 }
 #editShippingMethodModal .tab-content {
-    padding: 20px;
+    padding: 20px 0;
+}
+#editShippingMethodModal .map_filter_container {
+    margin-top: 20px;
 }

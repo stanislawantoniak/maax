@@ -1045,7 +1045,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         return Mage::getUrl("*/*/edit", array("id"=>$this->_registerPo()->getId()))."#".$anchor;
     }
 
-    public function saveShippingMethod() {
+    public function saveShippingMethodAction() {
         $req	=	$this->getRequest();
         $data	=	$req->getPost();
         $type	=	$req->getParam("type");
@@ -1092,16 +1092,24 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             if(!$po->getStatusModel()->isEditingAvailable($po)) {
                 throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("Order cannot be edited."));
             }
+            Mage::log("Data", null, "shipping1.log");
+            Mage::log($data, null, "shipping1.log");
             if(isset($data['add_own']) && $data['add_own']==1) {
-                if($type==Mage_Sales_Model_Order_Address::TYPE_SHIPPING) {
-                    $orignAddress = $po->getOrder()->getShippingAddress();
-                    $oldAddress = $po->getShippingAddress();
-                } else {
-                    $orignAddress = $po->getOrder()->getBillingAddress();
-                    $oldAddress = $po->getBillingAddress();
-                }
-                $newAddress = clone $orignAddress;
+                $orignAddress = $po->getOrder()->getShippingAddress();
+                $oldAddress = $po->getShippingAddress();
 
+                Mage::log("Po", null, "shipping2.log");
+                Mage::log($po->getData(), null, "shipping2.log");
+                $newAddress = clone $orignAddress;
+                Mage::log("New address", null, "shipping3.log");
+                Mage::log($newAddress->getData(), null, "shipping3.log");
+
+                $getOmniChannelMethodInfoByMethod = Mage::helper("udropship")
+                    ->getOmniChannelMethodInfoByMethod(0, $data['udropship_method']);
+                Mage::log($getOmniChannelMethodInfoByMethod->getData(), null, "shipping4.log");
+
+                $po->setData('udropship_method',$data['udropship_method']);
+                $po->setData('delivery_point_name',$data['delivery_point_name']);
                 //validate address data start
                 $errors = false;
                 $langHelper = Mage::helper("zolagopo");

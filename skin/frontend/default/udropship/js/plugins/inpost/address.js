@@ -1,6 +1,6 @@
 jQuery(document).ready(function () {
 
-    if(typeof lockerCity !== "undefined"){
+    if(typeof lockerCity !== 'undefined'){
         jQuery('[name=shipping_select_city] option[value="'+lockerCity+'"]').prop('selected', true);
         _makeMapRequest(lockerCity, true);
     }
@@ -14,7 +14,7 @@ jQuery(document).ready(function () {
 
             _makeMapRequest(enteredSearchValue, false);
         }
-    });
+    }).change();
 
     jQuery('[name=choose_inpost]').click(function (e) {
         jQuery(this).attr("disabled", true);
@@ -36,13 +36,13 @@ jQuery(document).ready(function () {
 });
 
 function _makeMapRequest(q, on_load) {
-	jQuery("select[name=shipping_select_point]").attr("disabled", true);
+	jQuery("select[name=delivery_point_name]").attr("disabled", true);
     jQuery.ajax({
         url: "/udpo/inpost/getInpostData",
         type: "POST",
         data: {town: q},
         success: function (response) {
-			jQuery("select[name=shipping_select_point]").attr("disabled", false);
+			jQuery("select[name=delivery_point_name]").attr("disabled", false);
             gmarkers = [];  //to collect only filtered markers (used in showMarkerWindow)
             data = jQuery.parseJSON(response);
 
@@ -64,7 +64,7 @@ function constructShippingPointSelectOnLoad(map_points){
     var options = [],
         map_point_long_name;
 
-    options.push('<option value="">'+Inpost["shipping_map_method_select"]+'</option>');
+    options.push('<option value="0">'+Inpost["shipping_map_method_select"]+'</option>');
     jQuery(map_points).each(function (i, map_point) {
         if(map_point.name == lockerName){
             map_point_long_name = map_point.street + " " + map_point.building_number + ", " + map_point.town  + " (" + map_point.postcode + ")";
@@ -75,15 +75,18 @@ function constructShippingPointSelectOnLoad(map_points){
         }
     });
 
-    jQuery("select[name=shipping_select_point]")
+    jQuery("select[name=delivery_point_name]")
         .html(options.join(""))
         .attr("disabled", false)
         .val("");
 
-    jQuery('[name=shipping_select_point] option[value="'+lockerName+'"]').prop('selected', true);
+    jQuery('[name=delivery_point_name] option[value="'+lockerName+'"]').prop('selected', true);
 
-    jQuery("select[name=shipping_select_point]")
-        .select2({dropdownParent: jQuery("#select_inpost_point"), language: localeCode});
+    jQuery("select[name=delivery_point_name]")
+        .select2({
+            dropdownParent: jQuery("#editShippingMethodModal"),
+            language: localeCode
+        });
 
     prepareGroupPoints(map_points);
 }
@@ -92,7 +95,7 @@ function constructShippingPointSelect(map_points) {
     var options = [],
         map_point_long_name;
 
-    options.push('<option value="default">'+Inpost["shipping_map_method_select"]+'</option>');
+    options.push('<option value="0">'+Inpost["shipping_map_method_select"]+'</option>');
     jQuery(map_points).each(function (i, map_point) {
         map_point_long_name = map_point.street + " " + map_point.building_number + ", " + map_point.town  + " (" + map_point.postcode + ")";
         options.push('<option data-carrier-town="' + map_point.town + '" data-carrier-additional="' + map_point.additional + '" data-carrier-pointcode="' + map_point.name + '" data-carrier-pointid="' + map_point.id + '" value="' + map_point.name + '">' + map_point_long_name + '</option>');
@@ -101,7 +104,7 @@ function constructShippingPointSelect(map_points) {
     //Jeśli w mieście jest tylko jeden paczkomat,
     // niech wybiera go automatycznie
     if(typeof map_points !== "undefined" && map_points.length === 1){
-        jQuery("select[name=shipping_select_point]")
+        jQuery("select[name=delivery_point_name]")
             .html(options.join(""))
             .attr("disabled", false)
             .val(map_points[0].name);
@@ -109,7 +112,7 @@ function constructShippingPointSelect(map_points) {
         showShippingData(map_points[0]);
 
     } else {
-        jQuery("select[name=shipping_select_point]")
+        jQuery("select[name=delivery_point_name]")
             .html(options.join(""))
             .attr("disabled", false)
             .val("default");
@@ -117,17 +120,17 @@ function constructShippingPointSelect(map_points) {
         prepareGroupPoints(map_points);
     }
 
-    jQuery("select[name=shipping_select_point]")
-        .select2({dropdownParent: jQuery("#select_inpost_point"), language: localeCode});
+    jQuery("select[name=delivery_point_name]")
+        .select2({dropdownParent: jQuery("#editShippingMethodModal"), language: localeCode});
 
     
 }
 
 function prepareGroupPoints(map_points){
-    jQuery("[name=shipping_select_point]").change(function () {
+    jQuery("[name=delivery_point_name]").change(function () {
         jQuery('[name=choose_inpost]').attr('disabled', 'disabled');
         jQuery(".shipping_select_point_data").css("display","none");
-        var enteredSearchPointValue = jQuery("[name=shipping_select_point] option:selected").val();
+        var enteredSearchPointValue = jQuery("[name=delivery_point_name] option:selected").val();
 
         if (enteredSearchPointValue !== "undefined") {
             jQuery(map_points).each(function (i, map_point) {
