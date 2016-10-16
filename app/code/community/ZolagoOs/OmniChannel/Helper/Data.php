@@ -3067,6 +3067,24 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
      * @param string $nl
      * @return string
      */
+    public function formatCustomerAddressPickUpPoint($po, $fullResponse = false, $nl = "<br/>") {
+        /** @var ZolagoOs_Pwr_Model_Point $locker */
+        $locker = $po->getDeliveryPickUpPoint();
+        $result = Mage::helper('ghinpost')->__("Pickup Point") . ' ' . $locker->getName() . $nl
+            . $locker->getStreet() . $nl
+            . $locker->getPostcode() . " " . $locker->getCity();
+        if ($fullResponse) {
+            $result .= $nl . "T. " . $po->getShippingAddress()->getTelephone();
+        }
+        return $result;
+    }
+
+    /**
+     * @param Zolago_Po_Model_Po $po
+     * @param bool $fullResponse
+     * @param string $nl
+     * @return string
+     */
     public function formatCustomerAddressInpost($po, $fullResponse = false, $nl = "<br/>") {
         /** @var GH_Inpost_Model_Locker $locker */
         $locker = $po->getInpostLocker();

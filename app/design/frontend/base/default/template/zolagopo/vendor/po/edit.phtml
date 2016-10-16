@@ -414,6 +414,8 @@ $isPickUpPaymentCanBeEntered = $this->isPickUpPaymentCanBeEntered();
 						<?php echo $udropshipHlp->formatCustomerAddressInpost($_po, true); ?>
 					<?php elseif($_po->isDeliveryPwr()):?>
 						<?php echo $udropshipHlp->formatCustomerAddressPwr($_po, true); ?>
+					<?php elseif($_po->isDeliveryPickUpPoint()):?>
+						<?php echo $udropshipHlp->formatCustomerAddressPickUpPoint($_po, true); ?>
 					<?php else:?>
 						<?php echo $udropshipHlp->formatCustomerAddress($_po->getShippingAddress(), 'html', $this->getVendor()) ?>
 					<?php endif;?>
