@@ -1123,6 +1123,15 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                     $data['city'] = $pwrPoint->getTown();
                     $data['postcode'] = $pwrPoint->getPostcode();
                     $po->setDeliveryPointName($data['pwr_delivery_point_name']);
+                } else if ($omniChannelMethodInfoByMethod->getDeliveryCode() == ZolagoOs_PickupPoint_Helper_Data::CODE) {
+                    /* @var $pos  Zolago_Pos_Model_Pos */
+                    $pos = Mage::getModel("zolagopos/pos")->load($data['pickuppoint_delivery_point_name']);
+
+                    $data['street'] = $pos->getStreet();
+                    $data['city'] = $pos->getCity();
+                    $data['postcode'] = $pos->getPostcode();
+
+                    $po->setDeliveryPointName($data['pickuppoint_delivery_point_name']);
                 } else {
                     $po->setDeliveryPointName('');
                 }
