@@ -85,7 +85,7 @@ function constructShippingPwrPointSelectOnLoad(map_points){
             language: localeCode
         });
 
-    prepareGroupPoints(map_points);
+    preparePwrGroupPoints(map_points);
 }
 
 function constructShippingPwrPointSelect(map_points) {
@@ -114,7 +114,7 @@ function constructShippingPwrPointSelect(map_points) {
             .attr("disabled", false)
             .val(0);
 
-        prepareGroupPoints(map_points);
+        preparePwrGroupPoints(map_points);
     }
 
     jQuery("select[name=pwr_delivery_point_name]")
@@ -126,7 +126,7 @@ function constructShippingPwrPointSelect(map_points) {
     
 }
 
-function prepareGroupPoints(map_points){
+function preparePwrGroupPoints(map_points){
     jQuery("[name=pwr_delivery_point_name]").change(function () {
         jQuery('[name=choose_inpost]').attr('disabled', 'disabled');
         jQuery(".pwr_shipping_select_point_data").css("display","none");
