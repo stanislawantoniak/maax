@@ -78,7 +78,7 @@ function constructShippingPointSelectOnLoad(map_points){
     jQuery("select[name=inpost_delivery_point_name]")
         .html(options.join(""))
         .attr("disabled", false)
-        .val("");
+        .val(0);
 
     jQuery('[name=inpost_delivery_point_name] option[value="'+lockerName+'"]')
         .prop('selected', true);
@@ -116,7 +116,7 @@ function constructShippingPointSelect(map_points) {
         jQuery("select[name=inpost_delivery_point_name]")
             .html(options.join(""))
             .attr("disabled", false)
-            .val(0);
+            .val("");
 
         prepareGroupPoints(map_points);
     }
