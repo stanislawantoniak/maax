@@ -1,6 +1,6 @@
 jQuery(document).ready(function () {
 
-    if(typeof lockerCity !== 'undefined'){
+    if(lockerCity){
         jQuery('[name=shipping_select_city] option[value="'+lockerCity+'"]').prop('selected', true);
         _makeMapRequest(lockerCity, true);
     }
@@ -14,7 +14,7 @@ jQuery(document).ready(function () {
 
             _makeMapRequest(enteredSearchValue, false);
         }
-    }).change();
+    });
 
     jQuery('[name=choose_inpost]').click(function (e) {
         jQuery(this).attr("disabled", true);
@@ -64,7 +64,7 @@ function constructShippingPointSelectOnLoad(map_points){
     var options = [],
         map_point_long_name;
 
-    options.push('<option value="0">'+Inpost["shipping_map_method_select"]+'</option>');
+    //options.push('<option value="0">'+Inpost["shipping_map_method_select"]+'</option>');
     jQuery(map_points).each(function (i, map_point) {
         if(map_point.name == lockerName){
             map_point_long_name = map_point.street + " " + map_point.building_number + ", " + map_point.town  + " (" + map_point.postcode + ")";

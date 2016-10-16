@@ -1104,12 +1104,21 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                 Mage::log("New address", null, "shipping3.log");
                 Mage::log($newAddress->getData(), null, "shipping3.log");
 
-                $getOmniChannelMethodInfoByMethod = Mage::helper("udropship")
+                $omniChannelMethodInfoByMethod = Mage::helper("udropship")
                     ->getOmniChannelMethodInfoByMethod(0, $data['udropship_method']);
-                Mage::log($getOmniChannelMethodInfoByMethod->getData(), null, "shipping4.log");
+                Mage::log($omniChannelMethodInfoByMethod->getData(), null, "shipping4.log");
+                $po->setUdropshipMethod($data['udropship_method']);
+                $deliveryPointMethods = array(
+                    GH_Inpost_Model_Carrier::CODE
+                );
+                if(in_array($omniChannelMethodInfoByMethod->getDeliveryCode(),$deliveryPointMethods)){
+                    $po->setDeliveryPointName($data['delivery_point_name']);
+                } else {
+                    $po->setDeliveryPointName('');
+                }
 
-                $po->setData('udropship_method',$data['udropship_method']);
-                $po->setData('delivery_point_name',$data['delivery_point_name']);
+
+
                 //validate address data start
                 $errors = false;
                 $langHelper = Mage::helper("zolagopo");
