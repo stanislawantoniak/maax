@@ -75,9 +75,14 @@ class Zolago_Po_Block_Vendor_Po_Edit_ShippingMethod
 			$forms['methods'][$code] = $method;
 			switch($code){
 				case GH_Inpost_Model_Carrier::CODE :
-					$forms['tabs']['ghinpost']['methods'][] = $code;
-					$forms['tabs']['ghinpost']['template'] = 'vendor_po_edit_shipping_method_ghinpost';
-					$forms['methods'][$code]['form_link'] = 'ghinpost';
+					$forms['tabs'][GH_Inpost_Model_Carrier::CODE]['methods'][] = $code;
+					$forms['tabs'][GH_Inpost_Model_Carrier::CODE]['template'] = 'vendor_po_edit_shipping_method_ghinpost';
+					$forms['methods'][$code]['form_link'] = GH_Inpost_Model_Carrier::CODE;
+					break;
+				case Orba_Shipping_Model_Packstation_Pwr::CODE :
+					$forms['tabs'][Orba_Shipping_Model_Packstation_Pwr::CODE]['methods'][] = $code;
+					$forms['tabs'][Orba_Shipping_Model_Packstation_Pwr::CODE]['template'] = 'vendor_po_edit_shipping_method_zospwr';
+					$forms['methods'][$code]['form_link'] = Orba_Shipping_Model_Packstation_Pwr::CODE;
 					break;
 				default:
 					$forms['tabs']['default']['methods'][] = $code;

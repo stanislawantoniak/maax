@@ -7,21 +7,21 @@ $_type = 'shipping';
 /** @var Zolago_Common_Helper_Data $_zolagoHlp */
 $_modagoHlp = Mage::helper("zolagocheckout");
 $poId = $_po->getId();
-$inPostData = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Inpost::getPopulateMapData();
-$inPostPoints = isset($inPostData["map_points"]) ? $inPostData["map_points"] : "";
+$pwrData = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Pwr::getPopulateMapData();
+$pwrPoints = isset($pwrData["map_points"]) ? $pwrData["map_points"] : "";
 $lockerName = $_po->getDeliveryPointName();
-$lockerCity = $_po->getInpostLocker()->getTown();
+$lockerCity = $_po->getDeliveryPwrPoint()->getTown();
 /** @var Zolago_Dropship_Helper_Data $udropshipHlp */
 $udropshipHlp = Mage::helper('udropship');
 ?>
 <script type="text/javascript">
-    var inPostPointsData = '<?php echo $inPostPoints; ?>';
-    var inPostPoints = (inPostPointsData.length > 0) ? jQuery.parseJSON(inPostPointsData) : [];
+    var pwrPointsData = '<?php echo $pwrPoints; ?>';
+    var pwrPoints = (pwrPointsData.length > 0) ? jQuery.parseJSON(pwrPointsData) : [];
     var localeCode = '<?php echo substr(Mage::getStoreConfig('general/locale/code', Mage::app()->getStore()->getId()),0,2); ?>';
     var poId = "<?php echo $poId; ?>";
-    var pachkomatLocate = "<?php echo Mage::helper('ghinpost')->__("Locker"); ?>";
-    var lockerCity = "<?php echo $lockerCity; ?>";
-    var lockerName = "<?php echo $lockerName; ?>";
+    var pwrLocate = "<?php echo Mage::helper('ghinpost')->__("Pwr Point"); ?>";
+    var lockerPwrCity = "<?php echo $lockerCity; ?>";
+    var lockerPwrName = "<?php echo $lockerName; ?>";
 
     var Inpost = [];
     Inpost['validation_please_select_shipping'] = "<?php echo $_hlp->__("City");?>";
@@ -39,9 +39,9 @@ $udropshipHlp = Mage::helper('udropship');
             <div class="col-sm-6 col-md-6 gui-form-control-wrapper">
                 <div class="gui-form-control">
                     <label for="name" class="gui-label"><?php echo $_hlp->__("City"); ?></label>
-                    <select name="shipping_select_city" class="select2" style="width: 100%;"  data-placeholder="<?php echo $_hlp->__("Select City"); ?>">
+                    <select name="pwr_shipping_select_city" class="select2" style="width: 100%;"  data-placeholder="<?php echo $_hlp->__("Select City"); ?>">
                         <option value="0"><?php echo $_hlp->__("Select City"); ?></option>
-                        <?php foreach ($inPostData["filters"] as $city => $value): ?>
+                        <?php foreach ($pwrData["filters"] as $city => $value): ?>
                             <option value="<?php echo $city; ?>"><?php echo $city; ?></option>
                         <?php endforeach; ?>
                     </select>
@@ -50,7 +50,7 @@ $udropshipHlp = Mage::helper('udropship');
             <div class="col-sm-6 col-md-6 gui-form-control-wrapper">
                 <div class="gui-form-control">
                     <label for="name" class="gui-label"><?php echo $_hlp->__("Address"); ?></label>
-                    <select  class="select2" style="width: 100%;"  data-placeholder="<?php echo $_hlp->__("Choose city first"); ?>"  name="inpost_delivery_point_name" data-default="">
+                    <select  class="select2" style="width: 100%;"  data-placeholder="<?php echo $_hlp->__("Choose city first"); ?>"  name="pwr_delivery_point_name" data-default="">
                         <option value="0"><?php echo $_hlp->__("Choose city first"); ?></option>
                     </select>
                 </div>
@@ -59,9 +59,9 @@ $udropshipHlp = Mage::helper('udropship');
         </div>
         <div class="clearfix map_filter_container invoice-data" style="min-height: 100px;">
             <!--Selected Point here-->
-            <div class="inpost_shipping_select_point_data">
+            <div class="pwr_shipping_select_point_data">
                 <div class="row">
-                    <div class="col-sm-6 address_data"><?php echo $udropshipHlp->formatCustomerAddressInpost($_po) ?></div>
+                    <div class="col-sm-6 address_data"><?php echo $udropshipHlp->formatCustomerAddressPwr($_po) ?></div>
                 </div>
             </div>
         </div>

@@ -40,7 +40,11 @@
 			<action method="setTitle"><title>Vendor Portal</title></action>
 			<action method="addItem">
 				<type>skin_js</type>
-				<name>js/plugins/inpost/address.js</name>
+				<name>js/po/edit/shipping_method/inpost/address.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/po/edit/shipping_method/pwr/address.js</name>
 			</action>
 			<!--<action method="setTemplate"><template>unirgy/dropship/vendor/head.phtml</template></action>-->
 		</reference>
@@ -61,6 +65,7 @@
 				<block name="vendor_po_edit_shipping_method" type="zolagopo/vendor_po_edit_ShippingMethod" template="zolagopo/vendor/po/edit/shipping_method.phtml">
 					<block name="vendor_po_edit_shipping_method_default" type="zolagopo/vendor_po_edit_ShippingMethod" template="zolagopo/vendor/po/edit/shipping_method/default.phtml" />
 					<block name="vendor_po_edit_shipping_method_ghinpost" type="zolagopo/vendor_po_edit_ShippingMethod" template="zolagopo/vendor/po/edit/shipping_method/ghinpost.phtml" />
+					<block name="vendor_po_edit_shipping_method_zospwr" type="zolagopo/vendor_po_edit_ShippingMethod" template="zolagopo/vendor/po/edit/shipping_method/zospwr.phtml" />
 				</block>
 
 
