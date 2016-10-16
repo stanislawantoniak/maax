@@ -143,7 +143,7 @@ function prepareGroupPoints(map_points){
 }
 
 function showShippingData(map_point){
-    var html_data = pachkomatLocate + " " + map_point.name + "<br/>" + map_point.street + " " + map_point.building_number + "<br/>" + map_point.postcode + " " + map_point.town;
+    var html_data = inPostLabel + " " + map_point.name + "<br/>" + map_point.street + " " + map_point.building_number + "<br/>" + map_point.postcode + " " + map_point.town;
     jQuery('.inpost_shipping_select_point_data').css("display","block");
     jQuery('.inpost_shipping_select_point_data .address_data').html(html_data);
     jQuery('[name=choose_inpost]').removeAttr('disabled');

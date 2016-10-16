@@ -3090,7 +3090,7 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
     public function formatCustomerAddressPwr($po, $fullResponse = false, $nl = "<br/>") {
         /** @var ZolagoOs_Pwr_Model_Point $locker */
         $locker = $po->getDeliveryPwrPoint();
-        $result = Mage::helper('ghinpost')->__("Pwr Point") . ' ' . $locker->getName() . $nl
+        $result = Mage::helper('ghinpost')->__("kiosk RUCHu") . ' ' . $locker->getName() . $nl
             . $locker->getStreet() . " " . $locker->getBuildingNumber() . $nl
             . $locker->getPostcode() . " " . $locker->getTown();
         if ($fullResponse) {
