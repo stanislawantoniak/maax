@@ -61,7 +61,7 @@ function constructShippingPwrPointSelectOnLoad(map_points){
     var options = [],
         map_point_long_name;
 
-    options.push('<option value="0">'+Inpost["shipping_map_method_select"]+'</option>');
+    options.push('<option value=0>'+Inpost["shipping_map_method_select"]+'</option>');
     jQuery(map_points).each(function (i, map_point) {
         if(map_point.name == lockerPwrName){
             map_point_long_name = map_point.street + " " + map_point.building_number + ", " + map_point.town  + " (" + map_point.postcode + ")";
@@ -92,7 +92,7 @@ function constructShippingPwrPointSelect(map_points) {
     var options = [],
         map_point_long_name;
 
-    options.push('<option value="0">'+Inpost["shipping_map_method_select"]+'</option>');
+    options.push('<option value=0>'+Inpost["shipping_map_method_select"]+'</option>');
     jQuery(map_points).each(function (i, map_point) {
         map_point_long_name = map_point.street + " " + map_point.building_number + ", " + map_point.town  + " (" + map_point.postcode + ")";
         options.push('<option data-carrier-town="' + map_point.town + '" data-carrier-additional="' + map_point.additional + '" data-carrier-pointcode="' + map_point.name + '" data-carrier-pointid="' + map_point.id + '" value="' + map_point.name + '">' + map_point_long_name + '</option>');
@@ -112,13 +112,16 @@ function constructShippingPwrPointSelect(map_points) {
         jQuery("select[name=pwr_delivery_point_name]")
             .html(options.join(""))
             .attr("disabled", false)
-            .val("default");
+            .val("");
 
         prepareGroupPoints(map_points);
     }
 
     jQuery("select[name=pwr_delivery_point_name]")
-        .select2({dropdownParent: jQuery("#editShippingMethodModal"), language: localeCode});
+        .select2({
+            dropdownParent: jQuery("#editShippingMethodModal"),
+            language: localeCode
+        });
 
     
 }
