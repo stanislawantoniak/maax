@@ -112,7 +112,7 @@ function constructShippingPwrPointSelect(map_points) {
         jQuery("select[name=pwr_delivery_point_name]")
             .html(options.join(""))
             .attr("disabled", false)
-            .val("");
+            .val(0);
 
         prepareGroupPoints(map_points);
     }
