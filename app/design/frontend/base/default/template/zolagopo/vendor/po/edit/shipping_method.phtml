@@ -2,15 +2,13 @@
 
 <?php $_hlp = Mage::helper("zolagopo");?>
 <?php $_po = $this->getPo();
+$poId = $_po->getId();
 $poUdropshipMethod = $_po->getUdropshipMethod();
-//Zend_Debug::dump($poUdropshipMethod);
-//Zend_Debug::dump($_po->getData());
 
 $deliveryMethodInfo = $_po->getOmniChannelMethodInfoByMethod();
 $deliveryCode = $deliveryMethodInfo->getDeliveryCode();
 
 $editableShippingMethods = $this->getEditableShippingMethods();
-
 
 ?>
 <?php $_address = $this->getAddress(); ?>
@@ -18,6 +16,10 @@ $editableShippingMethods = $this->getEditableShippingMethods();
 /** @var Zolago_Common_Helper_Data $_zolagoHlp */
 $_modagoHlp = Mage::helper("zolagocommon");
 ?>
+<script type="text/javascript">
+    var localeCode = '<?php echo substr(Mage::getStoreConfig('general/locale/code', Mage::app()->getStore()->getId()),0,2); ?>';
+    var poId = "<?php echo $poId; ?>";
+</script>
 <!-- Modal <?php echo $_type;?> address -->
 <div class="modal fade" id="editShippingMethodModal">
     <div class="modal-dialog">

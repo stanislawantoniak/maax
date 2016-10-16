@@ -15,13 +15,9 @@ $lockerCity = $_po->getDeliveryPwrPoint()->getTown();
 $udropshipHlp = Mage::helper('udropship');
 ?>
 <script type="text/javascript">
-    var pwrPointsData = '<?php echo $pwrPoints; ?>';
-    var pwrPoints = (pwrPointsData.length > 0) ? jQuery.parseJSON(pwrPointsData) : [];
-    var localeCode = '<?php echo substr(Mage::getStoreConfig('general/locale/code', Mage::app()->getStore()->getId()),0,2); ?>';
-    var poId = "<?php echo $poId; ?>";
-    var pwrLocate = "<?php echo Mage::helper('ghinpost')->__("Pwr Point"); ?>";
     var lockerPwrCity = "<?php echo $lockerCity; ?>";
     var lockerPwrName = "<?php echo $lockerName; ?>";
+    var pwrLocate = "<?php echo Mage::helper('ghinpost')->__("Pwr Point"); ?>";
 
     var Inpost = [];
     Inpost['validation_please_select_shipping'] = "<?php echo $_hlp->__("City");?>";
@@ -30,6 +26,8 @@ $udropshipHlp = Mage::helper('udropship');
     Inpost['shipping_map_nearest'] = "<?php echo $_hlp->__("City"); ?>";
     Inpost['shipping_map_method_select'] = "<?php echo $_hlp->__("Choose city first"); ?>";
 
+    var pwrPointsData = '<?php echo $pwrPoints; ?>';
+    var pwrPoints = (pwrPointsData.length > 0) ? jQuery.parseJSON(pwrPointsData) : [];
 </script>
 
 
