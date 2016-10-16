@@ -1045,6 +1045,9 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         return Mage::getUrl("*/*/edit", array("id"=>$this->_registerPo()->getId()))."#".$anchor;
     }
 
+    /**
+     * @return Mage_Core_Controller_Varien_Action|void
+     */
     public function saveShippingMethodAction() {
         $req	=	$this->getRequest();
         $data	=	$req->getPost();
@@ -1093,17 +1096,15 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                 throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("Order cannot be edited."));
             }
 
-            //Mage::log($data, null, "shipping1.log");
             if(isset($data['add_own']) && $data['add_own']==1) {
                 $orignAddress = $po->getOrder()->getShippingAddress();
                 $oldAddress = $po->getShippingAddress();
 
-                //Mage::log($po->getData(), null, "shipping2.log");
                 $newAddress = clone $orignAddress;
-                //Mage::log($newAddress->getData(), null, "shipping3.log");
 
+                $storeId =$po->getStoreId();
                 $omniChannelMethodInfoByMethod = Mage::helper("udropship")
-                    ->getOmniChannelMethodInfoByMethod(0, $data['udropship_method'], true, true);
+                    ->getOmniChannelMethodInfoByMethod($storeId, $data['udropship_method'], true, true);
 
                 if ($omniChannelMethodInfoByMethod->getDeliveryCode() == GH_Inpost_Model_Carrier::CODE) {
                     $locker = Mage::getModel('ghinpost/locker')->load($data['inpost_delivery_point_name'], 'name');
@@ -1133,8 +1134,9 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                 }
 
                 $condition = json_decode($omniChannelMethodInfoByMethod->getCondition());
-                //Mage::log($condition[0]->price, null, "shipping4.log");
-                $po->setUdropshipMethod($data['udropship_method']);
+                $oldUdropshipMethod = $po->getUdropshipMethod();
+                $newUdropshipMethod = $data['udropship_method'];
+                $po->setUdropshipMethod($newUdropshipMethod);
 
                 $po->setData('base_shipping_amount_incl', $condition[0]->price);
                 $po->setData('shipping_amount_incl', $condition[0]->price);
@@ -1178,6 +1180,12 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                         $po->setOwnBillingAddress($newAddress);
                     }
 
+                    Mage::dispatchEvent("zolagopo_po_shipping_method_change", array(
+                        "po" => $po,
+                        "new_udropship_method" => $newUdropshipMethod,
+                        "old_udropship_method" => $oldUdropshipMethod,
+                        "type" => $type
+                    ));
 
                     Mage::dispatchEvent("zolagopo_po_address_change", array(
                         "po" => $po,
