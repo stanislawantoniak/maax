@@ -682,7 +682,9 @@ if ($isPickUpPaymentCanBeEntered)
 /*******************************************************************************
  *	Shipping address modal
  *******************************************************************************/
-echo $this->getChild("vendor_po_edit_shipping_method")->setAddress($_po->getShippingAddress())->toHtml();
+echo $this->getChild("vendor_po_edit_shipping_method")
+	->setAddress($_po->getShippingAddress())
+	->toHtml();
 
 /*******************************************************************************
  *	Billing address modal

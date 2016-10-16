@@ -1111,7 +1111,12 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                 $deliveryPointMethods = array(
                     GH_Inpost_Model_Carrier::CODE
                 );
-                if(in_array($omniChannelMethodInfoByMethod->getDeliveryCode(),$deliveryPointMethods)){
+                if ($omniChannelMethodInfoByMethod->getDeliveryCode() == GH_Inpost_Model_Carrier::CODE) {
+                    $locker = Mage::getModel('ghinpost/locker')->load($data['delivery_point_name'], 'name');
+
+                    $data['street'] = $locker->getStreet() . " " . $locker->getBuildingNumber();
+                    $data['city'] = $locker->getTown();
+                    $data['postcode'] = $locker->getPostcode();
                     $po->setDeliveryPointName($data['delivery_point_name']);
                 } else {
                     $po->setDeliveryPointName('');
