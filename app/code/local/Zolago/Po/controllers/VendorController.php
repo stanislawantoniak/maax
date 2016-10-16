@@ -1092,22 +1092,18 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             if(!$po->getStatusModel()->isEditingAvailable($po)) {
                 throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("Order cannot be edited."));
             }
-            Mage::log("Data", null, "shipping1.log");
-            Mage::log($data, null, "shipping1.log");
+
+            //Mage::log($data, null, "shipping1.log");
             if(isset($data['add_own']) && $data['add_own']==1) {
                 $orignAddress = $po->getOrder()->getShippingAddress();
                 $oldAddress = $po->getShippingAddress();
 
-                Mage::log("Po", null, "shipping2.log");
-                Mage::log($po->getData(), null, "shipping2.log");
+                //Mage::log($po->getData(), null, "shipping2.log");
                 $newAddress = clone $orignAddress;
-                Mage::log("New address", null, "shipping3.log");
-                Mage::log($newAddress->getData(), null, "shipping3.log");
+                //Mage::log($newAddress->getData(), null, "shipping3.log");
 
                 $omniChannelMethodInfoByMethod = Mage::helper("udropship")
-                    ->getOmniChannelMethodInfoByMethod(0, $data['udropship_method']);
-                Mage::log($omniChannelMethodInfoByMethod->getData(), null, "shipping4.log");
-                $po->setUdropshipMethod($data['udropship_method']);
+                    ->getOmniChannelMethodInfoByMethod(0, $data['udropship_method'], true, true);
 
                 if ($omniChannelMethodInfoByMethod->getDeliveryCode() == GH_Inpost_Model_Carrier::CODE) {
                     $locker = Mage::getModel('ghinpost/locker')->load($data['inpost_delivery_point_name'], 'name');
@@ -1136,7 +1132,12 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                     $po->setDeliveryPointName('');
                 }
 
+                $condition = json_decode($omniChannelMethodInfoByMethod->getCondition());
+                //Mage::log($condition[0]->price, null, "shipping4.log");
+                $po->setUdropshipMethod($data['udropship_method']);
 
+                $po->setData('base_shipping_amount_incl', $condition[0]->price);
+                $po->setData('shipping_amount_incl', $condition[0]->price);
 
                 //validate address data start
                 $errors = false;

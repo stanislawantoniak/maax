@@ -3515,12 +3515,15 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
      * @param bool $includeTitle
      * @return Varien_Object
      */
-    public function getOmniChannelMethodInfoByMethod($storeId, $udropshipMethod, $includeTitle = false)
+    public function getOmniChannelMethodInfoByMethod($storeId, $udropshipMethod, $includeTitle = false, $includeRates = false)
     {
         $collection = Mage::getModel("udropship/shipping")->getCollection();
         $collection->joinDeliveryType();
         if ($includeTitle)
             $collection->joinDeliveryTitle($storeId);
+
+        if ($includeRates)
+            $collection->joinSimpleCondRates();
 
         $collection->getSelect()->having("udropship_method=?", $udropshipMethod);
 

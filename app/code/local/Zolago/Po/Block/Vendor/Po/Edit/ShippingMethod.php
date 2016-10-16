@@ -46,15 +46,20 @@ class Zolago_Po_Block_Vendor_Po_Edit_ShippingMethod
 	{
 		$collection = Mage::getModel("udropship/shipping")->getCollection();
 		$collection->joinDeliveryType();
+		$collection->joinSimpleCondRates();
 
 		$methods = array();
 		foreach ($collection as $collectionItem) {
+			$condition = json_decode($collectionItem->getCondition());
+
 			$methods[$collectionItem->getDeliveryCode()] = array(
 				'title' => $collectionItem->getShippingTitle(),
 				'delivery_code' => $collectionItem->getDeliveryCode(),
-				'udropship_method' => $collectionItem->getUdropshipMethod()
+				'udropship_method' => $collectionItem->getUdropshipMethod(),
+				'udropship_method_price' =>$condition[0]->price
 			);
 		}
+
 		return $methods;
 	}
 
