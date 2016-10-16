@@ -8,7 +8,7 @@ $_type = 'shipping';
 $_modagoHlp = Mage::helper("zolagocheckout");
 $poId = $_po->getId();
 $pwrData = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Pwr::getPopulateMapData();
-$pwrPoints = isset($pwrData["map_points"]) ? $pwrData["map_points"] : "";
+
 $lockerName = $_po->getDeliveryPointName();
 $lockerCity = $_po->getDeliveryPwrPoint()->getTown();
 /** @var Zolago_Dropship_Helper_Data $udropshipHlp */

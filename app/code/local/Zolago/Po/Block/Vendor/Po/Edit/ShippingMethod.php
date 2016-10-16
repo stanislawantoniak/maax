@@ -84,6 +84,11 @@ class Zolago_Po_Block_Vendor_Po_Edit_ShippingMethod
 					$forms['tabs'][Orba_Shipping_Model_Packstation_Pwr::CODE]['template'] = 'vendor_po_edit_shipping_method_zospwr';
 					$forms['methods'][$code]['form_link'] = Orba_Shipping_Model_Packstation_Pwr::CODE;
 					break;
+				case ZolagoOs_PickupPoint_Helper_Data::CODE :
+					$forms['tabs']['pickuppoint']['methods'][] = $code;
+					$forms['tabs']['pickuppoint']['template'] = 'vendor_po_edit_shipping_method_pickuppoint';
+					$forms['methods'][$code]['form_link'] = 'pickuppoint';
+					break;
 				default:
 					$forms['tabs']['default']['methods'][] = $code;
 					$forms['tabs']['default']['template'] = 'vendor_po_edit_shipping_method_default';

@@ -66,6 +66,7 @@
 					<block name="vendor_po_edit_shipping_method_default" type="zolagopo/vendor_po_edit_ShippingMethod" template="zolagopo/vendor/po/edit/shipping_method/default.phtml" />
 					<block name="vendor_po_edit_shipping_method_ghinpost" type="zolagopo/vendor_po_edit_ShippingMethod" template="zolagopo/vendor/po/edit/shipping_method/ghinpost.phtml" />
 					<block name="vendor_po_edit_shipping_method_zospwr" type="zolagopo/vendor_po_edit_ShippingMethod" template="zolagopo/vendor/po/edit/shipping_method/zospwr.phtml" />
+					<block name="vendor_po_edit_shipping_method_pickuppoint" type="zolagopo/vendor_po_edit_ShippingMethod" template="zolagopo/vendor/po/edit/shipping_method/pickuppoint.phtml" />
 				</block>
 
 
