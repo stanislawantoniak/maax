@@ -14,6 +14,7 @@ class Wf_OldStoreCustomer_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function showOldStoreMessage($email, $websiteId)
     {
+        $email = trim($email);
         /** @var $customer Mage_Customer_Model_Customer */
         $customer = Mage::getModel('customer/customer')
             ->setWebsiteId($websiteId);
@@ -21,6 +22,7 @@ class Wf_OldStoreCustomer_Helper_Data extends Mage_Core_Helper_Abstract
 
         if (!$customer->getId()) {
             $oldStoreCustomersCollection = Mage::getModel('wfoldstorecustomer/customer')->getCollection();
+            $oldStoreCustomersCollection->addFieldToFilter("email", $email);
             $oldStoreCustomersCollection->addFieldToFilter("has_account_in_old_store", 1);
             if ($oldStoreCustomersCollection->getFirstItem()->getId()) {
                 return TRUE;
