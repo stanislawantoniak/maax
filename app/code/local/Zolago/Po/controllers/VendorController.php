@@ -1103,8 +1103,9 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                 $newAddress = clone $orignAddress;
 
                 $storeId =$po->getStoreId();
+                Mage::log($po->getData(), null, "11.log");
                 $omniChannelMethodInfoByMethod = Mage::helper("udropship")
-                    ->getOmniChannelMethodInfoByMethod($storeId, $data['udropship_method'], true, true);
+                    ->getOmniChannelMethodInfoByMethod($storeId, $data['udropship_method'], true);
 
                 if ($omniChannelMethodInfoByMethod->getDeliveryCode() == GH_Inpost_Model_Carrier::CODE) {
                     $locker = Mage::getModel('ghinpost/locker')->load($data['inpost_delivery_point_name'], 'name');
@@ -1133,13 +1134,12 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                     $po->setDeliveryPointName('');
                 }
 
-                //$condition = json_decode($omniChannelMethodInfoByMethod->getCondition());
                 $oldUdropshipMethod = $po->getUdropshipMethod();
                 $newUdropshipMethod = $data['udropship_method'];
                 $po->setUdropshipMethod($newUdropshipMethod);
 
-                //$po->setData('base_shipping_amount_incl', $condition[0]->price);
-                //$po->setData('shipping_amount_incl', $condition[0]->price);
+                $newUdropshipMethodDescription = Mage::getStoreConfig('carriers/udtiership/title') . '-' . $omniChannelMethodInfoByMethod->getData("delivery_title");
+                $po->setData('udropship_method_description', $newUdropshipMethodDescription);
 
                 //validate address data start
                 $errors = false;
