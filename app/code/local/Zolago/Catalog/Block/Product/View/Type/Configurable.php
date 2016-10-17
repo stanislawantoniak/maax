@@ -181,6 +181,14 @@ class Zolago_Catalog_Block_Product_View_Type_Configurable extends Mage_Catalog_B
 		foreach ($this->getAllowAttributes() as $attribute) {
 			$productAttribute = $attribute->getProductAttribute();
 			$attributeId = $productAttribute->getId();
+
+			$attributOptions = $productAttribute->getSource()->getAllOptions(false);
+			$optionPositions = array();
+			foreach ($attributOptions as $i => $_option) {
+				$optionPositions[$_option['value']] = $i;
+			}
+
+
 			$info = array(
 				'id'        => $productAttribute->getId(),
 				'code'      => $productAttribute->getAttributeCode(),
@@ -213,6 +221,7 @@ class Zolago_Catalog_Block_Product_View_Type_Configurable extends Mage_Catalog_B
 
 					$info['options'][] = array(
 						'id'        => $value['value_index'],
+						'position' => $optionPositions[$value['value_index']],
 						'label'     => $value['label'],
 						'price'     => $configurablePrice,
 						'oldPrice'  => $this->_prepareOldPrice($value['pricing_value'], $value['is_percent']),
@@ -223,6 +232,10 @@ class Zolago_Catalog_Block_Product_View_Type_Configurable extends Mage_Catalog_B
 					$optionPrices[] = $configurablePrice;
 				}
 			}
+
+
+			$this->arraySortByColumn($info['options'], 'position');
+
 			/**
 			 * Prepare formated values for options choose
 			 */
@@ -285,4 +298,16 @@ class Zolago_Catalog_Block_Product_View_Type_Configurable extends Mage_Catalog_B
 		return Mage::helper('core')->jsonEncode($config);
 	}
 
+
+	function arraySortByColumn(&$arr, $col, $dir = SORT_ASC) {
+		$sort_col = array();
+		foreach ($arr as $key=> $row) {
+			$sort_col[$key] = $row[$col];
+		}
+
+		array_multisort($sort_col, $dir, $arr);
+	}
+
+
 }
+
