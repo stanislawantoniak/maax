@@ -15,7 +15,7 @@ $collection->addFieldToFilter("is_available_as_pickup_point", 1);
                 data-carrier-pointcode="<?php echo $pos->getId(); ?>"
                 data-carrier-additional="<?php echo $pos->getStreet(); ?> <?php echo $pos->getPostcode(); ?>"
         >
-            <?php echo $pos->getName(); ?>
+            <?php echo $pos->getStreet(); ?>, <?php echo $pos->getCity(); ?>, <?php echo $pos->getPostcode(); ?> (<?php echo $pos->getName(); ?>)
         </option>
     <?php endforeach; ?>
 </select>
