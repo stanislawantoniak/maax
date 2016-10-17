@@ -222,7 +222,7 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 				return $cacheData['favorites_products'];
 			}
 		}
-		$this->getFavoritesDetails();
+		$this->getFavoritesDetails(true);
 		return $this->customerInfo['favorites_products'];
 	}
 
