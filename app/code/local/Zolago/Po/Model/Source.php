@@ -40,6 +40,7 @@ class Zolago_Po_Model_Source extends ZolagoOs_OmniChannelPo_Model_Source
                 self::UDPO_STATUS_DELIVERED  => $hlp->__('Delivered'),
                 self::UDPO_STATUS_CANCELED   => $hlp->__('Canceled'),
                 self::UDPO_STATUS_RETURNED   => $hlp->__('Returned'),
+                self::UDPO_STATUS_TO_PICK    => $hlp->__('Ready for pickup'),
             );
             if (Mage::helper('udropship')->isModuleActive('ustockpo')) {
                 $options[self::UDPO_STATUS_STOCKPO_READY]   = $hlp->__('Ready for stock PO');
