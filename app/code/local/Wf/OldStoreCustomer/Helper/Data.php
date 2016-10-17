@@ -21,7 +21,7 @@ class Wf_OldStoreCustomer_Helper_Data extends Mage_Core_Helper_Abstract
 
         if (!$customer->getId()) {
             $oldStoreCustomersCollection = Mage::getModel('wfoldstorecustomer/customer')->getCollection();
-            $oldStoreCustomersCollection->addFieldToFilter("has_account_in_new_store", 1);
+            $oldStoreCustomersCollection->addFieldToFilter("has_account_in_old_store", 1);
             if ($oldStoreCustomersCollection->getFirstItem()->getId()) {
                 return TRUE;
             }
