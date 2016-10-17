@@ -24,6 +24,7 @@ class Zolago_Wishlist_Helper_Data extends Mage_Wishlist_Helper_Data{
 		}
 		return $this->_cookie;
 	}
+	
 
 	/**
 	 * @return Mage_Customer_Model_Customer
