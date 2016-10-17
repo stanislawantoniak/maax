@@ -1,0 +1,21 @@
+<?php
+/** @var Zolago_Checkout_Helper_Data $helper */
+$helper = Mage::helper("zolagocheckout");
+
+$collection = Mage::getModel("zolagopos/pos")->getCollection();
+$collection->addFieldToFilter("is_available_as_pickup_point", 1);
+
+?>
+
+<select name="pickuppoint_delivery_point_name" style="width: 100%;" class="select2">
+    <?php foreach ($collection as $pos): ?>
+        <option value="<?php echo $pos->getId(); ?>"
+                data-carrier-town="<?php echo $pos->getCity(); ?>"
+                data-carrier-pointid="<?php echo $pos->getId(); ?>"
+                data-carrier-pointcode="<?php echo $pos->getId(); ?>"
+                data-carrier-additional="<?php echo $pos->getStreet(); ?> <?php echo $pos->getPostcode(); ?>"
+        >
+            <?php echo $pos->getName(); ?>
+        </option>
+    <?php endforeach; ?>
+</select>

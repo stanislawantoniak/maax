@@ -3067,12 +3067,50 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
      * @param string $nl
      * @return string
      */
+    public function formatCustomerAddressPickUpPoint($po, $fullResponse = false, $nl = "<br/>") {
+        /** @var ZolagoOs_Pwr_Model_Point $locker */
+        $locker = $po->getDeliveryPickUpPoint();
+        $result = Mage::helper('ghinpost')->__("Pickup Point") . ' ' . $locker->getName() . $nl
+            . $locker->getStreet() . $nl
+            . $locker->getPostcode() . " " . $locker->getCity();
+        if ($fullResponse) {
+            $result .= $nl . "T. " . $po->getShippingAddress()->getTelephone();
+        }
+        return $result;
+    }
+
+    /**
+     * @param Zolago_Po_Model_Po $po
+     * @param bool $fullResponse
+     * @param string $nl
+     * @return string
+     */
     public function formatCustomerAddressInpost($po, $fullResponse = false, $nl = "<br/>") {
         /** @var GH_Inpost_Model_Locker $locker */
         $locker = $po->getInpostLocker();
         $result = Mage::helper('ghinpost')->__("Locker") . ' ' . $locker->getName() . $nl
                   . $locker->getStreet() . " " . $locker->getBuildingNumber() . $nl
                   . $locker->getPostcode() . " " . $locker->getTown();
+        if ($fullResponse) {
+            $result .= $nl . "T. " . $po->getShippingAddress()->getTelephone();
+        }
+        return $result;
+    }
+
+
+
+    /**
+     * @param Zolago_Po_Model_Po $po
+     * @param bool $fullResponse
+     * @param string $nl
+     * @return string
+     */
+    public function formatCustomerAddressPwr($po, $fullResponse = false, $nl = "<br/>") {
+        /** @var ZolagoOs_Pwr_Model_Point $locker */
+        $locker = $po->getDeliveryPwrPoint();
+        $result = Mage::helper('ghinpost')->__("kiosk RUCHu") . ' ' . $locker->getName() . $nl
+            . $locker->getStreet() . " " . $locker->getBuildingNumber() . $nl
+            . $locker->getPostcode() . " " . $locker->getTown();
         if ($fullResponse) {
             $result .= $nl . "T. " . $po->getShippingAddress()->getTelephone();
         }
@@ -3477,12 +3515,15 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
      * @param bool $includeTitle
      * @return Varien_Object
      */
-    public function getOmniChannelMethodInfoByMethod($storeId, $udropshipMethod, $includeTitle = false)
+    public function getOmniChannelMethodInfoByMethod($storeId, $udropshipMethod, $includeTitle = false, $includeRates = false)
     {
         $collection = Mage::getModel("udropship/shipping")->getCollection();
         $collection->joinDeliveryType();
         if ($includeTitle)
             $collection->joinDeliveryTitle($storeId);
+
+        if ($includeRates)
+            $collection->joinSimpleCondRates();
 
         $collection->getSelect()->having("udropship_method=?", $udropshipMethod);
 

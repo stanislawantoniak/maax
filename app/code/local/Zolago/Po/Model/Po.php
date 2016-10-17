@@ -1269,6 +1269,44 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 		return $this->getData('delivery_inpost_locker');
 	}
 
+
+	/**
+	 * Simple load pwr locker by name
+	 *
+	 * @param bool $force
+	 * @return ZolagoOs_Pwr_Model_Point
+	 */
+	public function getPwrLocker($force = false) {
+		if (!$this->hasData('pwr_locker') || $force) {
+			$pwrLockerName = $this->getDeliveryPointName();
+			/** @var ZolagoOs_Pwr_Model_Point $locker */
+			$locker = Mage::getModel('zospwr/point')->load($pwrLockerName, 'name');
+			$this->setData('pwr_locker', $locker);
+		}
+		return $this->getData('pwr_locker');
+	}
+	/**
+	 * Load PWR point by name only if delivery method was zospwr
+	 *
+	 * @param bool $force
+	 * @return ZolagoOs_Pwr_Model_Point
+	 */
+	public function getDeliveryPwrPoint($force = false) {
+		if (!$this->hasData('delivery_pwr_locker') || $force) {
+			/** @var ZolagoOs_Pwr_Model_Point $point */
+			$point = Mage::getModel("zospwr/point");
+
+			if ($this->isDeliveryPwr($force)) {
+				$pwrLockerName = $this->getDeliveryPointName();
+				$point->load($pwrLockerName, 'name');
+			}
+			$this->setData('delivery_pwr_locker', $point);
+		}
+		return $this->getData('delivery_pwr_locker');
+	}
+
+
+
 	/**
 	 * Load POS by pos_id (delivery_point_name) if delivery method was pick-up point
 	 * 
@@ -1287,7 +1325,21 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 		}
 		return $this->getData('delivery_pickup_point');
 	}
-	
+
+	/**
+	 * @param bool $force
+	 * @return bool
+	 */
+	public function isDeliveryPwr($force = false) {
+		if (!$this->hasData('is_delivery_pwr') || $force) {
+			$methodCode = $this->getShippingMethodInfo()->getDeliveryCode();
+
+			$isPwr = ($methodCode == Orba_Shipping_Model_Packstation_Pwr::CODE);
+			$this->setData('is_delivery_pwr', $isPwr);
+		}
+		return $this->getData('is_delivery_pwr');
+	}
+
 	/**
 	 * @param bool $force
 	 * @return bool

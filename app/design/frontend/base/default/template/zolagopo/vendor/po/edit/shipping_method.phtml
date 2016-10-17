@@ -1,0 +1,116 @@
+<?php /* @var $this Zolago_Po_Block_Vendor_Po_Edit_ShippingMethod */  ?>
+
+<?php $_hlp = Mage::helper("zolagopo");?>
+<?php $_po = $this->getPo();
+$poId = $_po->getId();
+$poUdropshipMethod = $_po->getUdropshipMethod();
+
+$deliveryMethodInfo = $_po->getOmniChannelMethodInfoByMethod();
+$deliveryCode = $deliveryMethodInfo->getDeliveryCode();
+
+$editableShippingMethods = $this->getEditableShippingMethods();
+
+?>
+<?php $_address = $this->getAddress(); ?>
+<?php $_type = 'shipping';
+/** @var Zolago_Common_Helper_Data $_zolagoHlp */
+$_modagoHlp = Mage::helper("zolagocommon");
+?>
+<script type="text/javascript">
+    var localeCode = '<?php echo substr(Mage::getStoreConfig('general/locale/code', Mage::app()->getStore()->getId()),0,2); ?>';
+    var poId = "<?php echo $poId; ?>";
+
+    var Inpost = [];
+    Inpost['pwr_shipping_map_method_select'] = "<?php echo $_hlp->__("Choose point"); ?>";
+
+    Inpost['validation_please_select_shipping'] = "<?php echo $_hlp->__("City");?>";
+    Inpost['shipping_map_select_city'] = "<?php echo $_hlp->__("City"); ?>";
+    Inpost['shipping_map_select_locker'] = "<?php echo $_hlp->__("City"); ?>";
+    Inpost['shipping_map_nearest'] = "<?php echo $_hlp->__("City"); ?>";
+    Inpost['shipping_map_method_select'] = "<?php echo $_hlp->__("Choose locker"); ?>";
+
+</script>
+<!-- Modal <?php echo $_type;?> address -->
+<div class="modal fade" id="editShippingMethodModal">
+    <div class="modal-dialog">
+        <form data-address-id="<?php echo $_address->getId();?>" id="<?php echo $_type;?>-address-form" action="<?php echo $this->getFormUrl() ;?>" class="form-horizontal row-border" method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">
+                        <?php echo $_hlp->__("Edit shipping address");?>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <?php if (!empty($editableShippingMethods)): ?>
+                        <ul class="nav nav-pills">
+                            <?php foreach ($editableShippingMethods['methods'] as $deliveryMethod): ?>
+                                <li class="nav-item <?php if($deliveryMethod['udropship_method'] ==$poUdropshipMethod): ?>active<?php endif; ?>">
+                                    <a nav-link data-toggle="pill" href="#<?php echo $deliveryMethod['form_link']; ?>">
+                                        <input type="radio" name="udropship_method" id="method_<?php echo $deliveryMethod['delivery_code']; ?>" value="<?php echo $deliveryMethod['udropship_method']; ?>" autocomplete="off" <?php if($deliveryMethod['udropship_method'] ==$poUdropshipMethod): ?>checked<?php endif; ?>>
+                                        <?php echo $deliveryMethod['title']; ?>
+                                    </a>
+                                </li>
+                            <?php endforeach; ?>
+                            <?php unset($deliveryMethod); ?>
+                        </ul>
+
+                        <div class="tab-content">
+                            <?php foreach ($editableShippingMethods['tabs'] as $tablink => $tabInfo): ?>
+                                <div id="<?php echo $tablink; ?>" class="tab-pane fade <?php if(in_array($deliveryCode, $tabInfo['methods'])): ?>in active<?php endif; ?>">
+                                    <div>
+                                        <?php echo $this->getChild($tabInfo['template'])->toHtml(); ?>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $_modagoHlp->__("Cancel");?></button>
+                    <button type="submit" name="add_own" value="1" class="btn form-btn-loading btn-primary" data-loading-text="<?php echo $_modagoHlp->__("Processing...");?>"><?php echo $_modagoHlp->__("Save address");?></button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script type="text/javascript">
+    jQuery(function($){
+
+        var form = $("#<?php echo $_type;?>-address-form");
+        form.validate({
+            rules: {
+                "postcode": {
+                    postcodeWithReplace: true,
+                    required: true
+                },
+                "firstname": {
+                    required: true
+                },
+                "lastname": {
+                    required: true
+                },
+                "telephone": {
+                    required: true,
+                    "validate-telephone": true
+                },
+                "street": {
+                    required: true
+                },
+                "city": {
+                    required: true
+                }
+            }
+        });
+
+        form.find('button[name=restore]').click(function() {
+            form.validate().settings.ignore = "*";
+            form.submit();
+        });
+
+        jQuery('a[data-toggle="pill"]').on('shown.bs.tab', function (e) {
+            jQuery(e.target).find("input[name=udropship_method]").prop("checked", true);
+        });
+    });
+</script>
