@@ -1133,13 +1133,13 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                     $po->setDeliveryPointName('');
                 }
 
-                $condition = json_decode($omniChannelMethodInfoByMethod->getCondition());
+                //$condition = json_decode($omniChannelMethodInfoByMethod->getCondition());
                 $oldUdropshipMethod = $po->getUdropshipMethod();
                 $newUdropshipMethod = $data['udropship_method'];
                 $po->setUdropshipMethod($newUdropshipMethod);
 
-                $po->setData('base_shipping_amount_incl', $condition[0]->price);
-                $po->setData('shipping_amount_incl', $condition[0]->price);
+                //$po->setData('base_shipping_amount_incl', $condition[0]->price);
+                //$po->setData('shipping_amount_incl', $condition[0]->price);
 
                 //validate address data start
                 $errors = false;
