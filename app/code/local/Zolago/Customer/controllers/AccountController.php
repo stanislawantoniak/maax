@@ -128,13 +128,21 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
         //trim username
         $login = $this->getRequest()->getPost('login');
         $login['username'] = trim($login['username']);
+
+		if(Mage::helper('wfoldstorecustomer')->showOldStoreMessage($login['username'], Mage::app()->getWebsite()->getId())){
+			Mage::getSingleton('core/session')->addError(Mage::helper('wfoldstorecustomer')->getOldStoreAccountMessage($this->getRequest()->getParam("is_checkout")));
+			$this->_loginPostRedirect();
+			return;
+		}
+
+
         $this->getRequest()->setPost('login', $login);
 
         parent::loginPostAction();
 		
 		
 		
-		// Add success if login sucessful (by core session - visable in both customer / checkout)
+		// Add success if login successful (by core session - visible in both customer / checkout)
         if ($this->_getSession()->isLoggedIn()) {
 			
             Mage::getSingleton('core/session')->addSuccess(
