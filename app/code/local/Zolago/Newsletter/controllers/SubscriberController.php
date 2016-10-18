@@ -2,6 +2,28 @@
 require_once Mage::getModuleDir('controllers', 'SalesManago_Tracking') . DS . "Newsletter". DS ."SubscriberController.php";
 class Zolago_Newsletter_SubscriberController extends SalesManago_Tracking_Newsletter_SubscriberController
 {
+    protected $_useSalt = false;
+    protected function _getRefererUrl() {
+        $url = parent::_getRefererUrl();
+        if ($this->_useSalt) {
+            $obj = Zend_Uri_Http::fromString($url);
+            $obj->addReplaceQueryParameters(array('salt'=>uniqid()));
+            $url = $obj->getUri();
+        }
+        return $url;
+    }
+    public function _redirectUrl($url) {
+        if ($this->_useSalt) {
+            $obj = Zend_Uri_Http::fromString($url);
+            $obj->addReplaceQueryParameters(array('salt'=>uniqid()));
+            $url = $obj->getUri();            
+        }
+        return parent::_redirectUrl($url);
+    }
+    public function newAction() {
+        $this->_useSalt = true;
+        return parent::newAction();
+    }
     public function invitationAction()
     {
         $_helper = Mage::helper("zolagonewsletter");
@@ -17,9 +39,9 @@ class Zolago_Newsletter_SubscriberController extends SalesManago_Tracking_Newsle
      */
     public function confirmAction()
     {
+        $this->_useSalt = true;
         if (!Mage::helper("zolagonewsletter")->isModuleActive())
             return parent::confirmAction();
-
         $_helper = Mage::helper("zolagonewsletter");
         $error = $this->confirm(
             $this->__('Invalid subscription confirmation code.'),

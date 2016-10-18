@@ -142,6 +142,59 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
         return $margins;
     }
 
+
+    /**
+     * @param $skuS
+     *
+     * @return array $assoc
+     */
+    public function getPriceMarginValuesSimple($skuS)
+    {
+        $margins = array();
+
+        if (empty($skuS)) {
+            return array();
+        }
+        $entityTypeID = Mage::getModel('catalog/product')->getResource()->getTypeId();
+
+        $readConnection = $this->_getReadAdapter();
+        $select = $readConnection->select();
+        $select->from(
+            array("products" =>  $this->getTable("catalog/product")),
+            array(
+                'product_id' => 'products.entity_id','products.sku'
+            )
+        );
+        $select->join(
+            array("margins" =>  'catalog_product_entity_text'),
+            'products.entity_id=margins.entity_id',
+            array(
+                'price_margin' => 'margins.value',
+                'store' => 'margins.store_id'
+            )
+        );
+        $select->join(
+            array("attributes" => $this->getTable("eav/attribute")),
+            "attributes.attribute_id=margins.attribute_id",
+            array()
+        );
+        $select->where(
+            "attributes.entity_type_id=?", $entityTypeID
+        );
+        $select->where(
+            "attributes.attribute_code=?", Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_PRICE_MARGIN_CODE
+        );
+        $select->where("products.sku IN(?)", $skuS);
+
+        try {
+            $margins = $readConnection->fetchAll($select);
+        } catch (Exception $e) {
+            Mage::throwException("Error fetching price_margin values");
+        }
+
+        return $margins;
+    }
+
     /**
      * Fetch products that should be updated by converter
      * Converter Msrp Type = From file
@@ -193,6 +246,64 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
         $select->where("msrp_source.value=?", Zolago_Catalog_Model_Product_Source_Convertermsrptype::FLAG_MANUAL);
         $select->where("products.sku IN(?)", $skuS);
         //Mage::log($select->__toString(), 0, 'priceMSRPSource.log');
+        try {
+            $msrp = $readConnection->fetchAll($select);
+        } catch (Exception $e) {
+            Mage::throwException("Error fetching converter_msrp_type values");
+        }
+
+        return $msrp;
+    }
+
+
+    /**
+     * Fetch products that should be updated by converter (from SIMPLE)
+     * Converter Msrp Type = From file
+     * @param $skuS
+     * @return array
+     * @throws Mage_Core_Exception
+     */
+    public function getMSRPSourceValuesManualConverterSimple($skuS)
+    {
+        $msrp = array();
+
+        if (empty($skuS)) {
+            return array();
+        }
+        $entityTypeID = Mage::getModel('catalog/product')->getResource()->getTypeId();
+
+        $readConnection = $this->_getReadAdapter();
+        $select = $readConnection->select();
+        $select->from(
+            array("msrp_source" => "catalog_product_entity_int"),
+            array(
+                "store" => "msrp_source.store_id",
+                "msrp_source_type" => "msrp_source.value"
+            )
+        );
+
+        $select->join(
+            array("products" => $this->getTable("catalog/product")),
+            "products.entity_id=msrp_source.entity_id",
+            array(
+                'products.sku',
+                'product_id' => 'products.entity_id'
+            )
+        );
+        $select->join(
+            array("attributes" => $this->getTable("eav/attribute")),
+            "attributes.attribute_id=msrp_source.attribute_id",
+            array()
+        );
+        $select->where(
+            "attributes.entity_type_id=?", $entityTypeID
+        );
+        $select->where(
+            "attributes.attribute_code=?", Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_MSRP_TYPE_CODE
+        );
+        $select->where("msrp_source.value=?", Zolago_Catalog_Model_Product_Source_Convertermsrptype::FLAG_MANUAL);
+        $select->where("products.sku IN(?)", $skuS);
+        
         try {
             $msrp = $readConnection->fetchAll($select);
         } catch (Exception $e) {
@@ -318,6 +429,67 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
         return $priceType;
     }
 
+
+    /**
+     * Get price type from simple (IPSON)
+     * @param $skus
+     * @return array
+     * @throws Mage_Core_Exception
+     */
+    public function getConverterPriceTypeSimple($skus)
+    {
+        if (empty($skus)) {
+            return array();
+        }
+        $priceType = array();
+        $entityTypeID = Mage::getModel('catalog/product')->getResource()->getTypeId();
+
+        $readConnection = $this->_getReadAdapter();
+        $select = $readConnection->select();
+        $select->from(
+            array("products" => $this->getTable("catalog/product")),
+            array(
+                'product_id' => 'products.entity_id', 'products.sku'
+            )
+        );
+
+        $select->join(
+            array("integ" =>  'catalog_product_entity_int'),
+            'products.entity_id=integ.entity_id',
+            array(
+                'price_type' => 'integ.value',
+                'store' => 'integ.store_id'
+            )
+        );
+        $select->join(
+            array("attributes" => $this->getTable("eav/attribute")),
+            "attributes.attribute_id=integ.attribute_id",
+            array()
+        );
+        $select->join(
+            array('option_value' => 'eav_attribute_option_value'),
+            'integ.value=option_value.option_id',
+            array(
+                'price_type' => 'option_value.value',
+            )
+        );
+
+        $select->where(
+            "attributes.entity_type_id=?", $entityTypeID
+        );
+        $select->where(
+            "attributes.attribute_code=?", Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_PRICE_TYPE_CODE
+        );
+        $select->where("products.sku IN(?)", $skus);
+
+        try {
+            $priceType = $readConnection->fetchAll($select);
+        } catch (Exception $e) {
+            Mage::throwException("Error fetching converter_price_type values");
+        }
+        return $priceType;
+    }
+
     /**
      * @param $skus
      * @return array
@@ -376,6 +548,7 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
             "attributes.attribute_code=?", Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_PRICE_TYPE_CODE
         );
         $select->where("products.sku IN(?)", $skus);
+        Mage::log((string)$select, null, "xxx.log");
 
         try {
             $priceType = $readConnection->fetchAll($select);
@@ -384,6 +557,8 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
         }
         return $priceType;
     }
+
+
 
     /**
      * get child products for configurable products

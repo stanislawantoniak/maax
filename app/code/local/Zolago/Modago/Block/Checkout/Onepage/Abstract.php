@@ -5,6 +5,82 @@
 abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checkout_Block_Onepage_Abstract {
 
 
+
+	/**
+	 * Delivery point info constructor for checkout
+	 * @return stdClass
+	 */
+	public function getDeliveryPointCheckout(){
+
+		/** @var Zolago_Checkout_Helper_Data $helper */
+		$helper = Mage::helper("zolagocheckout");
+
+		$deliveryMethodData = $helper->getMethodCodeByDeliveryType();
+		$deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
+
+
+		$deliveryPoint = new stdClass();
+		$deliveryPoint->id = NULL;
+		$deliveryPoint->checkout = new stdClass();
+		switch ($deliveryMethodCode) {
+			case ZolagoOs_PickupPoint_Helper_Data::CODE:
+				/* @var $pos  Zolago_Pos_Model_Pos */
+				$pos = $helper->getPickUpPoint();
+
+				$deliveryPoint->id = $pos->getId();
+				$deliveryPoint->name = $pos->getName();
+				$deliveryPoint->delivery_point_name = $pos->getId(); //this value will be saved to PO(delivery_point_name)
+				$deliveryPoint->city = $pos->getCity();
+				$deliveryPoint->street = $pos->getStreet();
+				$deliveryPoint->buildingNumber = "";
+				$deliveryPoint->postcode = $pos->getPostcode();
+				$deliveryPoint->locationDescription = "";
+
+				$deliveryPoint->checkout->title = $helper->__("Pick-Up Point");
+				$deliveryPoint->checkout->logo = '<figure class="truck"><i class="fa fa-map-marker fa-3x"></i></figure>';
+				$deliveryPoint->checkout->additionalInfo1 = "";
+				$deliveryPoint->checkout->additionalInfo2 = "";
+				break;
+			case GH_Inpost_Model_Carrier::CODE:
+				/* @var $locker GH_Inpost_Model_Locker */
+				$locker = $helper->getInpostLocker();
+
+				$deliveryPoint->id = $locker->getId();
+				$deliveryPoint->name = $locker->getName();
+				$deliveryPoint->delivery_point_name = $locker->getName(); //this value will be saved to PO(delivery_point_name)
+				$deliveryPoint->city = $locker->getTown();
+				$deliveryPoint->street = $locker->getStreet();
+				$deliveryPoint->postcode = $locker->getPostcode();
+				$deliveryPoint->buildingNumber = $locker->getBuildingNumber();
+				$deliveryPoint->locationDescription = $locker->getLocationDescription();
+
+				$deliveryPoint->checkout->title = $helper->__("Locker InPost");
+				$deliveryPoint->checkout->logo = '<figure class="inpost-img"><div><img src="'.$this->getSkinUrl('images/inpost/checkout-logo.png').'"></div></figure><br/>';
+				$deliveryPoint->checkout->additionalInfo1 = $helper->__("The phone number is required to receive package from locker.") . "<br/>";
+				$deliveryPoint->checkout->additionalInfo2 = $helper->__("We do not use it in any other way without your permission!");
+				break;
+            case Orba_Shipping_Model_Packstation_Pwr::CODE:
+                /* @var $locker ZolagoOs_Pwr_Model_Point */
+                $point = $helper->getPwrPoint();
+
+                $deliveryPoint->id = $point->getId();
+                $deliveryPoint->name = $point->getName();
+                $deliveryPoint->delivery_point_name = $point->getName();
+                $deliveryPoint->city = $point->getTown();
+                $deliveryPoint->street = $point->getStreet();
+                $deliveryPoint->postcode = $point->getPostcode();
+                $deliveryPoint->buildingNumber = $point->getBuildingNumber();
+                $deliveryPoint->locationDescription = $point->getLocationDescription();
+
+                $deliveryPoint->checkout->title = $helper->__("Locker PwR");
+                $deliveryPoint->checkout->logo = '<figure class="pwr-img"><div><img src="'.$this->getSkinUrl('images/pwr/checkout-logo.png').'"></div></figure><br/>';
+                $deliveryPoint->checkout->additionalInfo1 = $helper->__("The phone number is required to receive package from locker.") . "<br/>";
+                $deliveryPoint->checkout->additionalInfo2 = $helper->__("We do not use it in any other way without your permission!");
+                break;
+		}
+
+		return $deliveryPoint;
+	}
     /**
      * @param $deliveryMethod
      * @param $deliveryPointIdentifier
@@ -55,81 +131,6 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
     }
 
     /**
-     * Delivery point info constructor for checkout
-     * @return stdClass
-     */
-    public function getDeliveryPointCheckout() {
-
-        /** @var Zolago_Checkout_Helper_Data $helper */
-        $helper = Mage::helper("zolagocheckout");
-
-        $deliveryMethodData = $helper->getMethodCodeByDeliveryType();
-        $deliveryMethodCode = $deliveryMethodData->getDeliveryCode();
-
-
-        $deliveryPoint = new stdClass();
-        $deliveryPoint->id = NULL;
-        $deliveryPoint->checkout = new stdClass();
-        switch ($deliveryMethodCode) {
-        case 'zolagopickuppoint':
-            /* @var $pos  Zolago_Pos_Model_Pos */
-            $pos = $helper->getPickUpPoint();
-
-            $deliveryPoint->id = $pos->getId();
-            $deliveryPoint->name = $pos->getName();
-            $deliveryPoint->delivery_point_name = $pos->getId(); //this value will be saved to PO(delivery_point_name)
-            $deliveryPoint->city = $pos->getCity();
-            $deliveryPoint->street = $pos->getStreet();
-            $deliveryPoint->buildingNumber = "";
-            $deliveryPoint->postcode = $pos->getPostcode();
-            $deliveryPoint->locationDescription = "";
-
-            $deliveryPoint->checkout->title = $helper->__("Pick-Up Point");
-            $deliveryPoint->checkout->logo = '<figure class="truck"><i class="fa fa-map-marker fa-3x"></i></figure>';
-            $deliveryPoint->checkout->additionalInfo1 = "";
-            $deliveryPoint->checkout->additionalInfo2 = "";
-            break;
-        case 'ghinpost':
-            /* @var $locker GH_Inpost_Model_Locker */
-            $locker = $helper->getInpostLocker();
-
-            $deliveryPoint->id = $locker->getId();
-            $deliveryPoint->name = $locker->getName();
-            $deliveryPoint->delivery_point_name = $locker->getName(); //this value will be saved to PO(delivery_point_name)
-            $deliveryPoint->city = $locker->getTown();
-            $deliveryPoint->street = $locker->getStreet();
-            $deliveryPoint->postcode = $locker->getPostcode();
-            $deliveryPoint->buildingNumber = $locker->getBuildingNumber();
-            $deliveryPoint->locationDescription = $locker->getLocationDescription();
-
-            $deliveryPoint->checkout->title = $helper->__("Locker InPost");
-            $deliveryPoint->checkout->logo = '<figure class="inpost-img"><div><img src="'.$this->getSkinUrl('images/inpost/checkout-logo.png').'"></div></figure><br/>';
-            $deliveryPoint->checkout->additionalInfo1 = $helper->__("The phone number is required to receive package from locker.") . "<br/>";
-            $deliveryPoint->checkout->additionalInfo2 = $helper->__("We do not use it in any other way without your permission!");
-            break;
-        case 'zolagopwr':
-            /* @var $locker ZolagoOs_Pwr_Model_Point */
-            $point = $helper->getPwrPoint();
-
-            $deliveryPoint->id = $point->getId();
-            $deliveryPoint->name = $point->getName();
-            $deliveryPoint->delivery_point_name = $point->getName();
-            $deliveryPoint->city = $point->getTown();
-            $deliveryPoint->street = $point->getStreet();
-            $deliveryPoint->postcode = $point->getPostcode();
-            $deliveryPoint->buildingNumber = $point->getBuildingNumber();
-            $deliveryPoint->locationDescription = $point->getLocationDescription();
-
-            $deliveryPoint->checkout->title = $helper->__("Locker PwR");
-            $deliveryPoint->checkout->logo = '<figure class="pwr-img"><div><img src="'.$this->getSkinUrl('images/pwr/checkout-logo.png').'"></div></figure><br/>';
-            $deliveryPoint->checkout->additionalInfo1 = $helper->__("The phone number is required to receive package from locker.") . "<br/>";
-            $deliveryPoint->checkout->additionalInfo2 = $helper->__("We do not use it in any other way without your permission!");
-            break;
-        }
-
-        return $deliveryPoint;
-    }
-    /**
      * @return GH_Inpost_Model_Locker
      */
     public function getInpostLocker() {
@@ -148,6 +149,132 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
         return $point;
     }
 
+
+
+	public function getRateItems()
+	{
+		$rates = array();
+
+		$methodsByCode = array();
+
+		$qRates = $this->getRates();
+		$allMethodsByCode = array();
+		$vendors = array();
+
+		$daysInTransitData = array();
+		$shipping = $this->getUdropShippingMethods();
+		$shippingMethods = array();
+
+		foreach($shipping as $shippingItem){
+			$daysInTransitData[$shippingItem->getMethodCode()] = $shippingItem->getDaysInTransit();
+			$shippingMethods[$shippingItem->getMethodCode()] = $shippingItem->getData();
+
+		}
+
+		foreach ($qRates as $cCode => $cRates) {
+
+			foreach ($cRates as $rate) {
+				/* @var $rate Unirgy_DropshipSplit_Model_Quote_Rate */
+				$vId = $rate->getUdropshipVendor();
+
+				if (!$vId) {
+					continue;
+				}
+				$rates[$vId][$cCode][] = $rate;
+				$vendors[$vId] = $vId;
+
+				$deliveryType = "";
+				$deliveryTypeModel = Mage::getModel("udtiership/deliveryType")->load($rate->getMethod());
+				if ($deliveryTypeModel->getId()) {
+					$deliveryType = $deliveryTypeModel->getDeliveryCode();
+				}
+
+
+				if(isset($shippingMethods[$rate->getMethod()])){
+					$methodsByCode[$rate->getCode()] = array(
+						'vendor_id' => $vId,
+						'code' => $rate->getCode(),
+						'carrier_title' => $rate->getData('carrier_title'),
+						'method_title' => $rate->getData('method_title'),
+						'days_in_transit' => (isset($daysInTransitData[$rate->getMethod()]) ? $daysInTransitData[$rate->getMethod()] : ""),
+						"delivery_type" => $deliveryType
+					);
+
+					$allMethodsByCode[$rate->getCode()][] = array(
+						'vendor_id' => $vId,
+						'code' => $rate->getCode(),
+						'carrier_title' => $rate->getData('carrier_title'),
+						'method_title' => $rate->getData('method_title'),
+						'cost' => $rate->getPrice(),
+						'days_in_transit' => (isset($daysInTransitData[$rate->getMethod()]) ? $daysInTransitData[$rate->getMethod()] : ""),
+						"delivery_type" => $deliveryType
+					);
+				}
+
+
+			}
+			unset($cRates);
+			unset($rate);
+		}
+		$methodToFind = array();
+		$cost = array();
+
+		foreach ($allMethodsByCode as $code => $methodDataArr) {
+			foreach ($methodDataArr as $methodData) {
+				$vendorId = $methodData['vendor_id'];
+				$methodToFind[$code][$vendorId] = $vendorId;
+				$extraCharge = 0;
+				$costVal = $methodData['cost'];
+				$extraCharge = (int)Mage::getStoreConfig('carriers/'.$methodData["delivery_type"].'/cod_extra_charge');
+				if($extraCharge && Mage::getSingleton('checkout/session')->getPayment()['method'] == 'cashondelivery'){
+					$costVal = $costVal + $extraCharge;
+				}
+				$cost[$code][] = $costVal;
+			}
+		}
+
+
+		//Find intersecting method for all vendors
+		$allVendorsMethod = array();
+		foreach ($methodToFind as $method => $vendorsInMethod) {
+			$diff = array_diff($vendors, $vendorsInMethod);
+			if (empty($diff)) {
+				$allVendorsMethod[] = $method;
+			}
+		}
+
+		// array(
+		//		vendorId=>array(
+		//			method_code=>price,
+		//			....
+		//		),
+		// ...)
+		$vendorCosts = array();
+		foreach($allMethodsByCode as $rateCode=>$rateArray){
+			foreach($rateArray as $rate){
+				$vendorId = $rate['vendor_id'];
+				if(!isset($vendorCosts[$vendorId])){
+					$vendorCosts[$vendorId] = array();
+				}
+				$vendorCosts[$vendorId][$rate['code']] = (float)$rate['cost'];
+			}
+		}
+
+		return (object)array(
+			'rates' => $rates,
+			'allVendorsMethod' => $allVendorsMethod,
+			'vendors' => $vendors,
+			'methods' => $methodsByCode,
+			'cost' => $cost,
+			'vendorCosts'=> $vendorCosts
+		);
+
+	}
+
+
+	/**
+	 * @return string
+	 */
     public function getLastTelephoneForLocker() {
         $shippingAddress = $this->getQuote()->getShippingAddress();
         $tel = $shippingAddress->getTelephone();
@@ -183,119 +310,6 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
         return $shipping;
     }
 
-    public function getRateItems()
-    {
-        $rates = array();
-
-        $methodsByCode = array();
-
-        $qRates = $this->getRates();
-        $allMethodsByCode = array();
-        $vendors = array();
-
-        $daysInTransitData = array();
-        $shipping = $this->getUdropShippingMethods();
-        $shippingMethods = array();
-
-        foreach($shipping as $shippingItem) {
-            $daysInTransitData[$shippingItem->getMethodCode()] = $shippingItem->getDaysInTransit();
-            $shippingMethods[$shippingItem->getMethodCode()] = $shippingItem->getData();
-
-        }
-
-        foreach ($qRates as $cCode => $cRates) {
-
-            foreach ($cRates as $rate) {
-                /* @var $rate Unirgy_DropshipSplit_Model_Quote_Rate */
-                $vId = $rate->getUdropshipVendor();
-
-                if (!$vId) {
-                    continue;
-                }
-                $rates[$vId][$cCode][] = $rate;
-                $vendors[$vId] = $vId;
-
-                $deliveryType = "";
-                $deliveryTypeModel = Mage::getModel("udtiership/deliveryType")->load($rate->getMethod());
-                if ($deliveryTypeModel->getId()) {
-                    $deliveryType = $deliveryTypeModel->getDeliveryCode();
-                }
-
-
-                if(isset($shippingMethods[$rate->getMethod()])) {
-                    $methodsByCode[$rate->getCode()] = array(
-                                                           'vendor_id' => $vId,
-                                                           'code' => $rate->getCode(),
-                                                           'carrier_title' => $rate->getData('carrier_title'),
-                                                           'method_title' => $rate->getData('method_title'),
-                                                           'days_in_transit' => (isset($daysInTransitData[$rate->getMethod()]) ? $daysInTransitData[$rate->getMethod()] : ""),
-                                                           "delivery_type" => $deliveryType
-                                                       );
-
-                    $allMethodsByCode[$rate->getCode()][] = array(
-                            'vendor_id' => $vId,
-                            'code' => $rate->getCode(),
-                            'carrier_title' => $rate->getData('carrier_title'),
-                            'method_title' => $rate->getData('method_title'),
-                            'cost' => $rate->getPrice(),
-                            'days_in_transit' => (isset($daysInTransitData[$rate->getMethod()]) ? $daysInTransitData[$rate->getMethod()] : ""),
-                            "delivery_type" => $deliveryType
-                                                            );
-                }
-
-
-            }
-            unset($cRates);
-            unset($rate);
-        }
-        $methodToFind = array();
-        $cost = array();
-
-        foreach ($allMethodsByCode as $code => $methodDataArr) {
-            foreach ($methodDataArr as $methodData) {
-                $vendorId = $methodData['vendor_id'];
-                $methodToFind[$code][$vendorId] = $vendorId;
-                $cost[$code][] = $methodData['cost'];
-            }
-        }
-
-
-        //Find intersecting method for all vendors
-        $allVendorsMethod = array();
-        foreach ($methodToFind as $method => $vendorsInMethod) {
-            $diff = array_diff($vendors, $vendorsInMethod);
-            if (empty($diff)) {
-                $allVendorsMethod[] = $method;
-            }
-        }
-
-        // array(
-        //		vendorId=>array(
-        //			method_code=>price,
-        //			....
-        //		),
-        // ...)
-        $vendorCosts = array();
-        foreach($allMethodsByCode as $rateCode=>$rateArray) {
-            foreach($rateArray as $rate) {
-                $vendorId = $rate['vendor_id'];
-                if(!isset($vendorCosts[$vendorId])) {
-                    $vendorCosts[$vendorId] = array();
-                }
-                $vendorCosts[$vendorId][$rate['code']] = (float)$rate['cost'];
-            }
-        }
-
-        return (object)array(
-                   'rates' => $rates,
-                   'allVendorsMethod' => $allVendorsMethod,
-                   'vendors' => $vendors,
-                   'methods' => $methodsByCode,
-                   'cost' => $cost,
-                   'vendorCosts'=> $vendorCosts
-               );
-
-    }
 
     /**
      * @return bool
