@@ -37,6 +37,15 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </api>
+                        <tracking_url>
+                            <label>Tracking URL</label>
+                            <comment>%s is replaced with tracking number</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>25</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </tracking_url>
                         <partner_id translate="label" module="zospwr">
                             <label>PartnerID</label>
                             <frontend_type>text</frontend_type>
