@@ -120,7 +120,7 @@ $iconTruckBad = '<span class="fa-stack"><i class="fa fa-truck fa-stack-2x"></i><
 			<span><?php echo $_helper->__('Planned send date').': '.$sendDate ?></span>
 			<span><?php echo $_helper->__('Planned delivery date').': '.$deliveryDate; ?></span>
 		<?php elseif(
-			$cod && $status == Zolago_Po_Model_Source::UDPO_STATUS_TO_PICK
+			$status == Zolago_Po_Model_Source::UDPO_STATUS_TO_PICK
 		): ?>
 			<span><?php echo $_helper->__("Package status").": ".$_helper->__('Ready to pick up'); ?></span>
 		</div>
