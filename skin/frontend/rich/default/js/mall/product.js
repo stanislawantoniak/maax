@@ -1282,7 +1282,12 @@ jQuery(document).ready(function() {
 		tabsClass: 'hidden-xs',
 		accordionClass: 'visible-xs'
 	});
-	jQuery('#product_long_box_tabs').on('shown-accordion.bs.tabcollapse', function () {
-		//alert('accordion is shown now!');
+	jQuery(document).on("shown.bs.collapse shown.bs.tab", ".panel-collapse, a[data-toggle='tab']", function (e) {
+		if(Mall.isMobile(Mall.Breakpoint.sm)){
+			console.log("scroll");
+			jQuery('html, body').animate({
+				scrollTop: (jQuery(this).offset().top - 100)
+			}, 100);
+		}
 	});
 });
