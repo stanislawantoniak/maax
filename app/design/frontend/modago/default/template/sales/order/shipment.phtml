@@ -51,7 +51,7 @@ $iconTruckBad = '<span class="fa-stack"><i class="fa fa-truck fa-stack-2x"></i><
 				!$paid &&
 				($status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_ACK ||
 				$status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_BACKORDER ||
-				$status == 12 ||
+				$status == Zolago_Po_Model_Source::UDPO_STATUS_PAYMENT ||
 				$status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_ONHOLD)
 			): ?>
 			<span><?php echo $_helper->__("Package status").": ".$_helper->__('Waiting for payment'); ?></span>
@@ -67,7 +67,7 @@ $iconTruckBad = '<span class="fa-stack"><i class="fa fa-truck fa-stack-2x"></i><
 			$paid &&
 			($status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_ACK ||
 				$status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_BACKORDER ||
-				$status == 12 ||
+				$status == Zolago_Po_Model_Source::UDPO_STATUS_PAYMENT ||
 				$status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_PENDING ||
 				$status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_ONHOLD)
 		) ||
@@ -76,7 +76,7 @@ $iconTruckBad = '<span class="fa-stack"><i class="fa fa-truck fa-stack-2x"></i><
 			$cod &&
 			($status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_ACK ||
 				$status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_BACKORDER ||
-				$status == 12 ||
+				$status == Zolago_Po_Model_Source::UDPO_STATUS_PAYMENT ||
 				$status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_PENDING ||
 				$status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_ONHOLD)
 		)
