@@ -1284,10 +1284,9 @@ jQuery(document).ready(function() {
 	});
 	jQuery(document).on("shown.bs.collapse shown.bs.tab", ".panel-collapse, a[data-toggle='tab']", function (e) {
 		if(Mall.isMobile(Mall.Breakpoint.sm)){
-			console.log("scroll");
 			jQuery('html, body').animate({
 				scrollTop: (jQuery(this).offset().top - 100)
-			}, 100);
+			}, 0);
 		}
 	});
 });
