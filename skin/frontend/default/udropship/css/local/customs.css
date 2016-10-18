@@ -553,14 +553,14 @@ table.foot-empty-cells tfoot td:empty {
     font-weight: bold;
 }
 .grid_row_highlighted {
-/*	background-color: #60a1ea !important; */
 	background-color: #999 !important;
 }
 
 #editShippingMethodModal input[name=udropship_method] {
     height: 0;
-    visibility: hidden;
     width: 0;
+    visibility: hidden;
+    display: none;
 }
 #editShippingMethodModal .tab-content {
     padding: 20px 0;

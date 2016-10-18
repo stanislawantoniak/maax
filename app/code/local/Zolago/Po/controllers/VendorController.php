@@ -1103,7 +1103,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                 $newAddress = clone $orignAddress;
 
                 $storeId =$po->getStoreId();
-                Mage::log($po->getData(), null, "11.log");
+                
                 $omniChannelMethodInfoByMethod = Mage::helper("udropship")
                     ->getOmniChannelMethodInfoByMethod($storeId, $data['udropship_method'], true);
 
@@ -1113,6 +1113,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                     $data['street'] = $locker->getStreet() . " " . $locker->getBuildingNumber();
                     $data['city'] = $locker->getTown();
                     $data['postcode'] = $locker->getPostcode();
+                    $data['telephone'] = $data['inpost_telephone'];
                     $po->setDeliveryPointName($data['inpost_delivery_point_name']);
                 } else if ($omniChannelMethodInfoByMethod->getDeliveryCode() == Orba_Shipping_Model_Packstation_Pwr::CODE) {
                     $pwrPoint = Mage::getModel("zospwr/point")->loadByName($data['pwr_delivery_point_name']);
@@ -1120,6 +1121,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                     $data['street'] = $pwrPoint->getStreet() . " " . $pwrPoint->getBuildingNumber();
                     $data['city'] = $pwrPoint->getTown();
                     $data['postcode'] = $pwrPoint->getPostcode();
+                    $data['telephone'] = $data['pwr_telephone'];
                     $po->setDeliveryPointName($data['pwr_delivery_point_name']);
                 } else if ($omniChannelMethodInfoByMethod->getDeliveryCode() == ZolagoOs_PickupPoint_Helper_Data::CODE) {
                     /* @var $pos  Zolago_Pos_Model_Pos */
@@ -1128,7 +1130,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                     $data['street'] = $pos->getStreet();
                     $data['city'] = $pos->getCity();
                     $data['postcode'] = $pos->getPostcode();
-
+                    $data['telephone'] = $data['pickuppoint_telephone'];
                     $po->setDeliveryPointName($data['pickuppoint_delivery_point_name']);
                 } else {
                     $po->setDeliveryPointName('');
