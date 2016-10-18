@@ -68,7 +68,7 @@ class Orba_Shipping_Model_Packstation_Inpost_Message extends Varien_Object {
         $pack->addChild('phoneNum',$settings['phoneNumber']);
         $pack->addChild('dispatchPointName',$settings['dispatchPointName']);
         $address = $pack->addChild('senderAddress');
-        $address->addChild('name',$pos->getName());
+        $address->addChild('name',empty($pos->getCompany())? $pos->getName():$pos->getCompany());
         $address->addChild('email',$pos->getEmail());
         $address->addChild('phoneNum',$pos->getPhone());
         $address->addChild('street',$pos->getStreet());
