@@ -16,7 +16,7 @@ $placements = $this->getCategoryPlacements();
 
 $isLocalVendor = ($vendor->getId() == Mage::helper('udropship')->getLocalVendorId());
 ?>
-<script type="text/javascript" src="/skin/frontend/modago/default/js/imagesloaded.pkgd.min.js"></script>
+
 <div class="container">
     <form name="campaign-position" method="POST" action="<?php echo $this->getSaveUrl(); ?>">
         <input type="hidden" name="category" value="<?php echo $this->getCategoryId(); ?>"/>
