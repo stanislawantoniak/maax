@@ -94,8 +94,14 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Grid extends Mage_Adminhtml_Bloc
         return $grid;
     }
 
+    protected function _useAllocation() {
+    	return Mage::helper('zolagopayment')->getConfigUseAllocation();
+    }
 	protected function _prepareMassaction()
 	{
+		if (!$this->_useAllocation()) {
+			return $this;
+		}		
 		$this->setMassactionIdField('main_table.entity_id');
 		$this->getMassactionBlock()->setFormFieldName('txn');
 
@@ -115,5 +121,11 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Grid extends Mage_Adminhtml_Bloc
 		);
 
 		return $this;
+	}
+	public function getRowUrl($item) {
+		if ($this->_useAllocation()) {
+			return parent::getRowUrl($item);
+		}
+		return null;
 	}
 }
