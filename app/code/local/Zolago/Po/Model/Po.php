@@ -1344,6 +1344,20 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 	 * @param bool $force
 	 * @return bool
 	 */
+	public function isDeliveryCourier($force = false) {
+		if (!$this->hasData('is_delivery_courier') || $force) {
+			$methodCode = $this->getShippingMethodInfo()->getDeliveryCode();
+
+			$isPwr = ($methodCode == Orba_Shipping_Model_Carrier_Default::CODE);
+			$this->setData('is_delivery_courier', $isPwr);
+		}
+		return $this->getData('is_delivery_courier');
+	}
+
+	/**
+	 * @param bool $force
+	 * @return bool
+	 */
 	public function isDeliveryInpost($force = false) {
 		if (!$this->hasData('is_delivery_inpost') || $force) {
 			$methodCode = $this->getShippingMethodInfo()->getDeliveryCode();
