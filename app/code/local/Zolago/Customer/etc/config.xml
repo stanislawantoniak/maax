@@ -42,6 +42,32 @@
                 </rewrite>
             </core>
         </models>
+        <customer>
+            <address>
+                <formats>
+                    <text translate="title" module="customer">
+                        <title>Text</title>
+                    </text>
+                    <oneline translate="title" module="customer">
+                        <title>Text One Line</title>
+                    </oneline>
+                    <html translate="title" module="customer">
+                        <title>HTML</title>
+                        <htmlEscape>true</htmlEscape>
+                    </html>
+                    <html_2 translate="title" module="customer">
+                        <title>HTML 2</title>
+                        <htmlEscape>true</htmlEscape>
+                    </html_2>
+                    <pdf translate="title" module="customer">
+                        <title>PDF</title>
+                    </pdf>
+                    <js_template template="title" module="customer">
+                        <title>JavaScript Template</title>
+                    </js_template>
+                </formats>
+            </address>
+        </customer>
         <helpers>
             <zolagocustomer>
                 <class>Zolago_Customer_Helper</class>
