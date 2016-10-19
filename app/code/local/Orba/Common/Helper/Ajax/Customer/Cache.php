@@ -162,16 +162,16 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 	 * @return int
 	 */
 	public function getFavoritesCount() {
-		$key = $this->getCacheKeyForCustomerInfo();
-		if ($this->canUseCache()) {
-			$cacheData = $this->loadFromCache($key);
-			if (!empty($cacheData)) {
-				$this->customerInfo = array_merge($this->customerInfo, $cacheData);
-			}
-			if (isset($cacheData['favorites_count'])) {
-				return $cacheData['favorites_count'];
-			}
-		}
+//		$key = $this->getCacheKeyForCustomerInfo();
+//		if ($this->canUseCache()) {
+//			$cacheData = $this->loadFromCache($key);
+//			if (!empty($cacheData)) {
+//				$this->customerInfo = array_merge($this->customerInfo, $cacheData);
+//			}
+//			if (isset($cacheData['favorites_count'])) {
+//				return $cacheData['favorites_count'];
+//			}
+//		}
 		$this->getFavoritesDetails(true);
 		return $this->customerInfo['favorites_count'];
 	}
@@ -212,16 +212,16 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 	 * @return array
 	 */
 	public function getFavoritesProductsIds() {
-		$key = $this->getCacheKeyForCustomerInfo();
-		if ($this->canUseCache()) {
-			$cacheData = $this->loadFromCache($key);
-			if (!empty($cacheData)) {
-				$this->customerInfo = array_merge($this->customerInfo, $cacheData);
-			}
-			if (isset($cacheData['favorites_products'])) {
-				return $cacheData['favorites_products'];
-			}
-		}
+//		$key = $this->getCacheKeyForCustomerInfo();
+//		if ($this->canUseCache()) {
+//			$cacheData = $this->loadFromCache($key);
+//			if (!empty($cacheData)) {
+//				$this->customerInfo = array_merge($this->customerInfo, $cacheData);
+//			}
+//			if (isset($cacheData['favorites_products'])) {
+//				return $cacheData['favorites_products'];
+//			}
+//		}
 		$this->getFavoritesDetails(true);
 		return $this->customerInfo['favorites_products'];
 	}
