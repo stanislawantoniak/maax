@@ -134,13 +134,13 @@
 
     <admin>
         <routers>
-            <udqaadmin>
+            <zosqaadmin>
                 <use>admin</use>
                 <args>
                     <module>ZolagoOs_OmniChannelVendorAskQuestion_Adminhtml</module>
-                    <frontName>udqaadmin</frontName>
+                    <frontName>zosqaadmin</frontName>
                 </args>
-            </udqaadmin>
+            </zosqaadmin>
         </routers>
     </admin>
 

@@ -112,6 +112,13 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Grid extends Mage_Adminhtml_Bloc
 				'url'   => $this->getUrl('*/payment/massRefund')
 			)
 		);
+		$this->getMassactionBlock()->addItem(
+			'confirm_refund',
+			array(
+				'label' => $this->__('Confirm refund'),
+				'url'   => $this->getUrl('*/payment/massConfirmRefund')
+			)
+		);
 
 		return $this;
 	}

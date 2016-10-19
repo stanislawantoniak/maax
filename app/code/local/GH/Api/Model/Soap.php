@@ -508,8 +508,10 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
     /**
      * @throws Mage_Core_Exception
      */
-    protected function throwWrongCourierName() {
+    protected function throwWrongCourierName($_courier) {
+		Mage::log("error_wrong_courier_name: " . $_courier);
         Mage::throwException('error_wrong_courier_name');
+
     }
 
     public function getCourierCode($courier) {
@@ -525,7 +527,7 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
 	    	return Orba_Shipping_Model_Carrier_Dpd::CODE;
         }
 
-        $this->throwWrongCourierName();
+        $this->throwWrongCourierName($_courier);
     }
 
 	protected function arrayToStdClass($array) {

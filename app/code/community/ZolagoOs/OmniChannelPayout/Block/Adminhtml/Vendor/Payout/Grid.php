@@ -90,11 +90,11 @@ class ZolagoOs_OmniChannelPayout_Block_Adminhtml_Vendor_Payout_Grid extends Mage
 
     public function getRowUrl($row)
     {
-        return $this->getUrl('udpayoutadmin/payout/edit', array('id' => $row->getId()));
+        return $this->getUrl('zospayoutadmin/payout/edit', array('id' => $row->getId()));
     }
 
     public function getGridUrl()
     {
-        return $this->getUrl('udpayoutadmin/payout/vendorPayoutsGrid', array('_current'=>true));
+        return $this->getUrl('zospayoutadmin/payout/vendorPayoutsGrid', array('_current'=>true));
     }
 }

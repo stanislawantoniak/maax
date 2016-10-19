@@ -22,7 +22,7 @@ class ZolagoOs_OmniChannelVendorAskQuestion_Block_Adminhtml_Question_Edit_Form e
 
         $fieldset->addField('vendor_name', 'note', array(
             'label'     => Mage::helper('udqa')->__('Vendor'),
-            'text'      => '<a href="' . $this->getUrl('udropshipadmin/adminhtml_vendor/edit', array('id' => $vendor->getId())) . '" onclick="this.target=\'blank\'">' . $vendor->getVendorName() . '</a>'
+            'text'      => '<a href="' . $this->getUrl('zolagoosadmin/adminhtml_vendor/edit', array('id' => $vendor->getId())) . '" onclick="this.target=\'blank\'">' . $vendor->getVendorName() . '</a>'
         ));
 
         if ($question->getShipmentId()) {

@@ -17,7 +17,7 @@ class ZolagoOs_OmniChannel_Block_Adminhtml_Vendor_Statement_New_Form extends Zol
         $hlp = Mage::helper('udropship');
         $form = new Varien_Data_Form(array(
             'id' => 'edit_form',
-            'action' => $this->getUrl('udropshipadmin/adminhtml_vendor_statement/newPost'),
+            'action' => $this->getUrl('zolagoosadmin/adminhtml_vendor_statement/newPost'),
             'method' => 'post',
             'enctype' => 'multipart/form-data',
             'use_container' => true,

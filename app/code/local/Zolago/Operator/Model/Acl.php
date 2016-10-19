@@ -73,6 +73,9 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
     // GH API Access
     const RES_GHAPI_OPERATOR						= "udropship/ghapi";
 
+	// IAI-Shop API Access
+	const RES_IAISHOP_OPERATOR						= "iaishop/settings";
+
     // Attribute preview
     const RES_UDPROD_VENDOR_ATTRIBUTES              = "udprod/vendor_attributes";
 
@@ -134,6 +137,8 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
         self::RES_PAYMENT_OPERATOR                  => "Payment manage",
         // GH API Access
         self::RES_GHAPI_OPERATOR                    => "GH API",
+		// IAI-Shop Access
+		self::RES_IAISHOP_OPERATOR                  => "IAI-Shop API",
         // Attribute preview
         self::RES_UDPROD_VENDOR_ATTRIBUTES          => "Attribute preview",
         // Price management
@@ -219,8 +224,10 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
         // Build ACL Rules - GH API Access
         if ($vendor->getData('ghapi_vendor_access_allow')) {
             $this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_GHAPI_OPERATOR, self::RES_GHAPI_OPERATOR);
+			$this->setRule(self::OP_ADD, self::TYPE_ALLOW, self::ROLE_GHAPI_OPERATOR, self::RES_IAISHOP_OPERATOR);
         } else {
             $this->setRule(self::OP_ADD, self::TYPE_DENY, self::ROLE_GHAPI_OPERATOR, self::RES_GHAPI_OPERATOR);
+			$this->setRule(self::OP_ADD, self::TYPE_DENY, self::ROLE_GHAPI_OPERATOR, self::RES_IAISHOP_OPERATOR);
         }
 
         // Build ACL Rule - autofill attributes by apply rule - masowa zmiana cech produków
@@ -260,6 +267,7 @@ class Zolago_Operator_Model_Acl extends Zend_Acl
 			self::ROLE_PRODUCT_OPERATOR					=> "Product Operator",
 			self::ROLE_PAYMENT_OPERATOR					=> "Payment manage",
 			self::ROLE_GHAPI_OPERATOR					=> "GH API Settings",
+
 		);
 		if ($isGallery){
 			$_currentRoles[self::ROLE_SUPERUSER_OPERATOR] = "Configuration and regulations";

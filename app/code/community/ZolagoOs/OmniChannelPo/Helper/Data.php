@@ -1209,7 +1209,7 @@ class ZolagoOs_OmniChannelPo_Helper_Data extends Mage_Core_Helper_Abstract
                 'order_url'     => $ahlp->getUrl('adminhtml/sales_order/view', array(
                     'order_id'  => $order->getId()
                 )),
-                'po_url'  => $ahlp->getUrl('udpoadmin/order_po/view', array(
+                'po_url'  => $ahlp->getUrl('zospoadmin/order_po/view', array(
                     'udpo_id'  => $udpo->getId(),
                     'order_id' => $order->getId(),
                 )),

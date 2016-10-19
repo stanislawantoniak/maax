@@ -20,6 +20,11 @@
  * @method array getRootCategory()
  * @method array getWebsitesAllowed()
  *
+ * @method int getIaishopId()
+ * @method string getIaishopUrl()
+ * @method string getIaishopLogin()
+ * @method string getIaishopPass()
+ *
  * @method Zolago_Dropship_Model_Vendor setLastIntegration(string $date)
  */
 class Zolago_Dropship_Model_Vendor extends ZolagoOs_OmniChannel_Model_Vendor
@@ -112,7 +117,20 @@ class Zolago_Dropship_Model_Vendor extends ZolagoOs_OmniChannel_Model_Vendor
         }
         return $this->getData('child_vendor_ids');
     }
-
+    
+    /**
+     * return array
+     */
+    public function getActivePos() {        
+        if(!$this->hasData("active_pos")) {
+            $activePos = array();
+            if($this->getId()) {
+                $activePos = $this->getResource()->getActivePos($this);
+            }
+            $this->setData("active_pos", $activePos);
+        }
+        return $this->getData("active_pos");
+    }
     /**
      * @return array
      */
