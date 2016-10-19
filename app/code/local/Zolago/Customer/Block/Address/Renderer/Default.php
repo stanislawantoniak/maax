@@ -14,7 +14,7 @@ class Zolago_Customer_Block_Address_Renderer_Default
      * @return string
      */
     public function render(Mage_Customer_Model_Address_Abstract $address, $format=null)
-    {
+    {Mage::log($this->getType()->getCode(), null, "address.log");
         switch ($this->getType()->getCode()) {
             case 'html':
                 $dataFormat = Mage_Customer_Model_Attribute_Data::OUTPUT_FORMAT_HTML;
