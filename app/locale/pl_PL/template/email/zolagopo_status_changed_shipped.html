@@ -87,12 +87,12 @@
 									{{depend tracking}}
 									<br />
 									Przesyłkę możesz śledzić używając numeru listu przewozowego:
-									{{if track_url}}
-									<a href="{{var track_url}}" target="_blank"style="text-decoration: none; color: #1155CC">{{var tracking.getTrackNumber()}}</a>.
-									Link do śledzenia będzie aktywny dzień po nadaniu paczki.
-									{{else}}
-									{{var tracking.getTrackNumber()}}
-									{{/if}}
+										{{if track_url}}
+										<a href="{{var track_url}}" target="_blank"style="text-decoration: none; color: #1155CC">{{var tracking.getTrackNumber()}}</a>.
+										Link do śledzenia będzie aktywny dzień po nadaniu paczki.
+										{{else}}
+										{{var tracking.getTrackNumber()}}
+										{{/if}}
 									{{/depend}}
 								</div>
 								<span class="spacer">&nbsp;</span>
