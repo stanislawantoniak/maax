@@ -100,7 +100,7 @@ class Mage_Customer_Model_Address_Config extends Mage_Core_Model_Config_Base
         if (!isset($this->_types[$storeId])) {
             $this->_types[$storeId] = array();
             foreach ($this->getNode('formats')->children() as $typeCode => $typeConfig) {
-                Mage::log($typeCode, null, "address3.log");
+                Mage::log($typeCode, null, "address_3_1.log");
                 $path = sprintf('%s%s', self::XML_PATH_ADDRESS_TEMPLATE, $typeCode);
                 $type = new Varien_Object();
                 $htmlEscape = strtolower($typeConfig->htmlEscape);
