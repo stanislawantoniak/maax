@@ -146,6 +146,18 @@
 						</config>
 					</fields>
 				</loyalty_card>
+				<address_templates translate="label">
+					<fields>
+						<html_2>
+							<label>HTML 2</label>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>4</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</html_2>
+					</fields>
+				</address_templates>
 			</groups>
 		</customer>
 	</sections>
