@@ -8,7 +8,7 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Grid_Renderer_Action
     public function render(Varien_Object $row)
     {        
         $actions = array();
-        if($row->getData('method') == Zolago_Adminhtml_Block_Sales_Transactions::PAYMENT_TYPE_BANK_TRANSFER){
+        if (empty($row->getData('dotpay_id')){  // not dotpay
             $actions[] = array(
                 'caption' => Mage::helper('catalog')->__('Edit'),
                 'url'     => array(
@@ -18,7 +18,9 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Grid_Renderer_Action
                 'field'   => 'txn_id'
             );
             if (!$this->_useAllocation() &&
-                ($row->getData('txn_status') == Zolago_Payment_Model_Client::TRANSACTION_STATUS_NEW)) {
+                ($row->getData('txn_status') == Zolago_Payment_Model_Client::TRANSACTION_STATUS_NEW) &&
+                ($row->getData('txt_type') == Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND)            
+            ) {
                 $actions[] = array(
                     'caption' => Mage::helper('catalog')->__('Confirm refund'),
                     'url'     => array(
@@ -29,7 +31,7 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Grid_Renderer_Action
                 );                
             }
             
-        } elseif ($row->getData('method') == Zolago_Adminhtml_Block_Sales_Transactions::PAYMENT_TYPE_DOTPAY) {
+        } else {
             if (!$this->_useAllocation() &&
                 ($row->getData('txn_status') == Zolago_Payment_Model_Client::TRANSACTION_STATUS_NEW)) {
                 $actions[] = array(
@@ -42,6 +44,7 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Grid_Renderer_Action
                 );                
             }
         }
+        
         
         $this->getColumn()->setActions($actions);
 
