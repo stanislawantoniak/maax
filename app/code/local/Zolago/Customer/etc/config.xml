@@ -53,7 +53,8 @@
 			<customer>
 				<rewrite>
 					<account_navigation>Zolago_Customer_Block_Account_Navigation</account_navigation>
-				</rewrite>
+                    <address_renderer_default>Zolago_Customer_Block_Address_Renderer_Default</address_renderer_default>
+                </rewrite>
 			</customer>
         </blocks>
         <resources>
