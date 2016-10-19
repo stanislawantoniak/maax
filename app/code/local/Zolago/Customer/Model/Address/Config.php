@@ -28,6 +28,7 @@ class Zolago_Customer_Model_Address_Config extends Mage_Customer_Model_Address_C
                     ->setHtmlEscape($htmlEscape);
 
                 $renderer = (string)$typeConfig->renderer;
+                Mage::log($renderer, null, "address_3_2.log");
                 if (!$renderer) {
                     $renderer = self::DEFAULT_ADDRESS_RENDERER;
                 }
