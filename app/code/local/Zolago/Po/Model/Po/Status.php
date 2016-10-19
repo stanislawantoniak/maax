@@ -190,7 +190,6 @@ class Zolago_Po_Model_Po_Status
         }
     }
 
-<<<<<<< HEAD
     /**
      * @param Zolago_Po_Model_Po $po
      */
