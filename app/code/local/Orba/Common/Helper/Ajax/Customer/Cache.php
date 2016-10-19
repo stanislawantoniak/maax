@@ -136,8 +136,9 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 	 * @return $this
 	 */
 	public function getFavoritesDetails($force = false) {
+		Mage::log("getFavoritesDetails", null, "wishlist.log");
 
-		if ((!isset($this->customerInfo['favorites_count']) || !isset($this->customerInfo['favorites_products'])) || $force) {
+		//if ((!isset($this->customerInfo['favorites_count']) || !isset($this->customerInfo['favorites_products'])) || $force) {
 			// Favorites Count
 			/** @var Zolago_Wishlist_Helper_Data $wishlistHelper */
 			$wishlistHelper = Mage::helper('zolagowishlist');
@@ -154,7 +155,7 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 
 			// Favorites products ids
 			$this->customerInfo = array_merge($this->customerInfo, array('favorites_products' => $wishlistProdIds));
-		}
+		//}
 		return $this;
 	}
 
