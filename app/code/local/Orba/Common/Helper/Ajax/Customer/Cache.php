@@ -136,8 +136,9 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 	 * @return $this
 	 */
 	public function getFavoritesDetails($force = false) {
+		Mage::log("getFavoritesDetails", null, "wishlist.log");
 
-		if ((!isset($this->customerInfo['favorites_count']) || !isset($this->customerInfo['favorites_products'])) || $force) {
+		//if ((!isset($this->customerInfo['favorites_count']) || !isset($this->customerInfo['favorites_products'])) || $force) {
 			// Favorites Count
 			/** @var Zolago_Wishlist_Helper_Data $wishlistHelper */
 			$wishlistHelper = Mage::helper('zolagowishlist');
@@ -154,7 +155,7 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 
 			// Favorites products ids
 			$this->customerInfo = array_merge($this->customerInfo, array('favorites_products' => $wishlistProdIds));
-		}
+		//}
 		return $this;
 	}
 
@@ -172,7 +173,7 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 				return $cacheData['favorites_count'];
 			}
 		}
-		$this->getFavoritesDetails();
+		$this->getFavoritesDetails(true);
 		return $this->customerInfo['favorites_count'];
 	}
 
@@ -222,7 +223,7 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 				return $cacheData['favorites_products'];
 			}
 		}
-		$this->getFavoritesDetails();
+		$this->getFavoritesDetails(true);
 		return $this->customerInfo['favorites_products'];
 	}
 
@@ -417,18 +418,14 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 				/* @var $product Zolago_Catalog_Model_Product */
 				$image = Mage::helper("zolago_image")
 					->init($product, 'small_image')
-					->resize(90, 90);
-
+					->setCropPosition(Zolago_Image_Model_Catalog_Product_Image::POSITION_CENTER)
+					->adaptiveResize(200, 312);
 				$recentlyViewedContent[(int)$product->getId()] = array(
 					'title' => Mage::helper('catalog/output')->productAttribute($product, $product->getName(), 'name'),
 					'image_url' => (string)$image,
 					'redirect_url' => $product->getNoVendorContextUrl(),
 					'price' => $coreHelper->currency($product->getFinalPrice(), true, false),
 				);
-				if($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE){
-					list($_minimalPriceInclTax) = $product->getPriceModel()->getTotalPrices($product, null, true, false);
-					$recentlyViewedContent[(int)$product->getId()]['price'] = $coreHelper->currency($_minimalPriceInclTax, true, false);
-				}
 				// add old price only if should be visible
 				if ($product->getStrikeoutPrice() > $product->getPrice()) {
 					$recentlyViewedContent[(int)$product->getId()]['old_price'] =

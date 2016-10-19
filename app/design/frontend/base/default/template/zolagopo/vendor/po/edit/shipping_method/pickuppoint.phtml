@@ -1,0 +1,37 @@
+<?php /** @var Zolago_Po_Block_Vendor_Po_Edit_ShippingMethod $this */ ?>
+
+<?php
+$_hlp = Mage::helper("zolagopo");
+
+$_po = $this->getPo();
+$_address = $_po->getShippingAddress();
+
+/** @var Zolago_Checkout_Helper_Data $helper */
+$helper = Mage::helper("zolagocheckout");
+?>
+
+<?php
+$collection = Mage::getModel("zolagopos/pos")->getCollection();
+$collection->addFieldToFilter("is_available_as_pickup_point", 1);
+
+?>
+<div class="form-horizontal row-border">
+    <div class="form-group">
+        <label for="pickuppoint_delivery_point_name" class="col-md-4 control-label"><?php echo $_hlp->__("POS"); ?></label>
+        <div class="col-md-8">
+            <select name="pickuppoint_delivery_point_name" style="width: 100%;" class="select2">
+                <?php foreach ($collection as $pos): ?>
+                    <option value="<?php echo $pos->getId(); ?>">
+                        <?php echo $pos->getStreet(); ?>, <?php echo $pos->getCity(); ?>, <?php echo $pos->getPostcode(); ?> (<?php echo $pos->getName(); ?>)
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="pickuppoint_telephone" class="col-md-4 control-label"><?php echo $_hlp->__('Phone') ?></label>
+        <div class="col-md-8">
+            <input id="pickuppoint_telephone" name="pickuppoint_telephone" value="<?php echo $this->escapeHtml($_address->getTelephone()) ?>"  type="text" class="form-control"  />
+        </div>
+    </div>
+</div>

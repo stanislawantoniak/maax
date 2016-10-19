@@ -40,7 +40,11 @@
 			<action method="setTitle"><title>Vendor Portal</title></action>
 			<action method="addItem">
 				<type>skin_js</type>
-				<name>js/plugins/inpost/address.js</name>
+				<name>js/po/edit/shipping_method/inpost/address.js</name>
+			</action>
+			<action method="addItem">
+				<type>skin_js</type>
+				<name>js/po/edit/shipping_method/pwr/address.js</name>
 			</action>
 			<!--<action method="setTemplate"><template>unirgy/dropship/vendor/head.phtml</template></action>-->
 		</reference>
@@ -56,8 +60,16 @@
 				<block name="vendor_po_edit_edit_item" type="zolagopo/vendor_po_edit_edititem" template="zolagopo/vendor/po/edit/edit_item.phtml"/>
 				<block name="vendor_po_edit_shipping_cost" type="zolagopo/vendor_po_edit_shippingcost" template="zolagopo/vendor/po/edit/shipping_cost.phtml"/>
 				<block name="vendor_po_edit_split" type="zolagopo/vendor_po_edit_split" template="zolagopo/vendor/po/edit/split.phtml"/>
-				<block name="vendor_po_edit_shipping_address" type="zolagopo/vendor_po_edit_address" template="zolagopo/vendor/po/edit/address.phtml"/>
+				<block name="vendor_po_edit_shipping_address" type="zolagopo/vendor_po_edit_address" template="zolagopo/vendor/po/edit/billing_address.phtml"/>
 				<block name="vendor_po_edit_inpost_shipping_address" type="zolagopo/vendor_po_edit_inpostaddress" template="zolagopo/vendor/po/edit/inpost_address.phtml"/>
+				<block name="vendor_po_edit_shipping_method" type="zolagopo/vendor_po_edit_ShippingMethod" template="zolagopo/vendor/po/edit/shipping_method.phtml">
+					<block name="vendor_po_edit_shipping_method_default" type="zolagopo/vendor_po_edit_ShippingMethod" template="zolagopo/vendor/po/edit/shipping_method/default.phtml" />
+					<block name="vendor_po_edit_shipping_method_ghinpost" type="zolagopo/vendor_po_edit_ShippingMethod" template="zolagopo/vendor/po/edit/shipping_method/ghinpost.phtml" />
+					<block name="vendor_po_edit_shipping_method_zospwr" type="zolagopo/vendor_po_edit_ShippingMethod" template="zolagopo/vendor/po/edit/shipping_method/zospwr.phtml" />
+					<block name="vendor_po_edit_shipping_method_pickuppoint" type="zolagopo/vendor_po_edit_ShippingMethod" template="zolagopo/vendor/po/edit/shipping_method/pickuppoint.phtml" />
+				</block>
+
+
 				<block name="vendor_po_create_rma" type="zolagopo/vendor_po_edit_rma" template="zolagopo/vendor/po/edit/create_rma.phtml"/>
 				<block name="vendor_po_payment_change" type="zolagopo/vendor_po_edit_payments_change" template="zolagopo/vendor/po/edit/payments-change.phtml"/>
 				<block name="vendor_po_edit_billing_address" type="zolagopo/vendor_po_edit_address" template="zolagopo/vendor/po/edit/address.phtml"/>

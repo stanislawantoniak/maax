@@ -1,0 +1,64 @@
+<?php /** @var Zolago_Po_Block_Vendor_Po_Edit_ShippingMethod $this */ ?>
+
+<?php
+$_hlp = Mage::helper("zolagopo");
+$_po = $this->getPo();
+$_address = $_po->getShippingAddress();
+$_type = 'shipping';
+/** @var Zolago_Common_Helper_Data $_zolagoHlp */
+$_modagoHlp = Mage::helper("zolagocheckout");
+$poId = $_po->getId();
+$pwrData = Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping_Map_Pwr::getPopulateMapData();
+
+$lockerName = $_po->getDeliveryPointName();
+$lockerCity = $_po->getDeliveryPwrPoint()->getTown();
+/** @var Zolago_Dropship_Helper_Data $udropshipHlp */
+$udropshipHlp = Mage::helper('udropship');
+?>
+<script type="text/javascript">
+    var lockerPwrCity = "<?php echo $lockerCity; ?>";
+    var lockerPwrName = "<?php echo $lockerName; ?>";
+    var pwrLabel = "<?php echo Mage::helper('zolagopo')->__("RUCH point"); ?>";
+</script>
+<div class="form-horizontal row-border">
+    <div class="form-group">
+        <label for="pwr_shipping_select_city" class="col-md-2 control-label"><?php echo $_hlp->__("City"); ?></label>
+        <div class="col-md-10">
+            <select name="pwr_shipping_select_city" class="select2" style="width: 100%;"  data-placeholder="<?php echo $_hlp->__("Select City"); ?>">
+                <option value="0"><?php echo $_hlp->__("Select City"); ?></option>
+                <?php foreach ($pwrData["filters"] as $city => $value): ?>
+                    <option value="<?php echo $city; ?>"><?php echo $city; ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="pwr_delivery_point_name" class="col-md-2 control-label"><?php echo $_hlp->__("Address"); ?></label>
+        <div class="col-md-10">
+            <select name="pwr_delivery_point_name"  class="select2" style="width: 100%;"  data-placeholder="<?php echo $_hlp->__("Choose city first"); ?>" data-default="">
+                <option value="0"><?php echo $_hlp->__("Choose city first"); ?></option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="pwr_telephone" class="col-md-2 control-label"><?php echo $_hlp->__('Phone') ?></label>
+        <div class="col-md-10">
+            <input id="pwr_telephone" name="pwr_telephone" value="<?php echo $this->escapeHtml($_address->getTelephone()) ?>"  type="text" class="form-control"  />
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12 main_container" style="padding:0;">
+    <div class="main_container_column">
+
+        <div class="clearfix map_filter_container invoice-data" style="min-height: 100px;">
+            <!--Selected Point here-->
+            <div class="pwr_shipping_select_point_data">
+                <div class="row">
+                    <div class="col-sm-6 address_data"><?php echo $udropshipHlp->formatCustomerAddressPwr($_po) ?></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
