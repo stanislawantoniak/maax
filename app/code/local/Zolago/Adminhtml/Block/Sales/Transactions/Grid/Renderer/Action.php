@@ -19,7 +19,7 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Grid_Renderer_Action
             );
             if (!$this->_useAllocation() &&
                 ($row->getData('txn_status') == Zolago_Payment_Model_Client::TRANSACTION_STATUS_NEW) &&
-                ($row->getData('txt_type') == Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND)            
+                ($row->getData('txn_type') == Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND)            
             ) {
                 $actions[] = array(
                     'caption' => Mage::helper('catalog')->__('Confirm refund'),
