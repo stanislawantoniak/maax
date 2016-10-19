@@ -29,13 +29,13 @@ class Zolago_Customer_AccountController extends Mage_Customer_AccountController
 	public function logoutAction() {
 		// Do parent logout
 		parent::logoutAction();
-		
+
 		// Generate cms block
 		try{
 			$cms = $this->getLayout()->
-				createBlock("cms/block")->
-				setBlockId("customer-logout-forget")->
-				toHtml();
+			createBlock("cms/block")->
+			setBlockId("customer-logout-forget")->
+			toHtml();
 		}catch(Exception $e){
 			$cms = $this->__("Log out success");
 			Mage::logException($e);

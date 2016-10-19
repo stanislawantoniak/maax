@@ -509,9 +509,9 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
             if ($this->isUdpoActive() && ($po = Mage::helper('udpo')->getShipmentPo($shipment))) {
                 $data['po_id'] = $po->getIncrementId();
                 $data['po_url'] = $ahlp->getUrl('zospoadmin/order_po/view', array(
-                                                    'udpo_id'  => $po->getId(),
-                                                    'order_id' => $order->getId(),
-                                                ));
+                    'udpo_id'  => $po->getId(),
+                    'order_id' => $order->getId(),
+                ));
                 $template = preg_replace('/{{isPoAvailable}}(.*?){{\/isPoAvailable}}/s', '\1', $template);
             } else {
                 $template = preg_replace('/{{isPoAvailable}}.*?{{\/isPoAvailable}}/s', '', $template);

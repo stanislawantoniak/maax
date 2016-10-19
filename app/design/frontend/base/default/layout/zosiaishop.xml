@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<layout version="0.1.0">
+    <zosiaishop_settings_index>
+        <update handle="udropship_vendor" />
+        <update handle="adminhtml_head" />
+        <update handle="bootstrap"/>
+        <update handle="forms"/>
+        <reference name="content">
+            <block name="settings" type="zosiaishop/settings" template="zosiaishop/settings.phtml"></block>
+        </reference>
+    </zosiaishop_settings_index>
+</layout>

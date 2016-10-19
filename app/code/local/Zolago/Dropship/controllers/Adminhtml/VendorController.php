@@ -39,7 +39,7 @@ class Zolago_Dropship_Adminhtml_VendorController extends ZolagoOs_OmniChannel_Ad
             $docs = Mage::helper("ghregulation")->getDocumentsToAccept($vendor);
             if (empty($docs)) {
                 Mage::getSingleton('adminhtml/session')->addError(Mage::helper("zolagodropship")->__("Vendor does not have assigned documents"));
-                return $this->_redirect('udropshipadmin/adminhtml_vendor/edit/', array('id' => $vendorId));
+                return $this->_redirect('zolagoosadmin/adminhtml_vendor/edit/', array('id' => $vendorId));
             }
 
             $vendor->setConfirmation(md5(uniqid()));
@@ -62,7 +62,7 @@ class Zolago_Dropship_Adminhtml_VendorController extends ZolagoOs_OmniChannel_Ad
             Mage::getSingleton('adminhtml/session')->addError($xt->getMessage());
             Mage::logException($xt);
         }
-        $this->_redirect('udropshipadmin/adminhtml_vendor/edit/',array('id'=>$vendorId));
+        $this->_redirect('zolagoosadmin/adminhtml_vendor/edit/',array('id'=>$vendorId));
     }
     /**
      * resetPassword
@@ -87,7 +87,7 @@ class Zolago_Dropship_Adminhtml_VendorController extends ZolagoOs_OmniChannel_Ad
             Mage::getSingleton('adminhtml/session')->addError($xt->getMessage());
             Mage::logException($xt);
         }
-        $this->_redirect('udropshipadmin/adminhtml_vendor/edit/',array('id'=>$vendorId));
+        $this->_redirect('zolagoosadmin/adminhtml_vendor/edit/',array('id'=>$vendorId));
 
     }
     public function kindSaveAction() {
@@ -107,7 +107,7 @@ class Zolago_Dropship_Adminhtml_VendorController extends ZolagoOs_OmniChannel_Ad
             Mage::getSingleton('adminhtml/session')->addError($xt->getMessage());            
             Mage::logException($xt);
         }
-        $this->_redirect('udropshipadmin/adminhtml_vendor/edit/',array('id'=>$vendorId,'active_tab' => 'regulation_type'));
+        $this->_redirect('zolagoosadmin/adminhtml_vendor/edit/',array('id'=>$vendorId,'active_tab' => 'regulation_type'));
         
     }
     
@@ -126,7 +126,7 @@ class Zolago_Dropship_Adminhtml_VendorController extends ZolagoOs_OmniChannel_Ad
             Mage::getSingleton('adminhtml/session')->addError($xt->getMessage());            
             Mage::logException($xt);
         }
-        $this->_redirect('udropshipadmin/adminhtml_vendor/edit/',array('id'=>$vendorId,'active_tab' => 'regulation_type'));
+        $this->_redirect('zolagoosadmin/adminhtml_vendor/edit/',array('id'=>$vendorId,'active_tab' => 'regulation_type'));
                 
     }
 
@@ -158,7 +158,7 @@ class Zolago_Dropship_Adminhtml_VendorController extends ZolagoOs_OmniChannel_Ad
         } catch (Exception $xt) {
             Mage::getSingleton('adminhtml/session')->addError($xt->getMessage());            
         }
-        $this->_redirect('udropshipadmin/adminhtml_vendor/edit/',array('id'=>$vendorId,'active_tab' => 'brandshop_section'));
+        $this->_redirect('zolagoosadmin/adminhtml_vendor/edit/',array('id'=>$vendorId,'active_tab' => 'brandshop_section'));
     }
 
     /**
@@ -185,7 +185,7 @@ class Zolago_Dropship_Adminhtml_VendorController extends ZolagoOs_OmniChannel_Ad
             } catch (Exception $e) {
                 Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
                 if ($r->getParam('reg_id')) {
-                    $this->_redirect('umicrositeadmin/adminhtml_registration/edit', array('reg_id'=>$r->getParam('reg_id')));
+                    $this->_redirect('micrositeadmin/adminhtml_registration/edit', array('reg_id'=>$r->getParam('reg_id')));
                     return;
                 }
                 $this->_redirect('*/*/edit', array('id' => $r->getParam('id')));

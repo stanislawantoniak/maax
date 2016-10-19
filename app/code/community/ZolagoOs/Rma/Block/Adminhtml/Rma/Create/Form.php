@@ -29,6 +29,6 @@ class ZolagoOs_Rma_Block_Adminhtml_Rma_Create_Form extends Mage_Adminhtml_Block_
 
     public function getSaveUrl()
     {
-        return $this->getUrl('urmaadmin/order_rma/save', array('order_id' => $this->getRma()->getOrderId()));
+        return $this->getUrl('rmaadmin/order_rma/save', array('order_id' => $this->getRma()->getOrderId()));
     }
 }

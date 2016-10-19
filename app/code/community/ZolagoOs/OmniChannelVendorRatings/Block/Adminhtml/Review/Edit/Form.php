@@ -23,7 +23,7 @@ class ZolagoOs_OmniChannelVendorRatings_Block_Adminhtml_Review_Edit_Form extends
 
         $fieldset->addField('vendor_name', 'note', array(
             'label'     => Mage::helper('review')->__('Vendor'),
-            'text'      => '<a href="' . $this->getUrl('udropshipadmin/adminhtml_vendor/edit', array('id' => $vendor->getId())) . '" onclick="this.target=\'blank\'">' . $vendor->getVendorName() . '</a>'
+            'text'      => '<a href="' . $this->getUrl('zolagoosadmin/adminhtml_vendor/edit', array('id' => $vendor->getId())) . '" onclick="this.target=\'blank\'">' . $vendor->getVendorName() . '</a>'
         ));
 
         $fieldset->addField('shipment', 'note', array(

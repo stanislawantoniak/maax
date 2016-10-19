@@ -460,13 +460,13 @@
     </crontab>
     <admin>
         <routers>
-            <udpoadmin>
+            <zospoadmin>
                 <args>
                     <modules>
                         <Zolago_Po before="ZolagoOs_OmniChannelPo_Adminhtml">Zolago_Po_Adminhtml</Zolago_Po>
                     </modules>
                 </args>
-            </udpoadmin>
+            </zospoadmin>
         </routers>
     </admin>
 </config>

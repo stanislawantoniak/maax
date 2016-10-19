@@ -7,12 +7,12 @@
                 <vendor module="udropship">
                     <title>Vendors</title>
                     <sort_order>10</sort_order>
-                    <action>udropshipadmin/adminhtml_vendor</action>
+                    <action>zolagoosadmin/adminhtml_vendor</action>
                 </vendor>
                 <vendor_registration module="umicrosite">
                     <title>Vendor Registrations</title>
                     <sort_order>20</sort_order>
-                    <action>umicrositeadmin/adminhtml_registration</action>
+                    <action>micrositeadmin/adminhtml_registration</action>
                 </vendor_registration>
                 <review module="udratings">
                     <title>Reviews and Ratings</title>
@@ -21,17 +21,17 @@
                         <review_pending module="udratings">
                             <title>Pending Reviews</title>
                             <sort_order>10</sort_order>
-                            <action>udratingsadmin/review/pending</action>
+                            <action>zosratingsadmin/review/pending</action>
                         </review_pending>
                         <review_all>
                             <title>All Reviews</title>
                             <sort_order>20</sort_order>
-                            <action>udratingsadmin/review/index</action>
+                            <action>zosratingsadmin/review/index</action>
                         </review_all>
                         <rating module="udratings">
                             <title>Manage Ratings</title>
                             <sort_order>30</sort_order>
-                            <action>udratingsadmin/rating/index</action>
+                            <action>zosratingsadmin/rating/index</action>
                         </rating>
                     </children>
                 </review>
@@ -42,12 +42,12 @@
                         <question_pending module="udqa">
                             <title>Pending Questions/Answers</title>
                             <sort_order>10</sort_order>
-                            <action>udqaadmin/index/pending</action>
+                            <action>zosqaadmin/index/pending</action>
                         </question_pending>
                         <question_all>
                             <title>All Questions/Answers</title>
                             <sort_order>20</sort_order>
-                            <action>udqaadmin/index/index</action>
+                            <action>zosqaadmin/index/index</action>
                         </question_all>
                     </children>
                 </udqa>
@@ -57,7 +57,7 @@
                     <children>
                         <udpo translate="title" module="udpo">
                             <title>Purchase Orders</title>
-                            <action>udpoadmin/po</action>
+                            <action>zospoadmin/po</action>
                             <sort_order>10</sort_order>
                         </udpo>
                     </children>
@@ -69,17 +69,17 @@
                         <shipping module="udropship">
                             <title>Shipping Methods</title>
                             <sort_order>110</sort_order>
-                            <action>udropshipadmin/adminhtml_shipping</action>
+                            <action>zolagoosadmin/adminhtml_shipping</action>
                         </shipping>
                         <udshipclass_customer module="udshipclass">
                             <title>Customer Ship Classes</title>
                             <sort_order>120</sort_order>
-                            <action>udshipclassadmin/customer</action>
+                            <action>zosshipclassadmin/customer</action>
                         </udshipclass_customer>
                         <udshipclass_vendor module="udshipclass">
                             <title>Vendor Ship Classes</title>
                             <sort_order>130</sort_order>
-                            <action>udshipclassadmin/vendor</action>
+                            <action>zosshipclassadmin/vendor</action>
                         </udshipclass_vendor>
                     </children>
                 </vendor_general_config>

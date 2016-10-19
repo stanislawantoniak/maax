@@ -798,6 +798,9 @@ z-index: 0;
     color: #d3d3d3;
 }
 
+#refundModalSimple label[for=refund].has-error {
+    width: 200%;
+}
 
 div .view_lupa {
 	position: absolute;
