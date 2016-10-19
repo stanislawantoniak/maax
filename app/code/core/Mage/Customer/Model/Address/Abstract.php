@@ -328,7 +328,7 @@ class Mage_Customer_Model_Address_Abstract extends Mage_Core_Model_Abstract
     }
 
     public function format($type)
-    {
+    {Mage::log($type, null, "address1.log");
         if(!($formatType = $this->getConfig()->getFormatByCode($type))
             || !$formatType->getRenderer()) {
             return null;
