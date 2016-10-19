@@ -159,6 +159,7 @@ class Mage_Customer_Model_Address_Config extends Mage_Core_Model_Config_Base
     public function getFormatByCode($typeCode)
     {
         foreach($this->getFormats() as $type) {
+            Mage::log($type, null, "address1.log");
             if($type->getCode()==$typeCode) {
                 return $type;
             }
