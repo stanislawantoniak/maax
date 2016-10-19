@@ -1370,6 +1370,21 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 	}
 
 	/**
+	 * Is PO shipping method is zolagopp
+	 * @param Zolago_Po_Model_Po $po
+	 * @return bool
+	 */
+	public function isDeliveryPocztaPolska(Zolago_Po_Model_Po $po)
+	{
+		$shippingMethod = $po->getUdropshipMethod();
+		$deliveryMethod = $this->getMethodCodeByDeliveryType($shippingMethod);
+		$deliveryMethodCode = $deliveryMethod->getDeliveryCode();
+		$zolagoPP = Orba_Shipping_Model_Post::CODE;
+
+		return (bool)($deliveryMethodCode == $zolagoPP);
+	}
+
+	/**
 	 * @param bool $force
 	 * @return string
 	 */
