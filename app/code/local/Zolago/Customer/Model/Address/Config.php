@@ -16,7 +16,7 @@ class Zolago_Customer_Model_Address_Config extends Mage_Customer_Model_Address_C
         if (!isset($this->_types[$storeId])) {
             $this->_types[$storeId] = array();
             foreach ($this->getNode('formats')->children() as $typeCode => $typeConfig) {
-                Mage::log($typeCode, null, "address2.log");
+                Mage::log($typeCode, null, "address3.log");
                 $path = sprintf('%s%s', self::XML_PATH_ADDRESS_TEMPLATE, $typeCode);
                 $type = new Varien_Object();
                 $htmlEscape = strtolower($typeConfig->htmlEscape);
