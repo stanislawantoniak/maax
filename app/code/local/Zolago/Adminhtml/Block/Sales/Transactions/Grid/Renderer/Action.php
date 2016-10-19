@@ -8,7 +8,7 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Grid_Renderer_Action
     public function render(Varien_Object $row)
     {        
         $actions = array();
-        if (empty($row->getData('dotpay_id')){  // not dotpay
+        if (empty($row->getData('dotpay_id'))) {  // not dotpay
             $actions[] = array(
                 'caption' => Mage::helper('catalog')->__('Edit'),
                 'url'     => array(
