@@ -130,7 +130,7 @@ class ZolagoOs_OmniChannelVendorRatings_Block_Adminhtml_Review_Grid extends Mage
             'align'         => 'left',
             'width'         => '100px',
             'index'         => 'udropship_vendor',
-            'format'        => sprintf('<a onclick="this.target=\'blank\'" href="%sid/$udropship_vendor/">$vendor_name</a>', $this->getUrl('udropshipadmin/adminhtml_vendor/edit'))
+            'format'        => sprintf('<a onclick="this.target=\'blank\'" href="%sid/$udropship_vendor/">$vendor_name</a>', $this->getUrl('zolagoosadmin/adminhtml_vendor/edit'))
         ));
         }
 
@@ -171,7 +171,7 @@ class ZolagoOs_OmniChannelVendorRatings_Block_Adminhtml_Review_Grid extends Mage
                     array(
                         'caption' => Mage::helper('adminhtml')->__('Edit'),
                         'url'     => array(
-                            'base'=>'udratingsadmin/review/edit',
+                            'base'=>'zosratingsadmin/review/edit',
                             'params'=> array(
                                 'vendorId' => $this->getVendorId(),
                                 'customerId' => $this->getCustomerId(),
@@ -211,7 +211,7 @@ class ZolagoOs_OmniChannelVendorRatings_Block_Adminhtml_Review_Grid extends Mage
 
             $this->getMassactionBlock()->addItem('delete', array(
                 'label'=> Mage::helper('review')->__('Delete'),
-                'url'  => $this->getUrl('udratingsadmin/review/massDelete', array('ret' => Mage::registry('usePendingFilter') ? 'pending' : 'index')),
+                'url'  => $this->getUrl('zosratingsadmin/review/massDelete', array('ret' => Mage::registry('usePendingFilter') ? 'pending' : 'index')),
                 'confirm' => Mage::helper('review')->__('Are you sure?')
             ));
 
@@ -222,7 +222,7 @@ class ZolagoOs_OmniChannelVendorRatings_Block_Adminhtml_Review_Grid extends Mage
             array_unshift($statuses, array('label'=>'', 'value'=>''));
             $this->getMassactionBlock()->addItem('update_status', array(
                 'label'         => Mage::helper('review')->__('Update Status'),
-                'url'           => $this->getUrl('udratingsadmin/review/massUpdateStatus', array('ret' => Mage::registry('usePendingFilter') ? 'pending' : 'index')),
+                'url'           => $this->getUrl('zosratingsadmin/review/massUpdateStatus', array('ret' => Mage::registry('usePendingFilter') ? 'pending' : 'index')),
                 'additional'    => array(
                     'status'    => array(
                         'name'      => 'status',
@@ -238,7 +238,7 @@ class ZolagoOs_OmniChannelVendorRatings_Block_Adminhtml_Review_Grid extends Mage
 
     public function getRowUrl($row)
     {
-        return $this->getUrl('udratingsadmin/review/edit', array(
+        return $this->getUrl('zosratingsadmin/review/edit', array(
             'id' => $row->getReviewId(),
             'vendorId' => $this->getVendorId(),
             'customerId' => $this->getCustomerId(),
@@ -249,7 +249,7 @@ class ZolagoOs_OmniChannelVendorRatings_Block_Adminhtml_Review_Grid extends Mage
     public function getGridUrl()
     {
         if( $this->getVendorId() || $this->getCustomerId() ) {
-            return $this->getUrl('udratingsadmin/review/' . (Mage::registry('usePendingFilter') ? 'pending' : ''), array(
+            return $this->getUrl('zosratingsadmin/review/' . (Mage::registry('usePendingFilter') ? 'pending' : ''), array(
                 'vendorId' => $this->getVendorId(),
                 'customerId' => $this->getCustomerId(),
             ));

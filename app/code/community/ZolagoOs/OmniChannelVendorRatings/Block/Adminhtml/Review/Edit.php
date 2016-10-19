@@ -15,7 +15,7 @@ class ZolagoOs_OmniChannelVendorRatings_Block_Adminhtml_Review_Edit extends Mage
         $this->_updateButton('delete', 'label', Mage::helper('review')->__('Delete Review'));
 
         if( $this->getRequest()->getParam('vendorId', false) ) {
-            $this->_updateButton('back', 'onclick', 'setLocation(\'' . $this->getUrl('udropshipadmin/adminhtml_vendor/edit', array('id' => $this->getRequest()->getParam('vendorId', false))) .'\')' );
+            $this->_updateButton('back', 'onclick', 'setLocation(\'' . $this->getUrl('zolagoosadmin/adminhtml_vendor/edit', array('id' => $this->getRequest()->getParam('vendorId', false))) .'\')' );
         }
 
         if( $this->getRequest()->getParam('customerId', false) ) {
@@ -42,12 +42,12 @@ class ZolagoOs_OmniChannelVendorRatings_Block_Adminhtml_Review_Edit extends Mage
                 updateRating: function() {
                         elements = [$("select_stores"), $("rating_detail").getElementsBySelector("input[type=\'radio\']")].flatten();
                         $(\'save_button\').disabled = true;
-                        new Ajax.Updater("rating_detail", "'.$this->getUrl('udratingsadmin/review/ratingItems', array('_current'=>true)).'", {parameters:Form.serializeElements(elements), evalScripts:true, onComplete:function(){ $(\'save_button\').disabled = false; } });
+                        new Ajax.Updater("rating_detail", "'.$this->getUrl('zosratingsadmin/review/ratingItems', array('_current'=>true)).'", {parameters:Form.serializeElements(elements), evalScripts:true, onComplete:function(){ $(\'save_button\').disabled = false; } });
                     },
                 updateRatingNa: function() {
                         elements = [$("select_stores"), $("rating_detail_na").getElementsBySelector("input[type=\'radio\']")].flatten();
                         $(\'save_button\').disabled = true;
-                        new Ajax.Updater("rating_detail_na", "'.$this->getUrl('udratingsadmin/review/ratingItemsNa', array('_current'=>true)).'", {parameters:Form.serializeElements(elements), evalScripts:true, onComplete:function(){ $(\'save_button\').disabled = false; } });
+                        new Ajax.Updater("rating_detail_na", "'.$this->getUrl('zosratingsadmin/review/ratingItemsNa', array('_current'=>true)).'", {parameters:Form.serializeElements(elements), evalScripts:true, onComplete:function(){ $(\'save_button\').disabled = false; } });
                     }
            }
            Event.observe(window, \'load\', function(){

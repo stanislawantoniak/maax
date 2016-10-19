@@ -107,6 +107,8 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Detail extends Mage_Adminhtml_Bl
             : $this->__('N/A');
         $this->setCreatedAtHtml($this->escapeHtml($createdAt));
 
+        $this->setBankAccountHtml($this->escapeHtml($this->_txn->getBankAccount()));
+
         return parent::_toHtml();
     }
 }

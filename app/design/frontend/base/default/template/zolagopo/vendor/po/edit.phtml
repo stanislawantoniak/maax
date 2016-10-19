@@ -183,6 +183,12 @@ $isPickUpPaymentCanBeEntered = $this->isPickUpPaymentCanBeEntered();
                     </h4>
 					<div class="toolbar no-padding">
 						<div class="btn-group">
+							<?php if ($this->canShowPaymentChange()) : ?>
+								<span data-toggle="modal" data-target="#paymentsChange-pickup" class="btn btn-xs">
+									<i class="icon-retweet"></i>
+									<?php echo $_hlp->__("Change Payment"); ?>
+								</span>				
+							<?php endif; ?>			
 							<?php if($isPickUpPaymentCanBeEntered): ?>
 								<!--when delivery method is pickup-point it is possible to enter payment to order-->
 								<span data-toggle="modal" data-target="#paymentsModal-pickup" class="btn btn-xs">
@@ -717,6 +723,11 @@ echo $this->getChild("vendor_po_edit_shipping_method")
 if(!$activeNoRma){
 	echo $this->getChildHtml("vendor_po_create_rma");
 }
+/*******************************************************************************
+ * 	Change payment modal
+ *******************************************************************************/
+	echo $this->getChildHtml("vendor_po_payment_change");
+
 ?>
 
 <script type="text/javascript">

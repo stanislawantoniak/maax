@@ -1,7 +1,7 @@
 <?php
 
-require_once Mage::getConfig()->getModuleDir('controllers', 'ZolagoOs_OmniChannelVendorAskQuestion') 
-		. DS . "CustomerController.php";
+require_once Mage::getConfig()->getModuleDir('controllers', 'ZolagoOs_OmniChannelVendorAskQuestion')
+    . DS . "CustomerController.php";
 
 
 class Zolago_DropshipVendorAskQuestion_CustomerController extends ZolagoOs_OmniChannelVendorAskQuestion_CustomerController
@@ -19,10 +19,10 @@ class Zolago_DropshipVendorAskQuestion_CustomerController extends ZolagoOs_OmniC
             $data   = $this->getRequest()->getPost();
             $question = $this->getRequest()->getParam('question', array());
         }
-		
-		if(isset($question['shipment_id']) && empty($question['shipment_id'])){
-			unset($question['shipment_id']);
-		}
+
+        if(isset($question['shipment_id']) && empty($question['shipment_id'])){
+            unset($question['shipment_id']);
+        }
         if(!isset($question['po_id']) || !$question['po_id']) {
             $question['po_id'] = empty($question['order_id']) ? null : $question['order_id']; //don't know why it's here so leaving to ensure compatibility
         } else {

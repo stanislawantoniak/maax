@@ -5,7 +5,7 @@
         <sales_email>
             <groups>
                 <rma translate="label">
-                    <label>uReturns</label>
+                    <label>Returns</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>20</sort_order>
                     <show_in_default>1</show_in_default>
@@ -60,7 +60,7 @@
                     </fields>
                 </rma>
                 <rma_comment translate="label">
-                    <label>uReturns Comments</label>
+                    <label>Returns Comments</label>
                     <frontend_type>text</frontend_type>
                     <sort_order>30</sort_order>
                     <show_in_default>1</show_in_default>
@@ -118,7 +118,7 @@
         </sales_email>
         <urma>
             <tab>sales</tab>
-            <label>uReturns</label>
+            <label>Returns</label>
             <frontend_type>text</frontend_type>
             <sort_order>340</sort_order>
             <show_in_default>1</show_in_default>

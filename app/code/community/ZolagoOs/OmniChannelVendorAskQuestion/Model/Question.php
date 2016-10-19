@@ -146,7 +146,7 @@ class ZolagoOs_OmniChannelVendorAskQuestion_Model_Question extends Mage_Core_Mod
 
     public function getAdminUrl()
     {
-        return Mage::getModel('adminhtml/url')->getUrl('udqaadmin/index/edit', array('id'=>$this->getId()));
+        return Mage::getModel('adminhtml/url')->getUrl('zosqaadmin/index/edit', array('id'=>$this->getId()));
     }
 
 }

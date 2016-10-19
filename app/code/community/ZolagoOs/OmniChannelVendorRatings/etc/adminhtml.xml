@@ -12,17 +12,17 @@
                                 <review_pending module="udratings">
                                     <title>Pending Reviews</title>
                                     <sort_order>10</sort_order>
-                                    <action>udratingsadmin/review/pending</action>
+                                    <action>zosratingsadmin/review/pending</action>
                                 </review_pending>
                                 <review_all>
                                     <title>All Reviews</title>
                                     <sort_order>20</sort_order>
-                                    <action>udratingsadmin/review/index</action>
+                                    <action>zosratingsadmin/review/index</action>
                                 </review_all>
                                 <rating module="udratings">
                                     <title>Manage Ratings</title>
                                     <sort_order>30</sort_order>
-                                    <action>udratingsadmin/rating/index</action>
+                                    <action>zosratingsadmin/rating/index</action>
                                 </rating>
                             </children>
                         </review>

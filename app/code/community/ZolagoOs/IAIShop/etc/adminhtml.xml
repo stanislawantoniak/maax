@@ -1,0 +1,37 @@
+<config>
+    <menu>
+        <vendors>
+            <children>
+                <vendor_integration_config>
+                    <children>
+                        <zosiaishop_log>
+                            <title>IAI Integrator Log</title>
+                            <sort_order>250</sort_order>
+                            <action>adminhtml/zosiaishop_log/index</action>
+                        </zosiaishop_log>
+                    </children>
+                </vendor_integration_config>
+            </children>
+        </vendors>
+    </menu>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <vendors>
+                        <children>
+                            <vendor_integration_config>
+                                <children>
+                                    <zosiaishop_log>
+                                        <title>IAI Integrator Log</title>
+                                        <sort_order>250</sort_order>
+                                    </zosiaishop_log>
+                                </children>
+                            </vendor_integration_config>
+                        </children>
+                    </vendors>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

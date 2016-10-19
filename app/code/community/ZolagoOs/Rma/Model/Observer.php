@@ -12,8 +12,8 @@ class ZolagoOs_Rma_Model_Observer
             && Mage::helper('urma')->canRMA(Mage::registry('sales_order'))
         ) {
             $soeBlock->addButton('create_urma', array(
-                'label'     => Mage::helper('urma')->__('Create uReturn'),
-                'onclick'   => 'setLocation(\'' . $soeBlock->getUrl('urmaadmin/order_rma/new') . '\')',
+                'label'     => Mage::helper('urma')->__('Create Return'),
+                'onclick'   => 'setLocation(\'' . $soeBlock->getUrl('rmaadmin/order_rma/new') . '\')',
             ));
         }
     }

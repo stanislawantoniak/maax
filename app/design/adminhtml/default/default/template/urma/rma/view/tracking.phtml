@@ -29,7 +29,7 @@ foreach ($availCarriers as $acCode=>$acLabel) {
 <?php if($rma->getTracksCollection()->count()): ?>
 <a href="#" id="linkId" onclick="popWin('<?php echo $this->helper('urma/shipping')->getTrackingPopupUrlBySalesModel($this->getRma()) ?>','trackshipment','width=800,height=600,resizable=yes,scrollbars=yes')" title="<?php echo $this->__('Track this Return') ?>"><?php echo $this->__('Track this Return') ?></a>
 <br/>
-<a href="<?php echo $this->getUrl('urmaadmin/order_rma/printLabel', array('rma_id'=>$rma->getId()))?>">
+<a href="<?php echo $this->getUrl('rmaadmin/order_rma/printLabel', array('rma_id'=>$rma->getId()))?>">
     <?php echo $this->__('Print Labels') ?>
 </a>
 <?php endif ?>

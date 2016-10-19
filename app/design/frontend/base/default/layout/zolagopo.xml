@@ -71,6 +71,7 @@
 
 
 				<block name="vendor_po_create_rma" type="zolagopo/vendor_po_edit_rma" template="zolagopo/vendor/po/edit/create_rma.phtml"/>
+				<block name="vendor_po_payment_change" type="zolagopo/vendor_po_edit_payments_change" template="zolagopo/vendor/po/edit/payments-change.phtml"/>
 				<block name="vendor_po_edit_billing_address" type="zolagopo/vendor_po_edit_address" template="zolagopo/vendor/po/edit/address.phtml"/>
 				<block name="vendor_po_edit_comment" type="zolagopo/vendor_po_edit_comment" template="zolagopo/vendor/po/edit/comment.phtml"/>
 			</block>

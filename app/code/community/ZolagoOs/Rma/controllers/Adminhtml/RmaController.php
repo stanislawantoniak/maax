@@ -13,13 +13,13 @@ class ZolagoOs_Rma_Adminhtml_RmaController extends Mage_Adminhtml_Controller_Act
         $this->loadLayout()
             ->_setActiveMenu('sales/order')
             ->_addBreadcrumb($this->__('Sales'), $this->__('Sales'))
-            ->_addBreadcrumb($this->__('uReturn'),$this->__('uReturn'));
+            ->_addBreadcrumb($this->__('Return'),$this->__('Return'));
         return $this;
     }
 
     public function indexAction()
     {
-        $this->_title($this->__('Sales'))->_title($this->__('uReturn'));
+        $this->_title($this->__('Sales'))->_title($this->__('Return'));
 
         $this->_initAction()
             ->_addContent($this->getLayout()->createBlock('urma/adminhtml_rma'))

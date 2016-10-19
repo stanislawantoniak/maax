@@ -913,6 +913,7 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
             $list[$i]['delivery_method']          = $po->getApiDeliveryMethod();
             $list[$i]['shipment_tracking_number'] = $po->getShipmentTrackingNumber();
             $list[$i]['pos_id']                   = $po->getExternalId();
+            $list[$i]['external_order_id']	  = $po->getExternalOrderId();
             $list[$i]['order_currency']           = $po->getStore()->getCurrentCurrencyCode();
 			$list[$i]['order_email']              = $this->getApiOrderEmail($po->getIncrementId());
 			$list[$i]['customer_id']              = $po->getCustomerId();
