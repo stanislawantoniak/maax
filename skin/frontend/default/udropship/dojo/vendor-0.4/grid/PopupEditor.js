@@ -115,7 +115,7 @@ define([
 				this.setValue(null);
 			}
 			if(this.column.field == "name"){
-				this.showSku(cellObj.row.data.sku);
+				this.showSku(cellObj.row.data.skuv);
 			}
 			domStyle.set(
 				this.content, 
@@ -152,10 +152,10 @@ define([
 			
 		},
 
-		showSku: function (sku) {
+		showSku: function (skuv) {
 			var skuPlace;
 			skuPlace = put("p", {
-				innerHTML: 'SKU: ' + sku
+				innerHTML: 'SKU: ' + skuv
 			});
 			try {
 				this.getField().before(skuPlace);
