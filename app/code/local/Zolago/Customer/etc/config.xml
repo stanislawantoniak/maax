@@ -26,7 +26,8 @@
                 <rewrite>
                     <form>Zolago_Customer_Model_Customer_Form</form>
                     <customer>Zolago_Customer_Model_Customer</customer>
-	                <session>Zolago_Customer_Model_Session</session>
+                    <session>Zolago_Customer_Model_Session</session>
+                    <address_config>Zolago_Customer_Model_Address_Config</address_config>
                 </rewrite>
             </customer>
 			<customer_resource>
@@ -41,6 +42,32 @@
                 </rewrite>
             </core>
         </models>
+        <customer>
+            <address>
+                <formats>
+                    <text translate="title" module="customer">
+                        <title>Text</title>
+                    </text>
+                    <oneline translate="title" module="customer">
+                        <title>Text One Line</title>
+                    </oneline>
+                    <html translate="title" module="customer">
+                        <title>HTML</title>
+                        <htmlEscape>true</htmlEscape>
+                    </html>
+                    <html_2 translate="title" module="customer">
+                        <title>HTML 2</title>
+                        <htmlEscape>true</htmlEscape>
+                    </html_2>
+                    <pdf translate="title" module="customer">
+                        <title>PDF</title>
+                    </pdf>
+                    <js_template template="title" module="customer">
+                        <title>JavaScript Template</title>
+                    </js_template>
+                </formats>
+            </address>
+        </customer>
         <helpers>
             <zolagocustomer>
                 <class>Zolago_Customer_Helper</class>
@@ -175,6 +202,17 @@
 			<listing_products_cache>
 				<expiration_time>15</expiration_time>
 			</listing_products_cache>
+            <address_templates>
+                <html_2><![CDATA[{{if street1}}{{var street1}}<br />{{/if}}
+{{depend street2}}{{var street2}}<br />{{/depend}}
+{{depend street3}}{{var street3}}<br />{{/depend}}
+{{depend street4}}{{var street4}}<br />{{/depend}}
+{{if city}}{{var city}},  {{/if}}{{if region}}{{var region}}, {{/if}}{{if postcode}}{{var postcode}}{{/if}}<br/>
+{{var country}}<br/>
+{{depend telephone}}T: {{var telephone}}{{/depend}}
+{{depend fax}}<br/>F: {{var fax}}{{/depend}}
+{{depend vat_id}}<br/>VAT: {{var vat_id}}{{/depend}}]]></html_2>
+            </address_templates>
 		</customer>
 	</default>
 </config>
