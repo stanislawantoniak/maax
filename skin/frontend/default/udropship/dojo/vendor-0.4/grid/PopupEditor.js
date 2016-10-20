@@ -59,9 +59,11 @@ define([
 			this._close = put("a.close", "×");
 			this._form = this._buildForm();
 			this._title = this._buildTitle();
+			this._additionalInfo = this._buildAdditionalInfo();
 			
 			
 			put(this.content, this._title);
+			put(this.content, this._additionalInfo);
 			put(this.content, this._close);
 			put(this.content, this._form);
 			
@@ -115,7 +117,7 @@ define([
 				this.setValue(null);
 			}
 			if(this.column.field == "name"){
-				this.showSku(cellObj.row.data.sku);
+				this.showSku(cellObj.row.data.skuv);
 			}
 			domStyle.set(
 				this.content, 
@@ -152,13 +154,12 @@ define([
 			
 		},
 
-		showSku: function (sku) {
-			var skuPlace;
-			skuPlace = put("p", {
-				innerHTML: 'SKU: ' + sku
+		showSku: function (skuv) {
+			var skuObj = put("p", {
+				innerHTML: 'SKU: ' + skuv
 			});
 			try {
-				this.getField().before(skuPlace);
+				jQuery(this._additionalInfo).html(skuObj);
 			} catch (e) {
 
 			}
@@ -532,6 +533,13 @@ define([
 				put(title, put("span.required", " *"));
 			}
 			return title;
+		},
+
+		_buildAdditionalInfo: function(){
+			var additioalInfoContainer = put("div", {
+				id: "additional-info"
+			});
+			return additioalInfoContainer;
 		},
 		
 		/**
