@@ -114,7 +114,9 @@ define([
 			}else{
 				this.setValue(null);
 			}
-			
+			if(this.column.field == "name"){
+				this.showSku(cellObj.row.data.sku);
+			}
 			domStyle.set(
 				this.content, 
 				this._getEditorPosition(cellObj, this.content)
@@ -148,6 +150,18 @@ define([
 					
 			}
 			
+		},
+
+		showSku: function (sku) {
+			var skuPlace;
+			skuPlace = put("p", {
+				innerHTML: 'SKU: ' + sku
+			});
+			try {
+				this.getField().before(skuPlace);
+			} catch (e) {
+
+			}
 		},
 		/**
 		 * @returns {String}
