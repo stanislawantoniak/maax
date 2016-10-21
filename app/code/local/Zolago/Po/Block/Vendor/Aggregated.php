@@ -47,18 +47,25 @@ class Zolago_Po_Block_Vendor_Aggregated extends Mage_Core_Block_Template
         // cache
         $lambda = function ($param) {
             $out = array();
-            $manager = Mage::helper('orbashipping')->getShippingManager(Orba_Shipping_Model_Post::CODE);
-            if ($manager->isActive()) {
-                $client = $manager->getClient();
-                $list = $client->getPostOfficeList();
-                foreach ($list as $item) {
-                    $out[$item->urzadNadania] = sprintf('%s [%s]',$item->opis,$item->nazwaWydruk);
+            try {
+                $manager = Mage::helper('orbashipping')->getShippingManager(Orba_Shipping_Model_Post::CODE);
+                if ($manager->isActive()) {
+                    $client = $manager->getClient();
+                    $list = $client->getPostOfficeList();
+                    foreach ($list as $item) {
+                        $out[$item->urzadNadania] = sprintf('%s [%s]',$item->opis,$item->nazwaWydruk);
+                    }
                 }
+            } catch (Orba_Shipping_Model_Post_Client_Exception_NoPostOffices $xt) {
+                $out[0] = sprintf('-- %s --',$xt->getMessage());
+            } catch (Exception $xt) {
+                Mage::logException($xt);
+                Mage::getSingleton('core/session')->addError(Mage::helper('udpo')->__('There was a technical error. Please contact shop Administrator.'));
             }
             return serialize($out);
         };
         $cacheKey = 'post_office_list';
         return unserialize(Mage::helper('zolagocommon')->getCache($cacheKey,self::CACHE_GROUP,$lambda,null));
     }
-    
+
 }
