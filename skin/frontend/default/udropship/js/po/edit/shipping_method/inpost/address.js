@@ -1,16 +1,13 @@
 jQuery(document).ready(function () {
 
-    if(jQuery('[name=shipping_select_city]').length == 0)
-        return;
-
     if(lockerCity){
         jQuery('[name=shipping_select_city] option[value="'+lockerCity+'"]').prop('selected', true);
         _makeMapRequest(lockerCity, true);
     }
 
     jQuery("[name=shipping_select_city]").change(function () {
-        jQuery('[name=choose_inpost]').attr('disabled', 'disabled');
         var enteredSearchValue = jQuery("[name=shipping_select_city] option:selected").val();
+        console.log(enteredSearchValue);
 
         if (enteredSearchValue !== "undefined") {
             jQuery(".inpost_shipping_select_point_data").css("display","none");

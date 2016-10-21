@@ -1,9 +1,5 @@
 jQuery(document).ready(function () {
 
-    if(jQuery('[name=pwr_shipping_select_city]').length == 0)
-        return;
-    
-
     if(lockerPwrCity){
         jQuery('[name=pwr_shipping_select_city] option[value="'+lockerPwrCity+'"]').prop('selected', true);
         _makePwrMapRequest(lockerPwrCity, true);
