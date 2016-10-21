@@ -28,7 +28,7 @@ $carrier = $this->getCarrierTitle();
 
 
 $shippingMethodInfo = $this->getShippingMethodInfo();
-$shippingMethodTitle = $shippingMethodInfo->getUdropshipMethodTitle();
+$shippingMethodTitle = $shippingMethodInfo->getShippingTitle();
 
 
 $carrier = $carrier ? $carrier : $shippingMethodTitle;
@@ -49,6 +49,7 @@ $iconTruckBad = '<span class="fa-stack"><i class="fa fa-truck fa-stack-2x"></i><
 			<span class="order-top-title"><?php echo $_helper->__('delivery'); ?></span>
 			<?php if(
 				!$paid &&
+				!$cod &&
 				($status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_ACK ||
 				$status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_BACKORDER ||
 				$status == Zolago_Po_Model_Source::UDPO_STATUS_PAYMENT ||
