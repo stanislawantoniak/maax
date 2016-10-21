@@ -7,7 +7,7 @@ class Zolago_Mapper_Block_Adminhtml_Mapper_Grid extends Mage_Adminhtml_Block_Wid
         $this->setId('zolagomapper_mapper_grid');
         $this->setDefaultSort('mapper_id');
         $this->setDefaultDir('desc');
-        //$this->setSaveParametersInSession(true);
+        $this->setSaveParametersInSession(true);
         //$this->setMassactionIdFieldOnlyIndexValue(true);// custom_id value for mass action
     }
 
@@ -24,10 +24,10 @@ class Zolago_Mapper_Block_Adminhtml_Mapper_Grid extends Mage_Adminhtml_Block_Wid
     protected function _prepareColumns()
     {
 
-        $this->addColumn("mapper_id", array(
-            "index" => "mapper_id",
-            "header" => Mage::helper("zolagomapper")->__("ID"),
-        ));
+//        $this->addColumn("mapper_id", array(
+//            "index" => "mapper_id",
+//            "header" => Mage::helper("zolagomapper")->__("ID"),
+//        ));
         $this->addColumn("attribute_set_name", array(
             "index" => "attribute_set_name",
             "header" => Mage::helper("zolagomapper")->__("Attribute set"),
