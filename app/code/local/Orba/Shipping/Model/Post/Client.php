@@ -608,7 +608,6 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
         $message->guid = $number;
         $result = $this->_sendMessage('clearEnvelopeByGuids',$message);
         if (!empty($result->error)) {
-            Mage::log($result->error);
             Mage::throwException($result->error->errorDesc);
         }
     }
@@ -636,8 +635,7 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
          $message = new getUrzedyNadania();
          $result = $this->_sendMessage('getUrzedyNadania',$message);
          if (empty($result->urzedyNadania)) {             
-             Mage::log($result);
-             Mage::throwException(Mage::helper('orbashipping')->__('No assigned post offices'));
+             throw new Orba_Shipping_Model_Post_Client_Exception_NoPostOffices(Mage::helper('orbashipping')->__('No assigned post offices'));
          }
          return $result->urzedyNadania;
      }

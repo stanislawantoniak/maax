@@ -48,10 +48,10 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
         }
     }
 
-    protected function _saveRmaManually(){
+    protected function _saveRmaManually() {
         $shippingCost = $this->getRequest()->getPost('rma_shipping_cost');
         $shippingCostStatus = false;
-        if($shippingCost){
+        if($shippingCost) {
             $shippingCostStatus = true;
         }
         $data = $this->getRequest()->getPost('rma');
@@ -63,167 +63,169 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
             $rma->save();
 
             Mage::dispatchEvent("zolagorma_rma_created_manually", array(
-                "po" => $po,
-                "rma" => $rma
-            ));
+                                    "po" => $po,
+                                    "rma" => $rma
+                                ));
         }
         $this->_redirect('udpo/vendor/edit', array('id'=>$poId));
     }
 
-	public function makeRefundAction() {
-		$data = $this->getRequest()->getPost();
-		/** @var Zolago_Rma_Helper_Data $rmaHelper */
-		$hlp = Mage::helper("zolagorma");
-		$connection = Mage::getSingleton('core/resource')->getConnection('core_write');
-		/* @var $connection Varien_Db_Adapter_Interface */
-		$connection->beginTransaction();
+    public function makeRefundAction() {
+        $data = $this->getRequest()->getPost();
+        /** @var Zolago_Rma_Helper_Data $rmaHelper */
+        $hlp = Mage::helper("zolagorma");
+        $connection = Mage::getSingleton('core/resource')->getConnection('core_write');
+        /* @var $connection Varien_Db_Adapter_Interface */
+        $connection->beginTransaction();
 
-		try {
-			$rma = $this->_registerRma();
-			if(($rma->getRmaType() == Zolago_Rma_Model_Rma::RMA_TYPE_RETURN && $rma->getPo()->isCod())) {
-				Mage::throwException($hlp->__("Refund is not possible because order was sent using COD and client didn't receive the package."));
-			} else if($rma->getRmaStatusCode() == Zolago_Rma_Model_Rma_Status::STATUS_ACCEPTED) {
-				$invalidItems = array();
-				$validItems = array();
-				$returnAmount = 0;
-				$po = $rma->getPo();
+        try {
+            $rma = $this->_registerRma();
+            if(($rma->getRmaType() == Zolago_Rma_Model_Rma::RMA_TYPE_RETURN && $rma->getPo()->isCod())) {
+                Mage::throwException($hlp->__("Refund is not possible because order was sent using COD and client didn't receive the package."));
+            } else if($rma->getRmaStatusCode() == Zolago_Rma_Model_Rma_Status::STATUS_ACCEPTED) {
+                $invalidItems = array();
+                $validItems = array();
+                $returnAmount = 0;
+                $po = $rma->getPo();
 
-				/** @var Zolago_Rma_Model_Rma $rmaModel */
-				$rmaModel = Mage::getModel('zolagorma/rma');
-				$rmas = $rmaModel->loadByPoId($po->getId());
-				$alreadyReturnedAmount = 0;
-				foreach($rmas as $singleRma) {
-					$alreadyReturnedAmount += $singleRma->getReturnedValue();
-				}
+                /** @var Zolago_Rma_Model_Rma $rmaModel */
+                $rmaModel = Mage::getModel('zolagorma/rma');
+                $rmas = $rmaModel->loadByPoId($po->getId());
+                $alreadyReturnedAmount = 0;
+                foreach($rmas as $singleRma) {
+                    $alreadyReturnedAmount += $singleRma->getReturnedValue();
+                }
 
-				foreach ($data['rmaItems'] as $id => $val) {
-					/** @var Zolago_Rma_Model_Rma_Item $rmaItem */
-					$rmaItem = $rma->getItemById($id);
-					if (is_object($rmaItem) && $rmaItem->getId()) {
-						if($rmaItem->getPoItem()->getId()) {
-							$maxValue = $rmaItem->getPoItem()->getFinalItemPrice();
-						} else {
-							$maxValue = $rmaItem->getPrice();
-						}
-						if (isset($data['returnValues'][$id]) &&
-							$data['returnValues'][$id] <= $maxValue) {
-							$validItems[] = $rmaItem->setReturnedValue($rmaItem->getReturnedValue() + $data['returnValues'][$id])->save();
-							$returnAmount += $data['returnValues'][$id];
-						} else {
-							$invalidItems[] = $rmaItem->getName() . " (" . $rmaItem->getVendorSimpleSku() . ")";
-						}
-					} else {
-						$invalidItems[] = $hlp->__("Invalid RMA item ID:") . " " . $id;
-					}
-				}
+                foreach ($data['rmaItems'] as $id => $val) {
+                    /** @var Zolago_Rma_Model_Rma_Item $rmaItem */
+                    $rmaItem = $rma->getItemById($id);
+                    if (is_object($rmaItem) && $rmaItem->getId()) {
+                        if($rmaItem->getPoItem()->getId()) {
+                            $maxValue = $rmaItem->getPoItem()->getFinalItemPrice();
+                        } else {
+                            $maxValue = $rmaItem->getPrice();
+                        }
+                        if (isset($data['returnValues'][$id]) &&
+                                $data['returnValues'][$id] <= $maxValue) {
+                            $validItems[] = $rmaItem->setReturnedValue($rmaItem->getReturnedValue() + $data['returnValues'][$id])->save();
+                            $returnAmount += $data['returnValues'][$id];
+                        } else {
+                            $invalidItems[] = $rmaItem->getName() . " (" . $rmaItem->getVendorSimpleSku() . ")";
+                        }
+                    } else {
+                        $invalidItems[] = $hlp->__("Invalid RMA item ID:") . " " . $id;
+                    }
+                }
 
-				if (count($validItems) && $returnAmount > 0) {
-				    $tmpValue = round(($returnAmount + $alreadyReturnedAmount),4);
-					if($tmpValue <= $po->getGrandTotalInclTax()) {
-						$rma->setReturnedValue($rma->getReturnedValue() + $returnAmount)->save();
-					} else {
-						$this->_throwRefundTooMuchAmountException();
-					}
+                if (count($validItems) && $returnAmount > 0) {
+                    $tmpValue = round(($returnAmount + $alreadyReturnedAmount),4);
+                    if($tmpValue <= $po->getGrandTotalInclTax()) {
+                        $rma->setReturnedValue($rma->getReturnedValue() + $returnAmount)->save();
+                    } else {
+                        $this->_throwRefundTooMuchAmountException();
+                    }
 
-					if($po->isPaymentDotpay()) {
-						/** @var Zolago_Payment_Model_Allocation $allocationModel */
-						$allocationModel = Mage::getModel('zolagopayment/allocation');
-						$result = $allocationModel->createOverpayment($po, "Moved to overpayment by RMA refund", "Created overpayment by RMA refund",$rma->getId());
-						if($result === false) {
-							$this->_throwRefundTooMuchAmountException();
-						}
-					}
+                    if($po->isPaymentDotpay()) {
+                        /** @var Zolago_Payment_Model_Allocation $allocationModel */
+                        $allocationModel = Mage::getModel('zolagopayment/allocation');
+                        $result = $allocationModel->createOverpayment($po, "Moved to overpayment by RMA refund", "Created overpayment by RMA refund",$rma->getId());
+                        if($result === false) {
+                            $this->_throwRefundTooMuchAmountException();
+                        }
+                    }
                     $_returnAmount = $po->getCurrencyFormattedAmount($returnAmount);
-					$this->_getSession()->addSuccess($hlp->__("RMA refund successful! Amount refunded %s",$_returnAmount));
-					$po->addComment($hlp->__("Created refund (RMA id: %s). Amount: %s",$rma->getIncrementId(),$_returnAmount),false,true);
-					/*$rma->addComment($hlp->__("Created RMA refund. Amount: %s",$_returnAmount),false,true);*/
+                    $this->_getSession()->addSuccess($hlp->__("RMA refund successful! Amount refunded %s",$_returnAmount));
+                    $po->addComment($hlp->__("Created refund (RMA id: %s). Amount: %s",$rma->getIncrementId(),$_returnAmount),false,true);
+                    /*$rma->addComment($hlp->__("Created RMA refund. Amount: %s",$_returnAmount),false,true);*/
 
 
-					$commentData = array(
-						"parent_id" => $rma->getId(),
-						"is_visible_on_front" => 0,
-						"is_vendor_notified" => 0,
-						"is_customer_notified" => 0,
-						"is_visible_to_vendor" => 1
-					);
-					/* @var $vendorSession  Zolago_Dropship_Model_Session*/
-					$vendorSession = Mage::getSingleton('udropship/session');
-					$commentData['vendor_id'] = $vendorSession->getVendorId();
+                    $commentData = array(
+                                       "parent_id" => $rma->getId(),
+                                       "is_visible_on_front" => 0,
+                                       "is_vendor_notified" => 0,
+                                       "is_customer_notified" => 0,
+                                       "is_visible_to_vendor" => 1
+                                   );
+                    /* @var $vendorSession  Zolago_Dropship_Model_Session*/
+                    $vendorSession = Mage::getSingleton('udropship/session');
+                    $commentData['vendor_id'] = $vendorSession->getVendorId();
 
-					/** @var GH_Statements_Model_Refund $refundStatementModel */
-					$refundStatementModel = Mage::getModel('ghstatements/refund');
+                    /** @var GH_Statements_Model_Refund $refundStatementModel */
+                    $refundStatementModel = Mage::getModel('ghstatements/refund');
 
-					if($vendorSession->isOperatorMode()) {
-						$operator = $vendorSession->getOperator();
-						$commentData['operator_id'] = $operator->getId();
-						$refundStatementModel
-							->setOperatorId($operator->getId())
-							->setOperatorName($operator->getFirstname()." ".$operator->getLastname()." (".$operator->getEmail().")");
-					}
+                    if($vendorSession->isOperatorMode()) {
+                        $operator = $vendorSession->getOperator();
+                        $commentData['operator_id'] = $operator->getId();
+                        $refundStatementModel
+                        ->setOperatorId($operator->getId())
+                        ->setOperatorName($operator->getFirstname()." ".$operator->getLastname()." (".$operator->getEmail().")");
+                    }
 
-					if(!$po->isPaymentDotpay()) {
-						//refund confirm
-						$commentData['comment'] = $hlp->__("{{author_name}} has confirmed refund for this RMA, amount: %s",$_returnAmount);
-					} else {
-						//refund order
-						$commentData['comment'] = $hlp->__("{{author_name}} has ordered refund for this RMA, amount: %s",$_returnAmount);
-					}
-					$commentModel = Mage::getModel("zolagorma/rma_comment");
-					$commentModel->setRma($rma);
-					$commentModel->addData($commentData);
-					$commentModel->setAuthorName($commentModel->getAuthorName(false));
-					$commentModel->save();
+                    if(!$po->isPaymentDotpay()) {
+                        //refund confirm
+                        $commentData['comment'] = $hlp->__("{{author_name}} has confirmed refund for this RMA, amount: %s",$_returnAmount);
+                    } else {
+                        //refund order
+                        $commentData['comment'] = $hlp->__("{{author_name}} has ordered refund for this RMA, amount: %s",$_returnAmount);
+                    }
+                    $commentModel = Mage::getModel("zolagorma/rma_comment");
+                    $commentModel->setRma($rma);
+                    $commentModel->addData($commentData);
+                    $commentModel->setAuthorName($commentModel->getAuthorName(false));
+                    $commentModel->save();
 
-					//send emails to not transactional refunds
-					if(!$po->isPaymentDotpay()) {
-						/** @var Zolago_Payment_Helper_Data $paymentHelper */
-						$paymentHelper = Mage::helper('zolagopayment');
-						if($paymentHelper->sendRmaRefundEmail($rma->getOrder()->getCustomerEmail(),$rma,$_returnAmount)) {
-							$po->addComment($hlp->__("Email about RMA refund was sent to customer (RMA id: %s, amount: %s)", $rma->getIncrementId(), $_returnAmount), false, true);
-							$rma->addComment($hlp->__("Email about refund was sent to customer (Amount: %s)", $_returnAmount));
-						}
-					}
+                    //send emails to not transactional refunds
+                    if(!$po->isPaymentDotpay()) {
+                        /** @var Zolago_Payment_Helper_Data $paymentHelper */
+                        $paymentHelper = Mage::helper('zolagopayment');
+                        if($paymentHelper->sendRmaRefundEmail($rma->getOrder()->getCustomerEmail(),$rma,$_returnAmount)) {
+                            $po->addComment($hlp->__("Email about RMA refund was sent to customer (RMA id: %s, amount: %s)", $rma->getIncrementId(), $_returnAmount), false, true);
+                            $rma->addComment($hlp->__("Email about refund was sent to customer (Amount: %s)", $_returnAmount));
+                        }
+                    }
 
-					$refundStatementModel
-						->setPoId($po->getId())
-						->setPoIncrementId($po->getIncrementId())
-						->setRmaId($rma->getId())
-						->setRmaIncrementId($rma->getIncrementId())
-						->setDate(Mage::getModel('core/date')->date('Y-m-d'))
-						->setVendorId($po->getVendor()->getId())
-						->setRegisteredValue($returnAmount);
+                    $refundStatementModel
+                    ->setPoId($po->getId())
+                    ->setPoIncrementId($po->getIncrementId())
+                    ->setRmaId($rma->getId())
+                    ->setRmaIncrementId($rma->getIncrementId())
+                    ->setDate(Mage::getModel('core/date')->date('Y-m-d'))
+                    ->setVendorId($po->getVendor()->getId())
+                    ->setRegisteredValue($returnAmount);
 
-					if($rma->getPaymentChannelOwner()) {
-						$refundStatementModel->setValue($returnAmount);
-					}
+                    if($rma->getPaymentChannelOwner()) {
+                        $refundStatementModel->setValue($returnAmount);
+                    }
 
-					$refundStatementModel->save();
+                    $refundStatementModel->save();
 
-					$po->saveComments();
-					$rma->saveComments();
-				} elseif (count($invalidItems)) {
-					Mage::throwException($hlp->__("There was an error while processing those items:") . "<br />" . implode('<br />', $invalidItems));
-				} else {
-					Mage::throwException($hlp->__("No items to refund"));
-				}
+                    $po->saveComments();
+                    $rma->saveComments();
+                }
+                elseif (count($invalidItems)) {
+                    Mage::throwException($hlp->__("There was an error while processing those items:") . "<br />" . implode('<br />', $invalidItems));
+                }
+                else {
+                    Mage::throwException($hlp->__("No items to refund"));
+                }
 
-				$connection->commit();
-			} else {
-				Mage::throwException($hlp->__("Cannot create RMA refund because of wrong RMA status"));
-			}
-		} catch(Mage_Core_Exception $e) {
-			$connection->rollBack();
-			$this->_getSession()->addError($e->getMessage());
-		} catch(Exception $e) {
-			$connection->rollBack();
-			Mage::logException($e);
-			$this->_getSession()->addError($hlp->__("There was a technical error. Please contact shop Administrator."));
-		}
+                $connection->commit();
+            } else {
+                Mage::throwException($hlp->__("Cannot create RMA refund because of wrong RMA status"));
+            }
+        } catch(Mage_Core_Exception $e) {
+            $connection->rollBack();
+            $this->_getSession()->addError($e->getMessage());
+        } catch(Exception $e) {
+            $connection->rollBack();
+            Mage::logException($e);
+            $this->_getSession()->addError($hlp->__("There was a technical error. Please contact shop Administrator."));
+        }
 
-		return $this->_redirectReferer();
-	}
-    
-    public function makeSimpleRefundAction(){
+        return $this->_redirectReferer();
+    }
+
+    public function makeSimpleRefundAction() {
         $rmaId = $this->getRequest()->getParam('id');
         $amount = $this->getRequest()->getParam('refund');
         $hlp = Mage::helper("zolagorma");
@@ -239,7 +241,7 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
                 $paymentId = $rma->getOrder()->getPayment()->getId();
                 $customerAccount = NULL;
 
-                if($rma->getCustomerAccount()){
+                if($rma->getCustomerAccount()) {
                     $customerAccount = $rma->getCustomerAccount();
                 }
                 /* @var Mage_Sales_Model_Resource_Order_Payment_Transaction_Collection $existTransactionCollection */
@@ -310,12 +312,12 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
 
                         $this->_getSession()->addSuccess($hlp->__("RMA refund successful! Amount refunded %s", $po->getCurrencyFormattedAmount($amount)));
                     }
-                }else{
+                } else {
                     $this->_getSession()->addError($hlp->__("An amount to refund can not be more than total order sum"));
                 }
                 $this->_redirect("urma/vendor/edit", array('id' => $rmaId));
             }
-        }catch(Mage_Core_Exception $e) {
+        } catch(Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
         } catch(Exception $e) {
             Mage::logException($e);
@@ -328,7 +330,7 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
      * @param $rma
      * @return bool
      */
-    protected function validateSimpleRefund($amount, $rma){
+    protected function validateSimpleRefund($amount, $rma) {
         $customerId = $rma->getCustomerId();
         $orderId = $rma->getOrder()->getId();
         $paymentId = $rma->getOrder()->getPayment()->getId();
@@ -345,7 +347,7 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
 
         $items = $rma->getAllItems();
         $totalOrderSum = 0;
-        foreach ($items as $item){
+        foreach ($items as $item) {
             $poItemId = $item->getPoItem()->getId();
             if($poItemId) {
                 $paidNum = $item->getPoItem()->getFinalItemPrice();
@@ -354,29 +356,29 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
             }
             $totalOrderSum += floatval($paidNum);
         }
-        if(round($newRefundSum,4) <= round($totalOrderSum,4)){
+        if(round($newRefundSum,4) <= round($totalOrderSum,4)) {
             return true;
         }
         return false;
     }
 
-	protected function _throwRefundTooMuchAmountException() {
-		Mage::throwException(Mage::helper("zolagorma")->__("Refund could not be created - not enough money left in PO"));
-	}
-    
+    protected function _throwRefundTooMuchAmountException() {
+        Mage::throwException(Mage::helper("zolagorma")->__("Refund could not be created - not enough money left in PO"));
+    }
+
     /**
      * Print DHL waybill
      */
-     public function pdfAction() {
-         $request = $this->getRequest();
-         $number = $request->getParam('number');
-         if (empty($number)) {
-             Mage::throwException(Mage::helper('zolagorma')->__('No tracking number'));
-         }
-         $ioAdapter = new Varien_Io_File();
-         $dhlFile = Mage::helper('orbashipping/carrier_dhl')->getFileDir() . $number . '.pdf';
-         return $this->_prepareDownloadResponse(basename($dhlFile), @$ioAdapter->read($dhlFile), 'application/pdf');
-     }
+    public function pdfAction() {
+        $request = $this->getRequest();
+        $number = $request->getParam('number');
+        if (empty($number)) {
+            Mage::throwException(Mage::helper('zolagorma')->__('No tracking number'));
+        }
+        $ioAdapter = new Varien_Io_File();
+        $dhlFile = Mage::helper('orbashipping/carrier_dhl')->getFileDir() . $number . '.pdf';
+        return $this->_prepareDownloadResponse(basename($dhlFile), @$ioAdapter->read($dhlFile), 'application/pdf');
+    }
     /**
      * Add comment
      * @return null
@@ -413,12 +415,12 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
             //else
             //no meter
 
-	        //don't allow to close rma if refund is still processing
-	        if($rma->getRmaRefundAmount() && $rma->getPo()->isPaymentDotpay() && !$rma->isAlreadyReturned() && $status == 'closed_accepted') {
-		        throw new Mage_Core_Exception(
-			        Mage::helper("zolagorma")->__("You can't close RMA if refund is still processing. Please try again after refund completion.")
-		        );
-	        }
+            //don't allow to close rma if refund is still processing
+            if($rma->getRmaRefundAmount() && $rma->getPo()->isPaymentDotpay() && !$rma->isAlreadyReturned() && $status == 'closed_accepted') {
+                throw new Mage_Core_Exception(
+                    Mage::helper("zolagorma")->__("You can't close RMA if refund is still processing. Please try again after refund completion.")
+                );
+            }
 
             $messages = array();
 
@@ -432,7 +434,7 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
                 if($notify_email) {
                     $notify_status = 1;
                 } else {
-                    $notify_status = 0;                    
+                    $notify_status = 0;
                 }
                 $messages[] = Mage::helper("zolagorma")->__("Status changed");
                 Mage::helper('zolagorma')->processSaveStatus($rma, $status, (bool)$notify_status);
@@ -458,7 +460,7 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
                             "username"				=> null,
                             "rma_status"			=> $rma->getUdropshipStatus()
                         );
-	
+
                 $model = Mage::getModel("urma/rma_comment")->
                          setRma($rma)->
                          addData($data)->
@@ -477,11 +479,11 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
                 $messages[] = Mage::helper("zolagorma")->__("Comment added");
             }
 
-            if($notify){
+            if($notify) {
                 Mage::getModel("urma/rma")
-                    ->load($rma->getId())
-                    ->setnewCustomerQuestion(0)
-                    ->save();
+                ->load($rma->getId())
+                ->setnewCustomerQuestion(0)
+                ->save();
             }
 
             $connection->commit();
@@ -513,14 +515,14 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
     protected function _getTrackingNumber($carrier) {
         $manager = Mage::helper('orbashipping')->getShippingManager($carrier);
         $request = $this->getRequest();
-		$vendor = $this->_getSession()->getVendor();
+        $vendor = $this->_getSession()->getVendor();
         $rma = $this->_registerRma();
         $settings = $manager->prepareRmaSettings($request,$vendor,$rma);
         if ($carrier == Orba_Shipping_Model_Carrier_Dhl::CODE) {
             $this->getRequest()->setParam("shipping_source_account", $settings["account"]);
             if (isset($settings["gallery_shipping_source"])
-                && ($settings["gallery_shipping_source"] == 1)
-            ) {
+                    && ($settings["gallery_shipping_source"] == 1)
+               ) {
                 //Assign Client Number to Gallery Or To Vendor
                 $this->getRequest()->setParam("gallery_shipping_source", 1);
             }
@@ -534,8 +536,8 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
         $trackingParams = $manager->createShipmentAtOnce();
         $session = Mage::getSingleton('core/session');
         $session->setPdfNumberPrintId($trackingParams['trackingNumber']);
-        return $trackingParams['trackingNumber'];        
-        
+        return $trackingParams['trackingNumber'];
+
     }
     /**
      * Save tracking number
@@ -563,7 +565,7 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
             $length = (float)$request->getParam('length');
 
             $autoTracking = false;
-            
+
             $trackingNumber = $this->_getTrackingNumber($carrier);
 
             $trackData = array(
@@ -598,7 +600,7 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
                              "track_creator"			=> Zolago_Rma_Model_Rma_Track::CREATOR_TYPE_VENDOR,
                              "gallery_shipping_source" => $this->getRequest()->getParam("gallery_shipping_source", 0),
                              "shipping_source_account" => $this->getRequest()->getParam("shipping_source_account", 0),
-	                         "track_type" => GH_Statements_Model_Track::TRACK_TYPE_RMA_VENDOR
+                             "track_type" => GH_Statements_Model_Track::TRACK_TYPE_RMA_VENDOR
                          );
 
 
@@ -607,7 +609,7 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
             $manager = Mage::helper('orbashipping')->getShippingManager($carrier);
             $type = $request->getParam('specify_orbadhl_rate_type',0);
             $manager->calculateCharge($model,$type,$this->_getSession()->getVendor(),$rma->getTotalValue(),0);
-                     
+
             $model->save();
 
             Mage::dispatchEvent("zolagorma_rma_track_added", array(
@@ -706,29 +708,29 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
      * @throws Mage_Core_Exception
      */
     protected function _registerRma() {
-	    $id = is_numeric($this->getRequest()->getParam('id')) ? $this->getRequest()->getParam('id') : false;
+        $id = is_numeric($this->getRequest()->getParam('id')) ? $this->getRequest()->getParam('id') : false;
 
-	    if($id !== false &&
-		    Mage::registry('current_rma') instanceof Zolago_Rma_Model_Rma &&
-		    Mage::registry('current_rma')->getId() == $id) {
-		    return Mage::registry('current_rma');
-	    } else {
-		    Mage::unregister('current_rma');
-	    }
+        if($id !== false &&
+                   Mage::registry('current_rma') instanceof Zolago_Rma_Model_Rma &&
+                   Mage::registry('current_rma')->getId() == $id) {
+            return Mage::registry('current_rma');
+        } else {
+            Mage::unregister('current_rma');
+        }
 
-	    /** @var Zolago_Rma_Model_Rma $rma */
-	    $rma = Mage::getModel("zolagorma/rma");
-		$rma->load($id);
+        /** @var Zolago_Rma_Model_Rma $rma */
+        $rma = Mage::getModel("zolagorma/rma");
+        $rma->load($id);
 
         if(!$rma->getId()) {
             throw new Mage_Core_Exception(Mage::helper('zolagorma')->__("This RMA does not exist."));
         }
-	    if(!$this->_validateRma($rma)) {
-		    throw new Mage_Core_Exception(Mage::helper('zolagorma')->__("This RMA is not yours."));
-	    } else {
-		    Mage::register('current_rma', $rma);
-		    return Mage::registry('current_rma');
-	    }
+        if(!$this->_validateRma($rma)) {
+            throw new Mage_Core_Exception(Mage::helper('zolagorma')->__("This RMA is not yours."));
+        } else {
+            Mage::register('current_rma', $rma);
+            return Mage::registry('current_rma');
+        }
     }
 
     /**
@@ -741,13 +743,13 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
             return false;
         }
         /** @var Zolago_Dropship_Model_Vendor $vendor */
-		$vendor = $this->_getSession()->getVendor();
-		$rmaVendorId = $rma->getVendor()->getId();
-	
+        $vendor = $this->_getSession()->getVendor();
+        $rmaVendorId = $rma->getVendor()->getId();
+
         if($rmaVendorId == $vendor->getId()) {
             return true;
         }
-		
+
         return in_array($rmaVendorId, $vendor->getChildVendorIds());
     }
 

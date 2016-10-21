@@ -4,4 +4,7 @@
 "Przeniesiono na nadpłatę","Moved to overpayment"
 "Utworzono nadpłatę","Created overpayment"
 "Przeniesiono na nadpłatę ze zwrotu RMA","Moved to overpayment by RMA refund"
-"Utworzono nadpłatę ze zwrotu RMA","Created overpayment by RMA refund"s
+"Utworzono nadpłatę ze zwrotu RMA","Created overpayment by RMA refund"
+"[%s] Create overpayment refund on %s","[%s] Utworzono zwrot z nadpłaty na %s"
+"[%s] Refund not created","[%s] Nie utworzono zwrotu"
+"[%s] Error at create overpayment refund. Please contact with administrators.","[%s] Wystąpił błąd przy towrzeniu zwrotu. Skontaktuj się z administratorem sklepu"
