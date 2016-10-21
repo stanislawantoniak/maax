@@ -1,0 +1,275 @@
+<?php /* @var $this Zolago_Pos_Block_Dropship_Pos_Grid */ ?>
+<?php $_helper = Mage::helper("zolagopos");?>
+<?php
+/**
+ * Template for Zolago_Pos_Block_Dropship_Pos_Grid
+ *
+ *  getId()
+ *  getCollection()
+ *  getColumns()
+ *  getPagerVisibility()
+ *  getVarNamePage()
+ */
+$numColumns = sizeof($this->getColumns());
+?>
+
+<div id="<?php echo $this->getId() ?>">
+<?php if($this->getCollection()): ?>
+    <?php if($this->canDisplayContainer()): ?>
+    <?php if($this->getGridHeader()): ?>
+    <div class="content-header">
+        <table cellspacing="0">
+            <tr>
+                <td style="width:50%;"><h2><?php echo $this->getGridHeader(); ?></h2></td>
+            </tr>
+        </table>
+    </div>
+<?php endif ?>
+<?php else: ?>
+    <?php echo $this->getMessagesBlock()->getGroupedHtml() ?>
+<?php endif; ?>
+<?php if($this->getPagerVisibility() || $this->getExportTypes() || $this->getFilterVisibility()): ?>
+<?php if($this->getPagerVisibility()): ?>
+    <div class="actions">
+        <div class="pull-left form-inline">
+            <div class="text-holder">
+                <label>
+                    <?php echo $_helper->__('Total %d records found.', $this->getCollection()->getSize()) ?>
+                    <span id="<?php echo $this->getHtmlId() ?>-total-count" class="hidden"><?php echo $this->getCollection()->getSize() ?></span>
+                </label>
+            </div>
+            <div class="text-holder">
+                <label><?php echo $_helper->__('View') ?></label>
+            </div>
+            <div class="form-group">
+                <select class="form-control" name="<?php echo $this->getVarNameLimit() ?>" onchange="<?php echo $this->getJsObjectName() ?>.loadByElement(this)">
+                    <option value="20"<?php if($this->getCollection()->getPageSize()==20): ?> selected="selected"<?php endif; ?>>20</option>
+                    <option value="30"<?php if($this->getCollection()->getPageSize()==30): ?> selected="selected"<?php endif; ?>>30</option>
+                    <option value="50"<?php if($this->getCollection()->getPageSize()==50): ?> selected="selected"<?php endif; ?>>50</option>
+                    <option value="100"<?php if($this->getCollection()->getPageSize()==100): ?> selected="selected"<?php endif; ?>>100</option>
+                    <option value="200"<?php if($this->getCollection()->getPageSize()==200): ?> selected="selected"<?php endif; ?>>200</option>
+                </select>
+            </div>
+            <div class="text-holder">
+                <label><?php echo $_helper->__('per page.') ?></label>
+            </div>
+        </div>
+        <?php if($this->getMainButtonsHtml()):?>
+            <div class="pull-right  form-inline main-buttons">
+                <?php echo $this->getMainButtonsHtml() ?>
+            </div>
+        <?php endif;?>
+        <div class="pull-right form-inline">
+            <div class="form-group" style="margin-right: 10px;">
+            </div>
+            <?php $_curPage  = $this->getCollection()->getCurPage() ?>
+            <?php $_lastPage = $this->getCollection()->getLastPageNumber() ?>
+            <div class="form-group">
+                <input type="text" size="1" name="<?php echo $this->getVarNamePage() ?>" value="<?php echo $_curPage ?>" class="page align-right form-control" onkeypress="<?php echo $this->getJsObjectName() ?>.inputPage(event, '<?php echo $_lastPage ?>')"/>
+            </div>
+            <div class="form-group text-holder">
+                <label>
+                    <?php echo $_helper->__('of %s', $this->getCollection()->getLastPageNumber()) ?>
+                </label>
+            </div>
+            <div class="form-group">
+                <div class="btn-group">
+                    <?php if($_curPage>1): ?>
+                        <button class="btn btn-default"  title="<?php echo $_helper->__('Previous page') ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage-1) ?>');return false;"><i class="glyphicon glyphicon-chevron-left arrow"></i></button>
+                    <?php else: ?>
+                        <button class="btn btn-default" disabled="disabled"><i class="glyphicon glyphicon-chevron-left arrow"></i></button>
+                    <?php endif; ?>
+
+                    <?php if($_curPage < $_lastPage): ?>
+                        <button class="btn btn-default"  title="<?php echo $_helper->__('Next page') ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage+1) ?>');return false;"><i class="glyphicon glyphicon-chevron-right arrow"></i></button>
+                    <?php else: ?>
+                        <button class="btn btn-default" disabled="disabled"><i class="glyphicon glyphicon-chevron-right arrow"></i></button>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+        </div>
+        <div class="clearfix"></div>
+    </div>
+<hr/>
+
+<?php endif ?>
+
+<?php endif; ?>
+<?php if($this->getMassactionBlock()->isAvailable()): ?>
+    <?php echo $this->getMassactionBlockHtml() ?>
+<?php endif ?>
+    <div class="grid">
+        <div class="hor-scroll">
+            <table cellspacing="0" class="data table table-bordered table-hover table-striped" id="<?php echo $this->getId() ?>_table">
+                <?php foreach ($this->getColumns() as $_column): ?>
+                    <col <?php echo $_column->getHtmlProperty() ?> />
+                <?php endforeach; ?>
+                <?php if ($this->getHeadersVisibility() || $this->getFilterVisibility()): ?>
+                    <thead>
+                    <?php if ($this->getHeadersVisibility()): ?>
+                        <tr class="headings">
+                            <?php foreach ($this->getColumns() as $_column): ?>
+                                <th<?php echo $_column->getHeaderHtmlProperty() ?>><span class="nobr"><?php echo $_column->getHeaderHtml() ?></span></th>
+                            <?php endforeach; ?>
+                        </tr>
+                    <?php endif; ?>
+                    <?php if ($this->getFilterVisibility()): ?>
+                        <tr class="filter">
+                            <?php $i=0;foreach ($this->getColumns() as $_column): ?>
+                                <th<?php echo $_column->getHeaderHtmlProperty() ?>><?php echo $_column->getFilterHtml() ?></th>
+                            <?php endforeach; ?>
+                        </tr>
+                    <?php endif ?>
+                    </thead>
+                <?php endif; ?>
+                <?php if ($this->getCountTotals()): ?>
+                    <tfoot>
+                    <tr class="totals">
+                        <?php foreach ($this->getColumns() as $_column): ?>
+                            <th class="<?php echo $_column->getCssProperty() ?>"><?php echo ($_column->hasTotalsLabel()) ? $_column->getTotalsLabel() : $_column->getRowField($_column->getGrid()->getTotals()) ?>&nbsp;</th>
+                        <?php endforeach; ?>
+                    </tr>
+                    </tfoot>
+                <?php endif; ?>
+
+                <tbody>
+                <?php if (($this->getCollection()->getSize()>0) && (!$this->getIsCollapsed())): ?>
+                    <?php foreach ($this->getCollection() as $_index=>$_item): ?>
+                        <tr title="<?php echo $this->getRowUrl($_item) ?>"<?php if ($_class = $this->getRowClass($_item)):?> class="<?php echo $_class; ?>"<?php endif;?> >
+                            <?php $i=0;foreach ($this->getColumns() as $_column): ?>
+
+                                <?php if ($this->shouldRenderCell($_item, $_column)):?>
+                                    <?php $_rowspan = $this->getRowspan($_item, $_column);?>
+                                    <td <?php echo ($_rowspan ? 'rowspan="' . $_rowspan . '" ' : '') ?>class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i==$numColumns? 'last': '' ?>">
+                                        <?php echo (($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?>
+                                    </td>
+                                    <?php if ($this->shouldRenderEmptyCell($_item, $_column)):?>
+                                        <td colspan="<?php echo $this->getEmptyCellColspan($_item)?>" class="last"><?php echo $this->getEmptyCellLabel()?></td>
+                                    <?php endif;?>
+                                <?php endif;?>
+
+                            <?php endforeach; ?>
+                        </tr>
+                        <?php if ($_multipleRows = $this->getMultipleRows($_item)):?>
+                            <?php foreach ($_multipleRows as $_i):?>
+                                <tr>
+                                    <?php $i=0;foreach ($this->getMultipleRowColumns($_i) as $_column): ?>
+                                        <td class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i==$numColumns-1? 'last':'' ?>">
+                                            <?php echo (($_html = $_column->getRowField($_i)) != '' ? $_html : '&nbsp;') ?>
+                                        </td>
+                                    <?php endforeach; ?>
+                                </tr>
+                            <?php endforeach;?>
+                        <?php endif;?>
+
+                        <?php if ($this->shouldRenderSubTotal($_item)): ?>
+                            <tr class="subtotals">
+                                <?php $i = 0; foreach ($this->getSubTotalColumns() as $_column): ?>
+                                    <td class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i == $numColumns ? 'last' : '' ?>">
+                                        <?php echo ($_column->hasSubtotalsLabel() ? $_column->getSubtotalsLabel() :
+                                            $_column->getRowField($this->getSubTotalItem($_item))
+                                        );
+                                        ?>
+                                    </td>
+                                <?php endforeach; ?>
+                            </tr>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                <?php elseif ($this->getEmptyText()): ?>
+                    <tr>
+                        <td class="empty-text <?php echo $this->getEmptyTextClass() ?>" colspan="<?php echo $numColumns ?>"><?php echo $this->getEmptyText() ?></td>
+                    </tr>
+                <?php endif; ?>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+<?php if($this->getPagerVisibility() || $this->getExportTypes() || $this->getFilterVisibility()): ?>
+<?php if($this->getPagerVisibility() && !empty($this->pagerFooter)): ?>
+    <div class="actions row">
+        <div class="col-md-6 form-inline">
+            <div class="checkbox">
+                <label>
+                    <?php echo $_helper->__('Total %d records found.', $this->getCollection()->getSize()) ?>
+                    <span id="<?php echo $this->getHtmlId() ?>-total-count" class="hidden"><?php echo $this->getCollection()->getSize() ?></span>
+                </label>
+            </div>
+            <div class="checkbox">
+                <label><?php echo $_helper->__('View') ?></label>
+            </div>
+            <div class="form-group">
+                <select class="form-control" name="<?php echo $this->getVarNameLimit() ?>" onchange="<?php echo $this->getJsObjectName() ?>.loadByElement(this)">
+                    <option value="20"<?php if($this->getCollection()->getPageSize()==20): ?> selected="selected"<?php endif; ?>>20</option>
+                    <option value="30"<?php if($this->getCollection()->getPageSize()==30): ?> selected="selected"<?php endif; ?>>30</option>
+                    <option value="50"<?php if($this->getCollection()->getPageSize()==50): ?> selected="selected"<?php endif; ?>>50</option>
+                    <option value="100"<?php if($this->getCollection()->getPageSize()==100): ?> selected="selected"<?php endif; ?>>100</option>
+                    <option value="200"<?php if($this->getCollection()->getPageSize()==200): ?> selected="selected"<?php endif; ?>>200</option>
+                </select>
+            </div>
+            <div class="checkbox">
+                <label><?php echo $_helper->__('per page.') ?></label>
+            </div>
+        </div>
+        <div class="col-md-6 form-inline">
+            <div class="pull-right">
+                <?php $_curPage  = $this->getCollection()->getCurPage() ?>
+                <?php $_lastPage = $this->getCollection()->getLastPageNumber() ?>
+                <div class="form-group">
+                    <input type="text" size="1" name="<?php echo $this->getVarNamePage() ?>" value="<?php echo $_curPage ?>" class="page align-right form-control" onkeypress="<?php echo $this->getJsObjectName() ?>.inputPage(event, '<?php echo $_lastPage ?>')"/>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <?php echo $_helper->__('of %s', $this->getCollection()->getLastPageNumber()) ?>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <div class="btn-group">
+                        <?php if($_curPage>1): ?>
+                            <button class="btn btn-default"  title="<?php echo $_helper->__('Previous page') ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage-1) ?>');return false;"><i class="glyphicon glyphicon-chevron-left arrow"></i></button>
+                        <?php else: ?>
+                            <button class="btn btn-default" disabled="disabled"><i class="glyphicon glyphicon-chevron-left arrow"></i></button>
+                        <?php endif; ?>
+
+                        <?php if($_curPage < $_lastPage): ?>
+                            <button class="btn btn-default"  title="<?php echo $_helper->__('Next page') ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage+1) ?>');return false;"><i class="glyphicon glyphicon-chevron-right arrow"></i></button>
+                        <?php else: ?>
+                            <button class="btn btn-default" disabled="disabled"><i class="glyphicon glyphicon-chevron-right arrow"></i></button>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+<hr/>
+
+<?php endif ?>
+<?php endif; ?>
+
+<?php if($this->canDisplayContainer()): ?>
+    <script type="text/javascript">
+        //<![CDATA[
+        <?php echo $this->getJsObjectName() ?> = new varienGrid('<?php echo $this->getId() ?>', '<?php echo $this->getGridUrl() ?>', '<?php echo $this->getVarNamePage() ?>', '<?php echo $this->getVarNameSort() ?>', '<?php echo $this->getVarNameDir() ?>', '<?php echo $this->getVarNameFilter() ?>');
+        <?php echo $this->getJsObjectName() ?>.useAjax = '<?php echo $this->getUseAjax() ?>';
+        <?php if($this->getRowClickCallback()): ?>
+        <?php echo $this->getJsObjectName() ?>.rowClickCallback = <?php echo $this->getRowClickCallback() ?>;
+        <?php endif; ?>
+        <?php if($this->getCheckboxCheckCallback()): ?>
+        <?php echo $this->getJsObjectName() ?>.checkboxCheckCallback = <?php echo $this->getCheckboxCheckCallback() ?>;
+        <?php endif; ?>
+        <?php if($this->getRowInitCallback()): ?>
+        <?php echo $this->getJsObjectName() ?>.initRowCallback = <?php echo $this->getRowInitCallback() ?>;
+        <?php echo $this->getJsObjectName() ?>.initGridRows();
+        <?php endif; ?>
+        <?php if($this->getMassactionBlock()->isAvailable()): ?>
+        <?php echo $this->getMassactionBlock()->getJavaScript() ?>
+        <?php endif ?>
+        <?php echo $this->getAdditionalJavaScript(); ?>
+        //]]>
+    </script>
+<?php endif; ?>
+<?php endif ?>
+</div>
