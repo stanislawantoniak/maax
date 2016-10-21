@@ -1,0 +1,73 @@
+<?php $_hlp = Mage::helper("zolagopo");?>
+<?php $_po = $this->getPo(); ?>
+<?php $_address = $_po->getShippingAddress(); ?>
+<?php $_type = 'shipping';
+/** @var Zolago_Common_Helper_Data $_zolagoHlp */
+$_modagoHlp = Mage::helper("zolagocommon");
+?>
+<div class="form-horizontal row-border">
+    <ul class="list-unstyled">
+        <li class="form-group invoice-data">
+            <label for="<?php echo $_type;?>-address-firstname" class="col-md-3 control-label"><?php echo $_hlp->__('Firstname') ?></label>
+            <div class="col-md-9">
+                <input id="<?php echo $_type;?>-address-firstname" name="firstname" value="<?php echo $this->escapeHtml($_address->getFirstname()) ?>"  type="text" class="form-control" />
+            </div>
+        </li>
+        <li class="form-group invoice-data">
+            <label for="<?php echo $_type;?>-address-lastname" class="col-md-3 control-label"><?php echo $_hlp->__('Lastname') ?></label>
+            <div class="col-md-9">
+                <input id="<?php echo $_type;?>-address-lastname" name="lastname" value="<?php echo $this->escapeHtml($_address->getLastname()) ?>" type="text" class="form-control" />
+            </div>
+        </li>
+        <li class="form-group invoice-data">
+            <label for="<?php echo $_type;?>-address-company" class="col-md-3 control-label"><?php echo $_hlp->__('Company') ?></label>
+            <div class="col-md-9">
+                <input id="<?php echo $_type;?>-address-company" name="company" value="<?php echo $this->escapeHtml($_address->getCompany()) ?>" type="text" class="form-control" />
+            </div>
+        </li>
+        <li class="form-group invoice-data">
+            <label for="<?php echo $_type;?>-address-telephone" class="col-md-3 control-label"><?php echo $_hlp->__('Phone') ?></label>
+            <div class="col-md-9">
+                <input id="<?php echo $_type;?>-address-telephone" name="telephone" value="<?php echo $this->escapeHtml($_address->getTelephone()) ?>"  type="text" class="form-control"  />
+            </div>
+        </li>
+        <li class="form-group invoice-data">
+            <label for="<?php echo $_type;?>-address-street" class="col-md-3 control-label"><?php echo $_hlp->__('Street') ?></label>
+            <div class="col-md-9">
+                <input id="<?php echo $_type;?>-address-street" name="street" value="<?php echo $this->escapeHtml($_address->getStreet(1)) ?>" type="text" class="form-control"  />
+            </div>
+        </li>
+        <li class="form-group invoice-data">
+            <label for="shipping-address-postcode" class="col-md-3 control-label"><?php echo $_hlp->__('Postcode') ?></label>
+            <div class="col-md-9">
+                <input id="shipping-address-postcode" name="postcode" value="<?php echo $this->escapeHtml($_address->getPostcode()) ?>" type="text" class="form-control" />
+            </div>
+        </li>
+        <li class="form-group invoice-data">
+            <label for="<?php echo $_type;?>-address-city" class="col-md-3 control-label"><?php echo $_hlp->__('City') ?></label>
+            <div class="col-md-9">
+                <input id="<?php echo $_type;?>-address-city" name="city" value="<?php echo $this->escapeHtml($_address->getCity()) ?>" type="text" class="form-control"  />
+            </div>
+        </li>
+        <li class="form-group invoice-data">
+            <label for="<?php echo $_type;?>-address-country_id" class="col-md-3 control-label"><?php echo $_hlp->__('Country') ?></label>
+            <?php $_countries = Mage::getResourceModel('directory/country_collection')
+                ->loadData()
+                ->toOptionArray(false) ?>
+            <div class="col-md-9">
+                <input type="hidden" name="country_id" value="<?php echo $_address->getCountryId();?>"/>
+                <?php if (count($_countries) > 0): ?>
+                    <select id="<?php echo $_type;?>-address-country" disabled="disabled" name="country_id" class="form-control" >
+                        <option value="">-- Please Select --</option>
+                        <?php foreach($_countries as $_country): ?>
+                            <option value="<?php echo $_country['value'] ?>" <?php if($_address->getCountryId()==$_country['value']):?>selected="selected"<?php endif;?>>
+                                <?php echo $_country['label'] ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                <?php endif; ?>
+            </div>
+        </li>
+    </ul>
+
+</div>
