@@ -1325,6 +1325,20 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 	 * @param bool $force
 	 * @return bool
 	 */
+	public function isDeliveryCourier($force = false) {
+		if (!$this->hasData('is_delivery_courier') || $force) {
+			$methodCode = $this->getShippingMethodInfo()->getDeliveryCode();
+
+			$isCourier = ($methodCode == Orba_Shipping_Model_Carrier_Default::CODE);
+			$this->setData('is_delivery_courier', $isCourier);
+		}
+		return $this->getData('is_delivery_courier');
+	}
+
+	/**
+	 * @param bool $force
+	 * @return bool
+	 */
 	public function isDeliveryInpost($force = false) {
 		if (!$this->hasData('is_delivery_inpost') || $force) {
 			$methodCode = $this->getShippingMethodInfo()->getDeliveryCode();
@@ -1350,6 +1364,21 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 		return $this->getData('is_delivery_zolagopickuppoint');
 	}
 
+
+	/**
+	 * @param bool $force
+	 * @return bool
+	 */
+	public function isDeliveryPocztaPolska($force = false) {
+		if (!$this->hasData('is_delivery_zolagopp') || $force) {
+			$methodCode = $this->getShippingMethodInfo()->getDeliveryCode();
+			$isDeliveryPocztaPolska = ($methodCode == Orba_Shipping_Model_Post::CODE);
+			$this->setData('is_delivery_zolagopp', $isDeliveryPocztaPolska);
+		}
+		return $this->getData('is_delivery_zolagopp');
+	}
+
+
 	/**
 	 * @param bool $force
 	 * @return string
@@ -1357,10 +1386,10 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 	public function getApiDeliveryPointName($force = false) {
 		if (!$this->hasData('api_delivery_point_name') || $force) {
 			$methodCode = $this->getShippingMethodInfo()->getDeliveryCode();
-
 			switch ($methodCode) {
-				case GH_Inpost_Model_Carrier::CODE:
-					$name = $this->getDeliveryInpostLocker($force)->getName();
+				case Orba_Shipping_Model_Packstation_Inpost::CODE:
+				case Orba_Shipping_Model_Packstation_Pwr::CODE:
+					$name = $this->getDeliveryPointName();
 					break;
 				case ZolagoOs_PickupPoint_Helper_Data::CODE:
 					$pos  = $this->getDeliveryPickUpPoint($force);
