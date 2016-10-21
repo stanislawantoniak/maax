@@ -71,7 +71,7 @@ class Zolago_Pos_Model_Resource_Pos_Collection
             $condition,
             array()
         );
-		$this->getSelect()->group('main_table.pos_id');
+		//$this->getSelect()->group('main_table.pos_id');
 		return $this;
 	}
 

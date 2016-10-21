@@ -10,7 +10,7 @@ class Zolago_Pos_Block_Dropship_Pos_Grid extends Mage_Adminhtml_Block_Widget_Gri
         $this->setDefaultDir('desc');
         // Need
         $this->setGridClass('z-grid');
-        $this->setTemplate("zolagoadminhtml/widget/grid.phtml");
+        $this->setTemplate("zolagopos/pos/grid.phtml");
     }
 
     protected function _prepareCollection()
