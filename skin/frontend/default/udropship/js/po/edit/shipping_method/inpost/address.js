@@ -1,5 +1,8 @@
 jQuery(document).ready(function () {
 
+    if(jQuery('[name=shipping_select_city]').length == 0)
+        return;
+
     if(lockerCity){
         jQuery('[name=shipping_select_city] option[value="'+lockerCity+'"]').prop('selected', true);
         _makeMapRequest(lockerCity, true);
