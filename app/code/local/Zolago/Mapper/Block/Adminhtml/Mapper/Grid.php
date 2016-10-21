@@ -24,10 +24,6 @@ class Zolago_Mapper_Block_Adminhtml_Mapper_Grid extends Mage_Adminhtml_Block_Wid
     protected function _prepareColumns()
     {
 
-//        $this->addColumn("mapper_id", array(
-//            "index" => "mapper_id",
-//            "header" => Mage::helper("zolagomapper")->__("ID"),
-//        ));
         $this->addColumn("attribute_set_name", array(
             "index" => "attribute_set_name",
             "header" => Mage::helper("zolagomapper")->__("Attribute set"),
