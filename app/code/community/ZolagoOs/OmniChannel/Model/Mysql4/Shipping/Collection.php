@@ -143,6 +143,18 @@ class ZolagoOs_OmniChannel_Model_Mysql4_Shipping_Collection extends Mage_Core_Mo
         return $this;
     }
 
+    public function joinSimpleCondRates()
+    {
+        $this->getSelect()
+            ->join(
+                array('udtiership_simple_cond_rates' => 'udtiership_simple_cond_rates'),
+                "udtiership_delivery_type.delivery_type_id = udtiership_simple_cond_rates.delivery_type_id",
+                array('udtiership_simple_cond_rates.condition')
+            );
+
+        return $this;
+    }
+
 
     public function joinDeliveryTitle($storeId){
         $this->getSelect()->joinLeft(

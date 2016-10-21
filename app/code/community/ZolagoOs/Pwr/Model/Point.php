@@ -60,7 +60,7 @@ class ZolagoOs_Pwr_Model_Point extends Mage_Core_Model_Abstract {
 
 	/**
 	 * @param $name
-	 * @return GH_Inpost_Model_Locker
+	 * @return ZolagoOs_Pwr_Model_Point
 	 */
 	public function loadByName($name) {
 		$this->load($name, 'name');

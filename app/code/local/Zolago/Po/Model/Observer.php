@@ -380,7 +380,36 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract{
 		$text = Mage::helper('zolagopo')->__("Origin %s address restored", $type);
 		$this->_logEvent($po, $text);
 	}
-	
+
+
+
+	/**
+	 * PO Shipping Method Changed
+	 * @param type $observer
+	 */
+	public function poShippingMethodChange($observer) {
+		$po = $observer->getEvent()->getData('po');
+		/* @var $po Zolago_Po_Model_Po */
+
+		$newUdropshipMethod = $observer->getEvent()->getData('new_udropship_method');
+		$oldUdropshipMethod = $observer->getEvent()->getData('old_udropship_method');
+
+		if(
+			!empty($newUdropshipMethod)
+			&& ($newUdropshipMethod !== $oldUdropshipMethod)
+		){
+			$storeId =$po->getStoreId();
+			$omniChannelMethodInfoByMethodNew = Mage::helper("udropship")
+				->getOmniChannelMethodInfoByMethod($storeId, $newUdropshipMethod, true);
+
+			$omniChannelMethodInfoByMethodOld = Mage::helper("udropship")
+				->getOmniChannelMethodInfoByMethod($storeId, $oldUdropshipMethod, true);
+
+			$message =  Mage::helper('zolagopo')->__('Shipping method changed: ') . $omniChannelMethodInfoByMethodOld['shipping_title'] . "&rarr;" . $omniChannelMethodInfoByMethodNew['shipping_title'];
+			$this->_logEvent($po, $message, false);
+		}
+
+	}
 	/**
 	 * PO Address Changed
 	 * @param type $observer
