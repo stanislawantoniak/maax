@@ -107,6 +107,8 @@ $iconTruckBad = '<span class="fa-stack"><i class="fa fa-truck fa-stack-2x"></i><
 			<span><?php echo $_helper->__('Planned delivery date').': '.$deliveryDate; ?></span>
 		<?php elseif(
 			$paid && $status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_READY
+			||
+			($cod && $status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_READY)
 		): ?>
 			<span><?php echo $_helper->__("Package status").": ".$_helper->__('Packed and label printed'); ?></span>
 		</div>
@@ -129,8 +131,22 @@ $iconTruckBad = '<span class="fa-stack"><i class="fa fa-truck fa-stack-2x"></i><
 			<span><?php echo $_helper->__('Delivery method').': '.$carrier; ?></span>
 			<span><?php echo $_helper->__('Planned send date').': '.$sendDate ?></span>
 			<span><?php echo $_helper->__('Planned delivery date').': '.$deliveryDate; ?></span>
+		<?php elseif(
+			$cod && $status == Zolago_Po_Model_Source::UDPO_STATUS_TO_PICK
+		): ?>
+			<span><?php echo $_helper->__("Package status").": ".$_helper->__('Ready to pick up'); ?></span>
+		</div>
+		<div class="shipment-icon">
+			<?php echo $iconTruck; ?>
+		</div>
+		<div class="shipment-bottom">
+			<span><?php echo $_helper->__('Delivery method').': '.$carrier; ?></span>
+			<span><?php echo $_helper->__('Planned send date').': '.$sendDate ?></span>
+			<span><?php echo $_helper->__('Planned delivery date').': '.$deliveryDate; ?></span>
 			<?php elseif(
 			$paid && $status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_SHIPPED
+			||
+			($cod && $status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_SHIPPED)
 		): ?>
 			<span><?php echo $_helper->__("Package status").": ".$_helper->__('Shipped'); ?></span>
 		</div>
@@ -146,7 +162,8 @@ $iconTruckBad = '<span class="fa-stack"><i class="fa fa-truck fa-stack-2x"></i><
 			<span><a href="<?php printf($trackingUrl,$tracking); ?>" class="underline" target="_blank"><?php echo $_helper->__('track package'); ?></a></span>
 			<?php endif;?>
 		<?php elseif(
-			$paid && $status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_DELIVERED
+			$status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_DELIVERED
+
 		): ?>
 			<span><?php echo $_helper->__("Package status").": ".$_helper->__('Delivered'); ?></span>
 		</div>
