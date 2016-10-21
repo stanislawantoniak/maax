@@ -25,6 +25,13 @@ class Zolago_Adminhtml_Model_Sales_Transactions_Source extends Varien_Object
      */
     protected function _getOrdersInfo()
     {
+        if (Mage::helper('zolagocommon')->useGalleryConfiguration()) {
+            Mage::throwException('Do not use on gallery');
+            // poza galerią to działa tylko przez przypadek
+            // na galerii nie będzie działać wcale
+        }
+
+
         $orders = array();
 
         $dateModel = Mage::getModel('core/date');
@@ -32,7 +39,7 @@ class Zolago_Adminhtml_Model_Sales_Transactions_Source extends Varien_Object
 
         $collection->getSelect()->join(
             array('order' => $collection->getTable('udpo/po')),
-            'main_table.parent_id=`order`.entity_id',
+            'main_table.parent_id=`order`.order_id',
             array('order.grand_total_incl_tax','order.increment_id','item_entity_id'=>'main_table.entity_id','order.order_id')
        );
         $collection->getSelect()

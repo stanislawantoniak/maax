@@ -263,7 +263,18 @@ class  Zolago_Payment_Helper_Data extends Mage_Core_Helper_Abstract
         /** @var Mage_Sales_Model_Resource_Order_Payment_Transaction_Collection $coll */
         $coll = Mage::getResourceModel('sales/order_payment_transaction_collection');
         $coll->addOrderIdFilter($po->getOrder()->getId());
-        $coll->addFilter('txn_status', array('eq' => Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED));
+        $coll->addFieldToFilter('txn_status', array('eq' => Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED));
+        return $coll;
+    }
+    /**
+     * @param $po
+     * @return Mage_Sales_Model_Resource_Order_Payment_Transaction_Collection
+     */
+    public function getRefundTransactionCollection(Zolago_Po_Model_Po $po) {
+        /** @var Mage_Sales_Model_Resource_Order_Payment_Transaction_Collection $coll */
+        $coll = Mage::getResourceModel('sales/order_payment_transaction_collection');
+        $coll->addOrderIdFilter($po->getOrder()->getId());
+        $coll->addFieldToFilter('txn_status', array('in' => array(Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED,Zolago_Payment_Model_Client::TRANSACTION_STATUS_NEW)));
         return $coll;
     }
 
@@ -281,6 +292,11 @@ class  Zolago_Payment_Helper_Data extends Mage_Core_Helper_Abstract
             foreach ($coll as $transaction) {
                 $sum += $transaction->getTxnAmount();
             }
+            $coll = $this->getRefundTransactionCollection($po);
+            $coll->addTxnTypeFilter(Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND);
+            foreach ($coll as $transaction) {
+                $sum += $transaction->getTxnAmount();
+            }            
             $this->_cache[$key] = $sum;
         }
         return $this->_cache[$key];

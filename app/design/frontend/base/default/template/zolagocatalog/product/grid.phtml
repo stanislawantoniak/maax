@@ -305,8 +305,9 @@ $helper = Mage::helper("zolagocatalog");
 	}
 </style>
 
-<script type="text/javascript" src="/skin/frontend/base/default/js/rwd.carousel/rwd.carousel.js"></script>
-<script type="text/javascript" src="/skin/frontend/base/default/js/modernizr.custom.js"></script>
+<script type="text/javascript" src="<?php echo $this->getSkinUrl("js/rwd.carousel/rwd.carousel.js"); ?>"></script>
+<script type="text/javascript" src="<?php echo $this->getSkinUrl("js/modernizr.custom.js"); ?>"></script>
+
 <script type="text/javascript">
 	require(['vendor/catalog/productGrid'], function(productGrid) {
 		productGrid.setColumns(<?php echo $this->getJsonColumns();?>);
@@ -338,7 +339,7 @@ $helper = Mage::helper("zolagocatalog");
 			</div>
 			<div class="modal-body"></div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $helper->__("Close"); ?></button>
 			</div>
 		</div>
 	</div>
