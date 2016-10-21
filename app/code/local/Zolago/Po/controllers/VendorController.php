@@ -1045,6 +1045,188 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         return Mage::getUrl("*/*/edit", array("id"=>$this->_registerPo()->getId()))."#".$anchor;
     }
 
+    /**
+     * @return Mage_Core_Controller_Varien_Action|void
+     */
+    public function saveShippingMethodAction() {
+        $req	=	$this->getRequest();
+        $data	=	$req->getPost();
+        $type	=	$req->getParam("type");
+        $isAjax =	$req->isAjax();
+
+        try {
+            $po = $this->_registerPo();
+        } catch (Mage_Core_Exception $e) {
+            $this->_getSession()->addError($e->getMessage());
+            return $this->_redirectReferer();
+        } catch (Exception $e) {
+            Mage::logException($e);
+            $this->_getSession()->addError(Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator."));
+            return $this->_redirectReferer();
+        }
+
+        /* @var $po Zolago_Po_Model_Po */
+        $session = $this->_getSession();
+        /* @var $session Zolago_Dropship_Model_Session */
+
+
+        if (!$po->getId()) {
+            $this->getResponse()->setBody(Zend_Json::encode(array(
+                "status" => 0,
+                "content" => Mage::helper("zolagopo")->__("Wrong PO Id")
+            )));
+            return;
+        }
+
+        if ($po->getVendor()->getId() != $session->getVendor()->getId()) {
+            $this->getResponse()->setBody(Zend_Json::encode(array(
+                "status" => 0,
+                "content" => Mage::helper("zolagopo")->__("You have no access to this PO")
+            )));
+            return;
+        }
+
+        $response = array(
+            "status" => 1,
+            "content" => array()
+        );
+
+        try {
+            if(!$po->getStatusModel()->isEditingAvailable($po)) {
+                throw new Mage_Core_Exception(Mage::helper("zolagopo")->__("Order cannot be edited."));
+            }
+
+            if(isset($data['add_own']) && $data['add_own']==1) {
+                $orignAddress = $po->getOrder()->getShippingAddress();
+                $oldAddress = $po->getShippingAddress();
+
+                $newAddress = clone $orignAddress;
+
+                $storeId =$po->getStoreId();
+                
+                $omniChannelMethodInfoByMethod = Mage::helper("udropship")
+                    ->getOmniChannelMethodInfoByMethod($storeId, $data['udropship_method'], true);
+
+                if ($omniChannelMethodInfoByMethod->getDeliveryCode() == GH_Inpost_Model_Carrier::CODE) {
+                    $locker = Mage::getModel('ghinpost/locker')->load($data['inpost_delivery_point_name'], 'name');
+
+                    $data['street'] = $locker->getStreet() . " " . $locker->getBuildingNumber();
+                    $data['city'] = $locker->getTown();
+                    $data['postcode'] = $locker->getPostcode();
+                    $data['telephone'] = $data['inpost_telephone'];
+                    $po->setDeliveryPointName($data['inpost_delivery_point_name']);
+                } else if ($omniChannelMethodInfoByMethod->getDeliveryCode() == Orba_Shipping_Model_Packstation_Pwr::CODE) {
+                    $pwrPoint = Mage::getModel("zospwr/point")->loadByName($data['pwr_delivery_point_name']);
+
+                    $data['street'] = $pwrPoint->getStreet() . " " . $pwrPoint->getBuildingNumber();
+                    $data['city'] = $pwrPoint->getTown();
+                    $data['postcode'] = $pwrPoint->getPostcode();
+                    $data['telephone'] = $data['pwr_telephone'];
+                    $po->setDeliveryPointName($data['pwr_delivery_point_name']);
+                } else if ($omniChannelMethodInfoByMethod->getDeliveryCode() == ZolagoOs_PickupPoint_Helper_Data::CODE) {
+                    /* @var $pos  Zolago_Pos_Model_Pos */
+                    $pos = Mage::getModel("zolagopos/pos")->load($data['pickuppoint_delivery_point_name']);
+
+                    $data['street'] = $pos->getStreet();
+                    $data['city'] = $pos->getCity();
+                    $data['postcode'] = $pos->getPostcode();
+                    $data['telephone'] = $data['pickuppoint_telephone'];
+                    $po->setDeliveryPointName($data['pickuppoint_delivery_point_name']);
+                } else {
+                    $po->setDeliveryPointName('');
+                }
+
+                $oldUdropshipMethod = $po->getUdropshipMethod();
+                $newUdropshipMethod = $data['udropship_method'];
+                $po->setUdropshipMethod($newUdropshipMethod);
+
+                $newUdropshipMethodDescription = Mage::getStoreConfig('carriers/udtiership/title') . '-' . $omniChannelMethodInfoByMethod->getData("delivery_title");
+                $po->setData('udropship_method_description', $newUdropshipMethodDescription);
+
+                //validate address data start
+                $errors = false;
+                $langHelper = Mage::helper("zolagopo");
+                if(!$data['firstname']) {
+                    $errors = true;
+                    $session->addError($langHelper->__("Invalid first name"));
+                }
+                if(!$data['lastname']) {
+                    $errors = true;
+                    $session->addError($langHelper->__("Invalid last name"));
+                }
+                if(!$data['telephone'] && $type==Mage_Sales_Model_Order_Address::TYPE_SHIPPING) {
+                    $errors = true;
+                    $session->addError($langHelper->__("Invalid telephone"));
+                }
+                if(!$data['street']) {
+                    $errors = true;
+                    $session->addError($langHelper->__("Invalid street"));
+                }
+                if(!$data['city']) {
+                    $errors = true;
+                    $session->addError($langHelper->__("Invalid city"));
+                }
+                if(!$data['postcode'] || !preg_match('/^\d{2}-\d{3}$/',$data['postcode'])) {
+                    $errors = true;
+                    $session->addError($langHelper->__("Invalid postcode"));
+                }
+                //validate address data end
+
+                if($errors) {
+                    $this->_redirectReferer();
+                } else {
+                    $newAddress->addData($data);
+                    if ($type == Mage_Sales_Model_Order_Address::TYPE_SHIPPING) {
+                        $po->setOwnShippingAddress($newAddress);
+                    } else {
+                        $po->setOwnBillingAddress($newAddress);
+                    }
+
+                    Mage::dispatchEvent("zolagopo_po_shipping_method_change", array(
+                        "po" => $po,
+                        "new_udropship_method" => $newUdropshipMethod,
+                        "old_udropship_method" => $oldUdropshipMethod,
+                        "type" => $type
+                    ));
+
+                    Mage::dispatchEvent("zolagopo_po_address_change", array(
+                        "po" => $po,
+                        "new_address" => $newAddress,
+                        "old_address" => $oldAddress,
+                        "type" => $type
+                    ));
+
+                    $po->save();
+
+                    $session->addSuccess(Mage::helper("zolagopo")->__("Address changed"));
+                    $response['content']['reload'] = 1;
+                }
+            }
+        } catch(Mage_Core_Exception $e) {
+            $response = array(
+                "status"	=>0,
+                "content"	=>$e->getMessage()
+            );
+            if(!$isAjax) {
+                $session->addError($e->getMessage());
+            }
+        } catch(Exception $e) {
+            Mage::logException($e);
+            $response = array(
+                "status"=>0,
+                "content"=>Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator.")
+            );
+            if(!$isAjax) {
+                $session->addError(Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator."));
+            }
+        }
+        if($isAjax) {
+            $this->getResponse()->setHeader("content-type", "application/json");
+            $this->getResponse()->setBody(Zend_Json::encode($response));
+        } else {
+            $this->_redirectReferer();
+        }
+    }
 
     public function saveAddressAction() {
         $req	=	$this->getRequest();
@@ -1068,26 +1250,26 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         /* @var $session Zolago_Dropship_Model_Session */
 
 
-        if(!$po->getId()) {
+        if (!$po->getId()) {
             $this->getResponse()->setBody(Zend_Json::encode(array(
-                                              "status"=>0,
-                                              "content"=>Mage::helper("zolagopo")->__("Wrong PO Id")
-                                          )));
+                "status" => 0,
+                "content" => Mage::helper("zolagopo")->__("Wrong PO Id")
+            )));
             return;
         }
 
-        if($po->getVendor()->getId()!=$session->getVendor()->getId()) {
+        if ($po->getVendor()->getId() != $session->getVendor()->getId()) {
             $this->getResponse()->setBody(Zend_Json::encode(array(
-                                              "status"=>0,
-                                              "content"=>Mage::helper("zolagopo")->__("You have no access to this PO")
-                                          )));
+                "status" => 0,
+                "content" => Mage::helper("zolagopo")->__("You have no access to this PO")
+            )));
             return;
         }
 
         $response = array(
-                        "status"=>1,
-                        "content"=>array()
-                    );
+            "status" => 1,
+            "content" => array()
+        );
 
         try {
             if(!$po->getStatusModel()->isEditingAvailable($po)) {
