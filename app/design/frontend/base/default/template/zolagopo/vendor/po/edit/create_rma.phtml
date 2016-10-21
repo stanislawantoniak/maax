@@ -87,7 +87,7 @@ $reasonOptions = $this->getRmaReasons();
 		form.data("validator").settings.ignore = "";
 		var rmaReasonOption = jQuery("[name=rma_reason]").val();
 		if(rmaReasonOption == ''){
-			jQuery(".select2-chosen").html('<?php echo $_hlp->__("Select a reason...");?>');
+			jQuery("[name=rma_reason]").parents("div.col-sm-6").find(".select2-chosen").html('<?php echo $_hlp->__("Select a reason...");?>');
 		}
 	});
 	var form = jQuery("#new-rma"),
