@@ -393,13 +393,17 @@ class Zolago_Checkout_Helper_Data extends Mage_Core_Helper_Abstract
         $pwrCode = Mage::getModel("orbashipping/packstation_pwr")->getCarrierCode();
         $inpostCode = Mage::getModel("ghinpost/carrier")->getCarrierCode();
         $pickUpPointCode = Mage::helper("zospickuppoint")->getCode(); //Pick-up point
+        $courierCode = Orba_Shipping_Model_Carrier_Default::CODE;
 
         switch ($deliveryType) {
+            case $courierCode: // Admin => System => Formy Dostawy => Tier Shipping => Delivery Types
+                $carrierLogo = '<img class="checkout-logo"  src="' . Mage::getDesign()->getSkinUrl('images/checkout-logo/courier/dpd-logo.png') . '" />';
+                break;
             case $pwrCode: // Admin => System => Formy Dostawy => Tier Shipping => Delivery Types
-                $carrierLogo = '<img class="checkout-logo"  src="' . Mage::getDesign()->getSkinUrl('images/pwr/checkout-logo.png') . '" />';
+                $carrierLogo = '<img class="checkout-logo"  src="' . Mage::getDesign()->getSkinUrl('images/checkout-logo/pwr/checkout-logo.png') . '" />';
                 break;
             case $inpostCode: // Admin => System => Formy Dostawy => Tier Shipping => Delivery Types
-                $carrierLogo = '<img class="checkout-logo"  src="' . Mage::getDesign()->getSkinUrl('images/inpost/checkout-logo.png') . '" />';
+                $carrierLogo = '<img class="checkout-logo"  src="' . Mage::getDesign()->getSkinUrl('images/checkout-logo/inpost/checkout-logo.png') . '" />';
                 break;
             case $pickUpPointCode: // Admin => System => Formy Dostawy => Tier Shipping => Delivery Types
                 //Truck icon

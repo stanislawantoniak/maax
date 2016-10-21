@@ -1,0 +1,208 @@
+<style type="text/css">
+    body {
+        background-color: #F6F6F6;
+        color: #444444;
+    }
+
+    @media only screen and (max-width: 480px) {
+        .borderContainer {
+            border: none !important;
+        }
+
+        .content {
+            border-left: 15px solid white !important;
+            border-right: 15px solid white !important;
+        }
+
+        .logo {
+            margin-left: -20px !important;
+        }
+    }
+</style>
+<div class="borderContainer" style="width: 580px; margin: 0 auto; padding: 0; border: 20px solid #f6f6f6;">
+    <table class="container"
+           style="direction: ltr; text-align: left; font-family: 'Arial','Helvetica',sans-serif; color: #444; max-width: 580px; background: white; margin: 0; padding: 0;"
+           bgcolor="white">
+        <tbody style="margin: 0; padding: 0;">
+        <tr style="margin: 0; padding: 0;">
+            <td style="margin: 0; padding: 0;">
+                <div class="logo" style="width: 100%; margin:25px 35px 0px;padding:0;">
+                    <a href="{{store url=""}}" style="text-decoration: none; color: #444; margin: 0; padding: 0;">
+                    <img width="190" height="48" alt="{{var logo_alt}}" src="cid:logo.png"
+                         style="margin: 0 0 0 31px; padding: 0;"></a>
+                </div>
+                <div class="content"
+                     style="font-family: 'Arial','Helvetica',sans-serif; font-size: 13px; margin: 0px 35px 10px; padding: 0; border-color: white; border-style: solid; border-width: 15px 35px 10px;">
+                    <p class="line"
+                       style="border-top-style: solid; border-top-color: #7f7f7f; border-top-width: 1px; font-size: 9px; margin: 0 0 10px; padding: 0;">
+                        &nbsp;</p>
+
+                    <h1 style="font-weight: normal; font-size: 21px; border-bottom-width: 25px; border-bottom-style: solid; border-bottom-color: white; font-family: 'Arial','Helvetica',sans-serif; margin: 0; padding: 0;">
+                        {{if po.isDeliveryPickUpPoint()}}
+                        Twoje zamówienie jest gotowe do odbioru! {{else}}Twoje zam&oacute;wienie jest ju&#380; w drodze!
+                        {{/if}}
+                    </h1>
+
+                    {{if po.isDeliveryPickUpPoint()}}
+                            <div class="shortSpace"
+                                 style="line-height: 1.4em; border-bottom-width: 0px; border-bottom-color: white; border-bottom-style: solid; margin: 0; padding: 0;">
+                                Zamówienie nr. {{var po.getIncrementId()}} czeka na odbiór. Punkt odbioru osobistego znajduje
+                                się przy ul. Matuszewskiej 14, w budynku C2 (wejście G) i jest otwarte poniedziałek - piątek
+                                8:00-17:00. Więcej informacji znajdziesz <a href="{{store url=" punkt-odbioru/"}}">na naszej
+                                stronie</a>.
+                            </div>
+                            <span class="spacer" style="margin: 0 0 25px; padding: 0;">&nbsp;</span>
+                                    {{depend po.isCod()}}
+                                    <div class="shortSpace"
+                                         style="line-height: 1.4em; border-bottom-width: 25px; border-bottom-color: white; border-bottom-style: solid; margin: 0; padding: 0;">
+                                        Za zamówienie możesz zapłacić gotówką lub kartą. Do zapłaty masz: <strong
+                                            style="margin: 0; padding: 0;">{{var po.getFormattedGrandTotalInclTax()}}</strong>.<br/>
+                                    </div>
+                                    <span class="spacer" style="margin: 0 0 25px; padding: 0;">&nbsp;</span>
+                                    {{/depend}}
+
+                            <span class="spacer" style="margin: 0 0 25px; padding: 0;">&nbsp;</span>
+                    {{/if}}
+
+
+                    {{if po.isDeliveryCourier()}}
+                            <div class="shortSpace"
+                                 style="line-height: 1.4em; border-bottom-width: 0px; border-bottom-color: white; border-bottom-style: solid; margin: 0; padding: 0;">
+                                W&#322;a&#347;nie nadaliśmy Twoją paczkę (nr. {{var po.getIncrementId()}}).
+                            </div>
+
+                            <span class="spacer" style="margin: 0 0 25px; padding: 0;">&nbsp;</span>
+
+                                {{depend po.isCod()}}
+                                <div class="shortSpace" style="line-height: 1.4em; border-bottom-width: 25px; border-bottom-color: white; border-bottom-style: solid; margin: 0; padding: 0;">
+                                    Za zamówienie zapłacisz kurierowi przy odbiorze. Pamiętaj aby przygotować do zapłaty:
+                                    <strong>{{var po.getFormattedGrandTotalInclTax()}}</strong>
+                                </div>
+                                {{/depend}}
+                    {{/if}}
+
+
+                    <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
+                        {{if po.isDeliveryCourier()}}
+                        Paczka zostanie doręczona przez firmę kurierską {{var carrier.getConfigData('title')}}
+                        w ciągu 1-2 dni roboczych.
+                        <br />
+                        {{/if}}
+
+                        {{if po.isDeliveryInpost()}}
+                        Paczka zostanie doręczona do wybranego przez Ciebie paczkomatu
+                        w ciągu 1-2 dni roboczych.
+                        <br />
+                        {{/if}}
+
+                        {{if po.isDeliveryPwr()}}
+                        Paczka zostanie doręczona do wybranego przez Ciebie punktu Paczki w Ruchu
+                        w ciągu 1-2 dni roboczych. Poniżej znajdziesz adres punktu odbioru.
+                        <br />
+                        {{/if}}
+
+                        {{depend tracking}}
+                        Przesyłkę możesz śledzić używając numeru listu przewozowego:
+                            {{if track_url}}
+                                <a href="{{var track_url}}" target="_blank"style="text-decoration: none; color: #1155CC">{{var tracking.getTrackNumber()}}</a>.
+                                Link do śledzenia będzie aktywny dzień po nadaniu paczki.
+                            {{else}}
+                                {{var tracking.getTrackNumber()}}
+                            {{/if}}
+                        {{/depend}}
+                    </div>
+
+
+                    {{if po.isDeliveryCourier()}}
+                            <span class="spacer" style="margin: 0 0 25px; padding: 0;">&nbsp;</span>
+                            <h2 class="shortSpace" style="font-size: 15px; border-bottom-width: 5px; border-bottom-style: solid; border-bottom-color: white; font-family: 'Arial','Helvetica',sans-serif; margin: 0; padding: 0;">
+                                Adres dostawy:
+                            </h2>
+
+                            <div class="shortSpace"style="line-height: 1.4em; border-bottom-width: 25px; border-bottom-color: white; border-bottom-style: solid; margin: 0; padding: 0;">
+                                {{var po.getShippingAddress().format('html')}}
+                            </div>
+                    {{/if}}
+
+                    {{if po.isDeliveryPocztaPolska()}}
+                        <span class="spacer" style="margin: 0 0 25px; padding: 0;">&nbsp;</span>
+                        <h2 class="shortSpace" style="font-size: 15px; border-bottom-width: 5px; border-bottom-style: solid; border-bottom-color: white; font-family: 'Arial','Helvetica',sans-serif; margin: 0; padding: 0;">
+                            Adres dostawy:
+                        </h2>
+
+                        <div class="shortSpace"style="line-height: 1.4em; border-bottom-width: 25px; border-bottom-color: white; border-bottom-style: solid; margin: 0; padding: 0;">
+                            {{var po.getShippingAddress().format('html')}}
+                        </div>
+                    {{/if}}
+
+                    {{if po.isDeliveryInpost()}}
+                    <span class="spacer" style="margin: 0 0 25px; padding: 0;">&nbsp;</span>
+                    <h2 class="shortSpace" style="font-size: 15px; border-bottom-width: 5px; border-bottom-style: solid; border-bottom-color: white; font-family: 'Arial','Helvetica',sans-serif; margin: 0; padding: 0;">
+                        Adres paczkomatu:
+                    </h2>
+
+                    <div class="shortSpace"style="line-height: 1.4em; border-bottom-width: 25px; border-bottom-color: white; border-bottom-style: solid; margin: 0; padding: 0;">                        Paczkomat InPost {{var po.getDeliveryPointName()}}<br>
+                        {{var po.getShippingAddress().format('html_2')}}
+                    </div>
+                    {{/if}}
+
+                    {{if po.isDeliveryPwr()}}
+                    <span class="spacer" style="margin: 0 0 25px; padding: 0;">&nbsp;</span>
+                    <h2 class="shortSpace" style="font-size: 15px; border-bottom-width: 5px; border-bottom-style: solid; border-bottom-color: white; font-family: 'Arial','Helvetica',sans-serif; margin: 0; padding: 0;">
+                        Adres punktu Paczki w Ruchu:
+                    </h2>
+
+                    <div class="shortSpace"style="line-height: 1.4em; border-bottom-width: 25px; border-bottom-color: white; border-bottom-style: solid; margin: 0; padding: 0;">
+                        Punkt Paczki w Ruchu {{var po.getDeliveryPointName()}}<br>
+                        {{var po.getShippingAddress().format('html_2')}}
+                    </div>
+                    {{/if}}
+
+<<<<<<< .merge_file_TGglbK
+
+=======
+>>>>>>> .merge_file_WjBlZJ
+                    <div class="shortSpace"style="line-height: 1.4em; border-bottom-width: 25px; border-bottom-color: white; border-bottom-style: solid; margin: 0; padding: 0;">
+                        Data planowanej dostawy: {{var po.getMaxShippingDate()}}
+                    </div>
+
+                    <h2 class="shortSpace" style="font-size: 15px; border-bottom-width: 5px; border-bottom-style: solid; border-bottom-color: white; font-family: 'Arial','Helvetica',sans-serif; margin: 0; padding: 0;">
+                        Zawarto&#347;&#263; zamówienia:
+                    </h2>
+
+                    {{block type='zolagomodago/po_email_summary' template='zolagopo/email/summary.phtml'}}
+
+                    <span class="spacer" style="margin: 0 0 25px; padding: 0;">&nbsp;</span>
+                    <div class="shortSpace"
+                         style="line-height: 1.4em; border-bottom-width: 25px; border-bottom-color: white; border-bottom-style: solid; margin: 0; padding: 0;">
+                        Je&#347;li masz jakie&#347; pytania, <a href="{{var contact_url}}" class="shortSpace"
+                                                                style="text-decoration: none; color: #444; border-bottom-width: 25px; border-bottom-color: white; border-bottom-style: solid; margin: 0; padding: 0;">skontaktuj
+                        si&#281; ze sklepem.</a><br style="margin: 0; padding: 0;">
+                        Dzi&#281;kujemy za zakupy i zapraszamy ponownie!<br style="margin: 0; padding: 0;"><br
+                            style="margin: 0; padding: 0;"></div>
+                    <div class="shortSpace"
+                         style="line-height: 1.4em; border-bottom-width: 25px; border-bottom-color: white; border-bottom-style: solid; margin: 0; padding: 0;">
+                        <b style="margin: 0; padding: 0;">Nie odpowiadaj na ten e-mail</b>, gdy&#380; zosta&#322; on wys&#322;any
+                        przez automat. Je&#347;li masz dodatkowe pytania,
+                        <a target="_blank" class="special" href="{{store url=" contact/"}}" style="text-decoration:
+                        none; color: #15c; margin: 0; padding: 0;"> skontaktuj si&#281; z nami.</a>
+                        &#379;yczymy mi&#322;ego dnia.<br style="margin: 0; padding: 0;"><br
+                            style="margin: 0; padding: 0;">
+                        Zesp&oacute;&#322; <a href="{{store url=""}}" style="text-decoration: none; color: #444; margin:
+                        0; padding: 0;">{{config path="general/store_information/name"}}</a>
+                    </div>
+                    <br style="margin: 0; padding: 0;">
+                </div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="footer"
+     style="direction: ltr; color: #777; font-size: 11px; font-family: 'Arial','Helvetica',sans-serif; text-align: center; max-width: 560px; background: #F6F6F6; margin: 0; padding: 0; border: 10px solid #f6f6f6;"
+     align="center">Copyright &copy; 2016 <a target="_blank" href="{{store url=""}}" style="text-decoration: none;
+    color: #444; margin: 0; padding: 0;">{{config path="general/store_information/name"}}</a>
+    <p style="margin: 0; padding: 0;">Ta wiadomo&#347;&#263; zosta&#322;a wys&#322;ana przez {{config
+        path="general/store_information/address"}}</p>
+</div>
+</div>

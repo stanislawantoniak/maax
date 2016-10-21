@@ -455,8 +455,8 @@ class Zolago_Po_Model_Po_Status
         $hlp = Mage::helper("udpo");
         $po->setForceStatusChangeFlag(true);
         $hlp->processPoStatusSave($po, $newStatus2, true);
-
-        if (in_array($newStatus2, $this->getOverpaymentStatuses())) {
+        $store = $po->getStore();
+        if (in_array($newStatus2, $this->getOverpaymentStatuses()) && Mage::helper('zolagopayment')->getConfigUseAllocation($store)) {
             /** @var Zolago_Payment_Model_Allocation $allocModel */
             $allocModel = Mage::getModel("zolagopayment/allocation");
             $allocModel->createOverpayment($po);
