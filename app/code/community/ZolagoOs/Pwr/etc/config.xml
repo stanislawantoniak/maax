@@ -79,8 +79,9 @@
 				<active>0</active>
                 <title>Paczka w Ruchu</title>
 				<api>https://api-test.paczkawruchu.pl/WebServicePwR/WebServicePwRTest.asmx?wsdl</api>
+				<tracking_url>https://www.paczkawruchu.pl/#/pl/sledz-przesylke/%s</tracking_url>
 				<partner_id>TEST000782</partner_id>
-				<partner_key>E8651567B6</partner_key>
+				<partner_key>E8651567B6</partner_key>				
                 <cod_allowed>1</cod_allowed>
 			</zospwr>
 		</carriers>

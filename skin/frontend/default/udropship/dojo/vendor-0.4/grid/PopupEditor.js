@@ -59,9 +59,11 @@ define([
 			this._close = put("a.close", "×");
 			this._form = this._buildForm();
 			this._title = this._buildTitle();
+			this._additionalInfo = this._buildAdditionalInfo();
 			
 			
 			put(this.content, this._title);
+			put(this.content, this._additionalInfo);
 			put(this.content, this._close);
 			put(this.content, this._form);
 			
@@ -114,7 +116,9 @@ define([
 			}else{
 				this.setValue(null);
 			}
-			
+			if(this.column.field == "name"){
+				this.showSku(cellObj.row.data.skuv);
+			}
 			domStyle.set(
 				this.content, 
 				this._getEditorPosition(cellObj, this.content)
@@ -148,6 +152,17 @@ define([
 					
 			}
 			
+		},
+
+		showSku: function (skuv) {
+			var skuObj = put("p", {
+				innerHTML: 'SKU: ' + skuv
+			});
+			try {
+				jQuery(this._additionalInfo).html(skuObj);
+			} catch (e) {
+
+			}
 		},
 		/**
 		 * @returns {String}
@@ -518,6 +533,13 @@ define([
 				put(title, put("span.required", " *"));
 			}
 			return title;
+		},
+
+		_buildAdditionalInfo: function(){
+			var additioalInfoContainer = put("div", {
+				id: "additional-info"
+			});
+			return additioalInfoContainer;
 		},
 		
 		/**
