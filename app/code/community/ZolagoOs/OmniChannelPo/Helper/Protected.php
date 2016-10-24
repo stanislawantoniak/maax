@@ -139,7 +139,8 @@ class ZolagoOs_OmniChannelPo_Helper_Protected
 								$v = $vendorRates[$vId];
 							}
 						}
-
+						Mage::log("vendorRates: " . ($vendorRates), null, "po.log");
+						Mage::log("v: " . ($v), null, "po.log");
 						$_orderRate = 0 < $order->getBaseToOrderRate() ? $order->getBaseToOrderRate() : 1;
 						$_um = !empty($v["udpo_method"]) ? $v["udpo_method"] : $v["code"];
 						$_umd = !empty($v["udpo_method"]) ? !empty($v["udpo_method_name"]) ? $v["udpo_method_name"] : $v["udpo_method"] : !empty($v["carrier_title"]) ? $v["carrier_title"] . " - " . $v["method_title"] : $v["code"];
