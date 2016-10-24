@@ -28,8 +28,8 @@ class Zolago_Po_Model_Source extends ZolagoOs_OmniChannelPo_Model_Source
         case 'vendor_po_grid_status_filter':
             $options = array(
                 self::UDPO_STATUS_PENDING    => $hlp->__('Pending collection'),
-		self::UDPO_STATUS_PAYMENT    => $hlp->__('Pending payment'),
-		self::UDPO_STATUS_TO_PICK    => $hlp->__('Ready to pick up'),		
+                self::UDPO_STATUS_PAYMENT    => $hlp->__('Pending payment'),
+                self::UDPO_STATUS_TO_PICK    => $hlp->__('Ready to pick up'),
                 self::UDPO_STATUS_EXPORTED   => $hlp->__('Collecting and packing'),
                 self::UDPO_STATUS_ACK        => $hlp->__('Pending acceptance'),
                 self::UDPO_STATUS_BACKORDER  => $hlp->__('Pending stock check'),
