@@ -268,12 +268,12 @@ class ZolagoOs_OmniChannelPo_Helper_Protected
 			{
 				$_splitWeight = $udpoSplitWeights[$udpo->getUdropshipVendor() . "-"]["weights"][$udpoKey];
 				$_totalWeight = $udpoSplitWeights[$udpo->getUdropshipVendor() . "-"]["total_weight"];
-				$udpo->setShippingAmount(($udpo->getShippingAmount() * $_splitWeight) / $_totalWeight);
-				$udpo->setBaseShippingAmount(($udpo->getBaseShippingAmount() * $_splitWeight) / $_totalWeight);
-				$udpo->setShippingAmountIncl(($udpo->getShippingAmountIncl() * $_splitWeight) / $_totalWeight);
-				$udpo->setBaseShippingAmountIncl(($udpo->getBaseShippingAmountIncl() * $_splitWeight) / $_totalWeight);
-				$udpo->setShippingTax(($udpo->getShippingTax() * $_splitWeight) / $_totalWeight);
-				$udpo->setBaseShippingTax(($udpo->getBaseShippingTax() * $_splitWeight) / $_totalWeight);
+//				$udpo->setShippingAmount(($udpo->getShippingAmount() * $_splitWeight) / $_totalWeight);
+//				$udpo->setBaseShippingAmount(($udpo->getBaseShippingAmount() * $_splitWeight) / $_totalWeight);
+//				$udpo->setShippingAmountIncl(($udpo->getShippingAmountIncl() * $_splitWeight) / $_totalWeight);
+//				$udpo->setBaseShippingAmountIncl(($udpo->getBaseShippingAmountIncl() * $_splitWeight) / $_totalWeight);
+//				$udpo->setShippingTax(($udpo->getShippingTax() * $_splitWeight) / $_totalWeight);
+//				$udpo->setBaseShippingTax(($udpo->getBaseShippingTax() * $_splitWeight) / $_totalWeight);
 			}
 			$order->getUdposCollection()->addItem($udpo);
 			$transaction->addObject($udpo);
