@@ -203,6 +203,18 @@
                     </zolagopo_ghapi>
                 </observers>
             </zolagopo_po_address_restore>
+            <zolagopo_po_shipping_method_change>
+                <observers>
+                    <zolagopo>
+                        <model>zolagopo/observer</model>
+                        <method>poShippingMethodChange</method>
+                    </zolagopo>
+                    <zolagopo_ghapi>
+                        <model>zolagopo/observer</model>
+                        <method>ghapiAddMessageDeliveryOrInvoice</method>
+                    </zolagopo_ghapi>
+                </observers>
+            </zolagopo_po_shipping_method_change>
             <zolagopo_po_address_change>
                 <observers>
                     <zolagopo>
@@ -223,18 +235,18 @@
 					</zolagopo>
 				</observers>
 			</zolagorma_rma_created_manually>
-			<zolagopo_po_inpost_locker_name_change>
-				<observers>
-					<zolagopo>
-						<model>zolagopo/observer</model>
-						<method>poDeliveryAddressInpostChange</method>
-					</zolagopo>
-					<zolagopo_ghapi>
-						<model>zolagopo/observer</model>
-						<method>ghapiAddMessageDeliveryOrInvoice</method>
-					</zolagopo_ghapi>
-				</observers>
-			</zolagopo_po_inpost_locker_name_change>
+			<!--<zolagopo_po_inpost_locker_name_change>-->
+				<!--<observers>-->
+					<!--<zolagopo>-->
+						<!--<model>zolagopo/observer</model>-->
+						<!--<method>poDeliveryAddressInpostChange</method>-->
+					<!--</zolagopo>-->
+					<!--<zolagopo_ghapi>-->
+						<!--<model>zolagopo/observer</model>-->
+						<!--<method>ghapiAddMessageDeliveryOrInvoice</method>-->
+					<!--</zolagopo_ghapi>-->
+				<!--</observers>-->
+			<!--</zolagopo_po_inpost_locker_name_change>-->
             <zolagopo_po_compose>
                 <observers>
                     <zolagopo>
