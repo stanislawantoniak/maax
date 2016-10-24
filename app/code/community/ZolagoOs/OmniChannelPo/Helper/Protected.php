@@ -149,7 +149,16 @@ class ZolagoOs_OmniChannelPo_Helper_Protected
 						}
 
 						$__shipPriceTax = $v["tax"];
-						Mage::log($_orderRate * $__shipPrice, null, "ZolagoOs_OmniChannelPo_Helper_Protected.log");
+						Mage::log("setShippingAmount: " . ($_orderRate * $__shipPrice), null, "po.log");
+
+						Mage::log("setBaseShippingAmount: " . ($__shipPrice), null, "po.log");
+						Mage::log("setBaseShippingAmountIncl: " . ($_orderRate * $__shipPriceIncl), null, "po.log");
+
+						Mage::log("setBaseShippingAmountIncl: " . ($__shipPriceIncl), null, "po.log");
+						Mage::log("setShippingTax: " . ($_orderRate * $__shipPriceTax), null, "po.log");
+
+						Mage::log("setBaseShippingTax: " . ($__shipPriceTax), null, "po.log");
+
 						$udpos[$udpoKey]->setShippingAmount($_orderRate * $__shipPrice)
 							->setBaseShippingAmount($__shipPrice)
 							->setShippingAmountIncl($_orderRate * $__shipPriceIncl)
@@ -268,12 +277,12 @@ class ZolagoOs_OmniChannelPo_Helper_Protected
 			{
 				$_splitWeight = $udpoSplitWeights[$udpo->getUdropshipVendor() . "-"]["weights"][$udpoKey];
 				$_totalWeight = $udpoSplitWeights[$udpo->getUdropshipVendor() . "-"]["total_weight"];
-//				$udpo->setShippingAmount(($udpo->getShippingAmount() * $_splitWeight) / $_totalWeight);
-//				$udpo->setBaseShippingAmount(($udpo->getBaseShippingAmount() * $_splitWeight) / $_totalWeight);
-//				$udpo->setShippingAmountIncl(($udpo->getShippingAmountIncl() * $_splitWeight) / $_totalWeight);
-//				$udpo->setBaseShippingAmountIncl(($udpo->getBaseShippingAmountIncl() * $_splitWeight) / $_totalWeight);
-//				$udpo->setShippingTax(($udpo->getShippingTax() * $_splitWeight) / $_totalWeight);
-//				$udpo->setBaseShippingTax(($udpo->getBaseShippingTax() * $_splitWeight) / $_totalWeight);
+				$udpo->setShippingAmount(($udpo->getShippingAmount() * $_splitWeight) / $_totalWeight);
+				$udpo->setBaseShippingAmount(($udpo->getBaseShippingAmount() * $_splitWeight) / $_totalWeight);
+				$udpo->setShippingAmountIncl(($udpo->getShippingAmountIncl() * $_splitWeight) / $_totalWeight);
+				$udpo->setBaseShippingAmountIncl(($udpo->getBaseShippingAmountIncl() * $_splitWeight) / $_totalWeight);
+				$udpo->setShippingTax(($udpo->getShippingTax() * $_splitWeight) / $_totalWeight);
+				$udpo->setBaseShippingTax(($udpo->getBaseShippingTax() * $_splitWeight) / $_totalWeight);
 			}
 			$order->getUdposCollection()->addItem($udpo);
 			$transaction->addObject($udpo);
