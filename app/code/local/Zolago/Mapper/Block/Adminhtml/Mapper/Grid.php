@@ -8,7 +8,7 @@ class Zolago_Mapper_Block_Adminhtml_Mapper_Grid extends Mage_Adminhtml_Block_Wid
         $this->setDefaultSort('mapper_id');
         $this->setDefaultDir('desc');
         $this->setSaveParametersInSession(true);
-        $this->setMassactionIdFieldOnlyIndexValue(true);// custom_id value for mass action
+        //$this->setMassactionIdFieldOnlyIndexValue(true);// custom_id value for mass action
     }
 
     protected function _prepareCollection(){
@@ -16,47 +16,47 @@ class Zolago_Mapper_Block_Adminhtml_Mapper_Grid extends Mage_Adminhtml_Block_Wid
         /* @var $collection Zolago_Mapper_Model_Resource_Mapper_Collection */
 		$collection->setFlag('abstract', true);
 		$collection->joinAttributeSet();
-        $collection->addCustomId();
+        //$collection->addCustomId();
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
 
-    protected function _prepareColumns() {
+    protected function _prepareColumns()
+    {
 
-		
         $this->addColumn("attribute_set_name", array(
-            "index"     =>"attribute_set_name",
-            "header"    => Mage::helper("zolagomapper")->__("Attribute set"),
+            "index" => "attribute_set_name",
+            "header" => Mage::helper("zolagomapper")->__("Attribute set"),
         ));
-		
-		        $this->addColumn("name", array(
-            "index"     =>"name",
-            "header"    => Mage::helper("zolagomapper")->__("Name"),
+
+        $this->addColumn("name", array(
+            "index" => "name",
+            "header" => Mage::helper("zolagomapper")->__("Name"),
         ));
-		
+
         if (!Mage::app()->isSingleStoreMode()) {
             $this->addColumn('website_id', array(
-                'header'    => Mage::helper('zolagomapper')->__('Website'),
-                'align'     => 'center',
-                'width'     => '150px',
-                'type'      => 'options',
-                'options'   => Mage::getSingleton('adminhtml/system_store')->getWebsiteOptionHash(true),
-                'index'     => 'website_id',
+                'header' => Mage::helper('zolagomapper')->__('Website'),
+                'align' => 'center',
+                'width' => '150px',
+                'type' => 'options',
+                'options' => Mage::getSingleton('adminhtml/system_store')->getWebsiteOptionHash(true),
+                'index' => 'website_id',
             ));
         }
         $this->addColumn("is_active", array(
-            "index"     =>"is_active",
-            'type'      => 'options',
-			'align'		=> 'center',
-            "options"   => Mage::getSingleton("adminhtml/system_config_source_yesno")->toArray(),
-            "header"    => Mage::helper("zolagomapper")->__("Is active"),
-            'width'     => '100px',
+            "index" => "is_active",
+            'type' => 'options',
+            'align' => 'center',
+            "options" => Mage::getSingleton("adminhtml/system_config_source_yesno")->toArray(),
+            "header" => Mage::helper("zolagomapper")->__("Is active"),
+            'width' => '100px',
         ));
         $this->addColumn('action', array(
-            'header'    => Mage::helper('zolagomapper')->__('Action'),
-            'width'     => '100px',
-            'type'      => 'action',
-			"renderer"	=> Mage::getConfig()->getBlockClassName("zolagomapper/adminhtml_mapper_grid_column_renderer_action"),
+            'header' => Mage::helper('zolagomapper')->__('Action'),
+            'width' => '100px',
+            'type' => 'action',
+            "renderer" => Mage::getConfig()->getBlockClassName("zolagomapper/adminhtml_mapper_grid_column_renderer_action"),
             'filter' => false,
             'sortable' => false,
         ));
@@ -73,7 +73,7 @@ class Zolago_Mapper_Block_Adminhtml_Mapper_Grid extends Mage_Adminhtml_Block_Wid
 
     protected function _prepareMassaction()
     {
-        $this->setMassactionIdField('custom_id');
+        $this->setMassactionIdField('mapper_id');
         $this->getMassactionBlock()->setFormFieldName('custom_ids');
 
         $this->getMassactionBlock()->addItem('queue', array(
