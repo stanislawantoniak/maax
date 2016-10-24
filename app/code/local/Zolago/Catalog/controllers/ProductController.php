@@ -3,6 +3,7 @@ require_once Mage::getConfig()->getModuleDir('controllers', "Mage_Catalog") . DS
 class Zolago_Catalog_ProductController extends Mage_Catalog_ProductController
 {
     
+    
 	/**
      * Product view action
      */
