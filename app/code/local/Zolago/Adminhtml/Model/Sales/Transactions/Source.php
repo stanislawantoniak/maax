@@ -39,7 +39,7 @@ class Zolago_Adminhtml_Model_Sales_Transactions_Source extends Varien_Object
 
         $collection->getSelect()->join(
             array('po' => $collection->getTable('udpo/po')),
-            'main_table.parent_id=`po`.order_id',
+            'main_table.parent_id=`po`.entity_id',
             array('po.grand_total_incl_tax','po.increment_id','item_entity_id'=>'main_table.entity_id','po.order_id')
        );
         $collection->getSelect()
