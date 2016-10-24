@@ -25,22 +25,29 @@ class Zolago_Adminhtml_Model_Sales_Transactions_Source extends Varien_Object
      */
     protected function _getOrdersInfo()
     {
+        if (Mage::helper('zolagocommon')->useGalleryConfiguration()) {
+            Mage::throwException('Do not use on gallery');
+            // poza galerią to działa tylko przez przypadek
+            // na galerii nie będzie działać wcale
+        }
+
+
         $orders = array();
 
         $dateModel = Mage::getModel('core/date');
         $collection = Mage::getResourceModel('udpo/po_item_collection');
 
         $collection->getSelect()->join(
-            array('order' => $collection->getTable('udpo/po')),
-            'main_table.parent_id=`order`.entity_id',
-            array('order.grand_total_incl_tax','order.increment_id','item_entity_id'=>'main_table.entity_id','order.order_id')
+            array('po' => $collection->getTable('udpo/po')),
+            'main_table.parent_id=`po`.entity_id',
+            array('po.grand_total_incl_tax','po.increment_id','item_entity_id'=>'main_table.entity_id','po.order_id')
        );
         $collection->getSelect()
-            ->columns('concat(main_table.entity_id,"_",order.entity_id) as unique_id');
+            ->columns('concat(main_table.entity_id,"_",po.entity_id) as unique_id');
 
         $collection->getSelect()->join(
             array('order_payment' => $collection->getTable('sales/order_payment')),
-            'order_payment.parent_id=`order`.entity_id',
+            'order_payment.parent_id=`po`.order_id',
             array('*')
         );
 
@@ -48,9 +55,9 @@ class Zolago_Adminhtml_Model_Sales_Transactions_Source extends Varien_Object
         $collection->addAttributeToFilter('main_table.parent_item_id', array("null" => true));
 
         //Last 2 month orders
-        $collection->addAttributeToFilter('order.created_at', array("gteq" => new Zend_Db_Expr("DATE_SUB(CURDATE(), INTERVAL 2 MONTH)")));
+        $collection->addAttributeToFilter('po.created_at', array("gteq" => new Zend_Db_Expr("DATE_SUB(CURDATE(), INTERVAL 2 MONTH)")));
         $collection->setRowIdFieldName('unique_id');
-        $collection->getSelect()->order("order.created_at DESC");
+        $collection->getSelect()->order("po.created_at DESC");
 
         $options = array();
         foreach ($collection as $collectionItem) {

@@ -162,9 +162,12 @@ class Zolago_Adminhtml_PaymentController extends Mage_Adminhtml_Controller_Actio
                         $po->saveComments();
                         $rma->saveComments();
                     }
-                } else {
-                    $po = $paymentHelper->getTransactionPo($transaction);
-
+                } else {                
+                    if ($useAllocation === false) {
+                        $poList = $order->getPoListByOrder();
+                    } else {
+                        $poList = array($paymentHelper->getTransactionPo($transaction));
+                    }
                     if($paymentHelper->sendRefundEmail(
                                 $email,
                                 $order,
@@ -172,8 +175,10 @@ class Zolago_Adminhtml_PaymentController extends Mage_Adminhtml_Controller_Actio
                                 $paymentMethod)
                       ) {
                         //if email has been sent then add comment
-                        $po->addComment($rmaHelper->__("Email about refund was sent to customer (Amount: %s)", $amount),false,true);
-                        $po->saveComments();
+                        foreach ($poList as $po) {
+                            $po->addComment($rmaHelper->__("Email about refund was sent to customer (Amount: %s)", $amount),false,true);
+                            $po->saveComments();
+                        }
                     }
                 }
             }

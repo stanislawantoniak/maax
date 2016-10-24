@@ -42,3 +42,4 @@
 "Service %s get label error: %s","Błąd pobrania etykiet dla serwisu %s: %s"
 "Box in MINI size","Paczka w rozmiarze MINI"
 "Default box size for shipment labels","Domyślny rozmiar paczki przy generowaniu listu przewozowego" 
+"No assigned post offices","Brak przypisanych urzędów nadania"
