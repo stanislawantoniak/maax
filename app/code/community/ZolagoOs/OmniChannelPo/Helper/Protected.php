@@ -285,6 +285,7 @@ class ZolagoOs_OmniChannelPo_Helper_Protected
 				!empty($udpoSplitWeights[$udpo->getUdropshipVendor() . "-"]["weights"][$udpoKey]) &&
 				1 < count($udpoSplitWeights[$udpo->getUdropshipVendor() . "-"]["weights"]))
 			{
+				Mage::log("setBaseShippingTax: " . ($udpo->getBaseShippingTax()), null, "po.log");
 				$_splitWeight = $udpoSplitWeights[$udpo->getUdropshipVendor() . "-"]["weights"][$udpoKey];
 				$_totalWeight = $udpoSplitWeights[$udpo->getUdropshipVendor() . "-"]["total_weight"];
 				$udpo->setShippingAmount(($udpo->getShippingAmount() * $_splitWeight) / $_totalWeight);
