@@ -3431,6 +3431,7 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
             Mage::log("baseShipping round: ". (  $this->roundRate( $baseShipping - $baseStoreTax )  ), null, "rate.log");
             $baseTax        = $this->roundRate($calc->calcTaxAmount($baseShipping, $rate, false, false) );
 
+
             Mage::log("baseTax: ". ($calc->calcTaxAmount($baseShipping, $rate, false, false)), null, "rate.log");
             Mage::log("baseTax round: ". ($this->roundRate($calc->calcTaxAmount($baseShipping, $rate, false, false) )), null, "rate.log");
 
