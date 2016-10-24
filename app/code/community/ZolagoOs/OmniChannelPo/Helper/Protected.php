@@ -149,6 +149,7 @@ class ZolagoOs_OmniChannelPo_Helper_Protected
 						}
 
 						$__shipPriceTax = $v["tax"];
+						Mage::log($_orderRate * $__shipPrice, null, "ZolagoOs_OmniChannelPo_Helper_Protected.log");
 						$udpos[$udpoKey]->setShippingAmount($_orderRate * $__shipPrice)
 							->setBaseShippingAmount($__shipPrice)
 							->setShippingAmountIncl($_orderRate * $__shipPriceIncl)
