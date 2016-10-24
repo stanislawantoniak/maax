@@ -283,22 +283,12 @@ class Zolago_Mapper_Adminhtml_MapperController
      */
     public function massQueueAction() {
 
-        $ids = $this->getRequest()->getParam('custom_ids');
-        $_ids = array();
-        // Filtering ids with mapper_id (id is like 'attribute_set_id:mapper_id')
-        foreach($ids as $id) {
-            $arr = explode(':',$id);
-            $asid = isset($arr[0]) ? $arr[0] : 0;
-            $mid  = isset($arr[1]) ? $arr[1] : 0;
-            if ($mid) {
-                $_ids[] = $mid;
-            }
-        }
+	    $_ids = $this->getRequest()->getParam('custom_ids');
 
-        $oldCount = count($ids);
+
         $newCount = count($_ids);
 
-        if(!is_array($ids) || !count($_ids)) {
+        if(!is_array($_ids)) {
             Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zolagomapper')->__('Please select valid mappers'));
         } else {
             try {
@@ -306,11 +296,7 @@ class Zolago_Mapper_Adminhtml_MapperController
                     $queue = Mage::getModel('zolagomapper/queue_mapper');
                     $queue->push($id);
                 }
-                if ($oldCount == $newCount) {
-                    $this->_getSession()->addSuccess(Mage::helper("zolagomapper")->__("%s mappers added to rebuild queue", $newCount));
-                } else {
-                    $this->_getSession()->addSuccess(Mage::helper("zolagomapper")->__("%s mappers added to rebuild queue, %s row skipped", $newCount, $oldCount - $newCount));
-                }
+	            $this->_getSession()->addSuccess(Mage::helper("zolagomapper")->__("%s mappers added to rebuild queue", $newCount));
 
             } catch (Mage_Core_Exception $e) {
                 $this->_getSession()->addError($e->getMessage());
