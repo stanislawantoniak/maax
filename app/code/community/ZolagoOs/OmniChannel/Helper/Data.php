@@ -3427,7 +3427,13 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
             $storeRate      = $calc->getStoreRate($addressTaxRequest, $store);
             $baseStoreTax   = $calc->calcTaxAmount($baseShipping, $storeRate, true, false);
             $baseShipping   = $calc->round($baseShipping - $baseStoreTax);
+            Mage::log("baseShipping: ". ($baseShipping - $baseStoreTax), null, "rate.log");
+            Mage::log("baseShipping round: ". ($calc->round($baseShipping - $baseStoreTax)), null, "rate.log");
             $baseTax        = $calc->round($calc->calcTaxAmount($baseShipping, $rate, false, false), $rate, false, 'base');
+
+            Mage::log("baseTax: ". ($calc->calcTaxAmount($baseShipping, $rate, false, false)), null, "rate.log");
+            Mage::log("baseTax round: ". ($calc->round($calc->calcTaxAmount($baseShipping, $rate, false, false), $rate, false, 'base')), null, "rate.log");
+
             $baseTaxShipping= $baseShipping + $baseTax;
         } else {
             $baseTax        = $calc->round($calc->calcTaxAmount($baseShipping, $rate, false, false), $rate, false, 'base');
