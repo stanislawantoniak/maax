@@ -60,19 +60,19 @@ class Zolago_Po_Model_Po_Status
 
     static function getFinishStatuses() {
         return array(
-                   self::STATUS_CANCELED,
-                   self::STATUS_DELIVERED,
-                   self::STATUS_SHIPPED,
-                   self::STATUS_RETURNED
-               );;
+            self::STATUS_CANCELED,
+            self::STATUS_DELIVERED,
+            self::STATUS_SHIPPED,
+            self::STATUS_RETURNED
+        );;
     }
 
     static function getOverpaymentStatuses() {
         return array (
-                   self::STATUS_CANCELED,
-                   self::STATUS_DELIVERED,
-                   self::STATUS_SHIPPED,
-               );
+            self::STATUS_CANCELED,
+            self::STATUS_DELIVERED,
+            self::STATUS_SHIPPED,
+        );
     }
     /**
      * if PO is NEW
@@ -85,16 +85,14 @@ class Zolago_Po_Model_Po_Status
      * @param Zolago_Po_Model_Po $po
      */
     public function processNewStatus(Zolago_Po_Model_Po $po) {
-        if($po->getId()) {
+        if($po->getId()){
             return;
         }
-        if($po->getAlert()) {
+        if($po->getAlert()){
             $po->setUdropshipStatus(self::STATUS_ACK);
-        }
-        elseif(!$po->isCod()) {
+        }elseif(!$po->isCod()){
             $po->setUdropshipStatus(self::STATUS_BACKORDER);
-        }
-        else {
+        }else{
             $po->setUdropshipStatus(self::STATUS_PENDING);
         }
     }
@@ -107,10 +105,10 @@ class Zolago_Po_Model_Po_Status
      * @param Zolago_Po_Model_Po $po
      */
     public function processConfirmRelease(Zolago_Po_Model_Po $po) {
-        if($this->isConfirmReleaseAvailable($po)) {
-            if(!$po->isCod() && !$po->isPaid()) {
+        if($this->isConfirmReleaseAvailable($po)){
+            if(!$po->isCod() && !$po->isPaid()){
                 $status = self::STATUS_BACKORDER;
-            } else {
+            }else{
                 $status = self::STATUS_PENDING;
             }
             $this->_processStatus($po, $status);
@@ -125,12 +123,12 @@ class Zolago_Po_Model_Po_Status
      * @param Zolago_Po_Model_Po $po
      */
     public function processConfirmStock(Zolago_Po_Model_Po $po) {
-        if($this->isConfirmStockAvailable($po)) {
+        if($this->isConfirmStockAvailable($po)){
             $po->setStockConfirm(1);
             $po->getResource()->saveAttribute($po, "stock_confirm");
-            if(!$po->isCod() && !$po->isPaid()) {
+            if(!$po->isCod() && !$po->isPaid()){
                 $status = self::STATUS_PAYMENT;
-            } else {
+            }else{
                 $status = self::STATUS_PENDING;
             }
             $this->_processStatus($po, $status);
@@ -141,7 +139,7 @@ class Zolago_Po_Model_Po_Status
      * @param Zolago_Po_Model_Po $po
      */
     public function processPrintAggregated(Zolago_Po_Model_Po $po) {
-        if($this->isPrintAggregatedAvailable($po)) {
+        if($this->isPrintAggregatedAvailable($po)){
 
         }
     }
@@ -150,7 +148,7 @@ class Zolago_Po_Model_Po_Status
      * @param Zolago_Po_Model_Po $po
      */
     public function processConfirmSend(Zolago_Po_Model_Po $po) {
-        if($this->isConfirmSendAvailable($po)) {
+        if($this->isConfirmSendAvailable($po)){
             $this->_processStatus($po, self::STATUS_SHIPPED);
         }
     }
@@ -163,12 +161,12 @@ class Zolago_Po_Model_Po_Status
      * @param Zolago_Po_Model_Po $po
      */
     public function processDirectRealisation(Zolago_Po_Model_Po $po, $force=false) {
-        if($this->isDirectRealisationAvailable($po) || $force) {
+        if($this->isDirectRealisationAvailable($po) || $force){
             $po->setStockConfirm(0);
             $po->getResource()->saveAttribute($po, "stock_confirm");
-            if(!$po->isPaymentCheckOnDelivery() && !$po->isPaid()) {
+            if(!$po->isPaymentCheckOnDelivery() && !$po->isPaid()){
                 $status = self::STATUS_BACKORDER;
-            } else {
+            }else{
                 $status = self::STATUS_PENDING;
             }
             $this->_processStatus($po, $status);
@@ -182,10 +180,9 @@ class Zolago_Po_Model_Po_Status
      * @throws Mage_Core_Exception
      */
     public function processStartPacking(Zolago_Po_Model_Po $po, $force = false, $throwError = false) {
-        if($this->isStartPackingAvailable($po) || $force) {
+        if($this->isStartPackingAvailable($po) || $force){
             $this->_processStatus($po, self::STATUS_EXPORTED);
-        }
-        elseif($throwError) {
+        } elseif($throwError) {
             Mage::throwException(Mage::helper('ghapi')->__('Invalid status for this operation.'));
         }
     }
@@ -234,9 +231,9 @@ class Zolago_Po_Model_Po_Status
      */
     public function isConfirmReleaseAvailable($po) {
         switch ($this->_getStatus($po)) {
-        case self::STATUS_ACK:
-            return true;
-            break;
+            case self::STATUS_ACK:
+                return true;
+                break;
         }
         return false;
     }
@@ -248,9 +245,9 @@ class Zolago_Po_Model_Po_Status
      */
     public function isConfirmStockAvailable($po) {
         switch ($this->_getStatus($po)) {
-        case self::STATUS_BACKORDER:
-            return true;
-            break;
+            case self::STATUS_BACKORDER:
+                return true;
+                break;
         }
         return false;
     }
@@ -261,9 +258,9 @@ class Zolago_Po_Model_Po_Status
      */
     public function isPrintAggregatedAvailable($po) {
         switch ($this->_getStatus($po)) {
-        case self::STATUS_READY:
-            return true;
-            break;
+            case self::STATUS_READY:
+                return true;
+                break;
         }
         return false;
     }
@@ -282,12 +279,12 @@ class Zolago_Po_Model_Po_Status
      */
     public function isCancelShippingAvailable($po) {
         switch ($this->_getStatus($po)) {
-        case self::STATUS_READY:
-            if($po instanceof Zolago_Po_Model_Po) {
-                return !$po->getAggregated()->isConfirmed();
-            }
-            return true;
-            break;
+            case self::STATUS_READY:
+                if($po instanceof Zolago_Po_Model_Po) {
+                    return !$po->getAggregated()->isConfirmed();
+                }
+                return true;
+                break;
         }
         return false;
     }
@@ -298,9 +295,9 @@ class Zolago_Po_Model_Po_Status
      */
     public function isReadyToPickUp($po) {
         switch ($this->_getStatus($po)) {
-        case self::STATUS_TO_PICK:
-            return true;
-            break;
+            case self::STATUS_TO_PICK:
+                return true;
+                break;
         }
         return false;
     }
@@ -311,9 +308,9 @@ class Zolago_Po_Model_Po_Status
      */
     public function isConfirmSendAvailable($po) {
         switch ($this->_getStatus($po)) {
-        case self::STATUS_READY:
-            return true;
-            break;
+            case self::STATUS_READY:
+                return true;
+                break;
         }
         return false;
     }
@@ -324,9 +321,9 @@ class Zolago_Po_Model_Po_Status
      */
     public function isStartPackingAvailable($po) {
         switch ($this->_getStatus($po)) {
-        case self::STATUS_PENDING:
-            return true;
-            break;
+            case self::STATUS_PENDING:
+                return true;
+                break;
         }
         return false;
     }
@@ -337,10 +334,10 @@ class Zolago_Po_Model_Po_Status
      */
     public function isShippingAvailable($po) {
         switch ($this->_getStatus($po)) {
-        case self::STATUS_EXPORTED:
-        case self::STATUS_TO_PICK:
-            return true;
-            break;
+            case self::STATUS_EXPORTED:
+            case self::STATUS_TO_PICK:
+                return true;
+                break;
         }
         return false;
     }
@@ -351,13 +348,13 @@ class Zolago_Po_Model_Po_Status
      */
     public function isEditingAvailable($po) {
         switch ($this->_getStatus($po)) {
-        case self::STATUS_ACK:
-        case self::STATUS_BACKORDER:
-        case self::STATUS_PAYMENT:
-        case self::STATUS_PENDING:
-        case self::STATUS_EXPORTED:
-            return true;
-            break;
+            case self::STATUS_ACK:
+            case self::STATUS_BACKORDER:
+            case self::STATUS_PAYMENT:
+            case self::STATUS_PENDING:
+            case self::STATUS_EXPORTED:
+                return true;
+                break;
         }
         return false;
     }
@@ -380,10 +377,10 @@ class Zolago_Po_Model_Po_Status
             return false;
         }
         switch ($this->_getStatus($po)) {
-        case self::STATUS_CANCELED:
-        case self::STATUS_ONHOLD:
-            return true;
-            break;
+            case self::STATUS_CANCELED:
+            case self::STATUS_ONHOLD:
+                return true;
+                break;
         }
         return false;
     }
@@ -395,14 +392,14 @@ class Zolago_Po_Model_Po_Status
      */
     public function isChangePaymentAvailable($po) {
         switch ($this->_getStatus($po)) {
-        case self::STATUS_PENDING:
-        case self::STATUS_ACK:
-        case self::STATUS_BACKORDER:
-        case self::STATUS_ONHOLD:
-        case self::STATUS_PAYMENT:
-            return true;
-        default:
-            ;
+            case self::STATUS_PENDING:
+            case self::STATUS_ACK:
+            case self::STATUS_BACKORDER:
+            case self::STATUS_ONHOLD:
+            case self::STATUS_PAYMENT:
+                return true;
+            default:
+                ;
         }
         return false;
     }
@@ -415,18 +412,18 @@ class Zolago_Po_Model_Po_Status
         /** @var Zolago_Po_Helper_Data $hlp */
         $hlp = Mage::helper("udpo");
         switch ($this->_getStatus($status)) {
-        case self::STATUS_EXPORTED:
-            $statuses[self::STATUS_PENDING] = $hlp->getPoStatusName(self::STATUS_PENDING);
-        case self::STATUS_BACKORDER:
-        case self::STATUS_PAYMENT:
-        case self::STATUS_ACK:
-        case self::STATUS_PENDING:
-            $statuses[self::STATUS_ONHOLD] = $hlp->getPoStatusName(self::STATUS_ONHOLD);
-            $statuses[self::STATUS_CANCELED] = $hlp->getPoStatusName(self::STATUS_CANCELED);
-            break;
-        case self::STATUS_ONHOLD:
-            $statuses[self::STATUS_CANCELED] = $hlp->getPoStatusName(self::STATUS_CANCELED);
-            break;
+            case self::STATUS_EXPORTED:
+                $statuses[self::STATUS_PENDING] = $hlp->getPoStatusName(self::STATUS_PENDING);
+            case self::STATUS_BACKORDER:
+            case self::STATUS_PAYMENT:
+            case self::STATUS_ACK:
+            case self::STATUS_PENDING:
+                $statuses[self::STATUS_ONHOLD] = $hlp->getPoStatusName(self::STATUS_ONHOLD);
+                $statuses[self::STATUS_CANCELED] = $hlp->getPoStatusName(self::STATUS_CANCELED);
+                break;
+            case self::STATUS_ONHOLD:
+                $statuses[self::STATUS_CANCELED] = $hlp->getPoStatusName(self::STATUS_CANCELED);
+                break;
         }
 
         return $statuses;
@@ -455,8 +452,8 @@ class Zolago_Po_Model_Po_Status
         $hlp = Mage::helper("udpo");
         $po->setForceStatusChangeFlag(true);
         $hlp->processPoStatusSave($po, $newStatus2, true);
-
-        if (in_array($newStatus2, $this->getOverpaymentStatuses())) {
+        $store = $po->getStore();
+        if (in_array($newStatus2, $this->getOverpaymentStatuses()) && Mage::helper('zolagopayment')->getConfigUseAllocation($store)) {
             /** @var Zolago_Payment_Model_Allocation $allocModel */
             $allocModel = Mage::getModel("zolagopayment/allocation");
             $allocModel->createOverpayment($po);
@@ -469,7 +466,7 @@ class Zolago_Po_Model_Po_Status
      * @return int
      */
     protected function _getStatus($status) {
-        if($status instanceof Zolago_Po_Model_Po) {
+        if($status instanceof Zolago_Po_Model_Po){
             return $status->getUdropshipStatus();
         }
         return $status;
@@ -486,14 +483,15 @@ class Zolago_Po_Model_Po_Status
             $status = !is_null($status) && $status !== false ? $status : $po->getUdropshipStatus();
 
             if($status == Zolago_Po_Model_Po_Status::STATUS_PAYMENT
-                    || $status == Zolago_Po_Model_Po_Status::STATUS_PENDING
-                    || $status == Zolago_Po_Model_Po_Status::STATUS_BACKORDER)
+                || $status == Zolago_Po_Model_Po_Status::STATUS_PENDING
+                || $status == Zolago_Po_Model_Po_Status::STATUS_BACKORDER)
             {
                 $grandTotal = $po->getGrandTotalInclTax();
                 $sumAmount  = $po->getPaymentAmount();
+
                 //czeka na płatność lub czeka na rezerwacje
                 if (($status == Zolago_Po_Model_Po_Status::STATUS_PAYMENT || $status == Zolago_Po_Model_Po_Status::STATUS_BACKORDER)
-                        && (($grandTotal <= $sumAmount) || $po->isCod()))
+                    && $grandTotal <= $sumAmount)
                 {
                     return Zolago_Po_Model_Po_Status::STATUS_PENDING; //rowny albo nadplata
                 } //czeka na spakowanie
@@ -514,25 +512,24 @@ class Zolago_Po_Model_Po_Status
      */
     public function ghapiOrderStatus($status) {
         switch ($status) {
-        case Zolago_Po_Model_Source::UDPO_STATUS_ACK:
-        case Zolago_Po_Model_Source::UDPO_STATUS_ONHOLD:
-        case Zolago_Po_Model_Source::UDPO_STATUS_BACKORDER:
-            return 'pending';
-        case Zolago_Po_Model_Source::UDPO_STATUS_PAYMENT:
-            return 'pending_payment';
-        case Zolago_Po_Model_Source::UDPO_STATUS_PENDING:
-        case Zolago_Po_Model_Source::UDPO_STATUS_EXPORTED:
-        case Zolago_Po_Model_Source::UDPO_STATUS_READY:
-        case Zolago_Po_Model_Source::UDPO_STATUS_TO_PICK;
-            return 'ready';
-        case Zolago_Po_Model_Source::UDPO_STATUS_SHIPPED:
-            return 'shipped ';
-        case Zolago_Po_Model_Source::UDPO_STATUS_DELIVERED:
-            return 'delivered';
-        case Zolago_Po_Model_Source::UDPO_STATUS_CANCELED:
-            return 'cancelled';
-        case Zolago_Po_Model_Source::UDPO_STATUS_RETURNED:
-            return 'returned';
+            case Zolago_Po_Model_Source::UDPO_STATUS_ACK:
+            case Zolago_Po_Model_Source::UDPO_STATUS_ONHOLD:
+            case Zolago_Po_Model_Source::UDPO_STATUS_BACKORDER:
+                return 'pending';
+            case Zolago_Po_Model_Source::UDPO_STATUS_PAYMENT:
+                return 'pending_payment';
+            case Zolago_Po_Model_Source::UDPO_STATUS_PENDING:
+            case Zolago_Po_Model_Source::UDPO_STATUS_EXPORTED:
+            case Zolago_Po_Model_Source::UDPO_STATUS_READY:
+                return 'ready';
+            case Zolago_Po_Model_Source::UDPO_STATUS_SHIPPED:
+                return 'shipped ';
+            case Zolago_Po_Model_Source::UDPO_STATUS_DELIVERED:
+                return 'delivered';
+            case Zolago_Po_Model_Source::UDPO_STATUS_CANCELED:
+                return 'cancelled';
+            case Zolago_Po_Model_Source::UDPO_STATUS_RETURNED:
+                return 'returned';
         }
         return '';
     }
