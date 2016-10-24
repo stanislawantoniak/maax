@@ -495,10 +495,6 @@ abstract class Zolago_Checkout_Controller_Abstract
 			if (!$rate) {
 				continue;
 			}
-			Mage::log("price_excl: ". Mage::helper('udropship')->getShippingPrice($rate->getPrice(), $vendor, $address, 'base'), null, "checkout.log");
-			Mage::log("price_incl: ". Mage::helper('udropship')->getShippingPrice($rate->getPrice(), $vendor, $address, 'incl'), null, "checkout.log");
-			Mage::log("tax: ". Mage::helper('udropship')->getShippingPrice($rate->getPrice(), $vendor, $address, 'tax'), null, "checkout.log");
-
 			$details['methods'][$vId] = array(
 				'code' => $code,
 				'cost' => (float)$rate->getCost(),
