@@ -3426,17 +3426,17 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
         if ($priceIncludesTax) {
             $storeRate      = $calc->getStoreRate($addressTaxRequest, $store);
             $baseStoreTax   = $calc->calcTaxAmount($baseShipping, $storeRate, true, false);
-            $baseShipping   = $store->roundPrice($baseShipping - $baseStoreTax);
+            $baseShipping   = round($baseShipping - $baseStoreTax, 2);
             Mage::log("baseShipping: ". ($baseShipping - $baseStoreTax), null, "rate.log");
-            Mage::log("baseShipping round: ". ($store->roundPrice($baseShipping - $baseStoreTax)), null, "rate.log");
-            $baseTax        = $store->roundPrice($calc->calcTaxAmount($baseShipping, $rate, false, false), $rate, false, 'base');
+            Mage::log("baseShipping round: ". (round($baseShipping - $baseStoreTax, 2)), null, "rate.log");
+            $baseTax        = round($calc->calcTaxAmount($baseShipping, $rate, false, false), 2);
 
             Mage::log("baseTax: ". ($calc->calcTaxAmount($baseShipping, $rate, false, false)), null, "rate.log");
-            Mage::log("baseTax round: ". ($store->roundPrice($calc->calcTaxAmount($baseShipping, $rate, false, false), $rate, false, 'base')), null, "rate.log");
+            Mage::log("baseTax round: ". (round($calc->calcTaxAmount($baseShipping, $rate, false, false), 2)), null, "rate.log");
 
             $baseTaxShipping= $baseShipping + $baseTax;
         } else {
-            $baseTax        = $store->roundPrice($calc->calcTaxAmount($baseShipping, $rate, false, false), $rate, false, 'base');
+            $baseTax        = round($calc->calcTaxAmount($baseShipping, $rate, false, false), 2);
             $baseTaxShipping= $baseShipping + $baseTax;
         }
 
