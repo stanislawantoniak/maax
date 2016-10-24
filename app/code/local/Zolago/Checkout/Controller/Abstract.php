@@ -488,25 +488,29 @@ abstract class Zolago_Checkout_Controller_Abstract
         $details = $address->getUdropshipShippingDetails();
         $details = $details ? Zend_Json::decode($details) : array();
 
-        $hl = Mage::helper('udropship');
-        foreach ($shippingMethod as $vId => $code) {
-            $vendor = $hl->getVendor($vId);
-            $rate = $address->getShippingRateByCode($code);
-            if (!$rate) {
-                continue;
-            }
-            $details['methods'][$vId] = array(
-                'code' => $code,
-                'cost' => (float)$rate->getCost(),
-                'price' => (float)$rate->getPrice(),
-                'price_excl' => (float)Mage::helper('udropship')->getShippingPrice($rate->getPrice(), $vendor, $address, 'base'),
-                'price_incl' => (float)Mage::helper('udropship')->getShippingPrice($rate->getPrice(), $vendor, $address, 'incl'),
-                'tax' => (float)Mage::helper('udropship')->getShippingPrice($rate->getPrice(), $vendor, $address, 'tax'),
-                'carrier_title' => $rate->getCarrierTitle(),
-                'method_title' => $rate->getMethodTitle(),
-                'is_free_shipping' => (int)$rate->getIsFwFreeShipping()
-            );
-        }
+		$hl = Mage::helper('udropship');
+		foreach ($shippingMethod as $vId => $code) {
+			$vendor = $hl->getVendor($vId);
+			$rate = $address->getShippingRateByCode($code);
+			if (!$rate) {
+				continue;
+			}
+			Mage::log("price_excl: ". Mage::helper('udropship')->getShippingPrice($rate->getPrice(), $vendor, $address, 'base'), null, "checkout.log");
+			Mage::log("price_incl: ". Mage::helper('udropship')->getShippingPrice($rate->getPrice(), $vendor, $address, 'incl'), null, "checkout.log");
+			Mage::log("tax: ". Mage::helper('udropship')->getShippingPrice($rate->getPrice(), $vendor, $address, 'tax'), null, "checkout.log");
+
+			$details['methods'][$vId] = array(
+				'code' => $code,
+				'cost' => (float)$rate->getCost(),
+				'price' => (float)$rate->getPrice(),
+				'price_excl' => (float)Mage::helper('udropship')->getShippingPrice($rate->getPrice(), $vendor, $address, 'base'),
+				'price_incl' => (float)Mage::helper('udropship')->getShippingPrice($rate->getPrice(), $vendor, $address, 'incl'),
+				'tax' => (float)Mage::helper('udropship')->getShippingPrice($rate->getPrice(), $vendor, $address, 'tax'),
+				'carrier_title' => $rate->getCarrierTitle(),
+				'method_title' => $rate->getMethodTitle(),
+				'is_free_shipping' => (int)$rate->getIsFwFreeShipping()
+			);
+		}
 
 
         $address->setUdropshipShippingDetails(Zend_Json::encode($details));

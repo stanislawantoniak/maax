@@ -21,6 +21,9 @@ class ZolagoOs_OmniChannelPo_Helper_Protected
 		$hlpd = Mage::helper("udropship/protected");
 		$poHlp = Mage::helper("udpo");
 		$shippingMethod = Mage::helper("udropship")->explodeOrderShippingMethod($order);
+		Mage::log("hasUdpoVendorRates: ". (int)($order->hasUdpoVendorRates()), null, "po.log");
+
+
 		if ($order->hasUdpoVendorRates()) {
 			$vendorRates = $order->getUdpoVendorRates();
 		} else {
