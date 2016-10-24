@@ -149,7 +149,14 @@ class ZolagoOs_OmniChannelPo_Helper_Protected
 						}
 
 						$__shipPriceTax = $v["tax"];
-						$udpos[$udpoKey]->setShippingAmount(Mage::app()->getStore()->roundPrice($_orderRate * $__shipPrice))->setBaseShippingAmount($__shipPrice)->setShippingAmountIncl(Mage::app()->getStore()->roundPrice($_orderRate * $__shipPriceIncl))->setBaseShippingAmountIncl($__shipPriceIncl)->setShippingTax(Mage::app()->getStore()->roundPrice($_orderRate * $__shipPriceTax))->setBaseShippingTax($__shipPriceTax)->setUdropshipMethod($_um)->setUdropshipMethodDescription($_umd);
+						$udpos[$udpoKey]->setShippingAmount($_orderRate * $__shipPrice)
+							->setBaseShippingAmount($__shipPrice)
+							->setShippingAmountIncl($_orderRate * $__shipPriceIncl)
+							->setBaseShippingAmountIncl($__shipPriceIncl)
+							->setShippingTax($_orderRate * $__shipPriceTax)
+							->setBaseShippingTax($__shipPriceTax)
+							->setUdropshipMethod($_um)
+							->setUdropshipMethodDescription($_umd);
 					} else {
 						$vShipping = $vendor->getShippingMethods();
 						$uMethod = explode("_", $order->getShippingMethod(), 2);
