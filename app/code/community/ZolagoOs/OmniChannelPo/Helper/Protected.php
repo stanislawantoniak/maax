@@ -123,7 +123,7 @@ class ZolagoOs_OmniChannelPo_Helper_Protected
 						$udpoIndex++;
 						$udpos[$udpoKey]->setIncrementId(sprintf("%s-%s", $order->getIncrementId(), $udpoIndex));
 					}
-
+					Mage::log("vendorRates: " . ($vendorRates), null, "po.log");
 					if (!empty($vendorRates[$vId]) ||
 						!empty($vendorRates[$udpoKey]) ||
 						!empty($vendorRates[$vId]["rates_by_seq_number"][$orderItem->getUdpoSeqNumber()]))
