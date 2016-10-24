@@ -149,6 +149,7 @@ class ZolagoOs_OmniChannelPo_Helper_Protected
 						}
 
 						$__shipPriceTax = $v["tax"];
+						Mage::log("order Rate: " . ($_orderRate), null, "po.log");
 						Mage::log("setShippingAmount: " . ($_orderRate * $__shipPrice), null, "po.log");
 
 						Mage::log("setBaseShippingAmount: " . ($__shipPrice), null, "po.log");
