@@ -3426,17 +3426,11 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
         if ($priceIncludesTax) {
             $storeRate      = $calc->getStoreRate($addressTaxRequest, $store);
             $baseStoreTax   = $calc->calcTaxAmount($baseShipping, $storeRate, true, false);
-            $baseShipping   = number_format($baseShipping - $baseStoreTax, 2, '.', ' ');
-            Mage::log("baseShipping: ". ($baseShipping - $baseStoreTax), null, "rate.log");
-            Mage::log("baseShipping round: ". (  number_format( $baseShipping - $baseStoreTax, 2, '.', ' '  )  ), null, "rate.log");
-            $baseTax        = number_format($calc->calcTaxAmount($baseShipping, $rate, false, false), 2, '.', ' ');
-
-            Mage::log("baseTax: ". ($calc->calcTaxAmount($baseShipping, $rate, false, false)), null, "rate.log");
-            Mage::log("baseTax round: ". (number_format($calc->calcTaxAmount($baseShipping, $rate, false, false), 2, '.', ' ')), null, "rate.log");
-
+            $baseShipping   = $this->roundRate($baseShipping - $baseStoreTax);
+            $baseTax        = $this->roundRate($calc->calcTaxAmount($baseShipping, $rate, false, false) );
             $baseTaxShipping= $baseShipping + $baseTax;
         } else {
-            $baseTax        = number_format($calc->calcTaxAmount($baseShipping, $rate, false, false), 2, '.', ' ');
+            $baseTax        = $this->roundRate($calc->calcTaxAmount($baseShipping, $rate, false, false) );
             $baseTaxShipping= $baseShipping + $baseTax;
         }
 
@@ -3448,6 +3442,10 @@ class ZolagoOs_OmniChannel_Helper_Data extends Mage_Core_Helper_Abstract
             $result = $baseTaxShipping;
         }
         return $result;
+    }
+
+    public function roundRate($rate){
+        return round($rate, 2, PHP_ROUND_HALF_DOWN);
     }
 
     public function sortBySortOrder($a, $b)

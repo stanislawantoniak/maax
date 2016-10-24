@@ -21,9 +21,6 @@ class ZolagoOs_OmniChannelPo_Helper_Protected
 		$hlpd = Mage::helper("udropship/protected");
 		$poHlp = Mage::helper("udpo");
 		$shippingMethod = Mage::helper("udropship")->explodeOrderShippingMethod($order);
-		Mage::log("hasUdpoVendorRates: ". (int)($order->hasUdpoVendorRates()), null, "po.log");
-
-
 		if ($order->hasUdpoVendorRates()) {
 			$vendorRates = $order->getUdpoVendorRates();
 		} else {
@@ -126,8 +123,7 @@ class ZolagoOs_OmniChannelPo_Helper_Protected
 						$udpoIndex++;
 						$udpos[$udpoKey]->setIncrementId(sprintf("%s-%s", $order->getIncrementId(), $udpoIndex));
 					}
-					Mage::log("vendorRates: ", null, "po.log");
-					Mage::log($vendorRates, null, "po.log");
+
 					if (!empty($vendorRates[$vId]) ||
 						!empty($vendorRates[$udpoKey]) ||
 						!empty($vendorRates[$vId]["rates_by_seq_number"][$orderItem->getUdpoSeqNumber()]))
@@ -143,11 +139,6 @@ class ZolagoOs_OmniChannelPo_Helper_Protected
 								$v = $vendorRates[$vId];
 							}
 						}
-						Mage::log("vendorRates: ", null, "po.log");
-						Mage::log($vendorRates, null, "po.log");
-
-						Mage::log("v: ", null, "po.log");
-						Mage::log($v, null, "po.log");
 
 						$_orderRate = 0 < $order->getBaseToOrderRate() ? $order->getBaseToOrderRate() : 1;
 						$_um = !empty($v["udpo_method"]) ? $v["udpo_method"] : $v["code"];
@@ -158,25 +149,7 @@ class ZolagoOs_OmniChannelPo_Helper_Protected
 						}
 
 						$__shipPriceTax = $v["tax"];
-						Mage::log("order Rate: " . ($_orderRate), null, "po.log");
-						Mage::log("setShippingAmount: " . ($_orderRate * $__shipPrice), null, "po.log");
-
-						Mage::log("setBaseShippingAmount: " . ($__shipPrice), null, "po.log");
-						Mage::log("setBaseShippingAmountIncl: " . ($_orderRate * $__shipPriceIncl), null, "po.log");
-
-						Mage::log("setBaseShippingAmountIncl: " . ($__shipPriceIncl), null, "po.log");
-						Mage::log("setShippingTax: " . ($_orderRate * $__shipPriceTax), null, "po.log");
-
-						Mage::log("setBaseShippingTax: " . ($__shipPriceTax), null, "po.log");
-
-						$udpos[$udpoKey]->setShippingAmount($_orderRate * $__shipPrice)
-							->setBaseShippingAmount($__shipPrice)
-							->setShippingAmountIncl($_orderRate * $__shipPriceIncl)
-							->setBaseShippingAmountIncl($__shipPriceIncl)
-							->setShippingTax($_orderRate * $__shipPriceTax)
-							->setBaseShippingTax($__shipPriceTax)
-							->setUdropshipMethod($_um)
-							->setUdropshipMethodDescription($_umd);
+						$udpos[$udpoKey]->setShippingAmount(Mage::app()->getStore()->roundPrice($_orderRate * $__shipPrice))->setBaseShippingAmount($__shipPrice)->setShippingAmountIncl(Mage::app()->getStore()->roundPrice($_orderRate * $__shipPriceIncl))->setBaseShippingAmountIncl($__shipPriceIncl)->setShippingTax(Mage::app()->getStore()->roundPrice($_orderRate * $__shipPriceTax))->setBaseShippingTax($__shipPriceTax)->setUdropshipMethod($_um)->setUdropshipMethodDescription($_umd);
 					} else {
 						$vShipping = $vendor->getShippingMethods();
 						$uMethod = explode("_", $order->getShippingMethod(), 2);
@@ -234,17 +207,8 @@ class ZolagoOs_OmniChannelPo_Helper_Protected
 					$qtyOrdered = $orderItem->getQtyOrdered();
 					$_rowDivider = $_totQty / (0 < $qtyOrdered ? $qtyOrdered : 1);
 					$iTax = $orderItem->getBaseTaxAmount() * (0 < $_rowDivider ? $_rowDivider : 1);
-
-					Mage::log("getBaseTaxAmount: " . ($orderItem->getBaseTaxAmount()), null, "po.log");
-					Mage::log("iTax: " . ($iTax), null, "po.log");
-
 					$iDiscount = $orderItem->getBaseDiscountAmount() * (0 < $_rowDivider ? $_rowDivider : 1);
-					$udpos[$udpoKey]->setBaseTaxAmount($udpos[$udpoKey]->getBaseTaxAmount() + $iTax)
-						->setBaseDiscountAmount($udpos[$udpoKey]->getBaseDiscountAmount() + $iDiscount)
-						->setBaseTotalValue($udpos[$udpoKey]->getBaseTotalValue() + $orderItem->getBasePrice() * $_totQty)
-						->setTotalValue($udpos[$udpoKey]->getTotalValue() + $orderItem->getPrice() * $_totQty)
-						->setTotalQty($udpos[$udpoKey]->getTotalQty() + $_totQty);
-
+					$udpos[$udpoKey]->setBaseTaxAmount($udpos[$udpoKey]->getBaseTaxAmount() + $iTax)->setBaseDiscountAmount($udpos[$udpoKey]->getBaseDiscountAmount() + $iDiscount)->setBaseTotalValue($udpos[$udpoKey]->getBaseTotalValue() + $orderItem->getBasePrice() * $_totQty)->setTotalValue($udpos[$udpoKey]->getTotalValue() + $orderItem->getPrice() * $_totQty)->setTotalQty($udpos[$udpoKey]->getTotalQty() + $_totQty);
 				}
 
 				if ($orderItem->getParentItem()) {
@@ -294,7 +258,6 @@ class ZolagoOs_OmniChannelPo_Helper_Protected
 				!empty($udpoSplitWeights[$udpo->getUdropshipVendor() . "-"]["weights"][$udpoKey]) &&
 				1 < count($udpoSplitWeights[$udpo->getUdropshipVendor() . "-"]["weights"]))
 			{
-				Mage::log("setBaseShippingTax: " . ($udpo->getBaseShippingTax()), null, "po.log");
 				$_splitWeight = $udpoSplitWeights[$udpo->getUdropshipVendor() . "-"]["weights"][$udpoKey];
 				$_totalWeight = $udpoSplitWeights[$udpo->getUdropshipVendor() . "-"]["total_weight"];
 				$udpo->setShippingAmount(($udpo->getShippingAmount() * $_splitWeight) / $_totalWeight);
