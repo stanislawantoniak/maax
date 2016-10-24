@@ -225,8 +225,17 @@ class ZolagoOs_OmniChannelPo_Helper_Protected
 					$qtyOrdered = $orderItem->getQtyOrdered();
 					$_rowDivider = $_totQty / (0 < $qtyOrdered ? $qtyOrdered : 1);
 					$iTax = $orderItem->getBaseTaxAmount() * (0 < $_rowDivider ? $_rowDivider : 1);
+
+					Mage::log("getBaseTaxAmount: " . ($orderItem->getBaseTaxAmount()), null, "po.log");
+					Mage::log("iTax: " . ($iTax), null, "po.log");
+
 					$iDiscount = $orderItem->getBaseDiscountAmount() * (0 < $_rowDivider ? $_rowDivider : 1);
-					$udpos[$udpoKey]->setBaseTaxAmount($udpos[$udpoKey]->getBaseTaxAmount() + $iTax)->setBaseDiscountAmount($udpos[$udpoKey]->getBaseDiscountAmount() + $iDiscount)->setBaseTotalValue($udpos[$udpoKey]->getBaseTotalValue() + $orderItem->getBasePrice() * $_totQty)->setTotalValue($udpos[$udpoKey]->getTotalValue() + $orderItem->getPrice() * $_totQty)->setTotalQty($udpos[$udpoKey]->getTotalQty() + $_totQty);
+					$udpos[$udpoKey]->setBaseTaxAmount($udpos[$udpoKey]->getBaseTaxAmount() + $iTax)
+						->setBaseDiscountAmount($udpos[$udpoKey]->getBaseDiscountAmount() + $iDiscount)
+						->setBaseTotalValue($udpos[$udpoKey]->getBaseTotalValue() + $orderItem->getBasePrice() * $_totQty)
+						->setTotalValue($udpos[$udpoKey]->getTotalValue() + $orderItem->getPrice() * $_totQty)
+						->setTotalQty($udpos[$udpoKey]->getTotalQty() + $_totQty);
+
 				}
 
 				if ($orderItem->getParentItem()) {
