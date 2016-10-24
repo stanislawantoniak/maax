@@ -27,7 +27,7 @@ class Zolago_Mapper_Model_Resource_Mapper_Collection
 		$productEntityType = $eavConfig->getEntityType(Mage_Catalog_Model_Product::ENTITY);
 		
 		$this->getSelect()->
-			joinRight(
+			joinLeft(
 				array("attribute_set"=>$this->getTable("eav/attribute_set")), 
 				"main_table.attribute_set_id=attribute_set.attribute_set_id",
 				array("attribute_set_name", "attribute_set_id")
