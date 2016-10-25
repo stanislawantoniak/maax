@@ -153,6 +153,9 @@ class Zolago_Dropship_Helper_Data extends ZolagoOs_OmniChannel_Helper_Data
         if ($vendor->getOrbaupsRma() && $rmaMode) {
             $out[Orba_Shipping_Model_Carrier_Ups::CODE] = Orba_Shipping_Model_Carrier_Ups::CODE;
         }
+        if ($vendor->getUseZolagodpd()) {
+            $out[Orba_Shipping_Model_Carrier_Dpd::CODE] = Orba_Shipping_Model_Carrier_Dpd::CODE;
+        }
         return array_unique($out);
     }
 
