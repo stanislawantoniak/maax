@@ -77,9 +77,9 @@ class Zolago_Catalog_Model_Queue_Configurable extends Zolago_Common_Model_Queue_
 
             //2. set SALE/PROMO FLAG
             $zolagoCatalogProductConfigurableModel->updateSalePromoFlag($configurableProducts);
-        } else {
-            $productsIdsPullToSolr = $listProductsIds;
         }
+
+        $productsIdsPullToSolr =  array_merge($productsIdsPullToSolr, $listProductsIds);;
 
 
         //3. reindex products
