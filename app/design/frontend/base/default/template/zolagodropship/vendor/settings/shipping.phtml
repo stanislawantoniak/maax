@@ -5,6 +5,7 @@ $_vendor = $_session->getVendor();
 
 $useDhl = $_vendor->getData('use_dhl');
 $useUps = $_vendor->getData('use_orbaups');
+$useDpd = $_vendor->getData('use_zolagodpd');
 ?>
 <div class="container">
     <!--=== Page Header ===-->
@@ -283,6 +284,24 @@ $useUps = $_vendor->getData('use_orbaups');
                     </div>
                 </div>
 
+                <div class="widget box">
+                    <div class="widget-header">
+                        <h4><?php echo Mage::helper("zolagodropship")->__("DPD Settings");?></h4>
+                    </div>
+                    <div class="widget-content">
+                        <div class="form-group">
+                            <label for="use_zolagodpd" class="col-md-3 control-label">
+                                <?php echo Mage::helper("zolagodropship")->__("Use DPD");?>
+                            </label>
+                            <div class="col-md-9">
+                                <select id="use_zolagodpd" name="use_zolagodpd"  class="form-control">
+                                    <option value="1" <?php if($useDpd == 1): ?> selected='selected'<?php endif; ?> ><?php echo $this->__("Yes");?></option>
+                                    <option value="0" <?php if($useDpd == 0): ?> selected='selected'<?php endif; ?> ><?php echo $this->__("No");?></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="form-actions">
                     <button type="reset" id="filter_reset" class="btn pull-right">
                         <span><span><?php echo $this->__('Cancel');?></span></span>
