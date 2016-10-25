@@ -19,6 +19,9 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
     const CONVERTER_PRICE_UPDATE_LOG = 'converter_profilerPriceBatch.log';
     const CONVERTER_STOCK_UPDATE_LOG = 'converter_profilerStockBatch.log';
 
+    const CONVERTER_PRICE_UPDATE_CMD= 'ProductPricesUpdate';
+    const CONVERTER_STOCK_UPDATE_CMD= 'ProductStockUpdate';
+
     /**
      * @param $data
      *
@@ -52,95 +55,70 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
     {
         $json = json_encode($data);
 
-        if (!empty($data)) {
-            foreach ($data as $cmd => $batch) {
-                switch ($cmd) {
-                    case 'ProductPricesUpdate':
-                        $priceBatch = array();
-                        if(!empty($batch)){
-                            $batch = (array)$batch;
-                            foreach($batch as $dataPrice){
-                                $merchant = $dataPrice['merchant'];
-                                $prices = $dataPrice['data'];
+        if (!empty($data))
+            return $json;
 
-                                if (!empty($prices)) {
-                                    foreach ($prices as $skuV => $priceByType) {
-                                        $sku = $merchant . "-" . $skuV;
-                                        $priceBatch[$sku] = $priceByType;
-                                    }
+        foreach ($data as $cmd => $batch) {
+            switch ($cmd) {
+                case self:: CONVERTER_PRICE_UPDATE_CMD :
+                    $priceBatch = array();
+                    if (!empty($batch)) {
+                        $batch = (array)$batch;
+                        foreach ($batch as $dataPrice) {
+                            $merchant = $dataPrice['merchant'];
+                            $prices = $dataPrice['data'];
+
+                            if (!empty($prices)) {
+                                foreach ($prices as $skuV => $priceByType) {
+                                    $sku = $merchant . "-" . $skuV;
+                                    $priceBatch[$sku] = $priceByType;
                                 }
-                                unset($sku);
-                                unset($skuV);
-                                unset($priceByType);
                             }
-                            unset($dataPrice);
+                            unset($sku);
+                            unset($skuV);
+                            unset($priceByType);
                         }
+                        unset($dataPrice);
+                    }
 
-                        self::updatePricesConverter($priceBatch);
-                        break;
-                    case 'ProductStockUpdate':
-                        $stockBatch = array();
+                    self::updatePricesConverter($priceBatch);
+                    break;
+                case self:: CONVERTER_STOCK_UPDATE_CMD :
+                    $stockBatch = array();
 
-                        if(!empty($batch)){
-                            $batch = (array)$batch;
-                            $merchant = 0;
-                            foreach($batch as $dataStock){
-                                $merchant = $dataStock['merchant'];
-                                $stock = $dataStock['data'];
+                    if (!empty($batch)) {
+                        $batch = (array)$batch;
+                        foreach ($batch as $dataStock) {
+                            $merchant = $dataStock['merchant'];
+                            $stock = $dataStock['data'];
 
-                                if (!empty($stock)) {
-                                    foreach ($stock as $skuV => $stockByPOS) {
-                                        $sku = $merchant . "-" . $skuV;
-                                        $stockBatch[$merchant][$sku] = $stockByPOS;
-                                    }
+                            if (!empty($stock)) {
+                                foreach ($stock as $skuV => $stockByPOS) {
+                                    $sku = $merchant . "-" . $skuV;
+                                    $stockBatch[$merchant][$sku] = $stockByPOS;
                                 }
-                                unset($sku);
-                                unset($skuV);
-                                unset($stockByPOS);
                             }
-                            unset($dataStock);
+                            unset($sku);
+                            unset($skuV);
+                            unset($stockByPOS);
                         }
+                        unset($dataStock);
+                    }
 
-                        self::updateStockConverter($stockBatch);
-                        break;
-                    default:
-                        //
-                }
+
+                    self::updateStockConverter($stockBatch);
+
+                    break;
+                default:
+                    //
             }
-            unset($cmd);unset($batch);
         }
+        unset($cmd);
+        unset($batch);
+
         return $json;
     }
 
-
-    /**
-     * @return string
-     */
-    protected function _retrieveCollection()
-    {
-        return json_encode(array("testing", "hello2"));
-    }
-
-    /**
-     * @return string
-     */
-    protected function _retrieve()
-    {
-        return json_encode($this->getRequest());
-        //return json_encode(array("testing", "hello3"));
-    }
-
-    /**
-     * @param array $data
-     *
-     * @return string
-     */
-    protected function _multiUpdate($data)
-    {
-        $json = json_encode($data);
-        Mage::log(microtime() . " " . $json, 0, 'converter_stock_test.log');
-        return $json;
-    }
 
     /**
      * 1. Update stock item
@@ -150,10 +128,13 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
      */
     public static function updateStockConverter($stockBatch)
     {
+        Mage::dispatchEvent("zolagocatalog_converter_stock_batch_save_before", array(
+            "stock_batch" => $stockBatch
+        ));
 
-        if (empty($stockBatch)) {
+        if (empty($stockBatch))
             return;
-        }
+
         $skuS = array();
         foreach ($stockBatch as $stockBatchItem) {
             $skuS = array_merge($skuS, array_keys($stockBatchItem));
@@ -161,12 +142,12 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
         $stockId = 1;
         $availableStockByMerchant = array();
-        //Mage::log(print_r($stockBatch, true), 0, "updateStockConverter.log");
+
         foreach ($stockBatch as $merchant => $stockData) {
             $s = Zolago_Catalog_Helper_Stock::getAvailableStock($stockData, $merchant); //return array("sku" => qty, ...)
             $availableStockByMerchant = $s + $availableStockByMerchant;
         }
-        //Mage::log(print_r($availableStockByMerchant, true), 0, "availableStockByMerchant.log");
+
         if (empty($availableStockByMerchant)) {
             return;
         }

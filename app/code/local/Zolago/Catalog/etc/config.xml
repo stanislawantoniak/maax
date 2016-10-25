@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Zolago_Catalog>
-            <version>0.1.8</version>
+            <version>0.2.0</version>
         </Zolago_Catalog>
     </modules>
     <default>
@@ -65,6 +65,9 @@
                     <description_history>
                         <table>zolago_catalog_product_description_history</table>
                     </description_history>
+                    <external_stock>
+                        <table>zolagocatalog_external_stock</table>
+                    </external_stock>
                 </entities>
             </zolagocatalog_resource>
 			<catalog>
@@ -140,6 +143,14 @@
             </zolagocatalog_read>
         </resources>
         <events>
+            <zolagocatalog_converter_stock_batch_save_before>
+                <observers>
+                    <zolagocatalog_save_external_stock>
+                        <class>zolagocatalog/observer</class>
+                        <method>saveExternalStock</method>
+                    </zolagocatalog_save_external_stock>
+                </observers>
+            </zolagocatalog_converter_stock_batch_save_before>
             <catalog_product_delete_after>
                 <observers>
                     <zolagocatalog_category>
