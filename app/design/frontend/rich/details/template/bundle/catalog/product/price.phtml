@@ -78,8 +78,9 @@ $currencySymbol = Mage::app()->getLocale()->currency($currencyCode)->getSymbol()
 ?>
 
 <span class="price">
-    <span itemprop="price">
+    <span>
         <?php echo number_format($_minimalPriceInclTax, 2, ',', ' '); ?>
     </span>
+    <meta itemprop="price" content="<?php echo number_format($_minimalPriceInclTax, 2, ',', ' '); ?>" />
     <?php echo $currencySymbol; ?>
 </span>
