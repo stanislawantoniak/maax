@@ -87,7 +87,27 @@ class Zolago_Po_Model_Source extends ZolagoOs_OmniChannelPo_Model_Source
                 'udropship_status' => $hlp->__('PO Status'),
             );
             break;
+            case 'payment_method':
+                $options = [];
+                foreach (Mage::helper('payment')->getStoreMethods() as $method) {
+                    if ($method->getConfigData('visible')
+                        //&& $method->canUseCheckout()
+                    ) {
+                        switch ($method->getCode()) {
+                            case Zolago_Payment_Model_Cc::PAYMENT_METHOD_CODE:
+                            case Zolago_Payment_Model_Gateway::PAYMENT_METHOD_CODE:
+                                $paymentCode = Zolago_Dotpay_Model_Client::PAYMENT_METHOD;
+                                continue 1;
+                            default:
+                                $paymentCode = $method->getCode();
 
+                        }
+
+                        $options[$paymentCode] = Mage::getStoreConfig('payment/'.$paymentCode.'/title');
+
+                    }
+                }
+                break;
         case 'new_order_notifications':
             $options = array(
                 '' => $hlp->__('* No notification'),
