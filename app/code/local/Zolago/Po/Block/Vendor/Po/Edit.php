@@ -453,6 +453,27 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
         }
     }
 
+    
+    /**
+     * retrun true/false if can show payment change window
+     */
+    public function canShowPaymentChange() {
+        $po = $this->getPo();
+        $list = Mage::helper('zolagopayment')->getChangePaymentMethods($po);        
+        if (count($list)<2) {
+            return false;
+        }
+        $session = Mage::getSingleton('udropship/session');
+        $isAllowed = $session->isAllowed(Zolago_Operator_Model_Acl::RES_PAYMENT_OPERATOR);
+        if (!$isAllowed) return false;
+        // check paid
+        if ($po->getDebtAmount() >= 0) {
+            return false;
+        }
+        // check statuses
+        $status = Mage::getSingleton('zolagopo/po_status');
+        return $status->isChangePaymentAvailable($po);
+    }
     /**
      * Return true/false if button/modal window can be shown for payment method for current PO
      *
