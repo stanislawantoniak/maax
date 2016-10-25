@@ -83,7 +83,7 @@ class Zolago_Pos_Block_Adminhtml_Pos_Edit_Tab_General extends Mage_Adminhtml_Blo
             'dhl_terminal',
         ));
 
-		$ups = $form->addFieldset('ups', array('legend'=>$helper->__('UPS Settings')));
+        $ups = $form->addFieldset('ups', array('legend'=>$helper->__('UPS Settings')));
         $builder = Mage::getModel('zolagopos/form_fieldset_ups'); 
         $builder->setFieldset($ups);
         $builder->prepareForm(array(
@@ -92,7 +92,6 @@ class Zolago_Pos_Block_Adminhtml_Pos_Edit_Tab_General extends Mage_Adminhtml_Blo
             'ups_login',
             'ups_password',
         ));
-
         $beacon = $form->addFieldset('beacon', array('legend'=>Mage::helper('ghbeacon')->__('Beacon Settings')));
         $builder = Mage::getModel('zolagopos/form_fieldset_beacon');
         $builder->setFieldset($beacon);
