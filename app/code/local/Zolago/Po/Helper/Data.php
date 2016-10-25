@@ -75,7 +75,6 @@ class Zolago_Po_Helper_Data extends ZolagoOs_OmniChannelPo_Helper_Data
             && !$po->isPaid()
             && in_array($po->getUdropshipStatus(), Zolago_Po_Model_Po_Status::getPickupPaymentStatuses())
             && $po->getOrder()->getPayment()->getMethod() == 'cashondelivery'
-                        )
         ) {
             return true;
         }
