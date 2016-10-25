@@ -53,20 +53,26 @@ class Zolago_Po_Model_Po_Status
 	 * czeka na płatność
 	 */
     const STATUS_PAYMENT    = Zolago_Po_Model_Source::UDPO_STATUS_PAYMENT;// 12
-    	/*
-    	 * gotowe do odbioru
-    	 */
-    const STATUS_TO_PICK    = Zolago_Po_Model_Source::UDPO_STATUS_TO_PICK; 
-    
-	static function getFinishStatuses() {	
-		return array(
-			self::STATUS_CANCELED,
-			self::STATUS_DELIVERED,
-			self::STATUS_SHIPPED,
-			self::STATUS_RETURNED
-		);;
-	}
-    
+    /*
+     * gotowe do odbioru
+     */
+    const STATUS_TO_PICK    = Zolago_Po_Model_Source::UDPO_STATUS_TO_PICK;
+
+    static function getFinishStatuses() {
+        return array(
+                   self::STATUS_CANCELED,
+                   self::STATUS_DELIVERED,
+                   self::STATUS_SHIPPED,
+                   self::STATUS_RETURNED
+               );;
+    }
+
+    static function getPickupPaymentStatuses() {
+        return array (
+            self::STATUS_TO_PICK,
+        );
+    }
+
     static function getOverpaymentStatuses() {
         return array (
 			self::STATUS_CANCELED,
@@ -393,10 +399,10 @@ class Zolago_Po_Model_Po_Status
     public function isChangePaymentAvailable($po) {
         switch ($this->_getStatus($po)) {
         case self::STATUS_PENDING:
+        case self::STATUS_PAYMENT:
         case self::STATUS_ACK:
         case self::STATUS_BACKORDER:
         case self::STATUS_ONHOLD:
-        case self::STATUS_PAYMENT:
             return true;
         default:
             ;

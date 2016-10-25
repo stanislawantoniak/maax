@@ -17,6 +17,7 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
         /* @var $collection Zolago_Po_Model_Resource_Po_Collection */
 		
 		$collection->addOrderData();
+		$collection->addOrderPaymentData();
 		$collection->addProductNames();
 		$collection->addHasShipment();
 		$collection->joinAggregatedNames();
@@ -172,7 +173,15 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 			"filter"	=>	false,
 			"width"		=>	"100px"
 		));
-		
+
+		$this->addColumn("payment_method", array(
+			"header"	=>	Mage::helper("zolagopo")->__("Payment Method"),
+			"index"     => "payment_method",
+			"type"		=>	"options",
+			"options"	=>	Mage::getSingleton('udpo/source')->setPath('payment_method')->toOptionHash(),
+			'filter_condition_callback' => array($this, '_paymentMethodFilter')
+		));
+
 		$this->addColumn("payment_status", array(
 			"header"	=>	Mage::helper("zolagopo")->__("Payment status"),
 			"index"     => "payment_status",
@@ -231,6 +240,15 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
         ));
 		
 		return parent::_prepareColumns();
+	}
+	protected function _paymentMethodFilter($collection, $column)
+	{
+		if (!$value = $column->getFilter()->getValue())
+			return $this;
+		
+
+		$collection->getSelect()->where("order_payment_table.method=?" , $value);
+		return $this;
 	}
 	
 	protected function _getShippingMethodOptions() {
