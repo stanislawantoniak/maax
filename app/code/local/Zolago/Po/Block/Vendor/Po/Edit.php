@@ -467,7 +467,7 @@ class Zolago_Po_Block_Vendor_Po_Edit extends Zolago_Po_Block_Vendor_Po_Info
         $isAllowed = $session->isAllowed(Zolago_Operator_Model_Acl::RES_PAYMENT_OPERATOR);
         if (!$isAllowed) return false;
         // check paid
-        if (!$po->getDebtAmount()) {
+        if ($po->getDebtAmount() >= 0) {
             return false;
         }
         // check statuses
