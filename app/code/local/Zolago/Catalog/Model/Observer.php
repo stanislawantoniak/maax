@@ -244,4 +244,58 @@ class Zolago_Catalog_Model_Observer
             }
         }
     }
+
+
+    /**
+     * @param Varien_Event_Observer $observer
+     * @return $this
+     */
+    public function saveExternalStock(Varien_Event_Observer $observer)
+    {
+        try {
+            $stockBatch = $observer->getEvent()->getStockBatch();            
+
+            if(empty($stockBatch))
+                return;
+
+
+            // Reformat data
+            $data = [];
+            foreach ($stockBatch as $vendorId => $stockBatchData){
+                foreach ($stockBatchData as $externalSku => $stockBatchProductData){
+                    foreach ($stockBatchProductData as $externalPosId => $qty){
+                        $data[] = array(
+                            'external_sku' => $externalSku,
+                            'external_stock_id' => $externalPosId,
+                            'qty' => (float)$qty,
+                            'vendor_id' => $vendorId,
+                            'date_update' => date("Y-m-d H:i:s")
+
+                        );
+                    }
+                }
+            }
+
+            /**
+             *
+             *
+             *
+            INSERT INTO zolagocatalog_external_stock
+            (`external_sku`,`external_stock_id`,`qty`, `vendor_id`)
+            VALUES ("TT", "POS_1", 10, 1)
+            ON DUPLICATE KEY UPDATE qty=VALUES(qty), date_update=now()
+             *
+             */
+            if(empty($data))
+                return;
+
+            //database write adapter
+            Mage::getResourceModel('zolagocatalog/externalStock')
+                ->updateExternalStock($data);
+
+        } catch (Mage_Exception $e) {
+            Mage::logException($e);
+        }
+        return $this;
+    }
 }
