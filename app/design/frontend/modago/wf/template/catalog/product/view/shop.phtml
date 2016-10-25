@@ -68,6 +68,9 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
                             <?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE): ?>
                                 <meta itemprop="price" content="<?php echo round($_product->getFinalPrice(), 2); ?>"/>
                             <?php endif; ?>
+                            <?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE): ?>
+                                <meta itemprop="price" content="<?php echo round($_product->getFinalPrice(), 2); ?>"/>
+                            <?php endif; ?>
 
                             <meta itemprop="priceCurrency" content="<?php echo $currencyCode; ?>"/>
                             <meta itemprop="mpn" content="<?php echo $_product->getSku(); ?>"/>
@@ -82,7 +85,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
                             <span class="old-price"><?php if($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE && $_product->getStrikeoutPrice() != $_product->getFinalPrice()) : ?><?php echo str_replace(" ","&nbsp;",Mage::helper('core')->currency($_product->getStrikeoutPrice(), true, false)); ?><?php endif; ?></span>
                             <span class="price">
                                 <?php if ($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE): ?>
-                                    <span itemprop="price">
+                                    <span>
                                         <?php echo number_format($_product->getFinalPrice(), 2, ',', ' '); ?>
                                     </span> 
                                     <?php echo $currencySymbol; ?>
