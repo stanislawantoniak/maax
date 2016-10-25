@@ -7,6 +7,8 @@ class Zolago_Po_Model_Resource_Po_Collection
 	protected $_vendorJoined = false;
 	protected $_productJoined = false;
 	protected $_allocationsJoined = false;
+	protected $_orderPaymentJoined = false;
+
 	
 	public function addAlertFilter($int) {
 		$this->getSelect()->where("main_table.alert & ".(int)$int);
@@ -15,6 +17,9 @@ class Zolago_Po_Model_Resource_Po_Collection
 	
     public function addOrderData() {
 		return $this->_joinOrderTable();
+	}
+	public function addOrderPaymentData() {
+		return $this->_joinOrderPaymentTable();
 	}
 	public function addProductData() {
 	    return $this->_joinPoItem();
@@ -293,6 +298,20 @@ class Zolago_Po_Model_Resource_Po_Collection
 		return $this;
 	}
 
+	protected function _joinOrderPaymentTable()
+	{
+		if (!$this->_orderPaymentJoined) {
+			$this->getSelect()->join(
+				array('order_payment_table'=>$this->getTable('sales/order_payment')),
+				'order_payment_table.parent_id=main_table.order_id',
+				array(
+					'payment_method'=>'order_payment_table.method'
+				)
+			);
+			$this->_orderPaymentJoined = true;
+		}
+		return $this;
+	}
 	protected function _joinOrderTable()
     {
         if (!$this->_orderJoined) {
