@@ -82,9 +82,8 @@ class Zolago_Adminhtml_Sales_TransactionsController
     public function saveAction()
     {
         $orderId = $this->getRequest()->getParam('order_id');
-
-        $order = Mage::getModel("sales/order")->load($orderId);
-
+        /* @var $_po Zolago_Po_Model_Po*/
+        $order = Mage::getModel('sales/order')->load($orderId);
         $txnAmount = $this->getRequest()->getParam("txn_amount");
         $id = $this->getRequest()->getParam("txn_id", 0);
         $txnKey = $this->getRequest()->getParam('txn_key');
@@ -116,6 +115,7 @@ class Zolago_Adminhtml_Sales_TransactionsController
                 } else {
                     $this->_getSession()->addSuccess($this->__('Bank payment has been successfully changed.'));
                 }
+                $this->_changePaymentStatus($order);
 
             } catch (Exception $e) {
                 Mage::logException($e);
@@ -156,7 +156,8 @@ class Zolago_Adminhtml_Sales_TransactionsController
 
                 $transaction->save();
 
-            }
+                $this->_changePaymentStatus($order);
+            }            
             $this->_getSession()->addSuccess($this->__('Bank payment has been rejected.'));
         } catch (Exception $e) {
             Mage::logException($e);
@@ -165,6 +166,19 @@ class Zolago_Adminhtml_Sales_TransactionsController
 
         $this->_redirect("*/*");
 
+    }
+    protected function _changePaymentStatus($order) {
+        
+                /* @var $statusModel Zolago_Po_Model_Po_Status */
+                $poList = $order->getPoListByOrder();
+                foreach ($poList as $_po) {
+                    $statusModel = $_po->getStatusModel();
+                    if ($_po->getDebtAmount() >= 0) {
+                        $statusModel->processDirectRealisation($_po, true);
+                    } else {
+                        $statusModel->changeStatus($_po, Zolago_Po_Model_Po_Status::STATUS_PAYMENT);
+                    }
+                }
     }
 
 }

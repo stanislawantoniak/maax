@@ -11,7 +11,10 @@ class Zolago_Adminhtml_Model_Sales_Transactions_Source extends Varien_Object
     {
         switch ($this->getPath()) {
             case 'orders_info':
-                $out = $this->_getOrdersInfo();
+                $out = $this->_getOrdersInfo(false);
+                break;
+            case 'orders_info_ro':
+                $out = $this->_getOrdersInfo(true);
                 break;
             default:
                 $out = parent::toOptionHash($selector);
@@ -23,7 +26,7 @@ class Zolago_Adminhtml_Model_Sales_Transactions_Source extends Varien_Object
     /**
      * @return array
      */
-    protected function _getOrdersInfo()
+    protected function _getOrdersInfo($readonly)
     {
         if (Mage::helper('zolagocommon')->useGalleryConfiguration()) {
             Mage::throwException('Do not use on gallery');
@@ -40,7 +43,7 @@ class Zolago_Adminhtml_Model_Sales_Transactions_Source extends Varien_Object
         $collection->getSelect()->join(
             array('po' => $collection->getTable('udpo/po')),
             'main_table.parent_id=`po`.entity_id',
-            array('po.grand_total_incl_tax','po.increment_id','item_entity_id'=>'main_table.entity_id','po.order_id')
+            array('po.grand_total_incl_tax','po.increment_id','item_entity_id'=>'main_table.entity_id','po.order_id','po.udropship_status')
        );
         $collection->getSelect()
             ->columns('concat(main_table.entity_id,"_",po.entity_id) as unique_id');
@@ -50,8 +53,12 @@ class Zolago_Adminhtml_Model_Sales_Transactions_Source extends Varien_Object
             'order_payment.parent_id=`po`.order_id',
             array('*')
         );
-
-//        $collection->addAttributeToFilter('order_payment.method', "banktransfer");
+        if (!$readonly) {
+            $collection->addAttributeToFilter('order_payment.method', "banktransfer");
+            $collection->addAttributeToFilter('po.udropship_status', array("in" => 
+                array( Zolago_Po_Model_Po_Status::STATUS_PAYMENT)                
+            ));
+        }
         $collection->addAttributeToFilter('main_table.parent_item_id', array("null" => true));
 
         //Last 2 month orders
