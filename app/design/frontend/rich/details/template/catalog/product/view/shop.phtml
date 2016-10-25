@@ -84,6 +84,10 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 								<meta itemprop="price" content="<?php echo round($_product->getFinalPrice(), 2); ?>"/>
 							<?php endif; ?>
 
+							<?php if($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE):  ?>
+								<meta itemprop="price" content="<?php echo round($_product->getFinalPrice(), 2); ?>" />
+							<?php endif; ?>
+
 							<meta itemprop="priceCurrency" content="<?php echo $currencyCode; ?>"/>
 							<meta itemprop="mpn" content="<?php echo $_product->getSku(); ?>"/>
 
@@ -99,7 +103,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
                                 <?php if (
 									$_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE
 									&& $_product->getTypeId() !== Mage_Catalog_Model_Product_Type::TYPE_BUNDLE): ?>
-									<span itemprop="price">
+									<span>
                                         <?php echo number_format($_product->getFinalPrice(), 2, ',', ' '); ?>
                                     </span>
 									<?php echo $currencySymbol; ?>
