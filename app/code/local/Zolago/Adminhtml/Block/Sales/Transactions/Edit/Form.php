@@ -11,8 +11,9 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Edit_Form extends Mage_Adminhtml
         $request = $this->getRequest();
 
         $id = $request->get('id', NULL);
-
-
+        $tmp = !Mage::helper('zolagopayment')->getConfigUseAllocation();
+        $readonly = $this->getParentBlock()->getIsNew()? $tmp:false;
+        
         $form = new Varien_Data_Form(array(
             'id' => 'edit_form',
             'action' => $this->getUrl('*/*/save', array('id' => $id)),
@@ -29,6 +30,7 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Edit_Form extends Mage_Adminhtml
             'required' => true,
             'name' => 'txn_amount',
             'style' => 'max-width:100px;',
+            'disabled' => $readonly,
         ));
         $fieldset->addField('allow_order', 'hidden', array(
             'name' => 'allow_order'
@@ -42,15 +44,21 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Edit_Form extends Mage_Adminhtml
             'image' => $this->getSkinUrl('images/grid-cal.gif'),
             'time' => false,
             'after_element_html' => "<br /><small>" . Mage::helper('sales')->__('Allowed format: yyyy-mm-dd') . "</small>",
+            'disabled' => $readonly,
         ));
-        
+        if ($readonly) {
+            $path = 'orders_info_ro';
+        } else {
+            $path = 'orders_info';
+        }
         $fieldset->addField('order_id', 'select', array(
             'label' => Mage::helper('sales')->__('Order'),
             'required' => true,
             'name' => 'order_id',
             "options" => Mage::getSingleton('zolagoadminhtml/sales_transactions_source')
-                ->setPath('orders_info')
-                ->toOptionHash()
+                ->setPath($path)
+                ->toOptionHash(),
+            'disabled' => $readonly,
         ));
 
         $form->setUseContainer(true);
