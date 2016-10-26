@@ -1484,6 +1484,47 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
     }
     
     /**
+     * change payment in po
+     */
+    public function savePaymentAction() {
+        try {
+            $udpo = $this->_registerPo();
+            $payment = $udpo->getOrder()->getPayment();
+            $method = $this->getRequest()->getParam('payment');
+            if ($method == $payment->getMethod()) {
+                $message = Mage::helper('udpo')->__('You set the same type of payment');
+                $this->_getSession()->addNotice($message);                
+            } else {
+                
+                $payment->setMethod($method);
+                $payment->save();
+                $statusModel = Mage::getSingleton("zolagopo/po_status");
+                // change payment status
+                $status = $statusModel->getPoStatusByPayment($udpo);
+                if ($status !== false) {
+                    $statusModel->changeStatus($udpo,$status);
+                }
+                $message = Mage::helper('udpo')->__('Payment type changed');
+                $this->_getSession()->addSuccess($message);
+                $session = Mage::getSingleton('udropship/session');
+                if ($session->isOperatorMode()) {
+                    $operator = $session->getOperator();
+                    $name = sprintf('%s %s',$operator->getFirstName(),$operator->getLastName());                    
+                } else {
+                    $name = $session->getVendor()->getVendorName();
+                }
+                $comment = sprintf('[%s] %s',$name,$message);
+                Mage::helper('orbashipping/carrier')->addUdpoComment($udpo, $comment, false, true, $name);            
+            }
+        } catch (Mage_Core_Exception $e) {
+            $this->_getSession()->addError($e->getMessage());
+        } catch (Exception $e) {
+            Mage::logException($e);
+            $this->_getSession()->addError(Mage::helper("zolagopo")->__("There was a technical error. Please contact shop Administrator."));
+        }        
+        return $this->_redirectReferer();
+    }
+    /**
      * @return void
      * @throws Mage_Core_Exception
      * @throws Exception
