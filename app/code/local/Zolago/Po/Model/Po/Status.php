@@ -73,6 +73,7 @@ class Zolago_Po_Model_Po_Status
         );
     }
 
+
     static function getOverpaymentStatuses() {
         return array (
 			self::STATUS_CANCELED,
