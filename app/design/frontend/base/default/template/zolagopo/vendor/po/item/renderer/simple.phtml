@@ -46,7 +46,7 @@ $_sku = $_item->getFinalSku();
 							<td class="align-right"><?php echo $_relation->getRuleId() ? $_relation->getRuleId() : "-";?></td>
 							<td class="align-left"><?php echo $this->getAlgorithmName($_relation);?></td>
 							<td class="align-left"><?php echo $this->escapeHtml($_relation->getName());?></td>
-							<td class="align-right"><?php echo Mage::helper("core")->formatPrice($_relation->getDiscountAmount()/$_item->getQty());?></td>
+							<td class="align-right"><?php echo Mage::helper("core")->currency(Mage::helper('orbacommon')->ceildec($_relation->getDiscountAmount()/$_item->getQty()));?></td>
 							<td class="align-left"><?php echo $this->getPayerName($_relation);?></td>
 						</tr>
 					<?php endforeach;?>
