@@ -124,7 +124,7 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
 			$options[] = array(
 				'sort' => 'relevance',
 				'dir'   => 'desc',
-				'label' =>  Mage::helper("zolagosolrsearch")->__("Relevance")
+				'label' =>  Mage::helper("zolagosolrsearch")->__("Best match")
 			);
 		}
 		
