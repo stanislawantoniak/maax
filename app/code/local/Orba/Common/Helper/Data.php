@@ -37,7 +37,7 @@ class Orba_Common_Helper_Data extends Mage_Core_Helper_Abstract {
         return $base . '?' . $hash;
     }
     
-    //{{{ 
+     
     /**
      * formatting text (polska odmiana)
      * @param $int count
@@ -54,6 +54,16 @@ class Orba_Common_Helper_Data extends Mage_Core_Helper_Abstract {
         }
         return $counter.' '.$suffix;
     }
-    //}}}
     
+
+    /**
+     * @param     $val
+     * @param int $decimals
+     *
+     * @return float
+     */
+    function ceildec($val, $decimals = 2)
+    {
+        return ceil($val * pow(10, $decimals)) / pow(10, $decimals);
+    }
 }
