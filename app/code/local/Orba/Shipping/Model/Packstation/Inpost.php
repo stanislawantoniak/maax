@@ -10,13 +10,20 @@ class Orba_Shipping_Model_Packstation_Inpost extends Orba_Shipping_Model_Carrier
 
     public function prepareSettings($params,$shipment,$udpo) {
         $size = $params->getParam('specify_inpost_size');
+        $order = $shipment->getOrder();
         $vendor = Mage::helper('udropship')->getVendor($udpo->getUdropshipVendor());
         $pos = $udpo->getDefaultPos();
+        if ($order->getPayment()->getMethod() == 'cashondelivery') {
+            $deliveryValue = $udpo->getGrandTotalInclTax()-$udpo->getPaymentAmount();
+        } else {
+            $deliveryValue = 0;
+        }
+
         $shipmentSettings = array(
                                 'size' => $size,
                                 'pos' => $pos,
                                 'udpo' => $udpo,
-                                
+                                'cod' => $deliveryValue,                                
                             );
 
         $settings = Mage::helper('ghinpost')->getApiSettings($vendor,$pos);
