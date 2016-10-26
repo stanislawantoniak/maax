@@ -25,6 +25,25 @@
                         </zolagopo_compose>
 					</fields>
 				</purchase_order>
+                <vendor_panel>
+                    <label>Vendor Panel Settings</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>25</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <po_edit_show_product_links translate="label" module="zolagopo">
+                            <label>Edit PO page: show links on products</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>65</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </po_edit_show_product_links>
+                    </fields>
+                </vendor_panel>
             </groups>
         </udropship>
     </sections>
