@@ -128,7 +128,8 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
                                     <?php if ($attr['code'] == "color"): ?>
                                         <span itemprop="color"><?php echo $this->escapeHtml($attr['value']); ?></span>
 									<?php elseif ($attr['code'] == "manufacturer"): ?>
-										<span class="itemprop-brand"><?php echo $this->escapeHtml($attr['value']); ?></span>
+										<?php echo $this->escapeHtml($attr['value']); ?>
+										<meta itemprop="brand" content="<?php echo $this->escapeHtml($attr['value']); ?>">
 									<?php else: ?>
 										<?php if (array_key_exists('value', $attr) && !is_array($attr['value'])) : ?>
                                             <?php echo $this->escapeHtml($attr['value']); ?>
