@@ -47,10 +47,12 @@ $_modagoHlp = Mage::helper("zolagocommon");
 						<li class="form-group carrier">
 							<label class="col-md-3 control-label"><?php echo $_hlp->__('Carrier') ?></label>
 							<div class="col-md-9">
+							<?php $checked = true; ?>
 							<?php foreach($this->getCarriers() as $code => $name):?>
 								<label class="radio"> 
-									<input data-label="<?php echo $this->escapeHtml($name) ?>" id="shipping-carrier-<?php echo $this->escapeHtml($code);?>" name="carrier" <?php if($this->isMethodChecked($code)):?>checked="checked"<?php endif;?> value="<?php echo $this->escapeHtml($code);?>" title="<?php echo $this->escapeHtml($name) ?>" type="radio" class="uniform use-method" />
+									<input data-label="<?php echo $this->escapeHtml($name) ?>" id="shipping-carrier-<?php echo $this->escapeHtml($code);?>" name="carrier" <?php if($checked):?>checked="checked"<?php endif;?> value="<?php echo $this->escapeHtml($code);?>" title="<?php echo $this->escapeHtml($name) ?>" type="radio" class="uniform use-method" />
 									<?php echo $this->escapeHtml($name) ?>
+									<?php $checked = false; ?>
 								</label> 
 							<?php endforeach;?>
 							</div>
