@@ -91,7 +91,6 @@ class Zolago_Pos_Block_Dropship_Pos_Edit extends Mage_Core_Block_Template {
             'ups_login',
             'ups_password',
         ));
-        
 		
         $form->setValues($this->getModel()->getData());
         $this->setForm($form);

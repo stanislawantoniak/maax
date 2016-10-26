@@ -67,6 +67,12 @@ class Zolago_Po_Model_Po_Status
                );;
     }
 
+    static function getPickupPaymentStatuses() {
+        return array (
+            self::STATUS_TO_PICK,
+        );
+    }
+
     static function getOverpaymentStatuses() {
         return array (
                    self::STATUS_CANCELED,
@@ -396,10 +402,10 @@ class Zolago_Po_Model_Po_Status
     public function isChangePaymentAvailable($po) {
         switch ($this->_getStatus($po)) {
         case self::STATUS_PENDING:
+        case self::STATUS_PAYMENT:
         case self::STATUS_ACK:
         case self::STATUS_BACKORDER:
         case self::STATUS_ONHOLD:
-        case self::STATUS_PAYMENT:
             return true;
         default:
             ;
@@ -455,8 +461,8 @@ class Zolago_Po_Model_Po_Status
         $hlp = Mage::helper("udpo");
         $po->setForceStatusChangeFlag(true);
         $hlp->processPoStatusSave($po, $newStatus2, true);
-
-        if (in_array($newStatus2, $this->getOverpaymentStatuses())) {
+        $store = $po->getStore();
+        if (in_array($newStatus2, $this->getOverpaymentStatuses()) && Mage::helper('zolagopayment')->getConfigUseAllocation($store)) {
             /** @var Zolago_Payment_Model_Allocation $allocModel */
             $allocModel = Mage::getModel("zolagopayment/allocation");
             $allocModel->createOverpayment($po);

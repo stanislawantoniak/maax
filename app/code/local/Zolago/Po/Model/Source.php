@@ -28,8 +28,8 @@ class Zolago_Po_Model_Source extends ZolagoOs_OmniChannelPo_Model_Source
         case 'vendor_po_grid_status_filter':
             $options = array(
                 self::UDPO_STATUS_PENDING    => $hlp->__('Pending collection'),
-		self::UDPO_STATUS_PAYMENT    => $hlp->__('Pending payment'),
-		self::UDPO_STATUS_TO_PICK    => $hlp->__('Ready to pick up'),		
+                self::UDPO_STATUS_PAYMENT    => $hlp->__('Pending payment'),
+                self::UDPO_STATUS_TO_PICK    => $hlp->__('Ready to pick up'),
                 self::UDPO_STATUS_EXPORTED   => $hlp->__('Collecting and packing'),
                 self::UDPO_STATUS_ACK        => $hlp->__('Pending acceptance'),
                 self::UDPO_STATUS_BACKORDER  => $hlp->__('Pending stock check'),
@@ -87,7 +87,27 @@ class Zolago_Po_Model_Source extends ZolagoOs_OmniChannelPo_Model_Source
                 'udropship_status' => $hlp->__('PO Status'),
             );
             break;
+            case 'payment_method':
+                $options = [];
+                foreach (Mage::helper('payment')->getStoreMethods() as $method) {
+                    if ($method->getConfigData('visible')
+                        //&& $method->canUseCheckout()
+                    ) {
+                        switch ($method->getCode()) {
+                            case Zolago_Payment_Model_Cc::PAYMENT_METHOD_CODE:
+                            case Zolago_Payment_Model_Gateway::PAYMENT_METHOD_CODE:
+                                $paymentCode = Zolago_Dotpay_Model_Client::PAYMENT_METHOD;
+                                continue 1;
+                            default:
+                                $paymentCode = $method->getCode();
 
+                        }
+
+                        $options[$paymentCode] = Mage::getStoreConfig('payment/'.$paymentCode.'/title');
+
+                    }
+                }
+                break;
         case 'new_order_notifications':
             $options = array(
                 '' => $hlp->__('* No notification'),

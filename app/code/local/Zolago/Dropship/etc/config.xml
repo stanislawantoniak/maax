@@ -1,997 +1,1004 @@
 <?xml version="1.0"?>
 <config>
-	<modules>
-		<Zolago_Dropship>
-			<version>0.1.2</version>
-		</Zolago_Dropship>
-	</modules>
-	<global>
-		<models>
-			<zolagodropship>
-				<class>Zolago_Dropship_Model</class>
-                <resourceModel>zolagodropship_resource</resourceModel>
-			</zolagodropship>
-            <zolagodropship_resource>
-                <class>Zolago_Dropship_Model_Resource</class>
-                <entities>
-                    <preferences>
-                        <table>zolago_vendor_preferences</table>
-                    </preferences>
-                    <vendor_brandshop>
-                        <table>zolago_vendor_brandshop</table>
-                    </vendor_brandshop>
-                </entities>
-            </zolagodropship_resource>
-			<udropship>
-				<rewrite>
-					<session>Zolago_Dropship_Model_Session</session>
-					<vendor>Zolago_Dropship_Model_Vendor</vendor>
-					<!-- overide order shippign address id to shipment shipping address id -->
-					<pdf_shipment>Zolago_Dropship_Model_Pdf_Shipment</pdf_shipment>
-					<!-- Vendor model -->
-					<vendor>Zolago_Dropship_Model_Vendor</vendor>
-					<!-- Observer model -->
-					<observer>Zolago_Dropship_Model_Observer</observer>
-                </rewrite>
-			</udropship>
-			<udropship_mysql4>
-				<rewrite>
-					<vendor>Zolago_Dropship_Model_Resource_Vendor</vendor>
-				</rewrite>
-			</udropship_mysql4>
-
-
-
-			<sales>
-				<rewrite>
-					<!-- overide order shippign address id to shipment shipping address id -->
-					<order_pdf_shipment>Zolago_Dropship_Model_Pdf_Shipment</order_pdf_shipment>
-				</rewrite>
-			</sales>
-		</models>
-		<helpers>
-		  <zolagodropship>
-			<class>Zolago_Dropship_Helper</class>
-		  </zolagodropship>
-			<udropship>
-				<rewrite>
-					<data>Zolago_Dropship_Helper_Data</data>
-					<item>Zolago_Dropship_Helper_Item</item>
-				</rewrite>
-			</udropship>
-			<udprod>
-			    <rewrite>
-					<udcatalog>Zolago_Dropship_Helper_Catalog</udcatalog>					
-			    </rewrite>
-			</udprod>
-		</helpers>
-		<blocks>
-			<zolagodropship>
-				<class>Zolago_Dropship_Block</class>
-			</zolagodropship>
-			<udropship>
-				<rewrite>
-				    <adminhtml_vendor_edit_tab_form>Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Form</adminhtml_vendor_edit_tab_form>
-				    <adminhtml_vendor_edit_tabs>Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tabs</adminhtml_vendor_edit_tabs>
-					<vendor_preferences>Zolago_Dropship_Block_Vendor_Preferences</vendor_preferences>
-					<vendor_shipment_info>Zolago_Dropship_Block_Vendor_Shipment_Info</vendor_shipment_info>
-					<adminhtml_systemConfigFormField_categoriesSelect>Zolago_Dropship_Block_Adminhtml_SystemConfigFormField_CategoriesSelect</adminhtml_systemConfigFormField_categoriesSelect>
-                    <adminhtml_vendor_grid>Zolago_Dropship_Block_Adminhtml_Vendor_Grid</adminhtml_vendor_grid>
-                    <adminhtml_vendor_edit_tab_custom>Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Custom</adminhtml_vendor_edit_tab_custom>
-                    <adminhtml_vendor_edit>Zolago_Dropship_Block_Dropship_Adminhtml_Vendor_Edit</adminhtml_vendor_edit>
-                </rewrite>
-			</udropship>
-		</blocks>
-		<helpers>
-			<zolagodropship>
-				<class>Zolago_Dropship_Helper</class>
-			</zolagodropship>
-		</helpers>
-		<resources>
-			<zolagodropship_setup>
-				<setup>
-					<module>Zolago_Dropship</module>
-				</setup>
-			</zolagodropship_setup>
-		</resources>		    
-		<udropship>
-		    <courier>
-		        <fieldsets>		            
-			        <dhl_rates>
-				        <legend>DHL Rates</legend>
-				        <position>130</position>
-			        </dhl_rates>
-                    <dhl>
-                        <legend>DHL</legend>
-                        <position>140</position>
-                    </dhl>
-                    <orbaups_rates>
-                        <legend>UPS Rates</legend>
-                        <position>150</position>
-                    </orbaups_rates>
-                    <orbaups>
-                        <legend>UPS</legend>
-                        <position>160</position>
-                    </orbaups>
-                    <orbarma>
-                        <legend>RMA Settings</legend>
-                        <position>180</position>
-                    </orbarma>
-		        </fieldsets>
-		    </courier>
-            <vendor>
-                <fieldsets>
-                    <websites_allowed>
-                        <legend>Websites allowed</legend>
-                        <position>80</position>
-                        <hidden>true</hidden>
-                    </websites_allowed>
-                    <vendor_preferences>
-                        <legend>Addresses</legend>
-                        <position>80</position>
-                        <hidden>true</hidden>
-                    </vendor_preferences>
-                    <company_registration_data>
-                        <legend>Company data</legend>
-                        <position>1</position>
-                        <hidden>true</hidden>
-                    </company_registration_data>
-                    <company_contact_data>
-                        <legend>Company contact data</legend>
-                        <position>2</position>
-                        <hidden>true</hidden>
-                        <hidden>true</hidden>
-                    </company_contact_data>
-                    <executive_data>
-                        <legend>Main person responsible for cooperation</legend>
-                        <position>3</position>
-                        <hidden>true</hidden>
-                    </executive_data>
-                    <administrator_data>
-                        <legend>Main person responsible for system administration</legend>
-                        <position>4</position>
-                        <hidden>true</hidden>
-                    </administrator_data>
-                    <rma_contact_data>
-                        <legend>RMA contact data</legend>
-                        <position>6</position>
-                        <hidden>true</hidden>
-                    </rma_contact_data>
-                    <rma_executive_data>
-                        <legend>RMA executive</legend>
-                        <position>7</position>
-                        <hidden>true</hidden>
-                    </rma_executive_data>
-                </fieldsets>
-                <fields>
-                    <websites_allowed>
-                        <label>Websites</label>
-                        <fieldset>websites_allowed</fieldset>
-                        <type>multiselect</type>
-                        <source_model>zolagodropshipmicrosite/source</source_model>
-                        <position>1</position>
-                        <default>1</default>
-                    </websites_allowed>
-                    <!--Company registration data-->
-                    <company_name>
-                        <label>Company name</label>
-                        <fieldset>company_registration_data</fieldset>
-                        <type>text</type>
-                        <position>1</position>
-                    </company_name>
-                    <tax_no>
-                        <label>NIP</label>
-                        <fieldset>company_registration_data</fieldset>
-                        <type>text</type>
-                        <position>2</position>
-                    </tax_no>
-
-                    <rma_company_name>
-                        <label>Company name</label>
-                        <fieldset>shipping_origin</fieldset>
-                        <type>text</type>
-                        <position>0</position>
-                    </rma_company_name>
-
-                    <!--Company registration data-->
-
-                    <!--Company contact data-->
-                    <www>
-                        <label>Vendor WWW page</label>
-                        <fieldset>company_contact_data</fieldset>
-                        <type>text</type>
-                    </www>
-                    <contact_email>
-                        <label>Contact email</label>
-                        <fieldset>company_contact_data</fieldset>
-                        <type>text</type>
-                        <reg_class>validate-email</reg_class>
-                    </contact_email>
-                    <contact_telephone>
-                        <label>Contact phone</label>
-                        <fieldset>company_contact_data</fieldset>
-                        <type>text</type>
-                    </contact_telephone>
-                    <!--Company contact data-->
-
-
-                    <!--Main person responsible for cooperation-->
-                    <executive_firstname>
-                        <fieldset>executive_data</fieldset>
-                        <label>Executive firstname</label>
-                        <type>text</type>
-                        <position>1</position>
-                    </executive_firstname>
-                    <executive_lastname>
-                        <fieldset>executive_data</fieldset>
-                        <label>Executive lastname</label>
-                        <type>text</type>
-                        <position>2</position>
-                    </executive_lastname>
-                    <executive_telephone>
-                        <fieldset>executive_data</fieldset>
-                        <label>Executive Phone</label>
-                        <type>text</type>
-                        <position>3</position>
-                    </executive_telephone>
-                    <executive_telephone_mobile>
-                        <fieldset>executive_data</fieldset>
-                        <label>Executive Phone Mobile</label>
-                        <type>text</type>
-                        <position>4</position>
-                    </executive_telephone_mobile>
-                    <!--Main person responsible for cooperation-->
-
-                    <!--Main person responsible for system administration-->
-                    <administrator_firstname>
-                        <fieldset>administrator_data</fieldset>
-                        <label>Administrator first name</label>
-                        <type>text</type>
-                        <position>1</position>
-                    </administrator_firstname>
-                    <administrator_lastname>
-                        <fieldset>administrator_data</fieldset>
-                        <label>Administrator last name</label>
-                        <type>text</type>
-                        <position>2</position>
-                    </administrator_lastname>
-                    <administrator_telephone>
-                        <fieldset>administrator_data</fieldset>
-                        <label>Administrator phone</label>
-                        <type>text</type>
-                        <position>3</position>
-                    </administrator_telephone>
-                    <administrator_telephone_mobile>
-                        <fieldset>administrator_data</fieldset>
-                        <label>Administrator phone mobile</label>
-                        <type>text</type>
-                        <position>4</position>
-                    </administrator_telephone_mobile>
-                    <!--Main person responsible for system administration-->
-
-                    <!--RMA-->
-
-                    <!--RMA contact data-->
-                    <rma_email>
-                        <fieldset>rma_contact_data</fieldset>
-                        <label>Email</label>
-                        <type>text</type>
-                        <position>1</position>
-                    </rma_email>
-                    <rma_telephone>
-                        <fieldset>rma_contact_data</fieldset>
-                        <label>Phone</label>
-                        <type>text</type>
-                        <position>2</position>
-                    </rma_telephone>
-                    <!--RMA contact data-->
-
-                    <!--RMA executive-->
-                    <rma_executive_firstname>
-                        <fieldset>rma_executive_data</fieldset>
-                        <label>Name</label>
-                        <type>text</type>
-                        <position>1</position>
-                    </rma_executive_firstname>
-                    <rma_executive_lastname>
-                        <fieldset>rma_executive_data</fieldset>
-                        <label>Surname</label>
-                        <type>text</type>
-                        <position>2</position>
-                    </rma_executive_lastname>
-                    <rma_executive_telephone>
-                        <fieldset>rma_executive_data</fieldset>
-                        <label>Phone</label>
-                        <type>text</type>
-                        <position>3</position>
-                    </rma_executive_telephone>
-                    <rma_executive_telephone_mobile>
-                        <fieldset>rma_executive_data</fieldset>
-                        <label>Mobile</label>
-                        <type>text</type>
-                        <position>4</position>
-                    </rma_executive_telephone_mobile>
-                    <rma_executive_email>
-                        <fieldset>rma_executive_data</fieldset>
-                        <label>Email</label>
-                        <type>text</type>
-                        <position>5</position>
-                    </rma_executive_email>
-                    <!--RMA executive-->
-
-
-                    <!--RMA-->
-                    <billing_email>
-                        <fieldset>vendor_info</fieldset>
-                        <label>Billing person email</label>
-                        <reg_class>validate-email</reg_class>
-                        <type>text</type>
-                    </billing_email>
-                    <billing_street>
-                        <fieldset>vendor_info</fieldset>
-                        <label>Billing Street Address</label>
-                        <type>text</type>
-                    </billing_street>
-                    <billing_city>
-                        <fieldset>vendor_info</fieldset>
-                        <label>Billing City</label>
-                        <type>text</type>
-                    </billing_city>
-                    <billing_zip>
-                        <fieldset>vendor_info</fieldset>
-                        <label>Billing Zip/Postal Code</label>
-                        <type>text</type>
-                    </billing_zip>
-
-	                <legal_entity>
-		                <label>Legal entity</label>
-		                <note>It's displayed in agreement on last step of checkout if vendor is taking part in transaction</note>
-		                <type>textarea</type>
-		                <fieldset>vendor_info</fieldset>
-		                <position>10</position>
-	                </legal_entity>
-                    <new_order_notifications>                    
-                        <fieldset>vendor_info</fieldset>
-                    </new_order_notifications>
-                    <notify_by_udpo_status>
-                        <fieldset>vendor_info</fieldset>
-                    </notify_by_udpo_status>
-                    <url_key>
-                        <fieldset>vendor_info</fieldset>
-                    </url_key>
-                    <logo>
-                        <fieldset>vendor_info</fieldset>
-                    </logo>
-					<!-- For backward capability name of this field is not changed. @see re#1961 -->
-					<!-- should be lower_commission_percent -->
-                    <sale_commission_percent>
-                        <fieldset>statement</fieldset>
-                        <hide_modules>ZolagoOs_OmniChannelTierCommission</hide_modules>
-                        <position>11</position>
-                        <default>0</default>
-                    </sale_commission_percent>
-                    <marketing_charges_enabled>
-                        <hide_modules>ZolagoOs_OmniChannelTierCommission</hide_modules>
-                        <default>0</default>
-                    </marketing_charges_enabled>
-
-                	<super_vendor_id>
-                        <label>Super vendor</label>
-                        <type>select</type>
-						<source_model>zolagodropship/source</source_model>
-                        <source>allvendorswithempty</source>
-                        <fieldset>vendor_info</fieldset>
-                        <position>0</position>
-                    </super_vendor_id>
-                    <statements_calendar>
-                        <label>Statements calendar</label>
-                        <type>select</type>
-						<source_model>ghstatements/source_calendar</source_model>
-                        <fieldset>vendor_info</fieldset>
-                        <position>20</position>                        
-                    </statements_calendar>
-                	<vendor_type>
-                        <label>Vendor type</label>
-                        <type>select</type>
-						<source_model>zolagodropship/source</source_model>
-                        <source>vendorstype</source>
-                        <fieldset>vendor_form</fieldset>
-                        <position>0</position>
-                    </vendor_type>
-                    <can_ask>
-                        <label>Customer can ask?</label>
-                        <type>select</type>
-                        <source>yesno</source>
-                        <fieldset>vendor_info</fieldset>
-                        <position>2</position>
-                    </can_ask>
-                    <index_by_google>
-                        <label>Index Products By Google</label>
-                        <type>select</type>
-                        <source>yesno</source>
-                        <fieldset>vendor_info</fieldset>
-                        <position>3</position>
-                    </index_by_google>
-
-                    <sequence>
-                        <label>Sequence</label>
-                        <note>Vendor on main page in customized sequence</note>
-                        <type>text</type>
-                        <fieldset>vendor_info</fieldset>
-                        <position>3</position>
-                    </sequence>
-                    <vendor_type_label>
-                        <label>Vendor name prefix</label>
-                        <note>Can be empty</note>
-                        <type>text</type>
-                        <fieldset>marketing</fieldset>
-                        <position>9</position>
-                    </vendor_type_label>
-                    <vendor_landing_page_title>
-                        <label>Vendor page - Title</label>
-                        <type>text</type>
-                        <fieldset>marketing</fieldset>
-                        <position>10</position>
-                    </vendor_landing_page_title>
-                    <vendor_landing_page_description>
-                        <label>Vendor page - Description</label>
-                        <type>wysiwyg</type>
-                        <fieldset>marketing</fieldset>
-                        <position>11</position>
-                    </vendor_landing_page_description>
-                    <marketing_store_information_title>
-                        <label>Vendor page - Seller information title</label>
-                        <type>text</type>
-                        <fieldset>marketing</fieldset>
-                        <position>12</position>
-                    </marketing_store_information_title>
-                	<marketing_store_information>
-                        <label>Vendor page - Seller information</label>
-                        <type>wysiwyg</type>
-                        <fieldset>marketing</fieldset>
-                        <position>11</position>
-                    </marketing_store_information>
-                    <marketing_brand_information_title>
-                        <label>Vendor page - Brand information title</label>
-                        <type>text</type>
-                        <fieldset>marketing</fieldset>
-                        <position>13</position>
-                    </marketing_brand_information_title>
-                    <marketing_brand_information>
-                        <label>Vendor page - Brand information</label>
-                        <type>wysiwyg</type>
-                        <fieldset>marketing</fieldset>
-                        <position>14</position>
-                    </marketing_brand_information>
-                	<terms_seller_information>
-                        <label>Product page - Seller information</label>
-                        <type>wysiwyg</type>
-                        <fieldset>marketing</fieldset>
-                        <position>20</position>
-                    </terms_seller_information>
-                	<terms_delivery_information>
-                        <label>Delivery information</label>
-                        <type>wysiwyg</type>
-                        <fieldset>marketing</fieldset>
-                        <position>30</position>
-                    </terms_delivery_information>
-                	<terms_return_information>
-                        <label>Return information</label>
-                        <type>wysiwyg</type>
-                        <fieldset>marketing</fieldset>
-                        <position>40</position>
-                    </terms_return_information>
-                	<store_delivery_headline>
-                        <label>Product - store section - delivery headline</label>
-                        <type>text</type>
-                        <fieldset>marketing</fieldset>
-                        <position>50</position>
-                    </store_delivery_headline>
-                	<store_return_headline>
-                        <label>Product - store section - return headline</label>
-                        <type>text</type>
-                        <fieldset>marketing</fieldset>
-                        <position>60</position>
-                    </store_return_headline>
-                	<brandshop_info>
-                        <label>Product - Brand shop info</label>
-                        <type>text</type>
-                        <fieldset>marketing</fieldset>
-                        <position>75</position>
-                    </brandshop_info>
-                	<cart_slogan_one>
-                        <label>Basket slogan no 1</label>
-                        <type>text</type>
-                        <fieldset>marketing</fieldset>
-                        <position>80</position>
-						<only_admin>1</only_admin>
-                    </cart_slogan_one>
-                	<cart_slogan_two>
-                        <label>Basket slogan no 2</label>
-                        <type>text</type>
-                        <fieldset>marketing</fieldset>
-                        <position>90</position>
-						<only_admin>1</only_admin>
-                    </cart_slogan_two>
-
-                    <!--GH API-->
-                    <ghapi_vendor_access_allow>
-                        <label>GH API Access</label>
-                        <type>select</type>
-                        <source>yesno</source>
-                        <fieldset>ghapi_vendor_access</fieldset>
-                        <position>1</position>
-                    </ghapi_vendor_access_allow>
-
-	                <ghapi_reservation_disabled translate="label">
-		                <label>Don't reserve products' stocks after downloading order by API.</label>
-		                <type>select</type>
-		                <source>yesno</source>
-		                <fieldset>ghapi_vendor_access</fieldset>
-		                <position>2</position>
-		                <default>0</default>
-	                </ghapi_reservation_disabled>
-
-                    <ghapi_message_new_order>
-                        <label>Pojawiło się nowe zamówienie do realizacji.</label>
-                        <type>select</type>
-                        <source>yesno</source>
-                        <fieldset>ghapi_vendor_access</fieldset>
-                        <position>2</position>
-                        <default>1</default>
-                    </ghapi_message_new_order>
-                    <ghapi_message_order_canceled>
-                        <label>Zamówienie zostało anulowane.</label>
-                        <type>select</type>
-                        <source>yesno</source>
-                        <fieldset>ghapi_vendor_access</fieldset>
-                        <position>2</position>
-                        <default>1</default>
-                    </ghapi_message_order_canceled>
-                    <ghapi_message_order_payment_changes>
-                        <label>Zmieniła się metoda płatności w zamówieniu lub/i zmieniła się się płatność do zamówienia.</label>
-                        <type>select</type>
-                        <source>yesno</source>
-                        <fieldset>ghapi_vendor_access</fieldset>
-                        <position>2</position>
-                        <default>1</default>
-                    </ghapi_message_order_payment_changes>
-                    <ghapi_message_order_product_changes>
-                        <label>Zmieniły się produkty lub koszt dostawy w zamówieniu. Produkty mogły być usunięte, dodane, zmieniona cena, ilość, rabat.</label>
-                        <type>select</type>
-                        <source>yesno</source>
-                        <fieldset>ghapi_vendor_access</fieldset>
-                        <position>2</position>
-                        <default>1</default>
-                    </ghapi_message_order_product_changes>
-                    <ghapi_message_order_shipping_changes>
-                        <label>Zmieniła się metoda dostawy lub/i adres dostawy.</label>
-                        <type>select</type>
-                        <source>yesno</source>
-                        <fieldset>ghapi_vendor_access</fieldset>
-                        <position>2</position>
-                        <default>1</default>
-                    </ghapi_message_order_shipping_changes>
-                    <ghapi_message_order_invoice_changes>
-                        <label>Zmieniły się dane do faktury lub/i informacja czy faktura jest wymagana.</label>
-                        <type>select</type>
-                        <source>yesno</source>
-                        <fieldset>ghapi_vendor_access</fieldset>
-                        <position>2</position>
-                        <default>1</default>
-                    </ghapi_message_order_invoice_changes>
-                    <ghapi_message_order_status_changes>
-                        <label>Zmienił się status zamówienia.</label>
-                        <type>select</type>
-                        <source>yesno</source>
-                        <fieldset>ghapi_vendor_access</fieldset>
-                        <position>2</position>
-                        <default>1</default>
-                    </ghapi_message_order_status_changes>
-
-	                <!-- DHL Rates -->
-	                <dhl_rates_envelope translate="label">
-		                <label>Envelope</label>
-		                <type>text</type>
-		                <fieldset>dhl_rates</fieldset>
-		                <position>10</position>
-	                </dhl_rates_envelope>
-	                <dhl_rates_parcel_0_5 translate="label">
-		                <label>Parcel 0-5kg</label>
-		                <type>text</type>
-		                <fieldset>dhl_rates</fieldset>
-		                <position>20</position>
-	                </dhl_rates_parcel_0_5>
-	                <dhl_rates_parcel_5_10 translate="label">
-		                <label>Parcel 5-10kg</label>
-		                <type>text</type>
-		                <fieldset>dhl_rates</fieldset>
-		                <position>30</position>
-	                </dhl_rates_parcel_5_10>
-	                <dhl_rates_parcel_10_20 translate="label">
-		                <label>Parcel 10-20kg</label>
-		                <type>text</type>
-		                <fieldset>dhl_rates</fieldset>
-		                <position>40</position>
-	                </dhl_rates_parcel_10_20>
-	                <dhl_rates_parcel_20_31_5 translate="label">
-		                <label>Parcel 20-31.5kg</label>
-		                <type>text</type>
-		                <fieldset>dhl_rates</fieldset>
-		                <position>50</position>
-	                </dhl_rates_parcel_20_31_5>
-                    
-					<!-- DHL -->
-                	<use_dhl>
-                        <label>Use DHL</label>
-                        <type>select</type>
-                        <fieldset>dhl</fieldset>
-                        <source>yesno</source>
-						<frontend_model>udropship/adminhtml_vendor_helper_form_dependSelect</frontend_model>
-						<depend_fields>
-                            <dhl_login>1</dhl_login>
-                            <dhl_password>1</dhl_password>
-							<dhl_account>1</dhl_account>
-							<dhl_ecas>1</dhl_ecas>
-							<dhl_terminal>1</dhl_terminal>
-							<dhl_check>1</dhl_check>
-                        </depend_fields>
-                        <position>10</position>
-                    </use_dhl>
-                	<dhl_account>
-                        <label>DHL account</label>
-                        <type>text</type>
-                        <fieldset>dhl</fieldset>
-                        <position>15</position>
-                    </dhl_account>
-                	<dhl_login>
-                        <label>DHL login</label>
-                        <type>text</type>
-                        <fieldset>dhl</fieldset>
-                        <position>20</position>
-                    </dhl_login>
-                	<dhl_password>
-                        <label>DHL password</label>
-                        <type>password</type>
-                        <fieldset>dhl</fieldset>
-                        <position>30</position>
-                    </dhl_password>
-                	<dhl_ecas>
-                        <label>DHL eCas id</label>
-                        <type>text</type>
-                        <fieldset>dhl</fieldset>
-                        <position>40</position>
-                    </dhl_ecas>
-                	<dhl_terminal>
-                        <label>Terminal code</label>
-                        <type>text</type>
-                        <fieldset>dhl</fieldset>
-                        <position>50</position>
-                    </dhl_terminal>
-                    <dhl_insurance_charge_amount>
-                        <label>Insurance charge amount</label>
-                        <type>text</type>
-                        <fieldset>dhl_rates</fieldset>
-                        <position>51</position>
-                    </dhl_insurance_charge_amount>
-                    <dhl_insurance_charge_percent>
-                        <label>Insurance charge %</label>
-                        <type>text</type>
-                        <fieldset>dhl_rates</fieldset>
-                        <position>52</position>
-                    </dhl_insurance_charge_percent>
-                    <dhl_cod_charge_amount>
-                        <label>COD charge amount</label>
-                        <type>text</type>
-                        <fieldset>dhl_rates</fieldset>
-                        <position>53</position>
-                    </dhl_cod_charge_amount>
-                    <dhl_cod_charge_percent>
-                        <label>COD charge %</label>
-                        <type>text</type>
-                        <fieldset>dhl_rates</fieldset>
-                        <position>54</position>
-                    </dhl_cod_charge_percent>
-                    <use_orbaups>
-                        <label>Use UPS</label>
-                        <type>select</type>
-                        <fieldset>orbaups</fieldset>
-                        <source>yesno</source>
-						<frontend_model>udropship/adminhtml_vendor_helper_form_dependSelect</frontend_model>
-						<depend_fields>
-                            <orbaups_login>1</orbaups_login>
-                            <orbaups_password>1</orbaups_password>
-							<orbaups_account>1</orbaups_account>
-                        </depend_fields>
-                        <position>55</position>
-                    </use_orbaups>
-                	<orbaups_account>
-                        <label>UPS license key</label>
-                        <type>text</type>
-                        <fieldset>orbaups</fieldset>
-                        <position>60</position>
-                    </orbaups_account>
-                	<orbaups_login>
-                        <label>UPS login</label>
-                        <type>text</type>
-                        <fieldset>orbaups</fieldset>
-                        <position>70</position>
-                    </orbaups_login>
-                	<orbaups_password>
-                        <label>UPS password</label>
-                        <type>password</type>
-                        <fieldset>orbaups</fieldset>
-                        <position>80</position>
-                    </orbaups_password>
-                    <orbaups_insurance_charge_amount>
-                        <label>Insurance charge amount</label>
-                        <type>text</type>
-                        <fieldset>orbaups_rates</fieldset>
-                        <position>90</position>
-                    </orbaups_insurance_charge_amount>
-                    <orbaups_insurance_charge_percent>
-                        <label>Insurance charge %</label>
-                        <type>text</type>
-                        <fieldset>orbaups_rates</fieldset>
-                        <position>95</position>
-                    </orbaups_insurance_charge_percent>
-                    <orbaups_cod_charge_amount>
-                        <label>COD charge amount</label>
-                        <type>text</type>
-                        <fieldset>orbaups_rates</fieldset>
-                        <position>100</position>
-                    </orbaups_cod_charge_amount>
-                    <orbaups_cod_charge_percent>
-                        <label>COD charge %</label>
-                        <type>text</type>
-                        <fieldset>orbaups_rates</fieldset>
-                        <position>110</position>
-                    </orbaups_cod_charge_percent>
-                    <!-- Rma -->
-                    <dhl_rma>
-                        <label>Use another DHL account for RMA</label>
-                        <type>select</type>
-                        <fieldset>orbarma</fieldset>
-                        <source>yesno</source>
-						<frontend_model>udropship/adminhtml_vendor_helper_form_dependSelect</frontend_model>
-						<depend_fields>
-                            <dhl_rma_login>1</dhl_rma_login>
-                            <dhl_rma_password>1</dhl_rma_password>
-							<dhl_rma_account>1</dhl_rma_account>
-                        </depend_fields>
-                        <position>10</position>
-                    </dhl_rma>
-                    <orbaups_rma>
-                        <label>Use another UPS account for RMA</label>
-                        <type>select</type>
-                        <fieldset>orbarma</fieldset>
-                        <source>yesno</source>
-						<frontend_model>udropship/adminhtml_vendor_helper_form_dependSelect</frontend_model>
-						<depend_fields>
-                            <orbaups_rma_login>1</orbaups_rma_login>
-                            <orbaups_rma_password>1</orbaups_rma_password>
-							<orbaups_rma_account>1</orbaups_rma_account>
-                        </depend_fields>
-                        <position>33</position>
-                    </orbaups_rma>
-                	<dhl_rma_account>
-                        <label>Account number</label>
-                        <type>text</type>
-                        <fieldset>orbarma</fieldset>
-                        <position>15</position>
-                    </dhl_rma_account>
-                	<dhl_rma_login>
-                        <label>DHL login</label>
-                        <type>text</type>
-                        <fieldset>orbarma</fieldset>
-                        <position>20</position>
-                    </dhl_rma_login>
-                	<dhl_rma_password>
-                        <label>DHL password</label>
-                        <type>password</type>
-                        <fieldset>orbarma</fieldset>
-                        <position>30</position>
-                    </dhl_rma_password>
-                	<orbaups_rma_account>
-                        <label>License key</label>
-                        <type>text</type>
-                        <fieldset>orbarma</fieldset>
-                        <position>35</position>
-                    </orbaups_rma_account>
-                	<orbaups_rma_login>
-                        <label>UPS login</label>
-                        <type>text</type>
-                        <fieldset>orbarma</fieldset>
-                        <position>40</position>
-                    </orbaups_rma_login>
-                	<orbaups_rma_password>
-                        <label>UPS password</label>
-                        <type>password</type>
-                        <fieldset>orbarma</fieldset>
-                        <position>45</position>
-                    </orbaups_rma_password>
-					<!-- Product Review -->
-                	<review_status>
-                        <label>Product Review Status</label>
-                        <type>select</type>
-                        <fieldset>vendor_info</fieldset>
-                        <source_model>zolagodropship/source</source_model>
-                        <position>800</position>
-                        <selector>1</selector>
-                    </review_status>					
-					<!-- label store -->
-					<label_store>
-                        <label>Label store</label>
-                        <type>select</type>
-						<source_model>zolagodropship/source_store</source_model>
-                        <fieldset>vendor_info</fieldset>
-						<only_admin>1</only_admin>
-                        <position>500</position>
-                    </label_store>
-					<!-- category -->
-					<root_category>
-                        <label>Root categories</label>
-						<frontend_model>zolagodropship/adminhtml_vendor_helper_form_category</frontend_model>
-                        <fieldset>vendor_info</fieldset>
-						<only_admin>1</only_admin>
-                        <position>600</position>
-                    </root_category>
-					<!-- design -->
-					<custom_design>
-                        <label>Custom design</label>
-						<frontend_model>zolagodropship/adminhtml_vendor_helper_form_design</frontend_model>
-                        <fieldset>vendor_info</fieldset>
-						<only_admin>1</only_admin>
-                        <position>700</position>
-                    </custom_design>
-
-                    <!-- Modago Integrator -->
-                    <!-- @see app/code/local/GH/Api/Block/Adminhtml/Dropship/Settings/Ghapi/Form.php -->
-                    <integrator_enabled>
-                        <fieldset>modago_integrator</fieldset>
-                    </integrator_enabled>
-                    <integrator_secret translate="label">
-                        <fieldset>modago_integrator</fieldset>
-                    </integrator_secret>
-                    <last_integration>
-                        <fieldset>modago_integrator</fieldset>
-                    </last_integration>
-
-                    <modago_salesmanago_login translate="label">
-                        <fieldset>modago_salesmanago</fieldset>
-                    </modago_salesmanago_login>
-
-                    <!--Regulation-->
-	                <!-- Moved to: app/code/local/GH/Regulation/Block/Adminhtml/Dropship/Settings/Type.php -->
-	                <regulation_accept_text_top/>
-	                <regulation_proxy_assignment_url/>
-	                <regulation_proxy_assignment_url_text/>
-	                <regulation_proxy_assignment_override/>
-	                <regulation_accept_text_agreement/>
-                    <!--Regulation-->
-
-					<!--Marketing cost for each cost type start-->
-						<!-- dynamically created -->
-						<!-- @see Zolago_Dropship_Model_Vendor::_beforeSave() -> addConfigMarketingCostTypeFields() -->
-					<!--Marketing cost for each cost type end-->
-				</fields>
-			</vendor>
-		</udropship>
-		<events>
-		    <udropship_adminhtml_vendor_edit_prepare_form>
-		        <observers>
-		            <zolagodropship>
-		                <class>zolagodropship/observer</class>
-		                <method>udropship_adminhtml_vendor_edit_prepare_form</method>
-		            </zolagodropship>
-		        </observers>		        
-		    </udropship_adminhtml_vendor_edit_prepare_form>
-		    <udropship_adminhtml_vendor_tabs_after>	
-		        <observers>
-		            <zolagodropship>
-		                <class>zolagodropship/observer</class>
-		                <method>udropship_adminhtml_vendor_tabs_organize</method>
-		            </zolagodropship>
-		        </observers>
-		    </udropship_adminhtml_vendor_tabs_after>
-			<sales_order_shipment_track_save_before>
-				<observers>
-					<add_orba_shipping_data>
-						<class>zolagodropship/observer</class>
-						<method>addOrbaShippingData</method>
-					</add_orba_shipping_data>
-					<add_undelivered_track_data>
-						<class>zolagodropship/observer</class>
-						<method>addUndeliveredTrackData</method>
-					</add_undelivered_track_data>
-				</observers>				
-			</sales_order_shipment_track_save_before>
-			<urma_rma_track_save_before>
-				<observers>
-					<add_undelivered_track_data>
-						<class>zolagodropship/observer</class>
-						<method>addUndeliveredTrackData</method>
-					</add_undelivered_track_data>
-				</observers>
-			</urma_rma_track_save_before>
-		</events>		
-	</global>
-	<frontend>
-		<block>
-			<zolagodropship>
-				<class>Zolago_Dropship_Block_Pos</class>
-			</zolagodropship>
-		</block>
-		<events>
-			<core_locale_set_locale>
-                <observers>
-                    <bind_locale>
-                        <class>zolagodropship/observer</class>
-                        <method>bindLocale</method>
-                    </bind_locale>
-                </observers>
-            </core_locale_set_locale>
-		</events>
-		<routers>
-			<zolagodropship>
-				<use>standard</use>
-				<args>
-					<module>Zolago_Dropship</module>
-					<frontName>zolagdropship</frontName>
-				</args>
-			</zolagodropship>
-			<udropship>
-				<args>
-					<modules>
-						<Zolago_Dropship before="ZolagoOs_OmniChannel">Zolago_Dropship</Zolago_Dropship>
-                    </modules>
-				</args>
-			</udropship>
-		</routers>
-		<layout>
-			<updates>
-				<zolagodropship>
-					<file>zolagodropship.xml</file>
-				</zolagodropship>
-			</updates>
-		</layout>
-		<translate>
-			<modules>
-				<Zolago_Dropship>
-					<files>
-						<default>Zolago_Dropship.csv</default>
-					</files>
-				</Zolago_Dropship>
-			</modules>
-		</translate>		
-		<secure_url>
-		    <udropship_operator>/udropship/operator/</udropship_operator>
-		    <udropship_pos>/udropship/pos/</udropship_pos>
-		    <udropship_sizetable>/udropship/sizetable/</udropship_sizetable>
-		    <udropship_vendor_settings>/udropship/vendor_settings/</udropship_vendor_settings>
-		    <udropship_ghapi>/udropship/ghapi/</udropship_ghapi>
-		</secure_url>
-	</frontend>
-	<admin>
-		<routers>
-			<udropshipadmin>
-				<args>
-					<modules>
-						<Zolago_Dropship before="ZolagoOs_OmniChannel">Zolago_Dropship</Zolago_Dropship>
-					</modules>
-				</args>
-			</udropshipadmin>
-		</routers>
-	</admin>
-	<adminhtml>
-		<translate>
-			<modules>
-				<Zolago_Dropship>
-					<files>
-						<default>Zolago_Dropship.csv</default>
-					</files>
-				</Zolago_Dropship>
-			</modules>
-		</translate>
-	</adminhtml>
+  <modules>
+    <Zolago_Dropship>
+      <version>0.1.2</version>
+    </Zolago_Dropship>
+  </modules>
+  <global>
+    <models>
+      <zolagodropship>
+        <class>Zolago_Dropship_Model</class>
+        <resourceModel>zolagodropship_resource</resourceModel>
+      </zolagodropship>
+      <zolagodropship_resource>
+        <class>Zolago_Dropship_Model_Resource</class>
+        <entities>
+          <preferences>
+            <table>zolago_vendor_preferences</table>
+          </preferences>
+          <vendor_brandshop>
+            <table>zolago_vendor_brandshop</table>
+          </vendor_brandshop>
+        </entities>
+      </zolagodropship_resource>
+      <udropship>
+        <rewrite>
+          <session>Zolago_Dropship_Model_Session</session>
+          <vendor>Zolago_Dropship_Model_Vendor</vendor>
+          <!-- overide order shippign address id to shipment shipping address id -->
+          <pdf_shipment>Zolago_Dropship_Model_Pdf_Shipment</pdf_shipment>
+          <!-- Vendor model -->
+          <vendor>Zolago_Dropship_Model_Vendor</vendor>
+          <!-- Observer model -->
+          <observer>Zolago_Dropship_Model_Observer</observer>
+        </rewrite>
+      </udropship>
+      <udropship_mysql4>
+        <rewrite>
+          <vendor>Zolago_Dropship_Model_Resource_Vendor</vendor>
+        </rewrite>
+      </udropship_mysql4>
+      <sales>
+        <rewrite>
+          <!-- overide order shippign address id to shipment shipping address id -->
+          <order_pdf_shipment>Zolago_Dropship_Model_Pdf_Shipment</order_pdf_shipment>
+        </rewrite>
+      </sales>
+    </models>
+    <helpers>
+      <zolagodropship>
+        <class>Zolago_Dropship_Helper</class>
+      </zolagodropship>
+      <udropship>
+        <rewrite>
+          <data>Zolago_Dropship_Helper_Data</data>
+          <item>Zolago_Dropship_Helper_Item</item>
+        </rewrite>
+      </udropship>
+      <udprod>
+        <rewrite>
+          <udcatalog>Zolago_Dropship_Helper_Catalog</udcatalog>
+        </rewrite>
+      </udprod>
+    </helpers>
+    <blocks>
+      <zolagodropship>
+        <class>Zolago_Dropship_Block</class>
+      </zolagodropship>
+      <udropship>
+        <rewrite>
+          <adminhtml_vendor_edit_tab_form>Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Form</adminhtml_vendor_edit_tab_form>
+          <adminhtml_vendor_edit_tabs>Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tabs</adminhtml_vendor_edit_tabs>
+          <vendor_preferences>Zolago_Dropship_Block_Vendor_Preferences</vendor_preferences>
+          <vendor_shipment_info>Zolago_Dropship_Block_Vendor_Shipment_Info</vendor_shipment_info>
+          <adminhtml_systemConfigFormField_categoriesSelect>Zolago_Dropship_Block_Adminhtml_SystemConfigFormField_CategoriesSelect</adminhtml_systemConfigFormField_categoriesSelect>
+          <adminhtml_vendor_grid>Zolago_Dropship_Block_Adminhtml_Vendor_Grid</adminhtml_vendor_grid>
+          <adminhtml_vendor_edit_tab_custom>Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tab_Custom</adminhtml_vendor_edit_tab_custom>
+          <adminhtml_vendor_edit>Zolago_Dropship_Block_Dropship_Adminhtml_Vendor_Edit</adminhtml_vendor_edit>
+        </rewrite>
+      </udropship>
+    </blocks>
+    <helpers>
+      <zolagodropship>
+        <class>Zolago_Dropship_Helper</class>
+      </zolagodropship>
+    </helpers>
+    <resources>
+      <zolagodropship_setup>
+        <setup>
+          <module>Zolago_Dropship</module>
+        </setup>
+      </zolagodropship_setup>
+    </resources>
+    <udropship>
+      <courier>
+        <fieldsets>
+          <dhl_rates>
+            <legend>DHL Rates</legend>
+            <position>130</position>
+          </dhl_rates>
+          <dhl>
+            <legend>DHL</legend>
+            <position>140</position>
+          </dhl>
+          <orbaups_rates>
+            <legend>UPS Rates</legend>
+            <position>150</position>
+          </orbaups_rates>
+          <orbaups>
+            <legend>UPS</legend>
+            <position>160</position>
+          </orbaups>
+          <orbarma>
+            <legend>RMA Settings</legend>
+            <position>180</position>
+          </orbarma>
+          <zolagodpd>
+            <legend>DPD</legend>
+            <position>200</position>
+          </zolagodpd>
+        </fieldsets>
+      </courier>
+      <vendor>
+        <fieldsets>
+          <websites_allowed>
+            <legend>Websites allowed</legend>
+            <position>80</position>
+            <hidden>true</hidden>
+          </websites_allowed>
+          <vendor_preferences>
+            <legend>Addresses</legend>
+            <position>80</position>
+            <hidden>true</hidden>
+          </vendor_preferences>
+          <company_registration_data>
+            <legend>Company data</legend>
+            <position>1</position>
+            <hidden>true</hidden>
+          </company_registration_data>
+          <company_contact_data>
+            <legend>Company contact data</legend>
+            <position>2</position>
+            <hidden>true</hidden>
+            <hidden>true</hidden>
+          </company_contact_data>
+          <executive_data>
+            <legend>Main person responsible for cooperation</legend>
+            <position>3</position>
+            <hidden>true</hidden>
+          </executive_data>
+          <administrator_data>
+            <legend>Main person responsible for system administration</legend>
+            <position>4</position>
+            <hidden>true</hidden>
+          </administrator_data>
+          <rma_contact_data>
+            <legend>RMA contact data</legend>
+            <position>6</position>
+            <hidden>true</hidden>
+          </rma_contact_data>
+          <rma_executive_data>
+            <legend>RMA executive</legend>
+            <position>7</position>
+            <hidden>true</hidden>
+          </rma_executive_data>
+        </fieldsets>
+        <fields>
+          <websites_allowed>
+            <label>Websites</label>
+            <fieldset>websites_allowed</fieldset>
+            <type>multiselect</type>
+            <source_model>zolagodropshipmicrosite/source</source_model>
+            <position>1</position>
+            <default>1</default>
+          </websites_allowed>
+          <!--Company registration data-->
+          <company_name>
+            <label>Company name</label>
+            <fieldset>company_registration_data</fieldset>
+            <type>text</type>
+            <position>1</position>
+          </company_name>
+          <tax_no>
+            <label>NIP</label>
+            <fieldset>company_registration_data</fieldset>
+            <type>text</type>
+            <position>2</position>
+          </tax_no>
+          <rma_company_name>
+            <label>Company name</label>
+            <fieldset>shipping_origin</fieldset>
+            <type>text</type>
+            <position>0</position>
+          </rma_company_name>
+          <!--Company registration data-->
+          <!--Company contact data-->
+          <www>
+            <label>Vendor WWW page</label>
+            <fieldset>company_contact_data</fieldset>
+            <type>text</type>
+          </www>
+          <contact_email>
+            <label>Contact email</label>
+            <fieldset>company_contact_data</fieldset>
+            <type>text</type>
+            <reg_class>validate-email</reg_class>
+          </contact_email>
+          <contact_telephone>
+            <label>Contact phone</label>
+            <fieldset>company_contact_data</fieldset>
+            <type>text</type>
+          </contact_telephone>
+          <!--Company contact data-->
+          <!--Main person responsible for cooperation-->
+          <executive_firstname>
+            <fieldset>executive_data</fieldset>
+            <label>Executive firstname</label>
+            <type>text</type>
+            <position>1</position>
+          </executive_firstname>
+          <executive_lastname>
+            <fieldset>executive_data</fieldset>
+            <label>Executive lastname</label>
+            <type>text</type>
+            <position>2</position>
+          </executive_lastname>
+          <executive_telephone>
+            <fieldset>executive_data</fieldset>
+            <label>Executive Phone</label>
+            <type>text</type>
+            <position>3</position>
+          </executive_telephone>
+          <executive_telephone_mobile>
+            <fieldset>executive_data</fieldset>
+            <label>Executive Phone Mobile</label>
+            <type>text</type>
+            <position>4</position>
+          </executive_telephone_mobile>
+          <!--Main person responsible for cooperation-->
+          <!--Main person responsible for system administration-->
+          <administrator_firstname>
+            <fieldset>administrator_data</fieldset>
+            <label>Administrator first name</label>
+            <type>text</type>
+            <position>1</position>
+          </administrator_firstname>
+          <administrator_lastname>
+            <fieldset>administrator_data</fieldset>
+            <label>Administrator last name</label>
+            <type>text</type>
+            <position>2</position>
+          </administrator_lastname>
+          <administrator_telephone>
+            <fieldset>administrator_data</fieldset>
+            <label>Administrator phone</label>
+            <type>text</type>
+            <position>3</position>
+          </administrator_telephone>
+          <administrator_telephone_mobile>
+            <fieldset>administrator_data</fieldset>
+            <label>Administrator phone mobile</label>
+            <type>text</type>
+            <position>4</position>
+          </administrator_telephone_mobile>
+          <!--Main person responsible for system administration-->
+          <!--RMA-->
+          <!--RMA contact data-->
+          <rma_email>
+            <fieldset>rma_contact_data</fieldset>
+            <label>Email</label>
+            <type>text</type>
+            <position>1</position>
+          </rma_email>
+          <rma_telephone>
+            <fieldset>rma_contact_data</fieldset>
+            <label>Phone</label>
+            <type>text</type>
+            <position>2</position>
+          </rma_telephone>
+          <!--RMA contact data-->
+          <!--RMA executive-->
+          <rma_executive_firstname>
+            <fieldset>rma_executive_data</fieldset>
+            <label>Name</label>
+            <type>text</type>
+            <position>1</position>
+          </rma_executive_firstname>
+          <rma_executive_lastname>
+            <fieldset>rma_executive_data</fieldset>
+            <label>Surname</label>
+            <type>text</type>
+            <position>2</position>
+          </rma_executive_lastname>
+          <rma_executive_telephone>
+            <fieldset>rma_executive_data</fieldset>
+            <label>Phone</label>
+            <type>text</type>
+            <position>3</position>
+          </rma_executive_telephone>
+          <rma_executive_telephone_mobile>
+            <fieldset>rma_executive_data</fieldset>
+            <label>Mobile</label>
+            <type>text</type>
+            <position>4</position>
+          </rma_executive_telephone_mobile>
+          <rma_executive_email>
+            <fieldset>rma_executive_data</fieldset>
+            <label>Email</label>
+            <type>text</type>
+            <position>5</position>
+          </rma_executive_email>
+          <!--RMA executive-->
+          <!--RMA-->
+          <billing_email>
+            <fieldset>vendor_info</fieldset>
+            <label>Billing person email</label>
+            <reg_class>validate-email</reg_class>
+            <type>text</type>
+          </billing_email>
+          <billing_street>
+            <fieldset>vendor_info</fieldset>
+            <label>Billing Street Address</label>
+            <type>text</type>
+          </billing_street>
+          <billing_city>
+            <fieldset>vendor_info</fieldset>
+            <label>Billing City</label>
+            <type>text</type>
+          </billing_city>
+          <billing_zip>
+            <fieldset>vendor_info</fieldset>
+            <label>Billing Zip/Postal Code</label>
+            <type>text</type>
+          </billing_zip>
+          <legal_entity>
+            <label>Legal entity</label>
+            <note>It's displayed in agreement on last step of checkout if vendor is taking part in transaction</note>
+            <type>textarea</type>
+            <fieldset>vendor_info</fieldset>
+            <position>10</position>
+          </legal_entity>
+          <new_order_notifications>
+            <fieldset>vendor_info</fieldset>
+          </new_order_notifications>
+          <notify_by_udpo_status>
+            <fieldset>vendor_info</fieldset>
+          </notify_by_udpo_status>
+          <url_key>
+            <fieldset>vendor_info</fieldset>
+          </url_key>
+          <logo>
+            <fieldset>vendor_info</fieldset>
+          </logo>
+          <!-- For backward capability name of this field is not changed. @see re#1961 -->
+          <!-- should be lower_commission_percent -->
+          <sale_commission_percent>
+            <fieldset>statement</fieldset>
+            <hide_modules>ZolagoOs_OmniChannelTierCommission</hide_modules>
+            <position>11</position>
+            <default>0</default>
+          </sale_commission_percent>
+          <marketing_charges_enabled>
+            <hide_modules>ZolagoOs_OmniChannelTierCommission</hide_modules>
+            <default>0</default>
+          </marketing_charges_enabled>
+          <super_vendor_id>
+            <label>Super vendor</label>
+            <type>select</type>
+            <source_model>zolagodropship/source</source_model>
+            <source>allvendorswithempty</source>
+            <fieldset>vendor_info</fieldset>
+            <position>0</position>
+          </super_vendor_id>
+          <statements_calendar>
+            <label>Statements calendar</label>
+            <type>select</type>
+            <source_model>ghstatements/source_calendar</source_model>
+            <fieldset>vendor_info</fieldset>
+            <position>20</position>
+          </statements_calendar>
+          <vendor_type>
+            <label>Vendor type</label>
+            <type>select</type>
+            <source_model>zolagodropship/source</source_model>
+            <source>vendorstype</source>
+            <fieldset>vendor_form</fieldset>
+            <position>0</position>
+          </vendor_type>
+          <can_ask>
+            <label>Customer can ask?</label>
+            <type>select</type>
+            <source>yesno</source>
+            <fieldset>vendor_info</fieldset>
+            <position>2</position>
+          </can_ask>
+          <index_by_google>
+            <label>Index Products By Google</label>
+            <type>select</type>
+            <source>yesno</source>
+            <fieldset>vendor_info</fieldset>
+            <position>3</position>
+          </index_by_google>
+          <sequence>
+            <label>Sequence</label>
+            <note>Vendor on main page in customized sequence</note>
+            <type>text</type>
+            <fieldset>vendor_info</fieldset>
+            <position>3</position>
+          </sequence>
+          <vendor_type_label>
+            <label>Vendor name prefix</label>
+            <note>Can be empty</note>
+            <type>text</type>
+            <fieldset>marketing</fieldset>
+            <position>9</position>
+          </vendor_type_label>
+          <vendor_landing_page_title>
+            <label>Vendor page - Title</label>
+            <type>text</type>
+            <fieldset>marketing</fieldset>
+            <position>10</position>
+          </vendor_landing_page_title>
+          <vendor_landing_page_description>
+            <label>Vendor page - Description</label>
+            <type>wysiwyg</type>
+            <fieldset>marketing</fieldset>
+            <position>11</position>
+          </vendor_landing_page_description>
+          <marketing_store_information_title>
+            <label>Vendor page - Seller information title</label>
+            <type>text</type>
+            <fieldset>marketing</fieldset>
+            <position>12</position>
+          </marketing_store_information_title>
+          <marketing_store_information>
+            <label>Vendor page - Seller information</label>
+            <type>wysiwyg</type>
+            <fieldset>marketing</fieldset>
+            <position>11</position>
+          </marketing_store_information>
+          <marketing_brand_information_title>
+            <label>Vendor page - Brand information title</label>
+            <type>text</type>
+            <fieldset>marketing</fieldset>
+            <position>13</position>
+          </marketing_brand_information_title>
+          <marketing_brand_information>
+            <label>Vendor page - Brand information</label>
+            <type>wysiwyg</type>
+            <fieldset>marketing</fieldset>
+            <position>14</position>
+          </marketing_brand_information>
+          <terms_seller_information>
+            <label>Product page - Seller information</label>
+            <type>wysiwyg</type>
+            <fieldset>marketing</fieldset>
+            <position>20</position>
+          </terms_seller_information>
+          <terms_delivery_information>
+            <label>Delivery information</label>
+            <type>wysiwyg</type>
+            <fieldset>marketing</fieldset>
+            <position>30</position>
+          </terms_delivery_information>
+          <terms_return_information>
+            <label>Return information</label>
+            <type>wysiwyg</type>
+            <fieldset>marketing</fieldset>
+            <position>40</position>
+          </terms_return_information>
+          <store_delivery_headline>
+            <label>Product - store section - delivery headline</label>
+            <type>text</type>
+            <fieldset>marketing</fieldset>
+            <position>50</position>
+          </store_delivery_headline>
+          <store_return_headline>
+            <label>Product - store section - return headline</label>
+            <type>text</type>
+            <fieldset>marketing</fieldset>
+            <position>60</position>
+          </store_return_headline>
+          <brandshop_info>
+            <label>Product - Brand shop info</label>
+            <type>text</type>
+            <fieldset>marketing</fieldset>
+            <position>75</position>
+          </brandshop_info>
+          <cart_slogan_one>
+            <label>Basket slogan no 1</label>
+            <type>text</type>
+            <fieldset>marketing</fieldset>
+            <position>80</position>
+            <only_admin>1</only_admin>
+          </cart_slogan_one>
+          <cart_slogan_two>
+            <label>Basket slogan no 2</label>
+            <type>text</type>
+            <fieldset>marketing</fieldset>
+            <position>90</position>
+            <only_admin>1</only_admin>
+          </cart_slogan_two>
+          <!--GH API-->
+          <ghapi_vendor_access_allow>
+            <label>GH API Access</label>
+            <type>select</type>
+            <source>yesno</source>
+            <fieldset>ghapi_vendor_access</fieldset>
+            <position>1</position>
+          </ghapi_vendor_access_allow>
+          <ghapi_reservation_disabled translate="label">
+            <label>Don't reserve products' stocks after downloading order by API.</label>
+            <type>select</type>
+            <source>yesno</source>
+            <fieldset>ghapi_vendor_access</fieldset>
+            <position>2</position>
+            <default>0</default>
+          </ghapi_reservation_disabled>
+          <ghapi_message_new_order>
+            <label>Pojawi&#x142;o si&#x119; nowe zam&#xF3;wienie do realizacji.</label>
+            <type>select</type>
+            <source>yesno</source>
+            <fieldset>ghapi_vendor_access</fieldset>
+            <position>2</position>
+            <default>1</default>
+          </ghapi_message_new_order>
+          <ghapi_message_order_canceled>
+            <label>Zam&#xF3;wienie zosta&#x142;o anulowane.</label>
+            <type>select</type>
+            <source>yesno</source>
+            <fieldset>ghapi_vendor_access</fieldset>
+            <position>2</position>
+            <default>1</default>
+          </ghapi_message_order_canceled>
+          <ghapi_message_order_payment_changes>
+            <label>Zmieni&#x142;a si&#x119; metoda p&#x142;atno&#x15B;ci w zam&#xF3;wieniu lub/i zmieni&#x142;a si&#x119; si&#x119; p&#x142;atno&#x15B;&#x107; do zam&#xF3;wienia.</label>
+            <type>select</type>
+            <source>yesno</source>
+            <fieldset>ghapi_vendor_access</fieldset>
+            <position>2</position>
+            <default>1</default>
+          </ghapi_message_order_payment_changes>
+          <ghapi_message_order_product_changes>
+            <label>Zmieni&#x142;y si&#x119; produkty lub koszt dostawy w zam&#xF3;wieniu. Produkty mog&#x142;y by&#x107; usuni&#x119;te, dodane, zmieniona cena, ilo&#x15B;&#x107;, rabat.</label>
+            <type>select</type>
+            <source>yesno</source>
+            <fieldset>ghapi_vendor_access</fieldset>
+            <position>2</position>
+            <default>1</default>
+          </ghapi_message_order_product_changes>
+          <ghapi_message_order_shipping_changes>
+            <label>Zmieni&#x142;a si&#x119; metoda dostawy lub/i adres dostawy.</label>
+            <type>select</type>
+            <source>yesno</source>
+            <fieldset>ghapi_vendor_access</fieldset>
+            <position>2</position>
+            <default>1</default>
+          </ghapi_message_order_shipping_changes>
+          <ghapi_message_order_invoice_changes>
+            <label>Zmieni&#x142;y si&#x119; dane do faktury lub/i informacja czy faktura jest wymagana.</label>
+            <type>select</type>
+            <source>yesno</source>
+            <fieldset>ghapi_vendor_access</fieldset>
+            <position>2</position>
+            <default>1</default>
+          </ghapi_message_order_invoice_changes>
+          <ghapi_message_order_status_changes>
+            <label>Zmieni&#x142; si&#x119; status zam&#xF3;wienia.</label>
+            <type>select</type>
+            <source>yesno</source>
+            <fieldset>ghapi_vendor_access</fieldset>
+            <position>2</position>
+            <default>1</default>
+          </ghapi_message_order_status_changes>
+          <!-- DHL Rates -->
+          <dhl_rates_envelope translate="label">
+            <label>Envelope</label>
+            <type>text</type>
+            <fieldset>dhl_rates</fieldset>
+            <position>10</position>
+          </dhl_rates_envelope>
+          <dhl_rates_parcel_0_5 translate="label">
+            <label>Parcel 0-5kg</label>
+            <type>text</type>
+            <fieldset>dhl_rates</fieldset>
+            <position>20</position>
+          </dhl_rates_parcel_0_5>
+          <dhl_rates_parcel_5_10 translate="label">
+            <label>Parcel 5-10kg</label>
+            <type>text</type>
+            <fieldset>dhl_rates</fieldset>
+            <position>30</position>
+          </dhl_rates_parcel_5_10>
+          <dhl_rates_parcel_10_20 translate="label">
+            <label>Parcel 10-20kg</label>
+            <type>text</type>
+            <fieldset>dhl_rates</fieldset>
+            <position>40</position>
+          </dhl_rates_parcel_10_20>
+          <dhl_rates_parcel_20_31_5 translate="label">
+            <label>Parcel 20-31.5kg</label>
+            <type>text</type>
+            <fieldset>dhl_rates</fieldset>
+            <position>50</position>
+          </dhl_rates_parcel_20_31_5>
+          <!-- DHL -->
+          <use_dhl>
+            <label>Use DHL</label>
+            <type>select</type>
+            <fieldset>dhl</fieldset>
+            <source>yesno</source>
+            <frontend_model>udropship/adminhtml_vendor_helper_form_dependSelect</frontend_model>
+            <depend_fields>
+              <dhl_login>1</dhl_login>
+              <dhl_password>1</dhl_password>
+              <dhl_account>1</dhl_account>
+              <dhl_ecas>1</dhl_ecas>
+              <dhl_terminal>1</dhl_terminal>
+              <dhl_check>1</dhl_check>
+            </depend_fields>
+            <position>10</position>
+          </use_dhl>
+          <dhl_account>
+            <label>DHL account</label>
+            <type>text</type>
+            <fieldset>dhl</fieldset>
+            <position>15</position>
+          </dhl_account>
+          <dhl_login>
+            <label>DHL login</label>
+            <type>text</type>
+            <fieldset>dhl</fieldset>
+            <position>20</position>
+          </dhl_login>
+          <dhl_password>
+            <label>DHL password</label>
+            <type>password</type>
+            <fieldset>dhl</fieldset>
+            <position>30</position>
+          </dhl_password>
+          <dhl_ecas>
+            <label>DHL eCas id</label>
+            <type>text</type>
+            <fieldset>dhl</fieldset>
+            <position>40</position>
+          </dhl_ecas>
+          <dhl_terminal>
+            <label>Terminal code</label>
+            <type>text</type>
+            <fieldset>dhl</fieldset>
+            <position>50</position>
+          </dhl_terminal>
+          <dhl_insurance_charge_amount>
+            <label>Insurance charge amount</label>
+            <type>text</type>
+            <fieldset>dhl_rates</fieldset>
+            <position>51</position>
+          </dhl_insurance_charge_amount>
+          <dhl_insurance_charge_percent>
+            <label>Insurance charge %</label>
+            <type>text</type>
+            <fieldset>dhl_rates</fieldset>
+            <position>52</position>
+          </dhl_insurance_charge_percent>
+          <dhl_cod_charge_amount>
+            <label>COD charge amount</label>
+            <type>text</type>
+            <fieldset>dhl_rates</fieldset>
+            <position>53</position>
+          </dhl_cod_charge_amount>
+          <dhl_cod_charge_percent>
+            <label>COD charge %</label>
+            <type>text</type>
+            <fieldset>dhl_rates</fieldset>
+            <position>54</position>
+          </dhl_cod_charge_percent>
+          <use_orbaups>
+            <label>Use UPS</label>
+            <type>select</type>
+            <fieldset>orbaups</fieldset>
+            <source>yesno</source>
+            <frontend_model>udropship/adminhtml_vendor_helper_form_dependSelect</frontend_model>
+            <depend_fields>
+              <orbaups_login>1</orbaups_login>
+              <orbaups_password>1</orbaups_password>
+              <orbaups_account>1</orbaups_account>
+            </depend_fields>
+            <position>55</position>
+          </use_orbaups>
+          <orbaups_account>
+            <label>UPS license key</label>
+            <type>text</type>
+            <fieldset>orbaups</fieldset>
+            <position>60</position>
+          </orbaups_account>
+          <orbaups_login>
+            <label>UPS login</label>
+            <type>text</type>
+            <fieldset>orbaups</fieldset>
+            <position>70</position>
+          </orbaups_login>
+          <orbaups_password>
+            <label>UPS password</label>
+            <type>password</type>
+            <fieldset>orbaups</fieldset>
+            <position>80</position>
+          </orbaups_password>
+          <orbaups_insurance_charge_amount>
+            <label>Insurance charge amount</label>
+            <type>text</type>
+            <fieldset>orbaups_rates</fieldset>
+            <position>90</position>
+          </orbaups_insurance_charge_amount>
+          <orbaups_insurance_charge_percent>
+            <label>Insurance charge %</label>
+            <type>text</type>
+            <fieldset>orbaups_rates</fieldset>
+            <position>95</position>
+          </orbaups_insurance_charge_percent>
+          <orbaups_cod_charge_amount>
+            <label>COD charge amount</label>
+            <type>text</type>
+            <fieldset>orbaups_rates</fieldset>
+            <position>100</position>
+          </orbaups_cod_charge_amount>
+          <orbaups_cod_charge_percent>
+            <label>COD charge %</label>
+            <type>text</type>
+            <fieldset>orbaups_rates</fieldset>
+            <position>110</position>
+          </orbaups_cod_charge_percent>
+          <use_zolagodpd>
+            <label>Use DPD</label>
+            <type>select</type>
+            <fieldset>zolagodpd</fieldset>
+            <source>yesno</source>
+            <frontend_model>udropship/adminhtml_vendor_helper_form_dependSelect</frontend_model>
+            <position>120</position>
+          </use_zolagodpd>
+          <!-- Rma -->
+          <dhl_rma>
+            <label>Use another DHL account for RMA</label>
+            <type>select</type>
+            <fieldset>orbarma</fieldset>
+            <source>yesno</source>
+            <frontend_model>udropship/adminhtml_vendor_helper_form_dependSelect</frontend_model>
+            <depend_fields>
+              <dhl_rma_login>1</dhl_rma_login>
+              <dhl_rma_password>1</dhl_rma_password>
+              <dhl_rma_account>1</dhl_rma_account>
+            </depend_fields>
+            <position>10</position>
+          </dhl_rma>
+          <orbaups_rma>
+            <label>Use another UPS account for RMA</label>
+            <type>select</type>
+            <fieldset>orbarma</fieldset>
+            <source>yesno</source>
+            <frontend_model>udropship/adminhtml_vendor_helper_form_dependSelect</frontend_model>
+            <depend_fields>
+              <orbaups_rma_login>1</orbaups_rma_login>
+              <orbaups_rma_password>1</orbaups_rma_password>
+              <orbaups_rma_account>1</orbaups_rma_account>
+            </depend_fields>
+            <position>33</position>
+          </orbaups_rma>
+          <dhl_rma_account>
+            <label>Account number</label>
+            <type>text</type>
+            <fieldset>orbarma</fieldset>
+            <position>15</position>
+          </dhl_rma_account>
+          <dhl_rma_login>
+            <label>DHL login</label>
+            <type>text</type>
+            <fieldset>orbarma</fieldset>
+            <position>20</position>
+          </dhl_rma_login>
+          <dhl_rma_password>
+            <label>DHL password</label>
+            <type>password</type>
+            <fieldset>orbarma</fieldset>
+            <position>30</position>
+          </dhl_rma_password>
+          <orbaups_rma_account>
+            <label>License key</label>
+            <type>text</type>
+            <fieldset>orbarma</fieldset>
+            <position>35</position>
+          </orbaups_rma_account>
+          <orbaups_rma_login>
+            <label>UPS login</label>
+            <type>text</type>
+            <fieldset>orbarma</fieldset>
+            <position>40</position>
+          </orbaups_rma_login>
+          <orbaups_rma_password>
+            <label>UPS password</label>
+            <type>password</type>
+            <fieldset>orbarma</fieldset>
+            <position>45</position>
+          </orbaups_rma_password>
+          <!-- Product Review -->
+          <review_status>
+            <label>Product Review Status</label>
+            <type>select</type>
+            <fieldset>vendor_info</fieldset>
+            <source_model>zolagodropship/source</source_model>
+            <position>800</position>
+            <selector>1</selector>
+          </review_status>
+          <!-- label store -->
+          <label_store>
+            <label>Label store</label>
+            <type>select</type>
+            <source_model>zolagodropship/source_store</source_model>
+            <fieldset>vendor_info</fieldset>
+            <only_admin>1</only_admin>
+            <position>500</position>
+          </label_store>
+          <!-- category -->
+          <root_category>
+            <label>Root categories</label>
+            <frontend_model>zolagodropship/adminhtml_vendor_helper_form_category</frontend_model>
+            <fieldset>vendor_info</fieldset>
+            <only_admin>1</only_admin>
+            <position>600</position>
+          </root_category>
+          <!-- design -->
+          <custom_design>
+            <label>Custom design</label>
+            <frontend_model>zolagodropship/adminhtml_vendor_helper_form_design</frontend_model>
+            <fieldset>vendor_info</fieldset>
+            <only_admin>1</only_admin>
+            <position>700</position>
+          </custom_design>
+          <!-- Modago Integrator -->
+          <!-- @see app/code/local/GH/Api/Block/Adminhtml/Dropship/Settings/Ghapi/Form.php -->
+          <integrator_enabled>
+            <fieldset>modago_integrator</fieldset>
+          </integrator_enabled>
+          <integrator_secret translate="label">
+            <fieldset>modago_integrator</fieldset>
+          </integrator_secret>
+          <last_integration>
+            <fieldset>modago_integrator</fieldset>
+          </last_integration>
+          <modago_salesmanago_login translate="label">
+            <fieldset>modago_salesmanago</fieldset>
+          </modago_salesmanago_login>
+          <iaishop_id>
+            <fieldset>iaishop_settings</fieldset>
+          </iaishop_id>
+          <iaishop_url>
+            <fieldset>iaishop_settings</fieldset>
+          </iaishop_url>
+          <iaishop_login>
+            <fieldset>iaishop_settings</fieldset>
+          </iaishop_login>
+          <iaishop_pass>
+            <fieldset>iaishop_settings</fieldset>
+          </iaishop_pass>
+          <iaishop_delivery_udtiership>
+            <fieldset>iaishop_settings</fieldset>
+          </iaishop_delivery_udtiership>
+          <iaishop_delivery_ghinpost>
+            <fieldset>iaishop_settings</fieldset>
+          </iaishop_delivery_ghinpost>
+          <iaishop_delivery_zolagopp>
+            <fieldset>iaishop_settings</fieldset>
+          </iaishop_delivery_zolagopp>
+          <!--Regulation-->
+          <!-- Moved to: app/code/local/GH/Regulation/Block/Adminhtml/Dropship/Settings/Type.php -->
+          <regulation_accept_text_top/>
+          <regulation_proxy_assignment_url/>
+          <regulation_proxy_assignment_url_text/>
+          <regulation_proxy_assignment_override/>
+          <regulation_accept_text_agreement/>
+          <!--Regulation-->
+          <!--Marketing cost for each cost type start-->
+          <!-- dynamically created -->
+          <!-- @see Zolago_Dropship_Model_Vendor::_beforeSave() -> addConfigMarketingCostTypeFields() -->
+          <!--Marketing cost for each cost type end-->
+        </fields>
+      </vendor>
+    </udropship>
+    <events>
+      <udropship_adminhtml_vendor_edit_prepare_form>
+        <observers>
+          <zolagodropship>
+            <class>zolagodropship/observer</class>
+            <method>udropship_adminhtml_vendor_edit_prepare_form</method>
+          </zolagodropship>
+        </observers>
+      </udropship_adminhtml_vendor_edit_prepare_form>
+      <udropship_adminhtml_vendor_tabs_after>
+        <observers>
+          <zolagodropship>
+            <class>zolagodropship/observer</class>
+            <method>udropship_adminhtml_vendor_tabs_organize</method>
+          </zolagodropship>
+        </observers>
+      </udropship_adminhtml_vendor_tabs_after>
+      <sales_order_shipment_track_save_before>
+        <observers>
+          <add_orba_shipping_data>
+            <class>zolagodropship/observer</class>
+            <method>addOrbaShippingData</method>
+          </add_orba_shipping_data>
+          <add_undelivered_track_data>
+            <class>zolagodropship/observer</class>
+            <method>addUndeliveredTrackData</method>
+          </add_undelivered_track_data>
+        </observers>
+      </sales_order_shipment_track_save_before>
+      <urma_rma_track_save_before>
+        <observers>
+          <add_undelivered_track_data>
+            <class>zolagodropship/observer</class>
+            <method>addUndeliveredTrackData</method>
+          </add_undelivered_track_data>
+        </observers>
+      </urma_rma_track_save_before>
+    </events>
+  </global>
+  <frontend>
+    <block>
+      <zolagodropship>
+        <class>Zolago_Dropship_Block_Pos</class>
+      </zolagodropship>
+    </block>
+    <events>
+      <core_locale_set_locale>
+        <observers>
+          <bind_locale>
+            <class>zolagodropship/observer</class>
+            <method>bindLocale</method>
+          </bind_locale>
+        </observers>
+      </core_locale_set_locale>
+    </events>
+    <routers>
+      <zolagodropship>
+        <use>standard</use>
+        <args>
+          <module>Zolago_Dropship</module>
+          <frontName>zolagdropship</frontName>
+        </args>
+      </zolagodropship>
+      <udropship>
+        <args>
+          <modules>
+            <Zolago_Dropship before="ZolagoOs_OmniChannel">Zolago_Dropship</Zolago_Dropship>
+          </modules>
+        </args>
+      </udropship>
+    </routers>
+    <layout>
+      <updates>
+        <zolagodropship>
+          <file>zolagodropship.xml</file>
+        </zolagodropship>
+      </updates>
+    </layout>
+    <translate>
+      <modules>
+        <Zolago_Dropship>
+          <files>
+            <default>Zolago_Dropship.csv</default>
+          </files>
+        </Zolago_Dropship>
+      </modules>
+    </translate>
+    <secure_url>
+      <udropship_operator>/udropship/operator/</udropship_operator>
+      <udropship_pos>/udropship/pos/</udropship_pos>
+      <udropship_sizetable>/udropship/sizetable/</udropship_sizetable>
+      <udropship_vendor_settings>/udropship/vendor_settings/</udropship_vendor_settings>
+      <udropship_ghapi>/udropship/ghapi/</udropship_ghapi>
+    </secure_url>
+  </frontend>
+  <admin>
+    <routers>
+      <zolagoosadmin>
+        <args>
+          <modules>
+            <Zolago_Dropship before="ZolagoOs_OmniChannel">Zolago_Dropship</Zolago_Dropship>
+          </modules>
+        </args>
+      </zolagoosadmin>
+    </routers>
+  </admin>
+  <adminhtml>
+    <translate>
+      <modules>
+        <Zolago_Dropship>
+          <files>
+            <default>Zolago_Dropship.csv</default>
+          </files>
+        </Zolago_Dropship>
+      </modules>
+    </translate>
+  </adminhtml>
 </config>
