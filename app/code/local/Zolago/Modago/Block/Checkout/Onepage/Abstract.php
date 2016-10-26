@@ -55,7 +55,7 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
                 $deliveryPoint->locationDescription = $locker->getLocationDescription();
 
                 $deliveryPoint->checkout->title = $helper->__("Locker InPost");
-                $deliveryPoint->checkout->logo = '<figure class="inpost-img"><div><img src="'.$this->getSkinUrl('images/inpost/checkout-logo.png').'"></div></figure><br/>';
+                $deliveryPoint->checkout->logo = '<figure class="inpost-img"><div><img src="'.$this->getSkinUrl('images/checkout-logo/inpost/checkout-logo.png').'"></div></figure><br/>';
                 $deliveryPoint->checkout->additionalInfo1 = $helper->__("The phone number is required to receive package from locker.") . "<br/>";
                 $deliveryPoint->checkout->additionalInfo2 = $helper->__("We do not use it in any other way without your permission!");
                 break;
@@ -73,7 +73,7 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
                 $deliveryPoint->locationDescription = $point->getLocationDescription();
 
                 $deliveryPoint->checkout->title = $helper->__("Locker PwR");
-                $deliveryPoint->checkout->logo = '<figure class="pwr-img"><div><img src="'.$this->getSkinUrl('images/pwr/checkout-logo.png').'"></div></figure><br/>';
+                $deliveryPoint->checkout->logo = '<figure class="pwr-img"><div><img src="'.$this->getSkinUrl('images/checkout-logo/pwr/checkout-logo.png').'"></div></figure><br/>';
                 $deliveryPoint->checkout->additionalInfo1 = $helper->__("The phone number is required to receive package from locker.") . "<br/>";
                 $deliveryPoint->checkout->additionalInfo2 = $helper->__("We do not use it in any other way without your permission!");
                 break;
