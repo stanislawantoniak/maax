@@ -749,4 +749,12 @@ class Zolago_Po_Helper_Data extends ZolagoOs_OmniChannelPo_Helper_Data
             }
         }
     }
+
+    /**
+     * @return mixed
+     */
+    public function showProductLinksOnPoEditPage()
+    {
+        return Mage::getStoreConfig('udropship/vendor_panel/po_edit_show_product_links');
+    }
 }

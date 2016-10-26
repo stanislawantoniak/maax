@@ -23,9 +23,11 @@ $_sku = $_item->getFinalSku();
 	<td class="align-right"><?php echo $this->getLp();?></td>
 	<td><?php echo $this->escapeHtml($_sku);?></td>
 	<td>
-		<a href="<?php echo $_productUrl; ?>" target="_blank">
+		<?php if($_helper->showProductLinksOnPoEditPage()): ?>
+			<a href="<?php echo $_productUrl; ?>" target="_blank"><?php echo $this->escapeHtml($_item->getName());?></a>
+		<?php else: ?>
 			<?php echo $this->escapeHtml($_item->getName());?>
-		</a>
+		<?php endif; ?>
 		<div><?php echo $this->getBundleHtml($_item); ?></div>
 
 		<em class="text-muted"><?php echo $_productFlagText; ?></em>
@@ -54,7 +56,7 @@ $_sku = $_item->getFinalSku();
 							<td class="align-right"><?php echo $_relation->getRuleId() ? $_relation->getRuleId() : "-";?></td>
 							<td class="align-left"><?php echo $this->getAlgorithmName($_relation);?></td>
 							<td class="align-left"><?php echo $this->escapeHtml($_relation->getName());?></td>
-							<td class="align-right"><?php echo Mage::helper("core")->currency(Mage::helper('orbacommon')->ceildec($_relation->getDiscountAmount()/$_item->getQty()));?></td>
+							<td class="align-right"><?php echo Mage::helper("core")->currency($_itemDiscount);?></td>
 							<td class="align-left"><?php echo $this->getPayerName($_relation);?></td>
 						</tr>
 					<?php endforeach;?>
