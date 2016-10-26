@@ -36,7 +36,6 @@ foreach ($poList as $po): /** @var Zolago_Po_Model_Po $po */ ?>
         <span class="spacer">&nbsp;</span>
     <?php endif; ?>
     <div style="border-bottom:25px solid white;line-height: 1.4em;margin:0;padding:0">
-        <?php echo $helper->__("Max shipping date:"); ?> <?php echo $po->getMaxShippingDate(); ?> <?php echo ($po->isCod()) ? '' : $helper->__("(may change in the case of non-payment)"); ?>
     </div>
 
     <?php
