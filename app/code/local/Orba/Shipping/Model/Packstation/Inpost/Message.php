@@ -64,6 +64,10 @@ class Orba_Shipping_Model_Packstation_Inpost_Message extends Varien_Object {
         $pack->addChild('senderEmail',$email);
         $pack->addChild('boxMachineName',$udpo->getDeliveryPointName());
         $pack->addChild('packType',$settings['size']);
+        $pack->addChild('insuranceAmount',$udpo->getGrandTotalInclTax());
+        if ($settings['cod'] > 0) {
+         $pack->addChild('onDeliveryAmount',$settings['cod']);
+        }
         $pack->addChild('addresseeEmail',$udpo->getCustomerEmail());
         $pack->addChild('phoneNum',$settings['phoneNumber']);
         $pack->addChild('dispatchPointName',$settings['dispatchPointName']);
