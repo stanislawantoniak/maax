@@ -62,7 +62,6 @@ $iconTruckBad = '<span class="fa-stack"><i class="fa fa-truck fa-stack-2x"></i><
 		</div>
 		<div class="shipment-bottom">
 			<span><?php echo $_helper->__('Delivery method').': '.$carrier; ?></span>
-			<span><?php echo $_helper->__('Planned send date'); ?>: <?php echo $_helper->__("24h from date of payment"); ?></span>
 		<?php elseif(
 		(
 			$paid &&
@@ -90,8 +89,6 @@ $iconTruckBad = '<span class="fa-stack"><i class="fa fa-truck fa-stack-2x"></i><
 		</div>
 		<div class="shipment-bottom">
 			<span><?php echo $_helper->__('Delivery method').': '.$carrier; ?></span>
-			<span><?php echo $_helper->__('Planned send date').': '.$sendDate ?></span>
-			<span><?php echo $_helper->__('Planned delivery date').': '.$deliveryDate; ?></span>
 
 		<?php elseif(
 		($paid && $status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_EXPORTED) ||
@@ -104,8 +101,6 @@ $iconTruckBad = '<span class="fa-stack"><i class="fa fa-truck fa-stack-2x"></i><
 		</div>
 		<div class="shipment-bottom">
 			<span><?php echo $_helper->__('Delivery method').': '.$carrier; ?></span>
-			<span><?php echo $_helper->__('Planned send date').': '.$sendDate ?></span>
-			<span><?php echo $_helper->__('Planned delivery date').': '.$deliveryDate; ?></span>
 		<?php elseif(
 			$paid && $status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_READY
 			||
@@ -118,8 +113,6 @@ $iconTruckBad = '<span class="fa-stack"><i class="fa fa-truck fa-stack-2x"></i><
 		</div>
 		<div class="shipment-bottom">
 			<span><?php echo $_helper->__('Delivery method').': '.$carrier; ?></span>
-			<span><?php echo $_helper->__('Planned send date').': '.$sendDate ?></span>
-			<span><?php echo $_helper->__('Planned delivery date').': '.$deliveryDate; ?></span>
 		<?php elseif(
 			$status == Zolago_Po_Model_Source::UDPO_STATUS_TO_PICK
 		): ?>
@@ -130,8 +123,6 @@ $iconTruckBad = '<span class="fa-stack"><i class="fa fa-truck fa-stack-2x"></i><
 		</div>
 		<div class="shipment-bottom">
 			<span><?php echo $_helper->__('Delivery method').': '.$carrier; ?></span>
-			<span><?php echo $_helper->__('Planned send date').': '.$sendDate ?></span>
-			<span><?php echo $_helper->__('Planned delivery date').': '.$deliveryDate; ?></span>
 			<?php elseif(
 			$paid && $status == ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_SHIPPED
 			||
@@ -145,7 +136,6 @@ $iconTruckBad = '<span class="fa-stack"><i class="fa fa-truck fa-stack-2x"></i><
 		<div class="shipment-bottom">
 			<span><?php echo $_helper->__('Delivery method').': '.$carrier; ?></span>
 			<span><?php echo $_helper->__('Send date').': '.$shipmentDate ?></span>
-			<span><?php echo $_helper->__('Planned delivery date').': '.$deliveryDate; ?></span>
 			<span><?php echo $_helper->__('Tracking number').': '.$tracking ?></span>
 			<?php if ($trackingUrl && $tracking) : ?>
 			<span><a href="<?php printf($trackingUrl,$tracking); ?>" class="underline" target="_blank"><?php echo $_helper->__('track package'); ?></a></span>
