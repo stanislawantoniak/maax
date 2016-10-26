@@ -99,6 +99,12 @@ $_modagoHlp = Mage::helper("zolagocommon");
 								<input id="shipping-tracking_id"  name="tracking_id" title="<?php echo $_hlp->__('Tracking ID') ?>" type="text" class="form-control" />
 							</div>
 						</li>
+						<li class="form-group specify specify-carrier specify-carrier-zolagodpd specify-specify_zolagodpd_type specify-specify_zolagodpd_type-PACKAGE">
+							<label for="shipping-dpd-tracking_id" class="col-md-3 control-label"><?php echo $_hlp->__('Tracking ID') ?></label>
+							<div class="col-md-9">
+								<input id="shipping-dpd-tracking_id"  name="tracking_id" title="<?php echo $_hlp->__('Tracking ID') ?>" type="text" class="form-control" />
+							</div>
+						</li>
 					<?php else:?>
 						<li class="form-group">
 							<input type="hidden" name="carrier" value="custom"/>
@@ -138,7 +144,9 @@ jQuery(function($){
 	var shippingOrbadhlPkgRateType = $("#shipping-specify_orbadhl_rate_type", form),
 		specifyOrbadhlPkgSize = $(".specify-specify_orbadhl_size",form),
 		shippingOrbaupsPkgType = $("#shipping-specify_orbaups_type", form),
+		shippingZolagodpdPkgType = $("#shipping-specify_zolagodpd_type", form),
 		specifyOrbaupsPkgType = $(".specify-specify_orbaups_type", form),
+		specifyZolagodpdPkgType = $(".specify-specify_zolagodpd_type", form),
 		specifyCarrier = $(".specify-carrier", form),
 		autotracking = $("#auto-tracking"),
 		carrierTitle = $("#carrier_title"),
@@ -165,6 +173,11 @@ jQuery(function($){
 				autotracking.val("off");
 				shippingOrbaupsPkgType.change();
 				// Process for ups
+			break;
+			case "zolagodpd":
+				autotracking.val("off");
+				shippingZolagodpdPkgType.change();
+				// Process for dpd
 			break;
 		}
 	};
@@ -211,6 +224,12 @@ jQuery(function($){
 			specifyOrbaupsPkgType.filter(".specify-specify_orbaups_type-"+$(this).val()).removeClass("hidden")
 		}
 	};
+	var handleZolagodpdPkgType = function(){
+		if(!$(this).parents('.form-group').hasClass("hidden")){
+			specifyZolagodpdPkgType.addClass("hidden");
+			specifyZolagodpdPkgType.filter(".specify-specify_zolagodpd_type-"+$(this).val()).removeClass("hidden")
+		}
+	};
 	
 	$(".datepicker", form).datepicker({firstDay: 1}).
 			attr("placeholder", $.datepicker._defaults.dateFormat);
@@ -223,6 +242,7 @@ jQuery(function($){
 	<?php /* shippingOrbadhlPkgType.change(handleOrbadhlPkgType); */ ?>
 	shippingOrbadhlPkgRateType.change(handleOrbadhlPkgRateType);
 	shippingOrbaupsPkgType.change(handleOrbaupsPkgType);
+	shippingZolagodpdPkgType.change(handleZolagodpdPkgType);
 	specifyOrbadhlPkgSize.change(handleOrbadhlPkgSize);
 	
 	// Trigger flow
