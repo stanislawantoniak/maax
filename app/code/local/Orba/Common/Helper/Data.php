@@ -36,11 +36,12 @@ class Orba_Common_Helper_Data extends Mage_Core_Helper_Abstract {
         $hash = md5(Mage::app()->getLayout()->createBlock('core/template')->setTemplate('orbacommon/js/lib.phtml')->toHtml());
         return $base . '?' . $hash;
     }
-    
-     
+
     /**
      * formatting text (polska odmiana)
-     * @param $int count
+     * 
+     * @param $counter
+     *
      * @return string
      */
     public function formatOrdersText($counter) {
