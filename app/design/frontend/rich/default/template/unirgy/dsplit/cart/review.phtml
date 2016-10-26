@@ -6,11 +6,16 @@ $_v = $this->getVendor();
 
 <!-- Start vendor panel  vendor panel -->
 <div class="panel panel-custom panel-vendor">
-    <?php if ($_v->getId()): ?>
-    <div class="panel-heading"><?php echo $this->__("Seller"); ?>: <strong><?php echo $_v->getVendorName() ?></strong></div>
-    <?php else: ?>
-    <div class="panel-heading"><?php echo $this->__("Unknown vendor"); ?></div>
-    <?php endif ?>
+	<?php if(Mage::helper('zolagocommon')->useGalleryConfiguration()): ?>
+		<?php if ($_v->getId()): ?>
+		<div class="panel-heading"><?php echo $this->__("Seller"); ?>: <strong><?php echo $_v->getVendorName() ?></strong></div>
+		<?php else: ?>
+		<div class="panel-heading"><?php echo $this->__("Unknown vendor"); ?></div>
+		<?php endif ?>
+
+	<?php else: ?>
+		<div class="panel-heading"><strong>&nbsp;&nbsp;</strong></div>
+	<?php endif ?>
 	
 	<!-- End head Thead -->
 	
