@@ -140,25 +140,7 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 														<?php echo $this->escapeHtml($attr['value']); ?>
 													</span>
 									<?php elseif ($attr['code'] == "manufacturer"): ?>
-										<?php
-										$vendorsCollection = Mage::getModel("udropship/vendor")->getCollection();
-										$vendorsCollection->addFieldToFilter("vendor_name", array("like" => $attr['value']));
-										$brand = $vendorsCollection->getFirstItem();
-
-										$brandShopId = $brand->getId();
-										$brandShop = Mage::helper('udropship')->getVendor($brandShopId);
-										$brandShopName = $brandShop->getData("vendor_name");
-										$brandShopUrl = Mage::helper("umicrosite")->getVendorUrl($brandShop);
-										?>
-										<?php if ($brandShopProductId == $brandShopId): ?>
-											<h3 class="itemprop-brand">
-												<a href="<?php echo $brandShopUrl; ?>">
-													<?php echo $brandShopName; ?>
-												</a>
-											</h3>
-										<?php else: ?>
-											<?php echo $this->escapeHtml($attr['value']); ?>
-										<?php endif; ?>
+											<span class="itemprop-brand"><?php echo $this->escapeHtml($attr['value']); ?></span>
 									<?php else: ?>
 										<?php if (array_key_exists('value', $attr) && !is_array($attr['value'])) : ?>
 											<?php echo $this->escapeHtml($attr['value']); ?>
