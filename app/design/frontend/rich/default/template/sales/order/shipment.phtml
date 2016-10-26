@@ -151,9 +151,9 @@ $iconTruckBad = '<span class="fa-stack"><i class="fa fa-truck fa-stack-2x"></i><
 		</div>
 		<div class="shipment-bottom">
 			<span><?php echo $_helper->__('Delivery method').': '.$carrier; ?></span>
-			<span><?php echo $_helper->__('Send date').': '.$shipmentDate ?></span>
-			<span><?php echo $_helper->__('Tracking number').': '.$tracking ?></span>
+			<span><?php echo $_helper->__('Send date').': '.$shipmentDate ?></span>			
 			<?php if ($trackingUrl && $tracking) : ?>
+				<span><?php echo $_helper->__('Tracking number').': '.$tracking ?></span>
 			<span><a href="<?php printf($trackingUrl,$tracking); ?>" class="underline" target="_blank"><?php echo $_helper->__('track package'); ?></a></span>
 			<?php endif;?>
 		<?php elseif(
