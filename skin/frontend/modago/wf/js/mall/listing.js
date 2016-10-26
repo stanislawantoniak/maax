@@ -230,7 +230,14 @@ Mall.listing = {
 		var self = this;
 
 		if(this.getProducts().find(".item").size() > 0){
-			jQuery("#header-main").remove();
+			var headerMain = jQuery("#sb-site #header-main");
+
+			jQuery.each(headerMain, function(i, headerMainItem){
+				if(jQuery(headerMainItem).parents("section#main").length == 0){
+					jQuery(headerMainItem).remove();
+				}
+			});
+
 		}
 		this.getProducts().find(".item:not(.processed)").each(function(){
 			var el = jQuery(this);
