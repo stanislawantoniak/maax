@@ -23,7 +23,7 @@ class ZolagoOs_OmniChannelVendorProduct_Block_Vendor_Product_Wysiwyg extends Var
     {
         if (Mage::helper('udropship')->isWysiwygAllowed()
             && Mage::helper('catalog')->isModuleEnabled('Mage_Cms')
-            && (bool)Mage::getSingleton('cms/wysiwyg_config')->isEnabled()
+            && (bool)Mage::getSingleton('zolagocatalog/wysiwyg_config')->isEnabled()
             && $this->getProductAttribute()
         ) {
             return $this->getProductAttribute()->getIsWysiwygEnabled();
