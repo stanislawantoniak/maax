@@ -38,7 +38,6 @@
                     <catalog_product_edit_tab_attributes>Zolago_Adminhtml_Block_Catalog_Product_Edit_Tab_Attributes</catalog_product_edit_tab_attributes>
                     <catalog_helper_form_wysiwyg>Zolago_Adminhtml_Block_Catalog_Helper_Form_Wysiwyg</catalog_helper_form_wysiwyg>
                     <catalog_helper_form_wysiwyg_content>Zolago_Adminhtml_Block_Catalog_Helper_Form_Wysiwyg_Content</catalog_helper_form_wysiwyg_content>
-                    <widget_form>Zolago_Adminhtml_Block_Widget_Form</widget_form>
                 </rewrite>
             </adminhtml>
             <cmsmart_admintheme>
