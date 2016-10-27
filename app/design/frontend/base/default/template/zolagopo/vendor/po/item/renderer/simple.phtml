@@ -16,6 +16,8 @@ $_discountInfo   = $_item->getDiscountInfo();
 $_finalItemPrice = $_item->getFinalItemPrice();
 $_finalRowPrice  = $_item->getFinalRowPrice();
 $_sku = $_item->getFinalSku();
+
+$_helper = Mage::helper('zolagopo');
 ?>
 
 <tr data-item-id="<?php echo $_item->getId();?>" data-item-name="<?php echo $this->escapeHtml($_item->getName());?>">
