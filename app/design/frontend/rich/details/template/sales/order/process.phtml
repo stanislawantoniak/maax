@@ -1,3 +1,5 @@
+<?php /* @var $this Zolago_Modago_Block_Sales_Order_Process */ ?>
+
 <?php $_orders = $this->getOrders(); ?>
 <?php $_helper = Mage::helper("zolagosales");?>
 <?php $baseUrl = Mage::helper("core/url")->getHomeUrl(); ?>
@@ -23,6 +25,7 @@ if ($request->getRouteName() == "customer" && $request->getControllerName() == "
 	<?php if($_orders->getSize()): ?>
 		<?php foreach($_orders as $_order):?>
 		<?php /* @var $_order Mage_Sales_Model_Order */ ?>
+			<?php /* @see sales/order/process/view.phtml */ ?>
 			<?php echo $this->getOrderHtml($_order); ?>
 		<?php endforeach;?>
 	<?php else: ?>

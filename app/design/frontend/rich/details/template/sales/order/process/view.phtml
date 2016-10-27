@@ -32,10 +32,10 @@ if ($request->getRouteName() == "customer" && $request->getControllerName() == "
 		<p class="visible-xs">
 			<?php echo $_helper->__('Order date') ?>:
 			<?php echo $_helper->formatDate($_order->getCreatedAt());?>
-		<p>
-			<?php echo $_helper->__('Total order value')?>:
-			<?php echo Mage::helper('core')->formatPrice($_grandTotal);?>
-		</p>
+<!--		<p>-->
+<!--			--><?php //echo $_helper->__('Total order value')?><!--:-->
+<!--			--><?php //echo Mage::helper('core')->formatPrice($_grandTotal);?>
+<!--		</p>-->
 		<p>
 			<?php echo $_helper->__('Payment');?>:
 			<?php echo $this->getPaymentHtml();?>
