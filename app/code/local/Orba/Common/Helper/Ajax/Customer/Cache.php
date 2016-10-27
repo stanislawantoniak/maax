@@ -418,8 +418,7 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 				/* @var $product Zolago_Catalog_Model_Product */
 				$image = Mage::helper("zolago_image")
 					->init($product, 'small_image')
-					->setCropPosition(Zolago_Image_Model_Catalog_Product_Image::POSITION_CENTER)
-					->adaptiveResize(200, 312);
+					->resize(312, 312);
 				$recentlyViewedContent[(int)$product->getId()] = array(
 					'title' => Mage::helper('catalog/output')->productAttribute($product, $product->getName(), 'name'),
 					'image_url' => (string)$image,
