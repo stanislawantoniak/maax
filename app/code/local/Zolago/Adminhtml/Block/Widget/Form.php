@@ -14,6 +14,7 @@ class Zolago_Adminhtml_Block_Widget_Form extends Mage_Adminhtml_Block_Widget_For
      */
     protected function _prepareForm()
     {
+        die("test");
         $form = new Varien_Data_Form(array('id' => 'wysiwyg_edit_form', 'action' => $this->getData('action'), 'method' => 'post'));
 
         $config['document_base_url']     = $this->getData('store_media_url');
