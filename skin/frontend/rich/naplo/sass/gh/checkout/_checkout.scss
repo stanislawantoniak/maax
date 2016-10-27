@@ -303,6 +303,13 @@
 			}
 		}
 	}
+	.figure-button-wrapper {
+		figure {
+			img {
+				max-width: 100%;
+			}
+		}
+	}
 	.default_pay {
 		> .panel {
 			> .panel-body {
