@@ -7,7 +7,9 @@
 <?php
 $request = Mage::app()->getRequest();
 $customerAccountPage = false;
-if ($request->getRouteName() == "customer" && $request->getControllerName() == "account" && $request->getActionName() == "index") {
+if ($request->getRouteName() == "customer"
+	&& $request->getControllerName() == "account"
+	&& $request->getActionName() == "index") {
     $customerAccountPage = true;
 }
 ?>
