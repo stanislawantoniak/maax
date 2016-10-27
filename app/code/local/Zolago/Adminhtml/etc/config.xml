@@ -35,6 +35,9 @@
                     <customer_edit_tabs>Zolago_Adminhtml_Block_Customer_Edit_Tabs</customer_edit_tabs>
                     <sales_transactions_grid>Zolago_Adminhtml_Block_Sales_Transactions_Grid</sales_transactions_grid>
                     <sales_transactions>Zolago_Adminhtml_Block_Sales_Transactions</sales_transactions>
+                    <catalog_product_edit_tab_attributes>Zolago_Adminhtml_Block_Catalog_Product_Edit_Tab_Attributes</catalog_product_edit_tab_attributes>
+                    <catalog_helper_form_wysiwyg>Zolago_Adminhtml_Block_Catalog_Helper_Form_Wysiwyg</catalog_helper_form_wysiwyg>
+                    <catalog_helper_form_wysiwyg_content>Zolago_Adminhtml_Block_Catalog_Helper_Form_Wysiwyg_Content</catalog_helper_form_wysiwyg_content>
                 </rewrite>
             </adminhtml>
             <cmsmart_admintheme>
