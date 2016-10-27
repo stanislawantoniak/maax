@@ -159,6 +159,7 @@
       <zolagodpd>
         <active>1</active>
         <tracking_gateway><![CDATA[https://tracktrace.dpd.com.pl/findPackage]]></tracking_gateway>
+        <tracking_url><![CDATA[https://tracktrace.dpd.com.pl/parcelDetails?p1=%s]]></tracking_url>
         <title>DPD</title>
         <model>orbashipping/carrier_dpd</model>
       </zolagodpd>

@@ -378,6 +378,9 @@
                 <status_changed_shipped>udropship_purchase_order_status_changed_shipped</status_changed_shipped>
                 <zolagopo_compose>zolagopo_compose</zolagopo_compose>
             </purchase_order>
+            <vendor_panel>
+                <po_edit_show_product_links>1</po_edit_show_product_links>
+            </vendor_panel>
         </udropship>
     </default>
     <admin>
