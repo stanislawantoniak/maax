@@ -13,7 +13,7 @@
 	<div class="section " id="content-main">
 		<section class="main bg-w">
 			<header class="title-section">
-				<div class="headerTop">
+				<div class="headerTop clearfix">
 					<div class="table-row clearfix" id="order_header">
 						<div class="pull-left">
 							<h2><?php echo $this->__("Order number") . ': ' . $this->getOrder()->getIncrementId(); ?></h2>
@@ -25,6 +25,7 @@
 					</div>
 				</div>
 				<?php $_grandTotal = $this->getGrandTotal(); ?>
+
 				<p class="visible-xs"><?php echo $this->__('Order date') . ': ' . date('Y-m-d', strtotime($this->getOrder()->getCreatedAt())); ?></p>
 				<p><?php echo $this->__('Status') . ': ' . $this->getOrder()->getStatusLabel(); ?></p>
 				<p><?php echo $this->__('Total order value') . ': ' . Mage::helper('core')->formatPrice($_grandTotal); ?> </p>
