@@ -69,3 +69,6 @@
 "Vendor not allowed to get this invoice","Sprzedawca nie jest uprawniony do wyświetlenia tej faktury"
 "Get invoice","Pobierz fakturę"
 "Can't delete. Payment in statement","Nie można usunąć. Płatnośc uwzględniona w rozliczeniu"
+"[%s] Create overpayment refund on %s","[%s] Utworzono zwrot z nadpłaty na %s"
+"[%s] Refund not created","[%s] Nie utworzono zwrotu"
+"[%s] Error at create overpayment refund. Please contact with administrators.","[%s] Wystąpił błąd przy towrzeniu zwrotu. Skontaktuj się z administratorem sklepu"
