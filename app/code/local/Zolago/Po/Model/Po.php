@@ -664,6 +664,16 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 		return -(round((float)$this->getGrandTotalInclTax()-(float)$this->getPaymentAmount(),4));
 	}
 
+	/**
+	 * @return mixed
+	 */
+	public function getDebtAmountFormatted()
+	{
+		$debtAmount = abs($this->getDebtAmount());
+		$debtAmount = number_format($debtAmount, 2, '.', '');
+		return Mage::helper('core')->currency($debtAmount, true, false);
+	}
+
 	public function getCurrencyFormattedAmount($amount) {
 		return Mage::helper('core')->currency(
 			$amount,
