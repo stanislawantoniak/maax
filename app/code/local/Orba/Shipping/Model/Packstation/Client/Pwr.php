@@ -126,6 +126,7 @@ class Orba_Shipping_Model_Packstation_Client_Pwr extends Orba_Shipping_Model_Cli
        $this->_prepareSenderAddress($message);       
        $this->_prepareReceiverAddress($message);
        $this->_prepareReturnAddress($message);
+       $message->SenderOrders = $this->_settings['orderId'];
        $message->PrintAdress = 1;
        $message->PrintType = 1;
        if ($this->_settings['cod']) {
@@ -133,7 +134,7 @@ class Orba_Shipping_Model_Packstation_Client_Pwr extends Orba_Shipping_Model_Cli
            $message->AmountCashOnDelivery = $this->_settings['cod'];
            $message->TransferDescription = str_replace('-',' ',Mage::helper('zospwr')->getDescriptionTransfer($this->_settings['orderId']));
        }       
-       $message->Insurance = $this->_settings['insurance'];       
+       $message->Insurance = (bool)$this->_settings['insurance'];       
        $message->PackValue = $this->_settings['value'];
        $data = $this->_sendMessage('GenerateLabelBusinessPack',$message);
        $result = $this->_prepareResult($data,'GenerateLabelBusinessPackResult','GenerateLabelBusinessPack');       
