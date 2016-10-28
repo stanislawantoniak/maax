@@ -133,11 +133,17 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
             if (!is_array($orderIds)) {
                 $orderIds = array($orderIds);
             }
+
+            $showCustomerEmail = FALSE;
+            if (property_exists($request, 'showCustomerEmail'))
+                $showCustomerEmail = $request->showCustomerEmail;
+
+
             /** @var Zolago_Po_Model_Po $model */
             $model    = Mage::getModel('zolagopo/po');
             $user = $this->getUserByToken($token);
             $vendor = Mage::getModel('udropship/vendor')->load($user->getVendorId());
-            $allData = $model->ghapiGetOrdersByIncrementIds($orderIds, $vendor);
+            $allData = $model->ghapiGetOrdersByIncrementIds($orderIds, $vendor, $showCustomerEmail);
 
             // Checking if ids are correct
             $allDataIds = array();
@@ -508,8 +514,10 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
     /**
      * @throws Mage_Core_Exception
      */
-    protected function throwWrongCourierName() {
+    protected function throwWrongCourierName($_courier) {
+		Mage::log("error_wrong_courier_name: " . $_courier);
         Mage::throwException('error_wrong_courier_name');
+
     }
 
     public function getCourierCode($courier) {
