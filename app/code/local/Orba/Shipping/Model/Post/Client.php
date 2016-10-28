@@ -452,7 +452,7 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
         $cod->kwotaPobrania = $value *100; // gr
         if ($cod->sposobPobrania == sposobPobraniaType::RACHUNEK_BANKOWY) {
             $cod->nrb = Mage::getStoreConfig('carriers/zolagopp/cod_account_number');
-            $cod->tytulem = sprintf(Mage::getStoreConfig('carriers/zolagopp/cod_transfer_title'),$this->_settings['udpo']->getIncrementId());
+            $cod->tytulem = sprintf(Mage::getStoreConfig('carriers/zolagopp/cod_transfer_title'),$this->_settings['orderId']);
         }
         return $cod;
     }
@@ -485,6 +485,7 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
         $data->masa = $this->_settings['weight'];
         $data->wartosc = $this->_settings['value']*100; // gr
         $data->termin = terminRodzajType::EKSPRES24;
+        $data->numerPrzesylkiKlienta = $settings['orderId'];
         if ($insurance = $this->_prepareInsurance()) {
             $data->ubezpieczenie = $insurance;
         }
