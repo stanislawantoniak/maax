@@ -68,7 +68,7 @@ class Zolago_Adminhtml_Model_Sales_Transactions_Source extends Varien_Object
 
         $options = array();
         foreach ($collection as $collectionItem) {
-            $parentId = $collectionItem->getParentId();
+            $parentId = $collectionItem->getOrderId();
 
             $options[$parentId]["increment_id"] = $collectionItem->getIncrementId();
             $options[$parentId]["date"] = date('d.m.Y', $dateModel->timestamp(strtotime($collectionItem->getCreatedAt())));
