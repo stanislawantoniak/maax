@@ -98,7 +98,16 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 							<?php endif; ?>
 
 							<meta itemprop="itemCondition" itemtype="http://schema.org/OfferItemCondition" content="http://schema.org/NewCondition"/>
-							<span class="old-price"><?php if($_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE && !$_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE &&  $_product->getStrikeoutPrice() != $_product->getFinalPrice()) : ?><?php echo str_replace(" ","&nbsp;",Mage::helper('core')->currency($_product->getStrikeoutPrice(), true, false)); ?><?php endif; ?></span>
+							<span class="old-price">
+								<?php if(
+									$_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE
+									&& $_product->getTypeId() !== Mage_Catalog_Model_Product_Type::TYPE_BUNDLE
+									&&  $_product->getStrikeoutPrice() != $_product->getFinalPrice()
+								) : ?>
+
+									<?php echo str_replace(" ","&nbsp;",Mage::helper('core')->currency($_product->getStrikeoutPrice(), true, false)); ?>
+								<?php endif; ?>
+							</span>
                             <span class="price">
                                 <?php if (
 									$_product->getTypeId() != Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE
