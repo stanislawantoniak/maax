@@ -1,3 +1,18 @@
+<?php
+    if ($id = Mage::getSingleton('core/session')->getAggregatedPrintId()) {
+          Mage::getSingleton('core/session')->setAggregatedPrintId(null);
+          $url =  Mage::getUrl('udpo/vendor_aggregated/download',array('id'=>$id));
+        
+?>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+    document.location.href="<?php echo $url ?>";
+});
+</script>
+<?php
+    }
+?>
+
 <?php /* @var $this Zolago_Po_Block_Po */ ?>
 <?php $_officeList = $this->_getPostOfficeList(); ?>
 <div class="container">
