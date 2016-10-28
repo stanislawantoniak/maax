@@ -412,7 +412,7 @@ Mall.listing = {
 			promoFlagLabel = "",
 			isNewLabel = "",
 			bestsellerLabel ="",
-			flagLabel;
+			flagLabel = "";
 
 		var flag = product[15];
 
