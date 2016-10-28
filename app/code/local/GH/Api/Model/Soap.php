@@ -533,7 +533,7 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
 	    	return Orba_Shipping_Model_Carrier_Dpd::CODE;
         }
 
-        $this->throwWrongCourierName();
+        $this->throwWrongCourierName($_courier);
     }
 
 	protected function arrayToStdClass($array) {
