@@ -108,22 +108,14 @@ class Zolago_Adminhtml_Sales_TransactionsController
                     ->setIsClosed(1);
 
                 $transactionNew = $transaction->save();
-                $transaction->setTxnId($transactionNew->getId())->save();
 
+                $transaction->setTxnId($transactionNew->getId())->save();
                 if ($isNewTransaction) {
                     $this->_getSession()->addSuccess($this->__('Bank payment has been successfully created.'));
                 } else {
                     $this->_getSession()->addSuccess($this->__('Bank payment has been successfully changed.'));
                 }
                 $this->_changePaymentStatus($order);
-
-                /* @var $statusModel Zolago_Po_Model_Po_Status */
-                $statusModel = $_po->getStatusModel();
-                if ($_po->getDebtAmount() >= 0) {
-                    $statusModel->processDirectRealisation($_po, true);
-                } else {
-                    $statusModel->changeStatus($_po, Zolago_Po_Model_Po_Status::STATUS_PAYMENT);
-                }
 
             } catch (Exception $e) {
                 Mage::logException($e);
