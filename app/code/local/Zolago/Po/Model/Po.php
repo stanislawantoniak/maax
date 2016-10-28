@@ -1040,6 +1040,7 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 				break;
 			default:
 				$dMethod = self::GH_API_DELIVERY_METHOD_STANDARD_COURIER;
+				break;
 		}
 		return $dMethod;
 	}
