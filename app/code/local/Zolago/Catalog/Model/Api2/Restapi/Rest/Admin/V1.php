@@ -307,23 +307,23 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         $priceType = []; $priceMarginValues = []; $priceMSRPSourceManual= [];
         if(!empty($notVisibleIndividuallySkus)){
             //converter_price_type from configurable products
-            $priceType = $model->getConverterPriceTypeConfigurable($skuS);
+            $priceType = array_merge($priceType,$model->getConverterPriceTypeConfigurable($skuS));
 
             //price_margin from configurable products
-            $priceMarginValues = $model->getPriceMarginValuesConfigurable($skuS);
+            $priceMarginValues = array_merge($priceMarginValues,$model->getPriceMarginValuesConfigurable($skuS));
 
             //converter_msrp_type from configurable products
-            $priceMSRPSourceManual = $model->getMSRPSourceValuesManualConverterConfigurable($skuS);
+            $priceMSRPSourceManual = array_merge($priceMSRPSourceManual,$model->getMSRPSourceValuesManualConverterConfigurable($skuS));
         }
         if(!empty($visibleIndividuallySkus)){
             //converter_price_type from simple products
-            $priceType = $model->getConverterPriceTypeSimple($visibleIndividuallySkus);
+            $priceType = array_merge($priceType,$model->getConverterPriceTypeSimple($visibleIndividuallySkus));
 
             //price_margin from simple products
-            $priceMarginValues = $model->getPriceMarginValuesSimple($visibleIndividuallySkus);
+            $priceMarginValues = array_merge($priceMarginValues,$model->getPriceMarginValuesSimple($visibleIndividuallySkus));
 
             //converter_msrp_type from simple products
-            $priceMSRPSourceManual = $model->getMSRPSourceValuesManualConverterSimple($visibleIndividuallySkus);
+            $priceMSRPSourceManual = array_merge($priceMSRPSourceManual,$model->getMSRPSourceValuesManualConverterSimple($visibleIndividuallySkus));
         }
 
 
