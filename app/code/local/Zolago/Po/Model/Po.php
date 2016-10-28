@@ -21,6 +21,18 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 {
 	const TYPE_POSHIPPING = "poshipping";
 	const TYPE_POBILLING = "pobilling";
+
+
+	const GH_API_PAYMENT_METHOD_CC = 'credit_card';
+	const GH_API_PAYMENT_METHOD_ONLINE_BT = 'online_bank_transfer';
+	const GH_API_PAYMENT_METHOD_BT = 'bank_transfer';
+	const GH_API_PAYMENT_METHOD_COD = 'cash_on_delivery';
+
+	const GH_API_DELIVERY_METHOD_STANDARD_COURIER = 'standard_courier';
+	const GH_API_DELIVERY_METHOD_INPOST_LOCKER = 'inpost_parcel_locker';
+	const GH_API_DELIVERY_METHOD_POLISH_POST = 'polish_post';
+	const GH_API_DELIVERY_METHOD_PWR_LOCKER = 'pwr_parcel_locker';
+	const GH_API_DELIVERY_METHOD_PICKUPPOINT = 'pickuppoint';
 	
 	/**
 	 * Email template for new status
@@ -876,12 +888,13 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
         }
     }
 
-    /**
-     * @param $ids int|array
-     * @param $vendor Zolago_Dropship_Model_Vendor
-     * @return array
-     */
-    public function ghapiGetOrdersByIncrementIds($ids, $vendor) {
+	/**
+	 * @param $ids
+	 * @param $vendor
+	 * @param bool $showCustomerEmail
+	 * @return array
+	 */
+    public function ghapiGetOrdersByIncrementIds($ids, $vendor, $showCustomerEmail = FALSE) {
 
         if (is_numeric($ids)) $ids = array($ids);
         if (!is_array($ids)) return array();
@@ -910,9 +923,14 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
             $list[$i]['delivery_method']          = $po->getApiDeliveryMethod();
             $list[$i]['shipment_tracking_number'] = $po->getShipmentTrackingNumber();
             $list[$i]['pos_id']                   = $po->getExternalId();
+            $list[$i]['external_order_id']	  = $po->getExternalOrderId();
             $list[$i]['order_currency']           = $po->getStore()->getCurrentCurrencyCode();
 			$list[$i]['order_email']              = $this->getApiOrderEmail($po->getIncrementId());
 			$list[$i]['customer_id']              = $po->getCustomerId();
+
+			if ($showCustomerEmail)
+				$list[$i]['customer_email'] = $po->getCustomerEmail();
+
 
 
             $list[$i]['invoice_data']['invoice_required'] = $po->needInvoice();
@@ -977,16 +995,16 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
      */
     public function ghapiPaymentMethod() {
         if ($this->isCC()) {
-            return 'credit_card';
+            return self::GH_API_PAYMENT_METHOD_CC;
         }
         if ($this->isGateway()) {
-            return 'online_bank_transfer';
+            return self::GH_API_PAYMENT_METHOD_ONLINE_BT;
         }
         if ($this->isPaymentBanktransfer()) {
-            return 'bank_transfer';
+            return self::GH_API_PAYMENT_METHOD_BT;
         }
         if ($this->isCod()) {
-            return 'cash_on_delivery';
+            return self::GH_API_PAYMENT_METHOD_COD;
         }
         return '';
     }
@@ -1009,17 +1027,19 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 		$methodCode = $this->getShippingMethodInfo()->getDeliveryCode();
 		switch ($methodCode) {
 			case Orba_Shipping_Model_Packstation_Inpost::CODE:
-				$dMethod = 'inpost_parcel_locker'; // Paczkomaty InPost
+				$dMethod = self::GH_API_DELIVERY_METHOD_INPOST_LOCKER; // Paczkomaty InPost
 				break;
 			case Orba_Shipping_Model_Post::CODE:
-				$dMethod = 'polish_post'; // Poczta Polska
+				$dMethod = self::GH_API_DELIVERY_METHOD_POLISH_POST; // Poczta Polska
 				break;
 			case Orba_Shipping_Model_Packstation_Pwr::CODE:
-				$dMethod = 'pwr_parcel_locker'; // Paczka w Ruchu
+				$dMethod = self::GH_API_DELIVERY_METHOD_PWR_LOCKER; // Paczka w Ruchu
+				break;
+			case ZolagoOs_PickupPoint_Helper_Data::CODE:
+				$dMethod = self::GH_API_DELIVERY_METHOD_PICKUPPOINT; // Odbiór osobisty
 				break;
 			default:
-				$dMethod = 'standard_courier';
-				break;
+				$dMethod = self::GH_API_DELIVERY_METHOD_STANDARD_COURIER;
 		}
 		return $dMethod;
 	}
