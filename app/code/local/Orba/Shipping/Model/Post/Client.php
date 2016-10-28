@@ -621,6 +621,7 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
         $message->urzadNadania = $this->getParam('postOffice');
         $result = $this->_sendMessage('sendEnvelope',$message);
         if (!empty($result->error)) {
+            Mage::log($result);
             Mage::throwException($result->error->errorDesc);
         }
         if (empty($result)) {
@@ -644,5 +645,23 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
      protected function _getHelper() {
          return Mage::helper('orbashipping/post');
      }
+     
+    /**
+     * aggregated
+     */
+     public function getOutboxBook($id) {
+         $message = new getOutboxBook();
+         $message->idEnvelope = $id;
+         $result = $this->_sendMessage('getOutboxBook',$message);
+        if (!empty($result->error)) {
+            Mage::log($result);            
+            Mage::throwException($result->error->errorDesc);
+        }
+        if (empty($result)) {
+            Mage::throwException(Mage::helper('orbashipping')->__('Empty content'));
+        }
+        return $result;
+     }
+
 }
 
