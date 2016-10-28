@@ -56,7 +56,7 @@ class Zolago_Adminhtml_Model_Sales_Transactions_Source extends Varien_Object
         if (!$readonly) {
             $collection->addAttributeToFilter('order_payment.method', "banktransfer");
             $collection->addAttributeToFilter('po.udropship_status', array("in" => 
-                array( Zolago_Po_Model_Po_Status::STATUS_PAYMENT)                
+                array( Zolago_Po_Model_Po_Status::STATUS_PAYMENT,Zolago_Po_Model_Po_Status::STATUS_ACK,Zolago_Po_Model_Po_Status::STATUS_BACKORDER)
             ));
         }
         $collection->addAttributeToFilter('main_table.parent_item_id', array("null" => true));
