@@ -425,10 +425,10 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 					'redirect_url' => $product->getNoVendorContextUrl(),
 					'price' => $coreHelper->currency($product->getFinalPrice(), true, false),
 				);
-				if($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE){
-					list($_minimalPriceInclTax) = $product->getPriceModel()->getTotalPrices($product, null, true, false);
-					$recentlyViewedContent[(int)$product->getId()]['price'] = $coreHelper->currency($_minimalPriceInclTax, true, false);
-				}
+//				if($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE){
+//					list($_minimalPriceInclTax) = $product->getPriceModel()->getTotalPrices($product, null, true, false);
+//					$recentlyViewedContent[(int)$product->getId()]['price'] = $coreHelper->currency($_minimalPriceInclTax, true, false);
+//				}
 				// add old price only if should be visible
 				if ($product->getStrikeoutPrice() > $product->getPrice()) {
 					$recentlyViewedContent[(int)$product->getId()]['old_price'] =
