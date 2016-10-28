@@ -14,6 +14,7 @@ class Orba_Shipping_Model_Post extends Orba_Shipping_Model_Carrier_Abstract {
         $value = $udpo->getSubtotalInclTax();
         $insurance = $params->getParam('insurance');
         $order = $shipment->getOrder();
+        $codValue = 0;
         if ($order->getPayment()->getMethod() == 'cashondelivery') {
             $codValue = $udpo->getGrandTotalInclTax()-$udpo->getPaymentAmount();
         }
@@ -30,6 +31,7 @@ class Orba_Shipping_Model_Post extends Orba_Shipping_Model_Carrier_Abstract {
                                 'value' => $value,
                                 'cod' => $codValue,
                                 'insurance' => $insurance,
+                                'orderId' => $udpo->getIncrementId(),
                             );
 
         $settings = array();
