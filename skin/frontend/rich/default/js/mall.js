@@ -1639,46 +1639,7 @@ Mall.delegateLikeEvents = function() {
 	});
 };
 
-Mall.socialLogin = function(url,redirect) {
-	Mall.socialLoginInterval = Mall.isFirefox() ? 1000 : 150;
-	Mall.storeCheckoutValues();
-	Mall.socialLoginWindow = window.open(url, 'SocialLogin', 'width=540, height=440');
-	Mall.isGuestCheckout = document.location.href.search('checkout/guest/index') !== -1;
-	Mall.pollTimer = window.setInterval(function () {
-		//check if window is in our domain
-		var socialLoginWindowUrl = false;
-		try {
-			socialLoginWindowUrl = Mall.socialLoginWindow.document.URL;
-		} catch(error) {
-			//do nothing - it means that popup is in different domain
-		}
 
-		//handle popup close
-		if(Mall.socialLoginWindow.closed && Mall.isGuestCheckout) {
-			//reload window if someone closed popup during guest checkout
-			window.location.reload();
-			window.clearInterval(Mall.pollTimer);
-		} else if(socialLoginWindowUrl && socialLoginWindowUrl.indexOf(redirect) > -1) {
-			//proceed only if popup is in our domain and is not closed
-
-			var elem = Mall.socialLoginWindow.document.getElementById('redirect');
-			var url  = elem.innerText ? elem.innerText : (elem.textContent ? elem.textContent : false);
-
-			Mall.socialLoginWindow.close();
-
-			if(url) {
-				window.location = url;
-			} else if(Mall.isGuestCheckout) { //always reload when window closes in checkout
-				window.location.reload();
-			}
-
-			//clear timer - always on the end because of mobile browsers (firefox for example)
-			window.clearInterval(Mall.pollTimer);
-		}
-
-
-	}, Mall.socialLoginInterval);
-};
 
 Mall.storeCheckoutValues = function() {
 	if(typeof localStorage != "undefined") {

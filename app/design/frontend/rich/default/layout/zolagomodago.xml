@@ -918,12 +918,6 @@
           <block type="zolagomodago/checkout_onepage_shared_address_shipping" as="shipping" name="checkout.onepage.guest.address.shipping" template="checkout/onepage/shared/address/shipping.phtml"/>
           <block type="zolagomodago/checkout_onepage_shared_address_billing" as="billing" name="checkout.onepage.guest.address.billing" template="checkout/onepage/shared/address/billing.phtml"/>
           <block type="core/template" name="checkout.onepage.guest.password" as="password" template="checkout/onepage/shared/address/password.phtml"/>
-          <block type="sociallogin/register" name="ced_sociallogin_register" template="sociallogin/register.phtml">
-            <block type="sociallogin/google_button" name="ced_sociallogin_checkout_google_button" template="sociallogin/google/button.phtml"/>
-            <block type="sociallogin/facebook_button" name="ced_sociallogin_checkout_facebook_button" template="sociallogin/facebook/button.phtml"/>
-            <block type="sociallogin/twitter_button" name="ced_sociallogin_checkout_twitter_button" template="sociallogin/twitter/button.phtml"/>
-            <block type="sociallogin/linkedin_button" name="ced_sociallogin_checkout_linkedin_button" template="sociallogin/linkedin/button.phtml"/>
-          </block>
         </block>
         <block type="zolagomodago/checkout_onepage_shared_shippingpayment" name="checkout.onepage.guest.shippingpayment" template="checkout/onepage/shared/shippingpayment.phtml">
           <block type="zolagomodago/checkout_onepage_shared_shippingpayment_shipping" name="checkout.onepage.guest.shippingpayment.shipping" as="shipping" template="checkout/onepage/shared/shippingpayment/shipping.phtml"/>
@@ -1355,10 +1349,7 @@
       </action>
     </reference>
     <reference name="my.account.wrapper">
-      <block type="customer/form_edit" name="customer.account.password" template="zolagocustomer/form/editpassword.phtml">
-        <block type="sociallogin/google_button" name="social-login-google" template="sociallogin/google/button.phtml"/>
-        <block type="sociallogin/facebook_button" name="social-login-facebook" template="sociallogin/facebook/button.phtml"/>
-      </block>
+      <block type="customer/form_edit" name="customer.account.password" template="zolagocustomer/form/editpassword.phtml" />
     </reference>
     <reference name="content">
       <block type="zolagomodago/home_slider" name="zolago_modago_home_sliderlastseen" template="slider/lastseen.phtml"/>
@@ -1386,14 +1377,6 @@
   </customer_account_resetpassword>
   <customer_account_create>
     <update handle="zolago_modago_customer_handle"/>
-    <reference name="customer_form_register">
-      <block type="sociallogin/register" name="ced_sociallogin_register" template="sociallogin/register.phtml">
-        <block type="sociallogin/google_button" name="ced_sociallogin_checkout_google_button"/>
-        <block type="sociallogin/facebook_button" name="ced_sociallogin_checkout_facebook_button"/>
-        <block type="sociallogin/twitter_button" name="ced_sociallogin_checkout_twitter_button"/>
-        <block type="sociallogin/linkedin_button" name="ced_sociallogin_checkout_linkedin_button"/>
-      </block>
-    </reference>
   </customer_account_create>
   <!-- ################################################################### -->
   <!-- Sales												 -->

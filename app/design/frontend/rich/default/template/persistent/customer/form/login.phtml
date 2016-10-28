@@ -1,17 +1,9 @@
-<?php
-/** @var $this Mage_Customer_Block_Form_Login */
-$_hlp = Mage::helper("zolagocustomer");
-$_isCheckout = $this->getRequest()->getParam("is_checkout");
-$socialLogin = $this->getChildHtml('ced_sociallogin_login');
-$socialLogin = false;
-?>
-
 <div id="content" class="container-fluid">
 	<div id="logIn" class="row">
 		<div id="content-main" class="">
 			<div class="col-sm-6 column-block login-column">
 				<div class="main bg-w equalBlock col-01">  
-					<form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="login-form" class="form-horizontal" autocomplete="off" role="form" <?php if(!$socialLogin):?>style="margin-bottom:70px"<?php endif; ?>>
+					<form action="<?php echo $this->getPostActionUrl() ?>" method="post" id="login-form" class="form-horizontal" autocomplete="off" role="form" style="margin-bottom:70px">
 						<?php echo $this->getBlockHtml('formkey'); ?>
 						<?php if($_isCheckout):?>
 							<input name="is_checkout" type="hidden" value="1"/>
@@ -50,12 +42,8 @@ $socialLogin = false;
 							</ul>
 							<?php /* echo $this->getChildHtml('persistent.remember.me') */; ?>
 							<?php echo $this->getChildHtml('form.additional.info'); ?>
-							<button type="submit" name="send" class="button button-primary large link pull-right" <?php if(!$socialLogin): ?>style="bottom:30px;" <?php endif;?>id="login-button"><?php echo $_hlp->__('Login') ?></button>
-							<?php if($socialLogin): ?>
-							<footer class="footer-section">
-								<?php echo $socialLogin ?>
-							</footer>
-							<?php endif; ?>
+							<button type="submit" name="send" class="button button-primary large link pull-right" style="bottom:30px;" id="login-button"><?php echo $_hlp->__('Login') ?></button>
+
 						</section>
 					</form>
 				</div>
