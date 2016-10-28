@@ -18,12 +18,17 @@ class Orba_Shipping_Model_Packstation_Inpost extends Orba_Shipping_Model_Carrier
         } else {
             $deliveryValue = 0;
         }
+        $insuranceValue = $udpo->getSubTotalInclTax(); 
+        if ($insuranceValue < Mage::getStoreConfig('carriers/ghinpost/min_insurance_value')) {
+            $insuranceValue = 0; 
+        }
 
         $shipmentSettings = array(
                                 'size' => $size,
                                 'pos' => $pos,
                                 'udpo' => $udpo,
                                 'cod' => $deliveryValue,                                
+                                'insurance' => $insuranceValue,
                             );
 
         $settings = Mage::helper('ghinpost')->getApiSettings($vendor,$pos);

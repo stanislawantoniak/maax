@@ -21,13 +21,16 @@ class Orba_Shipping_Model_Packstation_Pwr extends Orba_Shipping_Model_Carrier_Ab
         } else {
             $deliveryValue = 0;
         }
-
+        $insuranceValue = $udpo->getSubTotalInclTax(); 
+        if ($insuranceValue < Mage::getStoreConfig('carriers/zospwr/min_insurance_value')) {
+            $insuranceValue = 0; 
+        }
         $settings = array (
             'udpo'	=> $udpo,
             'destinationCode' => $udpo->getDeliveryPointName(),
             'boxSize' => $boxSize,
-            'insurance' => $udpo->getGrandTotalInclTax(),
-            'value' => $udpo->getSubTotalIncTax()*100,
+            'insurance' => $insuranceValue*100,
+            'value' => $udpo->getSubTotalInclTax()*100,
             'cod'	=> $deliveryValue*100,
             'orderId'   => $udpo->getIncrementId(),
         );
