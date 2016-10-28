@@ -136,12 +136,16 @@ class Orba_Shipping_Model_Post extends Orba_Shipping_Model_Carrier_Abstract {
      */
     public function setShipped() {
             $postOfficeId = Mage::app()->getRequest()->getParam('post_office');
+            $aggregatedId = Mage::app()->getRequest()->getParam('id');
             $client = $this->getClient();
             $client->setParam('postOffice',$postOfficeId);            
             $result = $client->sendEnvelope();
-            // @todo process statuses 
-            // @see Orba_Shipping_Model_Post_Client_Wsdl
-            // @see envelopeStatusType
+            $box = $client->getOutboxBook($result->idEnvelope);
+            // save pdf
+            $pdf = $this->getAggregatedPdfObject();
+            $pdf->saveFile($box->pdfContent,$aggregatedId);
+            // save to session
+            Mage::getSingleton('core/session')->setAggregatedPrintId($aggregatedId);
     }
     public function getShippingModal() {
         return Mage::app()->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_zolagopp');
@@ -151,5 +155,8 @@ class Orba_Shipping_Model_Post extends Orba_Shipping_Model_Carrier_Abstract {
     }
     public function getLetterUrl() {
         return 'orbashipping/post/lp';
+    }
+    public function getAggregatedPdfObject() {
+        return Mage::getModel('zolagopo/aggregated_post');
     }
 }
