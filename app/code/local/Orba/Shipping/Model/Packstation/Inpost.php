@@ -29,6 +29,7 @@ class Orba_Shipping_Model_Packstation_Inpost extends Orba_Shipping_Model_Carrier
                                 'udpo' => $udpo,
                                 'cod' => $deliveryValue,                                
                                 'insurance' => $insuranceValue,
+                                'orderId' => $udpo->getIncrementId(),
                             );
 
         $settings = Mage::helper('ghinpost')->getApiSettings($vendor,$pos);
