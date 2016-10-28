@@ -11,9 +11,15 @@
         <rewrite>
           <!-- skip add price data if flag seted-->
           <observer>Zolago_Bundle_Model_Observer</observer>
-          <catalog_product_edit_tab_attributes>Zolago_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Attributes</catalog_product_edit_tab_attributes>
         </rewrite>
       </bundle>
     </models>
+    <blocks>
+      <bundle>
+        <rewrite>
+          <adminhtml_catalog_product_edit_tab_attributes>Zolago_Bundle_Block_Adminhtml_Catalog_Product_Edit_Tab_Attributes</adminhtml_catalog_product_edit_tab_attributes>
+        </rewrite>
+      </bundle>
+    </blocks>
   </global>
 </config>
