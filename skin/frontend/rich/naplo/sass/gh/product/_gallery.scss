@@ -211,9 +211,15 @@
 			right: 0;
 		}
 	}
-	#productGalleryBigMedia, #productGalleryBigMediaOpen {
+	#productGalleryBigMedia,
+	#productGalleryBigMediaOpen {
 		.item {
-			//@include productFlagLabel;
+			@include productFlagLabel;
+
+			.listing-label {
+				top: 0 !important;
+				right: 0 !important;
+			}
 		}
 		width: 100%;
 		max-width:409px;
