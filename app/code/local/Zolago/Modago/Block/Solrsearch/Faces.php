@@ -39,6 +39,13 @@ class Zolago_Modago_Block_Solrsearch_Faces extends Zolago_Solrsearch_Block_Faces
                 $block = "zolagomodago/solrsearch_faces_enum_icon";
                 break;
 
+            case "zolagosolrsearch/faces_flag":
+                $block = "zolagosolrsearch/faces_flag";
+                break;
+            case "zolagosolrsearch/faces_rating":
+                $block = "zolagosolrsearch/faces_rating";
+                break;
+
             default:
                 $block = "zolagomodago/solrsearch_faces_enum_droplist";
         }
