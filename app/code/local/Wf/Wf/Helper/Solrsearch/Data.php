@@ -64,7 +64,7 @@ class Wf_Wf_Helper_Solrsearch_Data extends Zolago_Solrsearch_Helper_Data {
                 keepAspectRatio(true)->
                 constrainOnly(true)->
                 keepFrame(true)->
-                resize(262, 335);
+                resize(462, 535);
             } catch (Exception $ex) {
                 Mage::logException($ex);
             }
