@@ -584,7 +584,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 		$attributeSetId = $_product->getData('attribute_set_id');
 		$brandId = $_product->getData( 'manufacturer');
 
-		$sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attributeSetId, $brandId);
+		$sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attributeSetId, $brandId,$_product);
 
 		return $sizeTableValue;
 	}
