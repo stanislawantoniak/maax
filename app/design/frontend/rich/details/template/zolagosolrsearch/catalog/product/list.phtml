@@ -69,11 +69,13 @@ $_products = $_cache['products'];
 											 * product[11]= skuv
 											 * product[12]= product_flag
 											 * product[13]= is_new
-											 * product[15]= flag
+											 * product[14]= is_bestseller
+											 * product[15]= getProductBestFlag
 											 * product[16]= prod_type
 											 * product[17] = qty
 											 * product[18] = min_qty
 											 */
+											$flag = $product[15];
 											?>
 
 											<div id="prod-<?php echo $product[0];?>" class="item col-phone col-xs-4 col-sm-6 col-md-4 col-lg-4 size14">
@@ -84,10 +86,10 @@ $_products = $_cache['products'];
 													   data-sku="<?php echo $product[10]; ?>"
 													   data-skuv="<?php echo $product[11]; ?>"
 													   data-product-type="<?php echo $product[16]; ?>">
-														<?php if($product[15]) : ?>
+														<?php if($flag) : ?>
 															<div class="label-product">
-																<div class="listing-label type-label-<?php echo $product[15]; ?>">
-																	<div class="flag-<?php echo $product[15];?>"></div>
+																<div class="listing-label type-label-<?php echo $flag; ?>">
+																	<div class="flag-<?php echo $flag;?>"></div>
 																</div>
 															</div>
 														<?php endif;?>

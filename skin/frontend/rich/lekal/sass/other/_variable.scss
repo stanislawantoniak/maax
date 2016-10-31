@@ -246,6 +246,56 @@ $colorProductStrikeOutPrice:             $color_000;
         }
     }
 }
+
+@mixin productFlagLabel {
+    .label-product {
+        text-align: center;
+        z-index: 1;
+
+        .listing-label {
+            color: #fff;
+            height: 35px;
+            line-height: 35px;
+            font-size: 13px;
+            padding: 0 20px;
+            font-family: $fontRegular;
+            display: inline-block;
+            top: 5px;
+            right: 10px;
+            position: absolute;
+            z-index: 100;
+            text-transform: uppercase;
+
+
+            &.type-label-new {
+                background: $backgroundColorFlagNew;
+            }
+            &.type-label-sale {
+                background: $backgroundColorFlagSale;
+            }
+
+            &.type-label-bestseller {
+                background: $backgroundColorFlagBestseller;
+            }
+            &.type-label-promotion {
+                background: $backgroundColorFlagPromotion;
+            }
+            .flag-bestseller:before {
+                content: "Bestseller";
+            }
+            .flag-promotion:before {
+                content: "Promocja";
+            }
+            .flag-sale:before {
+                content: "Wyprzedaż";
+            }
+            .flag-new:before {
+                content: "Nowość";
+            }
+
+        }
+    }
+}
 /***********************************************/
 $colorDropdownBorder:                   #ffffff;
 $colorDropdownBBoxShadow:               #ccc;
@@ -413,6 +463,11 @@ $colorProductExtraInfoBorder:           #EBEBEB;
 $boxShadowListingColor:                 #f5f3f4;
 $colorProductFinalPrice:                #dc4348;
 $colorProductStrikeOutPrice:            #8a8a8a;
+
+$backgroundColorFlagNew:                $color_adadad;
+$backgroundColorFlagBestseller:         $color_adadad;
+$backgroundColorFlagSale:               $color_adadad;
+$backgroundColorFlagPromotion:          $color_adadad;
 
 /*PRODUCT PAGE*/
 $galleryImageBorderColor:               #f1f1f1;

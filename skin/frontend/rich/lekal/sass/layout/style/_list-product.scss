@@ -15,7 +15,7 @@
       height:auto;
     }
   }
-  //@include productFlagLabel;
+  @include productFlagLabel;
   .logo_manufacturer {
     margin: 15px 8px;
     max-width: 100px;
