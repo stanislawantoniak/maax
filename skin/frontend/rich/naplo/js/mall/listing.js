@@ -451,7 +451,12 @@ Mall.listing = {
 	 */
     createProductEntityImprove: function(product) {
         var oldPrice = product[3] > product[4] ?  "<span class='old'>" + number_format(product[3], 2, ",", " ") + " " + Mall.getCurrencyBasedOnCode('PLN') +"</span>" : "";
+		var flagLabel = "";
+		var flag = product[15];
 
+		if(flag){
+			flagLabel = '<div class="label-product"><div class="listing-label type-label-'+flag+'"><div class="flag-'+flag+'"></div></div></div>';
+		}
 		var data = 	'<div id="prod-' + product[0] + '" class="item col-phone col-xs-4 col-sm-6 col-md-4 col-lg-4 size14">' +
 						'<div class="box_listing_product">' +
 							'<a href="' + product[2] + '" ' +
@@ -461,12 +466,8 @@ Mall.listing = {
 							'data-skuv="' + product[11] + '" ' +
 							'data-product-type="' + product[16] + '">';
 
-		if(product[15])
-					data += '<div class="label-product">' +
-								'<div class="listing-label type-label-' + product[15] + '">' +
-									'<div class="flag-' + product[15] + '"></div>' +
-								'</div>' +
-							'</div>';
+
+					data += flagLabel;
 		data += 			'<figure class="img_product boxed">' +
 								'<img ' +
 								'src="' + Mall.productImagesUrl + product[7] + '" ' +
