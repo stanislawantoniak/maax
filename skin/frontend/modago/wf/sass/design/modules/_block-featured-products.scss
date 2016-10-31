@@ -146,6 +146,7 @@
             .product-name {
               font-size: 15px;
               padding: 0;
+              white-space: initial;
               a {
                 font-weight: 400;
                 color: #3d3d3d;
@@ -155,9 +156,13 @@
                 font-family: $fontBlack;
                 width: 100%;
                 margin-bottom: 0.7142em;
+                overflow: hidden;
+                height: 2.3614em;
+                white-space: initial;
 
                 @media (max-width: $screen-xs-max) {
                   font-size: 0.9285em;
+                  height: 2.5em;
                 }
 
                 &:hover {
