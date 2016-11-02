@@ -36,7 +36,7 @@ if ($_product->getTypeId() == 'configurable') { //fix for simple products
 	/** @var Zolago_Catalog_Block_Product_View_Type_Configurable $salableCount */
 	$salableCount = Mage::getBlockSingleton('zolagocatalog/product_view_type_configurable')->getSalableCount();
 }
-$sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attributeSetId, $brandId);
+$sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attributeSetId, $brandId,$_product);
 ?>
 
 

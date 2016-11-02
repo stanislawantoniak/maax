@@ -1,5 +1,8 @@
 <?php
 class Zolago_Sizetable_Model_Sizetable extends Mage_Core_Model_Abstract{
+	
+	const ZOLAGO_SIZETABLE_ATTRIBUTE_CODE = 'custom_sizetable';
+
 
 	protected function _construct() {
 		$this->_init('zolagosizetable/sizetable');
