@@ -313,42 +313,12 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 	 * @param Zolago_Dropship_Model_Vendor|null $vendor
 	 * @return string
 	 */
-    public function getStoreDeliveryHeadline(Zolago_Dropship_Model_Vendor $vendor = null)
-    {
-        if (is_null($vendor)) {
-            $vendor = $this->getVendor();
-        }
-        $storeDeliveryHeadline = "";
-        /* @var $product Zolago_Catalog_Model_Product */
-        $product = $this->getProduct();
-
-        $inventory = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
-
-        $backorders = (int)$inventory->getBackorders();
-        $qty = (int)$inventory->getQty();
-
-        $backordersInfo = $product->getBackordersInfo();
-
-        if(!$product->isSalable()){
-            return $storeDeliveryHeadline;
-        }
-
-        if(
-            $inventory->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE
-        ){
-            //fo bundle always show from product
-            return $backordersInfo;
-        }
-        if (
-            $backorders > 0
-            && $qty == 0
-        ) {
-            $storeDeliveryHeadline = $backordersInfo;
-        } else {
-            $storeDeliveryHeadline = $vendor->getStoreDeliveryHeadline();
-        }
-        return $storeDeliveryHeadline;
-    }
+	public function getStoreDeliveryHeadline(Zolago_Dropship_Model_Vendor $vendor=null) {
+		if(is_null($vendor)){
+			$vendor = $this->getVendor();
+		}
+		return $vendor->getStoreDeliveryHeadline();
+	}
 
 	/**
 	 * @param Zolago_Dropship_Model_Vendor|null $vendor
@@ -614,7 +584,7 @@ class Zolago_Catalog_Block_Product_View extends Mage_Catalog_Block_Product_View
 		$attributeSetId = $_product->getData('attribute_set_id');
 		$brandId = $_product->getData( 'manufacturer');
 
-		$sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attributeSetId, $brandId);
+		$sizeTableValue = $_helperSizetable->getSizetableCMS($vendor_id, $storeId, $attributeSetId, $brandId,$_product);
 
 		return $sizeTableValue;
 	}
