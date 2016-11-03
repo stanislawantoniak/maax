@@ -425,6 +425,7 @@ class Zolago_Po_Model_Po_Status
         case self::STATUS_PAYMENT:
         case self::STATUS_ACK:
         case self::STATUS_PENDING:
+        case self::STATUS_TO_PICK:
             $statuses[self::STATUS_ONHOLD] = $hlp->getPoStatusName(self::STATUS_ONHOLD);
             $statuses[self::STATUS_CANCELED] = $hlp->getPoStatusName(self::STATUS_CANCELED);
             break;
