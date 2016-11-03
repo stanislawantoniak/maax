@@ -3,7 +3,7 @@
 /**
  * Class Zolago_Catalog_Model_Resource_ExternalStock
  */
-class Zolago_Catalog_Model_Resource_ExternalStock extends Mage_Core_Model_Resource_Db_Abstract
+class Zolago_Catalog_Model_Resource_External_Stock extends Mage_Core_Model_Resource_Db_Abstract
 {
 
     protected function _construct()
