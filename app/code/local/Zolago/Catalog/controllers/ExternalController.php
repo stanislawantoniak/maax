@@ -44,11 +44,13 @@ class Zolago_Catalog_ExternalController extends Mage_Core_Controller_Front_Actio
                                  );
             }
         } catch (Exception $xt) {
+            header("HTTP/1.0 400 Bad Request");
             $out = array (
                        'error' => 'bad_request',
                        'reason' => $xt->getMessage()
                    );
         }
+        header('Content-Type: text/plain;charset=utf-8');
         echo Zend_Json::encode($out);
         exit;
     }
