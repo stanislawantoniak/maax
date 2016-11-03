@@ -6,7 +6,7 @@ $installer->startSetup();
 
 //Adding Attribute converter_msrp_type
 $attributePriceType = $installer->addAttribute(
-    Mage_Catalog_Model_Product::ENTITY,
+    Mage_Catalog_Model_Product::ENTITY, 
 	Zolago_Sizetable_Model_Sizetable::ZOLAGO_SIZETABLE_ATTRIBUTE_CODE,
     array(
          'group'      => 'General',
