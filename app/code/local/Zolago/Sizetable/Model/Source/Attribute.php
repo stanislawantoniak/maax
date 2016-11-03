@@ -14,7 +14,7 @@ class Zolago_Sizetable_Model_Source_Attribute
                 $out[$item->getSizetableId()] = $item->getName();
             }
             $this->_options = $out;
-        }
+        } 
         return $this->_options;
     }
 }
