@@ -39,7 +39,7 @@ class Dotpay extends Mage_Shell_Abstract {
 				$help .= '    -action ' . substr($method, 0, -6);
 				$helpMethod = $method . 'Help';
 				if (method_exists($this, $helpMethod)) {
-					$help .= $this->$helpMethod();
+					$help .= "\n".$this->$helpMethod();
 				}
 				$help .= "\n";
 			}
@@ -76,7 +76,7 @@ class Dotpay extends Mage_Shell_Abstract {
 		}
 	}
 
-	public function tierCommissionActionHelp() {
+	public function makePayActionHelp() {
 		return "use ex: php shell/dotpay -action makePay -poid Y -amount 10.00";
 	}
 
