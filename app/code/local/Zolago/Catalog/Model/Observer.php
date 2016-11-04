@@ -290,7 +290,7 @@ class Zolago_Catalog_Model_Observer
                 return;
 
             //database write adapter
-            Mage::getResourceModel('zolagocatalog/externalStock')
+            Mage::getResourceModel('zolagocatalog/external_stock')
                 ->updateExternalStock($data);
 
         } catch (Mage_Exception $e) {
