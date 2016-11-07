@@ -1,10 +1,19 @@
 .recently-viewed {
-    .rwd-wrapper{
-        
-    }
-
     .rwd-item {
         padding:0px 5px;
+
+		.price {
+			color:$colorProductFinalPrice;
+			font-size: 14px;
+			font-family:$fontOpen;
+			text-align: center;
+			.old {
+				display: inline;
+				color:$colorFont;
+				text-decoration:line-through;
+				font-size:14px;
+			}
+		}
     }
 	h3.title-section {
 		padding-top:0px;

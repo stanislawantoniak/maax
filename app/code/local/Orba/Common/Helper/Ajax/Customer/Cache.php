@@ -172,7 +172,7 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 				return $cacheData['favorites_count'];
 			}
 		}
-		$this->getFavoritesDetails();
+		$this->getFavoritesDetails(true);
 		return $this->customerInfo['favorites_count'];
 	}
 
@@ -222,7 +222,7 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 				return $cacheData['favorites_products'];
 			}
 		}
-		$this->getFavoritesDetails();
+		$this->getFavoritesDetails(true);
 		return $this->customerInfo['favorites_products'];
 	}
 
@@ -429,9 +429,11 @@ class Orba_Common_Helper_Ajax_Customer_Cache extends Mage_Core_Helper_Abstract {
 					$recentlyViewedContent[(int)$product->getId()]['price'] = $coreHelper->currency($_minimalPriceInclTax, true, false);
 				}
 				// add old price only if should be visible
-				if ($product->getStrikeoutPrice() > $product->getPrice()) {
-					$recentlyViewedContent[(int)$product->getId()]['old_price'] =
-						$coreHelper->currency($product->getStrikeoutPrice(), true, false);
+				$_product = Mage::getModel("zolagocatalog/product")->load($product->getId());
+				
+				if ($_product->getStrikeoutPrice() != $_product->getFinalPrice()) {
+					$recentlyViewedContent[(int)$_product->getId()]['old_price'] =
+						$coreHelper->currency($_product->getStrikeoutPrice(), true, false);
 				}
 			}
 		}
