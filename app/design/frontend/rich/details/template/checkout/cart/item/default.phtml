@@ -32,6 +32,8 @@ $_helper = Mage::helper("zolagocataloginventory");
 $_helperCheckout = Mage::helper("zolagocheckout");
 $isVisibleProduct = $_item->getProduct()->isVisibleInSiteVisibility();
 $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage_Catalog_Model_Product_Attribute_Source_Msrp_Type::TYPE_BEFORE_ORDER_CONFIRM);
+
+$isBundleProduct = (bool)($this->getProduct()->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE);
 ?>
 
 
@@ -44,20 +46,22 @@ $canApplyMsrp = Mage::helper('catalog')->canApplyMsrp($_item->getProduct(), Mage
             <figure><a href="<?php echo $this->getProductUrl(); ?>"><img src="<?php echo $this->getProductThumbnail()->resize(53, 69); ?>" alt="<?php echo $this->escapeHtml($this->getProductName()) ?>" /></a></figure>
             <div class="description_checked_product">
                 <div class="product_name"><a href="<?php echo $this->getProductUrl(); ?>"><?php echo $this->escapeHtml($this->getProductName()) ?></a></div>
-                <?php if ($_options = $this->getOptionList()):?>
-                    <?php foreach ($_options as $_option) : ?>
-                        <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
+                <?php if(!$isBundleProduct): ?>
+                    <?php if ($_options = $this->getOptionList()):?>
+                        <?php foreach ($_options as $_option) : ?>
+                            <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
 
-                        <div class="product_size"><?php echo $this->escapeHtml($_option['label']) ?>: <?php echo $_formatedOptionValue['value'] ?>
-                            <?php if (isset($_formatedOptionValue['full_view'])): ?>
-                                <div class="truncated_full_value">
-                                    <?php echo $this->escapeHtml($_option['label']) ?>:
-                                    <?php echo $_formatedOptionValue['full_view'] ?>
-                                </div>
-                            <?php endif; ?>
-                        </div>
-                    <?php endforeach; ?>
-                <?php endif;?>
+                            <div class="product_size"><?php echo $this->escapeHtml($_option['label']) ?>: <?php echo $_formatedOptionValue['value'] ?>
+                                <?php if (isset($_formatedOptionValue['full_view'])): ?>
+                                    <div class="truncated_full_value">
+                                        <?php echo $this->escapeHtml($_option['label']) ?>:
+                                        <?php echo $_formatedOptionValue['full_view'] ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif;?>
+                <?php endif; ?>
                 <div class="product_availability"><span class="<?php if($_helper->getQuoteItemAvailableFlag($_item) == Zolago_CatalogInventory_Helper_Data::FLAG_IN_STOCK) : ?>icons-checked<?php else :?>icons-interjection<?php endif; ?>"><?php echo $_helper->getQuoteItemAvailableText($_item);?></span></div>
 
                 <?php $addInfoBlock = $this->getProductAdditionalInformationBlock(); ?>
