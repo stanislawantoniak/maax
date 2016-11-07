@@ -3,9 +3,21 @@ section#recently-viewed {
 	.recently-viewed {
 		.rwd-item {
 			padding:0px 5px;
+
+			.old-price {
+				color: $colorFont;
+				font-family: $fontRegular;
+				text-decoration: line-through;
+				margin-right:6px;
+			}
+			.old-price {
+				display: block;
+				line-height: 12px;
+				color: #3c3b3b;
+			}
 		}
 		h3.title-section-recently-viewed {			
-			font-size:18xp;
+			font-size:18px;
 			margin-bottom: 35px;
 			text-align:center;
 			padding-top: 0px;

@@ -345,6 +345,7 @@ var Mall = {
             		var image_url    = item.image_url;
             		var title        = item.title;
             		var price        = item.price;
+                    var old_price    =  (item.old_price !== undefined) ? ("<span class='old-price'>" + item.old_price + "</span>") : '';
 
             		recentlyViewedContent += "<a href='"+redirect_url+"' class='simple'>";
             		recentlyViewedContent += "<div class='container-fluid'>";
@@ -357,6 +358,7 @@ var Mall = {
             		recentlyViewedContent += "  <div class='col-lg-8 col-md-8 col-sm-8 col-xs-6 right-col no-gutter'>";
             		recentlyViewedContent += "   <div class='prod_name'>"+ title +"<div class='prod_name_fade'></div></div>";
             		recentlyViewedContent += "   <span class='wrapper-price'>";
+                    recentlyViewedContent += old_price
             		recentlyViewedContent += "    <span class='price'>"+price+"</span>"
             		recentlyViewedContent += "   </span>";
             		recentlyViewedContent += "  </div>";
