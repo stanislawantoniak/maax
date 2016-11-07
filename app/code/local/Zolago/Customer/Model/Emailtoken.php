@@ -2,7 +2,7 @@
 class Zolago_Customer_Model_Emailtoken extends Mage_Core_Model_Abstract{
     
     const EMAIL_TEMPLATE = "zolagocustomer_confirmemail"; 
-        // Fixed @todo Move config configurbale emali
+    const XML_PATH_CONFIRM_CHANGE_EMAIL = 'customer/password/zolagocustomer_confirmemail';
     const CONFIRM_PATH = "zolagocustomer/confirm/confirm";
     const HOURS_EXPIRE = 24;
     
@@ -38,7 +38,7 @@ class Zolago_Customer_Model_Emailtoken extends Mage_Core_Model_Abstract{
         );
         
         return $this->_sendEmailTemplate($customer, 
-            self::EMAIL_TEMPLATE, $templateParams, $store->getId());
+            self::XML_PATH_CONFIRM_CHANGE_EMAIL, $templateParams, $store->getId());
     }
     
     public function getConfirmLink($token=null) {
@@ -49,7 +49,7 @@ class Zolago_Customer_Model_Emailtoken extends Mage_Core_Model_Abstract{
     }
 
     protected function _sendEmailTemplate($customer, 
-        $template, $templateParams = array(), $storeId = null)
+        $templateKey, $templateParams = array(), $storeId = null)
     {
         $templateParams['use_attachments'] = true;
 
@@ -67,6 +67,7 @@ class Zolago_Customer_Model_Emailtoken extends Mage_Core_Model_Abstract{
         $emailTemplate->
             setDesignConfig(array('area' => 'frontend', 'store' => $storeId));
         
+        $template = Mage::getStoreConfig($templateKey,$storeId);
         if (is_numeric($template)) {
             $emailTemplate->load($template);
         } else {
