@@ -43,8 +43,12 @@ $isBundleProduct = (bool)($this->getProduct()->getTypeId() == Mage_Catalog_Model
             <div class="product"><?php echo $this->__("Product"); ?></div>
         </div>
         <div class="clearfix">
-            <figure><a href="<?php echo $this->getProductUrl(); ?>"><img src="<?php echo $this->getProductThumbnail()->resize(53, 69); ?>" alt="<?php echo $this->escapeHtml($this->getProductName()) ?>" /></a></figure>
-            <div class="description_checked_product">
+            <figure>
+                <a href="<?php echo $this->getProductUrl(); ?>">
+                    <img src="<?php echo $this->getProductThumbnail()->resize(53, 69); ?>" alt="<?php echo $this->escapeHtml($this->getProductName()) ?>" />
+                </a>
+            </figure>
+            <div class="description_checked_product <?php echo $this->getProduct()->getTypeId(); ?>">
                 <div class="product_name"><a href="<?php echo $this->getProductUrl(); ?>"><?php echo $this->escapeHtml($this->getProductName()) ?></a></div>
                 <?php if(!$isBundleProduct): ?>
                     <?php if ($_options = $this->getOptionList()):?>
