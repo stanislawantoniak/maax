@@ -1066,6 +1066,9 @@
 			margin-left: 64px;
 			font-size: 14px;
 			text-transform: uppercase;
+			&.bundle {
+				min-height: initial;
+			}
 			.product_name {
 				margin-bottom: 5px;
 				@media(min-width: 1100px) {
