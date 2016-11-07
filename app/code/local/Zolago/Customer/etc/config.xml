@@ -1,209 +1,212 @@
 <?xml version="1.0"?>
 <config>
-    <modules>
+  <modules>
+    <Zolago_Customer>
+      <version>0.0.18</version>
+    </Zolago_Customer>
+  </modules>
+  <global>
+    <models>
+      <zolagocustomer>
+        <class>Zolago_Customer_Model</class>
+        <resourceModel>zolagocustomer_resource</resourceModel>
+      </zolagocustomer>
+      <zolagocustomer_resource>
+        <class>Zolago_Customer_Model_Resource</class>
+        <entities>
+          <emailtoken>
+            <table>zolago_customer_emailtoken</table>
+          </emailtoken>
+          <attachtoken>
+            <table>zolago_customer_attachtoken</table>
+          </attachtoken>
+        </entities>
+      </zolagocustomer_resource>
+      <customer>
+        <rewrite>
+          <form>Zolago_Customer_Model_Customer_Form</form>
+          <customer>Zolago_Customer_Model_Customer</customer>
+          <session>Zolago_Customer_Model_Session</session>
+          <address_config>Zolago_Customer_Model_Address_Config</address_config>
+        </rewrite>
+      </customer>
+      <customer_resource>
+        <rewrite>
+          <customer>Zolago_Customer_Model_Resource_Customer</customer>
+        </rewrite>
+      </customer_resource>
+      <core>
+        <rewrite>
+          <email_template_mailer>Zolago_Common_Model_Core_Email_Template_Mailer</email_template_mailer>
+          <email_template>Zolago_Common_Model_Core_Email_Template</email_template>
+        </rewrite>
+      </core>
+    </models>
+    <customer>
+      <address>
+        <formats>
+          <text translate="title" module="customer">
+            <title>Text</title>
+          </text>
+          <oneline translate="title" module="customer">
+            <title>Text One Line</title>
+          </oneline>
+          <html translate="title" module="customer">
+            <title>HTML</title>
+            <htmlEscape>true</htmlEscape>
+          </html>
+          <html_2 translate="title" module="customer">
+            <title>HTML 2</title>
+            <htmlEscape>true</htmlEscape>
+          </html_2>
+          <pdf translate="title" module="customer">
+            <title>PDF</title>
+          </pdf>
+          <js_template template="title" module="customer">
+            <title>JavaScript Template</title>
+          </js_template>
+        </formats>
+      </address>
+    </customer>
+    <helpers>
+      <zolagocustomer>
+        <class>Zolago_Customer_Helper</class>
+      </zolagocustomer>
+    </helpers>
+    <blocks>
+      <zolagocustomer>
+        <class>Zolago_Customer_Block</class>
+      </zolagocustomer>
+      <customer>
+        <rewrite>
+          <account_navigation>Zolago_Customer_Block_Account_Navigation</account_navigation>
+        </rewrite>
+      </customer>
+    </blocks>
+    <resources>
+      <zolagocustomer_setup>
+        <setup>
+          <module>Zolago_Customer</module>
+          <class>Mage_Customer_Model_Entity_Setup</class>
+        </setup>
+      </zolagocustomer_setup>
+    </resources>
+    <template>
+      <email>
+        <zolagocustomer_confirmemail>
+          <label>Confirm email</label>
+          <file>zolagocutomer_confirm_email.html</file>
+          <type>html</type>
+        </zolagocustomer_confirmemail>
+        <zolagocustomer_attach_orders_email>
+          <label>Attach orders email</label>
+          <file>zolagocustomer_attach_orders_email.html</file>
+          <type>html</type>
+        </zolagocustomer_attach_orders_email>
+      </email>
+    </template>
+    <events>
+      <customer_logout>
+        <observers>
+          <zolagocustomer>
+            <type>singleton</type>
+            <class>zolagocustomer/observer</class>
+            <method>customerLogout</method>
+          </zolagocustomer>
+        </observers>
+      </customer_logout>
+      <zolagocustomer_change_email_confirm>
+        <observers>
+          <zolagocustomer>
+            <type>singleton</type>
+            <class>zolagocustomer/observer</class>
+            <method>customerChangeEmailConfirm</method>
+          </zolagocustomer>
+        </observers>
+      </zolagocustomer_change_email_confirm>
+    </events>
+  </global>
+  <frontend>
+    <routers>
+      <zolagocustomer>
+        <use>standard</use>
+        <args>
+          <module>Zolago_Customer</module>
+          <frontName>zolagocustomer</frontName>
+        </args>
+      </zolagocustomer>
+      <customer>
+        <args>
+          <modules>
+            <Zolago_Customer before="Mage_Customer">Zolago_Customer</Zolago_Customer>
+          </modules>
+        </args>
+      </customer>
+    </routers>
+    <translate>
+      <modules>
         <Zolago_Customer>
-            <version>0.0.18</version>
+          <files>
+            <default>Zolago_Customer.csv</default>
+          </files>
         </Zolago_Customer>
-    </modules>
-    <global>
-        <models>
-            <zolagocustomer>
-                <class>Zolago_Customer_Model</class>
-                <resourceModel>zolagocustomer_resource</resourceModel>
-            </zolagocustomer>
-            <zolagocustomer_resource>
-                <class>Zolago_Customer_Model_Resource</class>
-                <entities>
-                    <emailtoken>
-                        <table>zolago_customer_emailtoken</table>
-                    </emailtoken>
-	                <attachtoken>
-		                <table>zolago_customer_attachtoken</table>
-	                </attachtoken>
-                </entities>
-            </zolagocustomer_resource>
-            <customer>
-                <rewrite>
-                    <form>Zolago_Customer_Model_Customer_Form</form>
-                    <customer>Zolago_Customer_Model_Customer</customer>
-                    <session>Zolago_Customer_Model_Session</session>
-                    <address_config>Zolago_Customer_Model_Address_Config</address_config>
-                </rewrite>
-            </customer>
-			<customer_resource>
-				<rewrite>
-					<customer>Zolago_Customer_Model_Resource_Customer</customer>
-				</rewrite>
-			</customer_resource>
-            <core>
-                <rewrite>
-                    <email_template_mailer>Zolago_Common_Model_Core_Email_Template_Mailer</email_template_mailer>
-                    <email_template>Zolago_Common_Model_Core_Email_Template</email_template>
-                </rewrite>
-            </core>
-        </models>
-        <customer>
-            <address>
-                <formats>
-                    <text translate="title" module="customer">
-                        <title>Text</title>
-                    </text>
-                    <oneline translate="title" module="customer">
-                        <title>Text One Line</title>
-                    </oneline>
-                    <html translate="title" module="customer">
-                        <title>HTML</title>
-                        <htmlEscape>true</htmlEscape>
-                    </html>
-                    <html_2 translate="title" module="customer">
-                        <title>HTML 2</title>
-                        <htmlEscape>true</htmlEscape>
-                    </html_2>
-                    <pdf translate="title" module="customer">
-                        <title>PDF</title>
-                    </pdf>
-                    <js_template template="title" module="customer">
-                        <title>JavaScript Template</title>
-                    </js_template>
-                </formats>
-            </address>
-        </customer>
-        <helpers>
-            <zolagocustomer>
-                <class>Zolago_Customer_Helper</class>
-            </zolagocustomer>
-        </helpers>
-        <blocks>
-            <zolagocustomer>
-                <class>Zolago_Customer_Block</class>
-            </zolagocustomer>
-			<customer>
-				<rewrite>
-					<account_navigation>Zolago_Customer_Block_Account_Navigation</account_navigation>
-				</rewrite>
-			</customer>
-        </blocks>
-        <resources>
-            <zolagocustomer_setup>
-                <setup>
-                    <module>Zolago_Customer</module>
-                    <class>Mage_Customer_Model_Entity_Setup</class>
-                </setup>
-            </zolagocustomer_setup>
-        </resources>
-        <template>
-            <email>
-               <zolagocustomer_confirmemail>
-                   <label>Confirm email</label>
-                   <file>zolagocutomer_confirm_email.html</file>
-                   <type>html</type>
-               </zolagocustomer_confirmemail>
-	            <zolagocustomer_attach_orders_email>
-		            <label>Attach orders email</label>
-		            <file>zolagocustomer_attach_orders_email.html</file>
-		            <type>html</type>
-	            </zolagocustomer_attach_orders_email>
-            </email>
-        </template>
-		<events>
-			<customer_logout>
-				 <observers>
-                    <zolagocustomer>
-                        <type>singleton</type>
-                        <class>zolagocustomer/observer</class>
-                        <method>customerLogout</method>
-                    </zolagocustomer>
-                </observers>
-			</customer_logout>
-            <zolagocustomer_change_email_confirm>
-                <observers>
-                    <zolagocustomer>
-                        <type>singleton</type>
-                        <class>zolagocustomer/observer</class>
-                        <method>customerChangeEmailConfirm</method>
-                    </zolagocustomer>
-                </observers>
-            </zolagocustomer_change_email_confirm>
-		</events>
-    </global>
-    <frontend>
-        <routers>
-            <zolagocustomer>
-                <use>standard</use>
-                <args>
-                    <module>Zolago_Customer</module>
-                    <frontName>zolagocustomer</frontName>
-                </args>
-            </zolagocustomer>
-            <customer>  
-                <args>  
-                    <modules>  
-                        <Zolago_Customer before="Mage_Customer">Zolago_Customer</Zolago_Customer>  
-                    </modules>  
-                </args>  
-            </customer> 
-        </routers>
-        <translate>
-            <modules>
-                <Zolago_Customer>
-                    <files>
-                        <default>Zolago_Customer.csv</default>
-                    </files>
-                </Zolago_Customer>
-            </modules>
-        </translate>
-        <layout>
-            <updates>
-                <zolagocustomer>
-                    <file>zolagocustomer.xml</file>
-                </zolagocustomer>
-            </updates>
-        </layout>
-    </frontend>
-	<adminhtml>
-		<translate>
-			<modules>
-				<Zolago_Customer>
-					<files>
-						<default>Zolago_Customer.csv</default>
-					</files>
-				</Zolago_Customer>
-			</modules>
-		</translate>
-	</adminhtml>
-    <crontab>
-        <jobs>
-            <zolagocustomer_clear_old_tokens>
-                <schedule>
-                    <!-- Run every 2 hours -->
-                    <cron_expr>18 */2 * * *</cron_expr>
-                </schedule>
-                <run>
-                    <model>zolagocustomer/observer::cleanOldTokens</model>
-                </run>
-            </zolagocustomer_clear_old_tokens>
-        </jobs>
-    </crontab>
-	<default>
-		<customer>
-			<agreements>
-				<policy>Wyrażam zgodę na przetwarzanie moich danych osobowych przez Zolago Group Sp. Z o.o. z siedzibą w Warszawie (Barkocińska 6 03-534), w celu świadczenia przez nią usług w ramach Modago.pl</policy>
-				<tos>Oświadczam, że zapoznałem(am) się z Regulaminem sklepu Modago.pl i akceptuję jego postanowienia.</tos>
-				<newsletter>Wyrażam zgodę na przetwarzanie moich danych osobowych w celach marketingowych przez Zolago Group Sp. Z o.o. z siedzibą w Warszawie (Barkocińska 6 03-534)</newsletter>
-				<sms>Wyrażam zgodę na otrzymywanie wiadomości sms zawierających aktualizację stanu zamówienia oraz informacje o dostawie</sms>
-				<register_info>Dane osobowe będą przetwarzane w celu założenia i utrzymywania konta w serwisie Modago.pl | Dane będą przetwarzane przez Zolago Group sp. z o.o. z siedzibą w Warszawie (03-543), ul. Barkocińska 6, wpisana do rejestru przedsiębiorców Krajowego Rejestru Sądowego pod numerem KRS 0000457797 w celu realizacji umowy o świadczenie drogą elektroniczną usługi założenia i utrzymywania konta w serwisie Modago.pl. Podanie danych osobowych jest dobrowolne. Przysługuje Pani/Panu prawo dostępu do treści swoich danych oraz ich poprawiania.</register_info>
-				<dotpay><![CDATA[Akceptuję <a href="https://ssl.dotpay.pl/files/regulamin_dotpay_sa_dokonywania_wplat_w_serwisie_dotpay.pdf" target="_blank">regulamin operatora płatności Dotpay.pl</a>]]></dotpay>
-				<checkout>Dane osobowe będą przetwarzane przez Modago.pl i Sprzedawców w celu realizacji umowy sprzedaży. | Dane będą przetwarzane celu realizacji umowy sprzedaży przez: {vendors}. Dane będą przetwarzane przez Zolago Group sp. z o.o. z siedzibą w Warszawie (03-543), ul. Barkocińska 6, wpisana do rejestru przedsiębiorców Krajowego Rejestru Sądowego pod numerem KRS 0000457797, w celu realizacji umowy o świadczenie drogą elektroniczną usługi pośredniczenia w zawarciu umowy sprzedaży w serwisie Modago.pl. Podanie danych osobowych jest dobrowolne. Przysługuje Pani/Panu prawo dostępu do treści swoich danych oraz ich poprawiania.</checkout>
-			</agreements>
-			<orders_attach>
-				<email_template>zolagocustomer_attach_orders_email</email_template>
-				<email_identity>support</email_identity>
-			</orders_attach>
-			<listing_products_cache>
-				<expiration_time>15</expiration_time>
-			</listing_products_cache>
-            <address_templates>
-                <html_2><![CDATA[{{if street1}}{{var street1}}<br />{{/if}}
+      </modules>
+    </translate>
+    <layout>
+      <updates>
+        <zolagocustomer>
+          <file>zolagocustomer.xml</file>
+        </zolagocustomer>
+      </updates>
+    </layout>
+  </frontend>
+  <adminhtml>
+    <translate>
+      <modules>
+        <Zolago_Customer>
+          <files>
+            <default>Zolago_Customer.csv</default>
+          </files>
+        </Zolago_Customer>
+      </modules>
+    </translate>
+  </adminhtml>
+  <crontab>
+    <jobs>
+      <zolagocustomer_clear_old_tokens>
+        <schedule>
+          <!-- Run every 2 hours -->
+          <cron_expr>18 */2 * * *</cron_expr>
+        </schedule>
+        <run>
+          <model>zolagocustomer/observer::cleanOldTokens</model>
+        </run>
+      </zolagocustomer_clear_old_tokens>
+    </jobs>
+  </crontab>
+  <default>
+    <customer>
+      <password>
+        <zolagocustomer_confirmemail>zolagocustomer_confirmemail</zolagocustomer_confirmemail>
+      </password>
+      <agreements>
+        <policy><![CDATA[Wyrażam zgodę na przetwarzanie moich danych osobowych przez Zolago Group Sp. Z o.o. z siedzibą w Warszawie (Barkocińska 6 03-534), w celu świadczenia przez nią usług w ramach Modago.pl]]></policy>
+        <tos><![CDATA[Oświadczam, że zapoznałem(am) się z Regulaminem sklepu Modago.pl i akceptuję jego postanowienia.]]></tos>
+        <newsletter><![CDATA[Wyrażam zgodę na przetwarzanie moich danych osobowych w celach marketingowych przez Zolago Group Sp. Z o.o. z siedzibą w Warszawie (Barkocińska 6 03-534)]]></newsletter>
+        <sms><![CDATA[Wyrażam zgodę na otrzymywanie wiadomości sms zawierających aktualizację stanu zamówienia oraz informacje o dostawie]]></sms>
+        <register_info><![CDATA[Dane osobowe będą przetwarzane w celu założenia i utrzymywania konta w serwisie Modago.pl | Dane będą przetwarzane przez Zolago Group sp. z o.o. z siedzibą w Warszawie (03-543), ul. Barkocińska 6, wpisana do rejestru przedsiębiorców Krajowego Rejestru Sądowego pod numerem KRS 0000457797 w celu realizacji umowy o świadczenie drogą elektroniczną usługi założenia i utrzymywania konta w serwisie Modago.pl. Podanie danych osobowych jest dobrowolne. Przysługuje Pani/Panu prawo dostępu do treści swoich danych oraz ich poprawiania.]]></register_info>
+        <dotpay><![CDATA[Akceptuję <a href="https://ssl.dotpay.pl/files/regulamin_dotpay_sa_dokonywania_wplat_w_serwisie_dotpay.pdf" target="_blank">regulamin operatora płatności Dotpay.pl</a>]]></dotpay>
+        <checkout><![CDATA[Dane osobowe będą przetwarzane przez Modago.pl i Sprzedawców w celu realizacji umowy sprzedaży. | Dane będą przetwarzane celu realizacji umowy sprzedaży przez: {vendors}. Dane będą przetwarzane przez Zolago Group sp. z o.o. z siedzibą w Warszawie (03-543), ul. Barkocińska 6, wpisana do rejestru przedsiębiorców Krajowego Rejestru Sądowego pod numerem KRS 0000457797, w celu realizacji umowy o świadczenie drogą elektroniczną usługi pośredniczenia w zawarciu umowy sprzedaży w serwisie Modago.pl. Podanie danych osobowych jest dobrowolne. Przysługuje Pani/Panu prawo dostępu do treści swoich danych oraz ich poprawiania.]]></checkout>
+      </agreements>
+      <orders_attach>
+        <email_template>zolagocustomer_attach_orders_email</email_template>
+        <email_identity>support</email_identity>
+      </orders_attach>
+      <listing_products_cache>
+        <expiration_time>15</expiration_time>
+      </listing_products_cache>
+      <address_templates>
+        <html_2><![CDATA[{{if street1}}{{var street1}}<br />{{/if}}
 {{depend street2}}{{var street2}}<br />{{/depend}}
 {{depend street3}}{{var street3}}<br />{{/depend}}
 {{depend street4}}{{var street4}}<br />{{/depend}}
@@ -212,7 +215,7 @@
 {{depend telephone}}T: {{var telephone}}{{/depend}}
 {{depend fax}}<br/>F: {{var fax}}{{/depend}}
 {{depend vat_id}}<br/>VAT: {{var vat_id}}{{/depend}}]]></html_2>
-            </address_templates>
-		</customer>
-	</default>
+      </address_templates>
+    </customer>
+  </default>
 </config>
