@@ -186,14 +186,17 @@
     </crontab>
 	<default>
 		<customer>
-			<agreements>
-				<policy>Wyrażam zgodę na przetwarzanie moich danych osobowych przez Zolago Group Sp. Z o.o. z siedzibą w Warszawie (Barkocińska 6 03-534), w celu świadczenia przez nią usług w ramach Modago.pl</policy>
-				<tos>Oświadczam, że zapoznałem(am) się z Regulaminem sklepu Modago.pl i akceptuję jego postanowienia.</tos>
-				<newsletter>Wyrażam zgodę na przetwarzanie moich danych osobowych w celach marketingowych przez Zolago Group Sp. Z o.o. z siedzibą w Warszawie (Barkocińska 6 03-534)</newsletter>
-				<sms>Wyrażam zgodę na otrzymywanie wiadomości sms zawierających aktualizację stanu zamówienia oraz informacje o dostawie</sms>
-				<register_info>Dane osobowe będą przetwarzane w celu założenia i utrzymywania konta w serwisie Modago.pl | Dane będą przetwarzane przez Zolago Group sp. z o.o. z siedzibą w Warszawie (03-543), ul. Barkocińska 6, wpisana do rejestru przedsiębiorców Krajowego Rejestru Sądowego pod numerem KRS 0000457797 w celu realizacji umowy o świadczenie drogą elektroniczną usługi założenia i utrzymywania konta w serwisie Modago.pl. Podanie danych osobowych jest dobrowolne. Przysługuje Pani/Panu prawo dostępu do treści swoich danych oraz ich poprawiania.</register_info>
+      <password>
+        <zolagocustomer_confirmemail>zolagocustomer_confirmemail</zolagocustomer_confirmemail>
+      </password>
+     			<agreements>
+				<policy><![CDATA[Wyrażam zgodę na przetwarzanie moich danych osobowych przez Zolago Group Sp. Z o.o. z siedzibą w Warszawie (Barkocińska 6 03-534), w celu świadczenia przez nią usług w ramach Modago.pl]]></policy>
+				<tos><![CDATA[Oświadczam, że zapoznałem(am) się z Regulaminem sklepu Modago.pl i akceptuję jego postanowienia.]]></tos>
+				<newsletter><![CDATA[Wyrażam zgodę na przetwarzanie moich danych osobowych w celach marketingowych przez Zolago Group Sp. Z o.o. z siedzibą w Warszawie (Barkocińska 6 03-534)]]></newsletter>
+				<sms><![CDATA[Wyrażam zgodę na otrzymywanie wiadomości sms zawierających aktualizację stanu zamówienia oraz informacje o dostawie]]></sms>
+				<register_info><![CDATA[Dane osobowe będą przetwarzane w celu założenia i utrzymywania konta w serwisie Modago.pl | Dane będą przetwarzane przez Zolago Group sp. z o.o. z siedzibą w Warszawie (03-543), ul. Barkocińska 6, wpisana do rejestru przedsiębiorców Krajowego Rejestru Sądowego pod numerem KRS 0000457797 w celu realizacji umowy o świadczenie drogą elektroniczną usługi założenia i utrzymywania konta w serwisie Modago.pl. Podanie danych osobowych jest dobrowolne. Przysługuje Pani/Panu prawo dostępu do treści swoich danych oraz ich poprawiania.]]></register_info>
 				<dotpay><![CDATA[Akceptuję <a href="https://ssl.dotpay.pl/files/regulamin_dotpay_sa_dokonywania_wplat_w_serwisie_dotpay.pdf" target="_blank">regulamin operatora płatności Dotpay.pl</a>]]></dotpay>
-				<checkout>Dane osobowe będą przetwarzane przez Modago.pl i Sprzedawców w celu realizacji umowy sprzedaży. | Dane będą przetwarzane celu realizacji umowy sprzedaży przez: {vendors}. Dane będą przetwarzane przez Zolago Group sp. z o.o. z siedzibą w Warszawie (03-543), ul. Barkocińska 6, wpisana do rejestru przedsiębiorców Krajowego Rejestru Sądowego pod numerem KRS 0000457797, w celu realizacji umowy o świadczenie drogą elektroniczną usługi pośredniczenia w zawarciu umowy sprzedaży w serwisie Modago.pl. Podanie danych osobowych jest dobrowolne. Przysługuje Pani/Panu prawo dostępu do treści swoich danych oraz ich poprawiania.</checkout>
+				<checkout><![CDATA[Dane osobowe będą przetwarzane przez Modago.pl i Sprzedawców w celu realizacji umowy sprzedaży. | Dane będą przetwarzane celu realizacji umowy sprzedaży przez: {vendors}. Dane będą przetwarzane przez Zolago Group sp. z o.o. z siedzibą w Warszawie (03-543), ul. Barkocińska 6, wpisana do rejestru przedsiębiorców Krajowego Rejestru Sądowego pod numerem KRS 0000457797, w celu realizacji umowy o świadczenie drogą elektroniczną usługi pośredniczenia w zawarciu umowy sprzedaży w serwisie Modago.pl. Podanie danych osobowych jest dobrowolne. Przysługuje Pani/Panu prawo dostępu do treści swoich danych oraz ich poprawiania.]]></checkout>
 			</agreements>
 			<orders_attach>
 				<email_template>zolagocustomer_attach_orders_email</email_template>
