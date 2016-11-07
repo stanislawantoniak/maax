@@ -2,6 +2,9 @@
 
 class Zolago_Sales_Model_Order extends Mage_Sales_Model_Order
 {
+    function queueNewOrderEmail($forceMode = false) {
+        $this->sendNewOrderEmail(); // no queue
+    }
     /**
      * Send email with order data
      *
