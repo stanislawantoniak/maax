@@ -148,19 +148,24 @@ class Zolago_Catalog_Block_Product_View_Type_Configurable extends Mage_Catalog_B
 		}
 
 		foreach ($this->getAllowProducts() as $product) {
-			$productId  = $product->getId();
-			$maxQtyData = $product->getData('stock_item')->getQty();
-			if(!$maxQtyData){
-				$maxQtyData = 1;
+			$productId = $product->getId();
+			$inventory = Mage::getModel('cataloginventory/stock_item')
+				->loadByProduct($product);
+
+			$maxQtyData = (int)$inventory->getQty();
+			if (!!$inventory->getBackorders()) {
+				$maxQtyData = (int)$inventory->getMaxSaleQty();
 			}
-			$minQtyData = $product->getData('stock_item')->getMinSaleQty();
-			if(!$minQtyData){
+
+			$minQtyData = (int)$inventory->getMinSaleQty();
+			if (!$minQtyData) {
 				$minQtyData = 1;
 			}
+
 			foreach ($this->getAllowAttributes() as $attribute) {
-				$productAttribute   = $attribute->getProductAttribute();
+				$productAttribute = $attribute->getProductAttribute();
 				$productAttributeId = $productAttribute->getId();
-				$attributeValue     = $product->getData($productAttribute->getAttributeCode());
+				$attributeValue = $product->getData($productAttribute->getAttributeCode());
 				if (!isset($options[$productAttributeId])) {
 					$options[$productAttributeId] = array();
 				}
@@ -170,7 +175,7 @@ class Zolago_Catalog_Block_Product_View_Type_Configurable extends Mage_Catalog_B
 				}
 				$options[$productAttributeId][$attributeValue][] = $productId;
 				$minQty[$attributeValue] = (int)$minQtyData;
-				$maxQty[$attributeValue] = (int)$maxQtyData;
+				$maxQty[$attributeValue] = $maxQtyData;
 			}
 		}
 
