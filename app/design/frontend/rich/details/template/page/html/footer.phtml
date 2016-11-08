@@ -28,7 +28,7 @@
 
 $standaloneFooterLinksDesc = $this->getLayout()->createBlock('cms/block')->setBlockId('standalone_footer_links_desc')->toHtml();
 $standaloneFooterLinksMobile = $this->getLayout()->createBlock('cms/block')->setBlockId('standalone_footer_links_mobile')->toHtml();
-
+$footerFacebookLink = $this->getLayout()->createBlock('cms/block')->setBlockId('footer_facebook_link')->toHtml();
 ?>
 <footer id="footer" class="footer">
     <div class="footer_block">
@@ -38,12 +38,7 @@ $standaloneFooterLinksMobile = $this->getLayout()->createBlock('cms/block')->set
                     <div class="row">
                         <div class="wpb_wrapper">
                             <?php echo $this->getChildHtml("newsletter") ?>
-                            <div class="footer_facebook_link">
-                                <a href="#">
-                                    <i class="fa fa-facebook" aria-hidden="true"></i>
-                                    <span>Dołącz do nas na facebooku</span>
-                                </a>
-                            </div>
+                            <?php echo $footerFacebookLink; ?>
                         </div>
                     </div>
                 </div>
