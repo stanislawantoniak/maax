@@ -98,6 +98,9 @@ class  Zolago_Payment_Helper_Data extends Mage_Core_Helper_Abstract
      * @return bool
      */
     public function sendRmaRefundEmail($email,$rma,$refundAmount,$paymentType=false) {
+        if (!$templateId = $this->_getRmaRefundEmailTemplateId()) {
+            return false;
+        }
         /** @var Zolago_Common_Helper_Data $helper */
         $helper = Mage::helper("zolagocommon");
 
@@ -106,7 +109,7 @@ class  Zolago_Payment_Helper_Data extends Mage_Core_Helper_Abstract
         $return =  $helper->sendEmailTemplate(
                        $email,
                        '',
-                       $this->_getRmaRefundEmailTemplateId(),
+                       $templateId,
                        $this->_getRmaRefundEmailVars($rma->getIncrementId(),$refundAmount,$paymentType),
                        true,
                        $this->_getRefundEmailSender()
@@ -126,6 +129,9 @@ class  Zolago_Payment_Helper_Data extends Mage_Core_Helper_Abstract
      * @return Mage_Core_Model_Email_Template_Mailer
      */
     public function sendRefundEmail($email,$order,$refundAmount,$paymentType=false) {
+        if (!$templateId = $this->_getRefundEmailTemplateId()) {
+            return false;
+        }
         /** @var Zolago_Common_Helper_Data $helper */
         $helper = Mage::helper("zolagocommon");
 
@@ -134,7 +140,7 @@ class  Zolago_Payment_Helper_Data extends Mage_Core_Helper_Abstract
         $return = $helper->sendEmailTemplate(
                       $email,
                       '',
-                      $this->_getRefundEmailTemplateId(),
+                      $templateId,
                       $this->_getRefundEmailVars($order->getIncrementId(),$refundAmount,$paymentType),
                       true,
                       $this->_getRefundEmailSender()
