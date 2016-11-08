@@ -16,11 +16,6 @@ class Zolago_Sales_Helper_Transaction extends Mage_Core_Helper_Abstract
                                       ->addFieldToFilter('order_id', $orderId)
                                       ->addFieldToFilter('txn_type', $type)
                                       ->addFieldToFilter('payment_id', $paymentId);
-        if ($customerId) {
-            $existTransactionCollection->addFieldToFilter('customer_id', $customerId);
-        } else {
-            $existTransactionCollection->addFieldToFilter('customer_id', array('null'=>true));            
-        }
         return $existTransactionCollection;
     }
     public function createRefundTransaction($order,$customerId,$amount,$customerAccount = null) {
