@@ -191,24 +191,33 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 		<div class="block_to_size">
 			<?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
 				<?php if (!empty($productAttrs)) : ?>
-					<?php foreach ($productAttrs as $_attribute) : ?>
-						<?php if (array_key_exists('attribute_code', $_attribute) && $_attribute['attribute_code'] == 'size') : ?>
-							<?php $haveSizes = true; ?>
-							<div class="size-box-label clearfix clr">
-								<div class="size-label"><?php  echo $hlp->__("Size label"); ?>:</div>
+					<?php
+					$_attributes = $_product
+						->getTypeInstance(true)
+						->getConfigurableAttributes($_product);
+
+					$_attribute = $_attributes->getFirstItem();
+					?>
+
+					<?php if($_attribute): ?>
+						<?php $haveSizes = true; ?>
+						<div class="size-box-label clearfix clr">
+							<div class="size-label"><?php  echo $_attribute->getLabel(); ?>:</div>
+						</div>
+						<div class="size-box clearfix clr">
+							<div>
+								<a style="display:none;" href="#"
+								   class="view-sizing"
+								   data-toggle="modal"
+								   data-target="#tabelaRozmiarow">
+									<?php if (!empty($sizeTableValue)) : ?>
+										<?php echo $this->__("Sizes"); ?>
+									<?php endif; ?>
+								</a>
 							</div>
-							<div class="size-box clearfix clr">
-								<div>
-									<a style="display:none;" href="#" class="view-sizing" data-toggle="modal"
-									   data-target="#tabelaRozmiarow">
-										<?php if (!empty($sizeTableValue)) : ?>
-											<?php echo $this->__("Sizes"); ?>
-										<?php endif; ?>
-									</a>
-								</div>
-							</div>
-						<?php endif; ?>
-					<?php endforeach; ?>
+						</div>
+					<?php endif; ?>
+
 				<?php endif; ?>
 			<?php endif; ?>
 		</div>
