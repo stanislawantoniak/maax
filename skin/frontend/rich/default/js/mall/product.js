@@ -6,6 +6,7 @@ Mall.product = {
 	_entity_id: '',
 	_path_back_to_category_text: '',
 	_path_back_to_category_link: '',
+	_default_select_text: '',
 
 	init: function() {
 		if(jQuery("body").hasClass("catalog-product-view")) {

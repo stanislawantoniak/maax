@@ -2071,7 +2071,8 @@ jQuery(document).ready(function() {
 
     jQuery(".size-box select").selectBoxIt({
         native: Mall.getIsBrowserMobile(),
-        defaultText: (jQuery(".size-box option").length > 1) ? Mall.i18nValidation.__('Size') : '',
+        defaultText: (jQuery(".size-box option").length > 1) ? Mall.product._default_select_text : '',
+//        defaultText: (jQuery(".size-box option").length > 1) ? Mall.i18nValidation.__('Size') : '',
         autoWidth: false
     });
     var optionsCount = jQuery(".size-box option").length;

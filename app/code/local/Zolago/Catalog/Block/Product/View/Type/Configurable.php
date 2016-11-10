@@ -299,7 +299,6 @@ class Zolago_Catalog_Block_Product_View_Type_Configurable extends Mage_Catalog_B
 		}
 
 		$config = array_merge($config, $this->_getAdditionalConfig());
-
 		return Mage::helper('core')->jsonEncode($config);
 	}
 

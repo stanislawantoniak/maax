@@ -170,7 +170,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
                     <?php if ($isSalable): ?>
                         <div class="col-xs-6 text-right">
                             <button class="btn button button-primary ico addBasket"
-                                    <?php if(isset($haveSizes) && $haveSizes == true): ?><?php if ($salableCount > 1): ?>title="<?php echo $hlp->__("Choose size first"); ?>" data-toggle="tooltip" <?php endif; ?>data-placemen="top"<?php endif; ?>
+                                    <?php if(isset($haveSizes) && $haveSizes == true): ?><?php if ($salableCount > 1): ?>title="<?php echo $hlp->__("Choose variant first"); ?>" data-toggle="tooltip" <?php endif; ?>data-placemen="top"<?php endif; ?>
                                     id="add-to-cart"
                                     onclick="Mall.addToCart(<?php echo $_product->getId(); ?>, <?php echo !$_product->getStockItem()->getMinSaleQty() ? 1 : $_product->getStockItem()->getMinSaleQty(); ?>);return false;"><?php echo $this->__("add to cart"); ?></button>
                         </div>

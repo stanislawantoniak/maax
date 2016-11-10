@@ -45,6 +45,7 @@ $reviewsAvg = $this->getReviewsAvg();
 $reviewsCount = $this->getReviewsCount();
 $reviewsLabel = $this->getReviewsLabel();
 
+$defaultLabelName = $hlp->__("Choose..."); 
 
 $inventory = Mage::getModel('cataloginventory/stock_item')->loadByProduct($_product);
 
@@ -197,12 +198,13 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 						->getConfigurableAttributes($_product);
 
 					$_attribute = $_attributes->getFirstItem();
+					$defaultLabelName = $_attribute->getLabel();
 					?>
 
 					<?php if($_attribute): ?>
 						<?php $haveSizes = true; ?>
 						<div class="size-box-label clearfix clr">
-							<div class="size-label"><?php  echo $_attribute->getLabel(); ?>:</div>
+							<div class="size-label"><?php echo $hlp->__("Size label"); ?>:</div>
 						</div>
 						<div class="size-box clearfix clr">
 							<div>
@@ -233,14 +235,14 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 			<div class="action-box-bundle clearfix">
 					<?php if ($_product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE): ?>
 						<button class="btn button button-primary addBasket"
-								<?php if (isset($haveSizes) && $haveSizes == true): ?><?php if ($salableCount > 1): ?>title="<?php echo $hlp->__("Choose size first"); ?>"
+								<?php if (isset($haveSizes) && $haveSizes == true): ?><?php if ($salableCount > 1): ?>title="<?php echo $hlp->__("Choose variant first"); ?>"
 								data-toggle="tooltip" <?php endif; ?>data-placemen="top"<?php endif; ?>
 								id="add-to-cart"
 								onclick="Mall.validateAddingToCart(<?php echo $_product->getId(); ?>);return false;"><i class="fa fa-shopping-cart" aria-hidden="true"></i><?php echo $this->__("Add to cart");
 							?></button>
 					<?php else: ?>
 						<button class="btn button button-primary addBasket"
-								<?php if (isset($haveSizes) && $haveSizes == true): ?><?php if ($salableCount > 1): ?>title="<?php echo $hlp->__("Choose size first"); ?>"
+								<?php if (isset($haveSizes) && $haveSizes == true): ?><?php if ($salableCount > 1): ?>title="<?php echo $hlp->__("Choose variant first"); ?>"
 								data-toggle="tooltip" <?php endif; ?>data-placemen="top"<?php endif; ?>
 								id="add-to-cart"
 								onclick="Mall.validateSimpleAddingToCart(<?php echo $_product->getId(); ?>, <?php echo $minQty; ?>, <?php echo $maxQty; ?>, '<?php echo $_product->getTypeId(); ?>');return false;"><i class="fa fa-shopping-cart" aria-hidden="true"></i><?php echo $this->__("Add to cart");
@@ -287,6 +289,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 		jsonConfig.useSizeboxList = useSizeboxList;
 		Mall.product.productOptions(jsonConfig);
 		Mall.product._current_product_type = "<?php echo Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE; ?>";
+		Mall.product._default_select_text = "<?php echo $defaultLabelName; ?>";
 	</script>
 <?php endif; ?>
 <script type="text/javascript">
@@ -324,7 +327,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 
 
 				if(!attrId){
-					jQuery("#qty-error").text('<?php echo $hlp->__("Choose size first"); ?>');
+					jQuery("#qty-error").text('<?php echo $hlp->__("Choose variant first"); ?>');
 					jQuery("#qty-error").show();
 				}else{
 					var maxQty;
@@ -360,7 +363,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 				}
 
 				if(!attrId){
-					jQuery("#qty-error").text('<?php echo $hlp->__("Choose size first"); ?>');
+					jQuery("#qty-error").text('<?php echo $hlp->__("Choose variant first"); ?>');
 					jQuery("#qty-error").show();
 				}else{
 					var maxQty;
