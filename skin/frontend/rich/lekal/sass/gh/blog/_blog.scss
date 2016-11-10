@@ -28,13 +28,19 @@
       }
     }
   }
-
   .mp-content {
     ul, ol {
       margin-left: 20px;
       padding-left: 0px;
     }
+    a {
+	text-decoration:underline;
+	&:hover {
+		color: $colorSecondFont;
+	}
+    }
   }
+
   @media(max-width: $screen-xs-max) {
     #blog-mobile-menu {
       margin-top: -15px;
