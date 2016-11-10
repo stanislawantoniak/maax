@@ -147,7 +147,9 @@ $_isSliderBoxContent = $_sliders->count() ? true : false;
 															<?php if (!empty($captionText)): // 7 START ?>
 																<?php $showCaptions = true; ?>
 																<?php if (!empty($caption['url'])): // A2 OPEN ?>
-																	<a href="<?php echo $caption['url']; ?>" class="<?php if ($j == 1): ?>title-caption-a<?php else: ?>body-caption-a<?php endif; ?>">
+																	<a href="<?php echo $caption['url']; ?>" class="<?php if ($j == 1): ?>title-caption-item title-caption-a<?php else: ?>body-caption-a<?php endif; ?>">
+																<?php else: ?>
+																<?php if ($j==1): ?><span class="title-caption-item"><?php endif;?>
 																<?php endif; ?>
 																<div class="<?php if ($j == 1): ?>title-caption<?php else: ?>body-caption<?php endif; ?>">
 																	<?php echo $caption['text']; ?>
@@ -155,6 +157,8 @@ $_isSliderBoxContent = $_sliders->count() ? true : false;
 																</div>
 																<?php if (!empty($caption['url'])): // A2 CLOSE ?>
 																	</a>
+																<?php else: ?>
+																	<?php if ($j==1):?></span><?php endif;?>
 																<?php endif; ?>
 															<?php endif; // 7 END ?>
 														<?php endforeach; // 6 END ?>

@@ -99,7 +99,6 @@ class Zolago_Campaign_Model_Placement extends Mage_Core_Model_Abstract
             } else {
                 $bannerCaption = array();
             }
-
             // Setup final url
             if (isset($bannerCaption["url"])) {
                 $bannerCaption["url"] = $this->getUrl($bannerCaption["url"]);

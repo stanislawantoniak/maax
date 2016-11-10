@@ -1883,7 +1883,7 @@ Mall.inspirationsSliderAdjustHeight = function () {
     // `apply` is equivalent to passing each height as an argument
     var maxHeight = Math.max.apply(null, elementHeights);
     if(maxHeight > 0){
-        rwdInspiration.find(".rwd-item .item .carousel-caption .title-caption-a").each(function (i, item) {
+        rwdInspiration.find(".rwd-item .item .carousel-caption .title-caption-item").each(function (i, item) {
             jQuery(item).animate({ height: maxHeight }, 100);
         });
     }
