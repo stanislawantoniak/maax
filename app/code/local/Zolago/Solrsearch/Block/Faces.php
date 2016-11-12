@@ -519,8 +519,10 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
                                 'price' =>$this->getPriceBlock($solrData),
                                 'flag' => $this->getFlagBlock($solrData),
                                 'rating' => $this->getRatingBlock($solrData),
+                                'super_attributes' => $this->getSuperAttributesBlock($solrData),
                             );
 
+        //die('test');
         // Fix for landing pages and campaigns
         $fq = $this->getRequest()->getParam('fq');
         $campInfo = isset($fq['campaign_info_id']) ? $fq['campaign_info_id'] : null;
@@ -554,6 +556,10 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         if ($additionalBlocks['price']) {
             $finishBlock[] = $additionalBlocks['price'];
         }
+        if ($additionalBlocks['super_attributes']) {
+            $finishBlock[] = $additionalBlocks['super_attributes'];
+        }
+
         foreach($finishBlock as $block) {
             $block->setFilterContainer($this);
             $block->setSolrModel($this->solrModel);
@@ -658,7 +664,26 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         }
     }
 
+    public function getSuperAttributesBlock($solrData) {
+        $facetFileds = array();
+        krumo($solrData,$facetFileds);
+        krumo($solrData);
+        if (isset($solrData['facet_counts']['facet_fields']) && is_array($solrData['facet_counts']['facet_fields'])) {
+            $facetFileds = $solrData['facet_counts']['facet_fields'];
+        }
+        if(isset($facetFileds['super_attribute_size_facet_color_facet_facet'])) {
+            $data = $facetFileds['super_attribute_size_facet_color_facet_facet'];
+            krumo($data);
 
+            $block = $this->getLayout()
+                ->createBlock("zolagosolrsearch/faces_superattribute");
+            $block->setParentBlock($this);
+            $block->setAllItems($data);
+            $block->setAttributeCode("super_attribute_size_color");
+            $block->setFacetKey("super_attribute_size_color");
+            return $block;
+        }
+    }
     public function getRatingBlock($solrData) {
         if(!$this->getCurrentCategory()->getUseReviewFilter()) {
             return null;
@@ -730,7 +755,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         $priceFieldName = Mage::helper('solrsearch')->getPriceFieldName();
         $facetFileds = array();
         $sorted = array();
-
+        //krumo($solrData);
         if (isset($solrData['facet_counts']['facet_fields']) && is_array($solrData['facet_counts']['facet_fields'])) {
             $facetFileds = $solrData['facet_counts']['facet_fields'];
         }

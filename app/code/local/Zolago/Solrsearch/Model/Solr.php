@@ -56,6 +56,8 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 		// remove facets non existing in filters
 		$availableFacets = $this->getAvailableFacets();
 		$this->facetFields = array_intersect($this->facetFields,$availableFacets);
+        $this->facetFields[] = "super_attribute_size_facet_color_facet_facet";
+        //krumo($this->facetFields);
 	}
 
 	
@@ -250,6 +252,9 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 					/*else if(in_array($key, $this->_specialKeys, true)) {
 						$extendedQuery .= $key.':%22'.urlencode(trim(addslashes($value))).'%22+OR+';
 					}*/
+                    else if($key == 'super_attribute_size_color_facet') {
+                        $cats[] = "super_attribute_size_color_boost:%22".urlencode(trim(addslashes($value)))."%22";
+                    }
                     else if($key == 'category_id') {
                         $cats[] = "category_id:%22{$value}%22";
                     }
@@ -283,7 +288,10 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 				if ($extendedQuery) {
 					$extendedQuery				= trim($extendedQuery, '+OR+');
 					$extendedFilterQueryArray[] = $extendedQuery;					
-				}				
+				}
+//                if($key == 'super_attribute_size_color_facet') {
+//                    $filterQueryArray[] = 'super_attribute_size_color_boost'.':%22'.urlencode(trim(addslashes($value))).'%22';
+//                }
             }
         }
 		
@@ -309,7 +317,7 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
                 $filterQueryString .= '%28'.@implode('%29+AND+%28', $filterQueryArray);
             }
         }
-
+Mage::log($filterQueryArray);
         if(count($extendedFilterQueryArray) > 0) {
 			$filterQueryString .= '%29+AND+%28'.@implode('+OR+', $extendedFilterQueryArray).'%29';
         } else {

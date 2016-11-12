@@ -1,0 +1,85 @@
+<?php
+/** @var Zolago_Modago_Block_Solrsearch_Faces_Enum_Size $this */
+$key = $this->getFacetKey();
+?>
+<?php //if ($this->getCanShow()): ?>
+    <?php
+    $sectionClass = $this->isFilterRolled() ? 'closed' : 'open';
+    $iconClass = $this->isFilterRolled() ? "fa-angle-down" : "fa-angle-up visible-xs";
+    $isOptionSelected = array();
+    $key_withoutFacet = explode("_", $key);
+    array_pop($key_withoutFacet);
+    $pureKey = implode("_", $key_withoutFacet);
+    ?>
+
+    <div class="section clearfix" data-xs-rolled="closed" data-lg-rolled="<?php echo $sectionClass; ?>">
+
+        <h3 class="<?php echo $sectionClass; ?>"><span><?php echo $this->getFacetLabel(); ?></span> <i class="fa <?php echo $iconClass; ?>"></i></h3>
+        <div class="content filter-size"  id="filter_<?php echo $key ?>">
+            <?php foreach ($this->getItems() as $item): ?>
+                <?php if ($this->getCanShowItem($item)): ?>
+                    <?php
+                    if(!$isOptionSelected && $item['active']) {
+                        $isOptionSelected[] = $item;
+                    }
+                    ?>
+                    <label for="<?php echo $item['itemId']?>">
+                        <input data-url="<?php echo $item['url']; ?>"
+                               data-params='<?php echo $item['params'];?>'
+                               type="checkbox"
+                               name="<?php echo $item['name'];?>"
+                               value="<?php echo $item['value']?>"
+                               id="<?php echo $item['itemId']?>"
+                               <?php if($item['active']): ?>checked="checked" <?php endif; ?> />
+				<span>
+					<a href="<?php echo $item['url']; ?>"
+                       class="listing-link">
+						<?php echo $item['item']; ?>
+					</a>
+				</span>
+                    </label>
+                <?php endif; ?>
+            <?php endforeach; ?>
+            <?php if ($this->getCanShowHidden()): ?>
+                <?php foreach ($this->getHiddenItems() as $item): ?>
+                    <label for="<?php echo $item['itemId']?>">
+                        <input data-url="<?php echo $item['url'] ?>"
+                               data-params='<?php echo $item['params'];?>'
+                               type="checkbox"
+                               name="<?php echo $item['name'];?>"
+                               value="<?php echo $item['value']?>"
+                               id="<?php echo $item['itemId']?>"
+                               <?php if($item['active']): ?>checked="checked" <?php endif; ?> />
+					<span>
+						<a href="<?php echo $item['url']; ?>"
+                           class="listing-link">
+							<?php echo $item['item']; ?>
+						</a>
+					</span>
+                    </label>
+                <?php endforeach; ?>
+                <div class="action clearfix">
+                    <a href="#" class="go_read_filter underline showmore-filters" data-state="0"><?php echo $this->__("Show more"); ?></a>
+                </div>
+            <?php endif; ?>
+
+        </div>
+        <?php if(count($isOptionSelected)) : ?>
+            <div class="content-xs" id="filter_<?php echo $key ?>_xs" data-content="xs">
+                <div class="active-filter">
+                    <?php foreach ($isOptionSelected as $item): ?>
+                        <?php if ($this->getCanShowItem($item) && $item['active']): ?>
+                            <a href="<?php echo $item['url']; ?>"
+                               class="active-filter-label"
+                               data-input="<?php echo $item['itemId']; ?>">
+                                <?php echo $item['value']; ?><div class="wrapper-x"><i class="fa fa-times"></i></div>
+                            </a>
+                            <input type="hidden" name="fq[<?php echo $pureKey; ?>]"
+                                   value="<?php echo $item['value']; ?>"/>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div>
+<?php //endif; ?>

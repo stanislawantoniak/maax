@@ -422,6 +422,38 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
         return preg_replace("/_facet$/", "", $facet);
     }
 
+    public function getSuperAttributeRelation() {
+        $facetKey = $this->getFacetKey();
+        //Zend_Debug::dump($facetKey);
+
+        $solrData = $this->getSolrData();
+        $facetFields = $solrData['facet_counts']['facet_fields'];
+
+        $superAttributeFacet = isset($facetFields['super_attribute_' . $facetKey . '_color_facet_facet']) ? $facetFields['super_attribute_' . $facetKey . '_color_facet_facet'] : false;
+        if (!$superAttributeFacet){
+            return;
+        }
+
+        //krumo($superAttributeFacet);
+        //krumo($this->getFilterQuery());
+
+        $availableLabels = array();
+        foreach($superAttributeFacet as $superAttributeFacetItem => $v){
+            $data = explode("_", $superAttributeFacetItem);
+            //Zend_Debug::dump($data);
+            $availableLabels[$data[0]][] = $data[1];
+
+        }
+        //krumo($availableLabels);
+
+        foreach ($this->getItems() as $item){
+            //Zend_Debug::dump($item['item']);
+        }
+
+
+
+
+    }
 
     public function getFacetLabel($facetCode=null) {
 
