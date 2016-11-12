@@ -675,9 +675,11 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
             $data = $facetFileds['super_attribute_size_facet_color_facet_facet'];
             krumo($data);
 
+            /* @var $block Zolago_Solrsearch_Block_Faces_Superattribute */
             $block = $this->getLayout()
                 ->createBlock("zolagosolrsearch/faces_superattribute");
             $block->setParentBlock($this);
+            $block->setSolrData($solrData);
             $block->setAllItems($data);
             $block->setAttributeCode("super_attribute_size_color");
             $block->setFacetKey("super_attribute_size_color");

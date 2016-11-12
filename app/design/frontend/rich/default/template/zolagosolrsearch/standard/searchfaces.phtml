@@ -12,7 +12,6 @@
 				<input type="hidden" name="q" value="<?php echo $this->getData('querytext') ?>"/>
                 <?php if ($this->isShoppingOptionsActive()): ?>
 						<?php foreach ($this->getFilterBlocks() as $filterBlock): ?>
-						<?php krumo($filterBlock); ?>
                             <?php /** @var $filterBlock Zolago_Modago_Block_Solrsearch_Faces_Category */ ?>
 							<!-- Blocks here -->
 							<?php echo $filterBlock->toHtml(); ?>

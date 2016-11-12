@@ -1,62 +1,91 @@
 <?php
-/** @var Zolago_Modago_Block_Solrsearch_Faces_Enum_Size $this */
+/** @var $this Zolago_Solrsearch_Block_Faces_Superattribute */
 $key = $this->getFacetKey();
+/** @see Zolago_Solrsearch_Block_Faces::_getRegularFilterBlocks */
+$customShowFlag = $this->getCustomShowFlag();
+
+$solrData = $this->getSolrData();
+
+$solrDataDocs = $solrData['response']['docs'];
+
+$items = [];
+foreach ($solrDataDocs as $solrDataDoc){
+    krumo($solrDataDoc);
+    if(isset($solrDataDoc['super_attribute_size_color_boost'])){
+        foreach ($solrDataDoc['super_attribute_size_color_boost'] as $i){
+            $items[ $i][] = 1;
+        }
+    }
+}
+krumo($items);
 ?>
-<?php //if ($this->getCanShow()): ?>
+<?php if ($this->getCanShow()): ?>
     <?php
     $sectionClass = $this->isFilterRolled() ? 'closed' : 'open';
-    $iconClass = $this->isFilterRolled() ? "fa-angle-down" : "fa-angle-up visible-xs";
-    $isOptionSelected = array();
+    $iconClass = $this->isFilterRolled() ? "fa-angle-down" : "fa-angle-up";
+    $isOptionSelected = false;
     $key_withoutFacet = explode("_", $key);
     array_pop($key_withoutFacet);
     $pureKey = implode("_", $key_withoutFacet);
     ?>
-
-    <div class="section clearfix" data-xs-rolled="closed" data-lg-rolled="<?php echo $sectionClass; ?>">
-
+    <div class="section clearfix" data-xs-rolled="closed" data-lg-rolled="<?php echo $sectionClass; ?>" <?php echo $customShowFlag ? "style='display:none;visibility:hidden;'" : ''; ?>>
         <h3 class="<?php echo $sectionClass; ?>"><span><?php echo $this->getFacetLabel(); ?></span> <i class="fa <?php echo $iconClass; ?>"></i></h3>
-        <div class="content filter-size"  id="filter_<?php echo $key ?>">
-            <?php foreach ($this->getItems() as $item): ?>
-                <?php if ($this->getCanShowItem($item)): ?>
+        <div id="filter_<?php echo $key ?>" class="content checkbox filter-enum">
+            <?php foreach ($this->getItems() as $item => $value): ?>
+                <?php if ($this->getCanShowItem($value)): ?>
                     <?php
-                    if(!$isOptionSelected && $item['active']) {
-                        $isOptionSelected[] = $item;
+                    if(!$isOptionSelected && $value['active']) {
+                        $isOptionSelected = true;
                     }
                     ?>
-                    <label for="<?php echo $item['itemId']?>">
-                        <input data-url="<?php echo $item['url']; ?>"
-                               data-params='<?php echo $item['params'];?>'
+                    <div class="form-group form-checkbox">
+
+                        <input data-url="<?php echo $value['url'] ?>"
+                               data-params='<?php echo $value['params'];?>'
                                type="checkbox"
-                               name="<?php echo $item['name'];?>"
-                               value="<?php echo $item['value']?>"
-                               id="<?php echo $item['itemId']?>"
-                               <?php if($item['active']): ?>checked="checked" <?php endif; ?> />
-				<span>
-					<a href="<?php echo $item['url']; ?>"
-                       class="listing-link">
-						<?php echo $item['item']; ?>
-					</a>
-				</span>
-                    </label>
+                               name="<?php echo $value['name'];?>"
+                               value="<?php echo $value['value']?>"
+                               id="<?php echo $value['itemId']?>"
+                               class="css-checkbox"
+                               <?php if($value['active']): ?>checked="checked" <?php endif; ?>>
+                        <label for="<?php echo $value['itemId']; ?>" class="css-label">
+	                        <span>
+		                        <a href="<?php echo $value['url']; ?>"
+                                   class="listing-link">
+			                        <?php echo $value['item']; ?>
+		                        </a>
+	                        </span>
+                            &nbsp;
+	                        <span class="suffix">
+		                        (<?php echo $value['count']; ?>)
+	                        </span>
+                        </label>
+                    </div>
                 <?php endif; ?>
             <?php endforeach; ?>
             <?php if ($this->getCanShowHidden()): ?>
                 <?php foreach ($this->getHiddenItems() as $item): ?>
-                    <label for="<?php echo $item['itemId']?>">
+                    <div class="form-group form-checkbox" data-state="hidden" style="display: none;">
                         <input data-url="<?php echo $item['url'] ?>"
-                               data-params='<?php echo $item['params'];?>'
                                type="checkbox"
+                               class="css-checkbox"
                                name="<?php echo $item['name'];?>"
                                value="<?php echo $item['value']?>"
                                id="<?php echo $item['itemId']?>"
-                               <?php if($item['active']): ?>checked="checked" <?php endif; ?> />
-					<span>
-						<a href="<?php echo $item['url']; ?>"
-                           class="listing-link">
-							<?php echo $item['item']; ?>
-						</a>
-					</span>
-                    </label>
+                               <?php if($item['active']): ?>checked="checked" <?php endif; ?>>
+                        <label for="<?php echo $item['itemId']; ?>" class="css-label">
+	                        <span>
+		                        <a href="<?php echo $item['url']; ?>"
+                                   class="listing-link">
+			                        <?php echo $item['item']; ?>
+		                        </a>
+	                        </span>
+                            &nbsp;
+	                        <span class="suffix">
+		                        (<?php echo $item['count']; ?>)
+	                        </span>
+                        </label>
+                    </div>
                 <?php endforeach; ?>
                 <div class="action clearfix">
                     <a href="#" class="go_read_filter underline showmore-filters" data-state="0"><?php echo $this->__("Show more"); ?></a>
@@ -64,10 +93,10 @@ $key = $this->getFacetKey();
             <?php endif; ?>
 
         </div>
-        <?php if(count($isOptionSelected)) : ?>
+        <?php if($isOptionSelected) : ?>
             <div class="content-xs" id="filter_<?php echo $key ?>_xs" data-content="xs">
                 <div class="active-filter">
-                    <?php foreach ($isOptionSelected as $item): ?>
+                    <?php foreach ($this->getItems() as $item): ?>
                         <?php if ($this->getCanShowItem($item) && $item['active']): ?>
                             <a href="<?php echo $item['url']; ?>"
                                class="active-filter-label"
@@ -82,4 +111,4 @@ $key = $this->getFacetKey();
             </div>
         <?php endif; ?>
     </div>
-<?php //endif; ?>
+<?php endif; ?>
