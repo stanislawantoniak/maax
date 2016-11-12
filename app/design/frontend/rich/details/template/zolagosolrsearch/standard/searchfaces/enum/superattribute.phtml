@@ -31,7 +31,10 @@ krumo($items);
     <div class="section clearfix" data-xs-rolled="closed" data-lg-rolled="<?php echo $sectionClass; ?>" <?php echo $customShowFlag ? "style='display:none;visibility:hidden;'" : ''; ?>>
         <h3 class="<?php echo $sectionClass; ?>"><span><?php echo $this->getFacetLabel(); ?></span> <i class="fa <?php echo $iconClass; ?>"></i></h3>
         <div id="filter_<?php echo $key ?>" class="content checkbox filter-enum">
-            <?php foreach ($this->getItems() as $item => $value): ?>
+            <?php foreach ($this->getItems() as $item => $value):
+
+                krumo($value);
+                ?>
                 <?php if ($this->getCanShowItem($value)): ?>
                     <?php
                     if(!$isOptionSelected && $value['active']) {
