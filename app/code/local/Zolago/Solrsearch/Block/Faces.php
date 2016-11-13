@@ -682,7 +682,7 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
             $block->setSolrData($solrData);
             $block->setAllItems($data);
             $block->setAttributeCode("super_attribute");
-            $block->setFacetKey("super_attribute_facet");
+            $block->setFacetKey(Zolago_Solrsearch_Model_Solr::SUPER_ATTRIBUTE_FACET);
             return $block;
         }
     }
