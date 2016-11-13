@@ -223,6 +223,10 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
             array("*"));
         $select->where("product_id IN (?)", $parentIds);
 
+        $attributeIds = array();
+        foreach ($this->getReadConnection()->fetchAll($select) as $row) {
+            $attributeIds[$row['product_id']][] = $row['attribute_id'];
+        }
 
         $allowProductTypes = array();
         foreach (Mage::helper('catalog/product_configuration')->getConfigurableAllowedTypes() as $type) {
@@ -230,23 +234,39 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
         }
 
         foreach($collection as $collectionItem){
+            Mage::log($collectionItem->getData(), null, 'product_super_attribute.log');
+            Mage::log($configurableChildIds[$collectionItem->getId()], null, 'product_super_attribute.log');
             //$collectionItem configurable product
+
+            if(!isset($configurableChildIds[$collectionItem->getId()])){
+                //no children???
+                continue;
+            }
+
+            if(!isset($attributeIds[$collectionItem->getId()])){
+                //no children???
+                continue;
+            }
 
             $attributeCodes = [];
             $subCollection = $collectionItem->getCollection()
                 ->addAttributeToSelect('sku')
                 ->addAttributeToSelect('type_id')
                 ->addFieldToFilter('type_id', $allowProductTypes)
-                ->addFilterByRequiredOptions();
+                ->addFilterByRequiredOptions()
+                ->addIdFilter($configurableChildIds[$collectionItem->getId()]);
 
-            foreach ($collectionItem->getTypeInstance(true)->getUsedProductAttributes($collectionItem) as $attribute) {
+
+            foreach ($attributeIds[$collectionItem->getId()] as $attributeId) {
+                $attribute = $collectionItem->getResource()->getAttribute($attributeId); // @todo make cache for it
+
                 $subCollection->addAttributeToSelect($attribute->getAttributeCode());
                 $subCollection->addAttributeToFilter($attribute->getAttributeCode(), array('notnull'=>1));
                 $attributeCodes[] = $attribute->getAttributeCode();
             }
-            $attributes = $collectionItem->getTypeInstance(true)->getConfigurableAttributes($collectionItem);
 
-
+            Mage::log($attributeCodes, null, 'product_super_attribute_1.log');
+            asort($attributeCodes);
             foreach($subCollection as $subCollectionItem){
                 $items = [];
                 foreach ($attributeCodes as $attributeCode) {
