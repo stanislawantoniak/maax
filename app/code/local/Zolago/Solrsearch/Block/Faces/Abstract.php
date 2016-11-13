@@ -439,7 +439,7 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
 
         $availableLabels = array();
         foreach($superAttributeFacet as $superAttributeFacetItem => $v){
-            $data = explode("_", $superAttributeFacetItem);
+            $data = explode(" / ", $superAttributeFacetItem);
             //Zend_Debug::dump($data);
             $availableLabels[$data[0]][] = $data[1];
 

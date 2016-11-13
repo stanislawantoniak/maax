@@ -10,14 +10,14 @@ $solrDataDocs = $solrData['response']['docs'];
 
 $items = [];
 foreach ($solrDataDocs as $solrDataDoc){
-    krumo($solrDataDoc);
+    //krumo($solrDataDoc);
     if(isset($solrDataDoc['super_attribute_boost'])){
         foreach ($solrDataDoc['super_attribute_boost'] as $i){
             $items[ $i][] = 1;
         }
     }
 }
-krumo($items);
+//krumo($items);
 ?>
 <?php if ($this->getCanShow()): ?>
     <?php
@@ -33,7 +33,7 @@ krumo($items);
         <div id="filter_<?php echo $key ?>" class="content checkbox filter-enum">
             <?php foreach ($this->getItems() as $item => $value):
 
-                krumo($value);
+                //krumo($value);
                 ?>
                 <?php if ($this->getCanShowItem($value)): ?>
                     <?php
