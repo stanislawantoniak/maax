@@ -671,8 +671,8 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
         if (isset($solrData['facet_counts']['facet_fields']) && is_array($solrData['facet_counts']['facet_fields'])) {
             $facetFileds = $solrData['facet_counts']['facet_fields'];
         }
-        if(isset($facetFileds['super_attribute_size_facet_color_facet_facet'])) {
-            $data = $facetFileds['super_attribute_size_facet_color_facet_facet'];
+        if(isset($facetFileds['super_attribute_facet'])) {
+            $data = $facetFileds['super_attribute_facet'];
             krumo($data);
 
             /* @var $block Zolago_Solrsearch_Block_Faces_Superattribute */
@@ -681,8 +681,8 @@ class Zolago_Solrsearch_Block_Faces extends SolrBridge_Solrsearch_Block_Faces
             $block->setParentBlock($this);
             $block->setSolrData($solrData);
             $block->setAllItems($data);
-            $block->setAttributeCode("super_attribute_size_color");
-            $block->setFacetKey("super_attribute_size_color");
+            $block->setAttributeCode("super_attribute");
+            $block->setFacetKey("super_attribute");
             return $block;
         }
     }

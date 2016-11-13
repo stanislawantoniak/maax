@@ -56,7 +56,7 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 		// remove facets non existing in filters
 		$availableFacets = $this->getAvailableFacets();
 		$this->facetFields = array_intersect($this->facetFields,$availableFacets);
-        $this->facetFields[] = "super_attribute_size_facet_color_facet_facet";
+        $this->facetFields[] = "super_attribute_facet";
         //krumo($this->facetFields);
 	}
 
@@ -252,7 +252,7 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 					/*else if(in_array($key, $this->_specialKeys, true)) {
 						$extendedQuery .= $key.':%22'.urlencode(trim(addslashes($value))).'%22+OR+';
 					}*/
-                    else if($key == 'super_attribute_size_color_facet') {
+                    else if($key == 'super_attribute_facet') {
                         $cats[] = "super_attribute_boost:%22".urlencode(trim(addslashes($value)))."%22";
                     }
                     else if($key == 'category_id') {

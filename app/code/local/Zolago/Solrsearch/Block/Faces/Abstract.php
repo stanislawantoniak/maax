@@ -429,7 +429,7 @@ abstract class Zolago_Solrsearch_Block_Faces_Abstract extends Mage_Core_Block_Te
         $solrData = $this->getSolrData();
         $facetFields = $solrData['facet_counts']['facet_fields'];
 
-        $superAttributeFacet = isset($facetFields['super_attribute_' . $facetKey . '_color_facet_facet']) ? $facetFields['super_attribute_' . $facetKey . '_color_facet_facet'] : false;
+        $superAttributeFacet = isset($facetFields['super_attribute_facet']) ? $facetFields['super_attribute_facet'] : false;
         if (!$superAttributeFacet){
             return;
         }
