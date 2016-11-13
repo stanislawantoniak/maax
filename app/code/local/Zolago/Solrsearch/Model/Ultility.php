@@ -15,7 +15,15 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 	/**
 	 * @var array
 	 */
+	protected $_configurableIds;
+	/**
+	 * @var array
+	 */
 	protected $_configurableChildIds;
+	/**
+	 * @var array
+	 */
+	protected $_configurableSuperAttributeLabels;
 	/**
 	 * @var array
 	 */
@@ -92,11 +100,22 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 				$configurableIds[] = $product->getId();
 			}
 		}
+		$this->_configurableIds = $configurableIds;
 		$this->_configurableChildIds = Mage::getResourceSingleton('zolagosolrsearch/improve')->
 			getAllChildIds($configurableIds);
 
 		$this->_configurableChildIdsFlat = $this->_flatten($this->_configurableChildIds);
 		return $this;
+	}
+
+	public function _collectConfigurableSuperAttributes(Mage_Catalog_Model_Resource_Product_Collection $collection) {
+		Mage::log($this->_configurableChildIds, null, '1.log');
+
+		$this->_configurableSuperAttributeLabels = Mage::getResourceSingleton('zolagosolrsearch/improve')->
+		getConfigurableSuperAttributeLabels($collection, $this->_configurableChildIds);
+
+		Mage::log($this->_configurableSuperAttributeLabels , null, 'product_super_attribute.log');
+		
 	}
 	
 	/**
@@ -154,7 +173,8 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 			Zolago_Solrsearch_Model_Resource_Improve::JOIN_STOCK => true,
 			Zolago_Solrsearch_Model_Resource_Improve::JOIN_URL => true,
 		));
-		
+		$superAttributes = $this->_configurableSuperAttributeLabels;
+		Mage::log($superAttributes, null, 'product_super_attribute.log');
 		foreach($rows as $row){
 			$row['store_id'] = $storeId;
 			$item = new Varien_Object;
@@ -162,6 +182,9 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 			$item->setOrigData();
 			$item->unsetData();
 			$item->setId($row['entity_id']);
+			if(isset($superAttributes[$row['entity_id']])){
+				$item->setSuperAttributeBoost($superAttributes[$row['entity_id']]);
+			}
 			$finalCollection->addItem($item);
 		}
 		//Mage::log("Base collection " . $this->_formatTime($this->getMicrotime()-$time));
@@ -374,6 +397,7 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		
 		// Collect configuration children
 		$this->_collectConfigurableChildIds($collection);
+		$this->_collectConfigurableSuperAttributes($collection);
 		
 		//$allIds = array_unique(array_merge(
 		//		$collecitonIds,

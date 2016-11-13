@@ -201,6 +201,68 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
     }
 
     /**
+     * @param $collection
+     * @param $configurableChildIds
+     *
+     * @return array
+     */
+    public function getConfigurableSuperAttributeLabels($collection, $configurableChildIds) {
+
+        $out = array();
+        $parentIds = array_keys($configurableChildIds);
+        if (empty($parentIds)) {
+            //only for configurable products
+            return $out;
+        }
+
+        if(!is_array($parentIds)) {
+            $parentIds = array($parentIds);
+        }
+        $select = $this->getReadConnection()->select();
+        $select->from($this->getTable('catalog/product_super_attribute'),
+            array("*"));
+        $select->where("product_id IN (?)", $parentIds);
+
+
+        $allowProductTypes = array();
+        foreach (Mage::helper('catalog/product_configuration')->getConfigurableAllowedTypes() as $type) {
+            $allowProductTypes[] = $type->getName();
+        }
+
+        foreach($collection as $collectionItem){
+            //$collectionItem configurable product
+
+            $attributeCodes = [];
+            $subCollection = $collectionItem->getCollection()
+                ->addAttributeToSelect('sku')
+                ->addAttributeToSelect('type_id')
+                ->addFieldToFilter('type_id', $allowProductTypes)
+                ->addFilterByRequiredOptions();
+
+            foreach ($collectionItem->getTypeInstance(true)->getUsedProductAttributes($collectionItem) as $attribute) {
+                $subCollection->addAttributeToSelect($attribute->getAttributeCode());
+                $subCollection->addAttributeToFilter($attribute->getAttributeCode(), array('notnull'=>1));
+                $attributeCodes[] = $attribute->getAttributeCode();
+            }
+            $attributes = $collectionItem->getTypeInstance(true)->getConfigurableAttributes($collectionItem);
+
+
+            foreach($subCollection as $subCollectionItem){
+                $items = [];
+                foreach ($attributeCodes as $attributeCode) {
+                    $items[]=$subCollectionItem->getAttributeText($attributeCode);
+                }
+                $out[$collectionItem->getId()][] = implode(" / ", $items);
+            }
+
+            
+            Mage::log($subCollection->getSelect()->__toString(), null, 'product_super_attribute.log');
+        }
+
+        return $out;
+    }
+
+    /**
      * @param array|int $parentIds
      * @return array (parenId=>array(child1, child2,...),...)
      */

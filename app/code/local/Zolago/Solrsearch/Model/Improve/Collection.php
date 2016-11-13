@@ -71,6 +71,8 @@ class Zolago_Solrsearch_Model_Improve_Collection extends Varien_Data_Collection 
 		}
 		return $this;
 	}
+
+
 	
 	/**
 	 * @return array

@@ -48,7 +48,7 @@ class Zolago_Solrsearch_Helper_Data extends Mage_Core_Helper_Abstract {
 		"udropship_vendor_varchar" => "udropship_vendor_name",
 		"manufacturer_logo_varchar" => "manufacturer_logo",
 		"manufacturer_varchar" => "manufacturer",
-		"super_attribute_size_color_boost" => "super_attribute_size_color"
+		"super_attribute_boost" => "super_attribute"
 	);
 
 	/**

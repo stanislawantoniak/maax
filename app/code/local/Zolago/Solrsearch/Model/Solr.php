@@ -253,7 +253,7 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 						$extendedQuery .= $key.':%22'.urlencode(trim(addslashes($value))).'%22+OR+';
 					}*/
                     else if($key == 'super_attribute_size_color_facet') {
-                        $cats[] = "super_attribute_size_color_boost:%22".urlencode(trim(addslashes($value)))."%22";
+                        $cats[] = "super_attribute_boost:%22".urlencode(trim(addslashes($value)))."%22";
                     }
                     else if($key == 'category_id') {
                         $cats[] = "category_id:%22{$value}%22";
@@ -289,9 +289,6 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 					$extendedQuery				= trim($extendedQuery, '+OR+');
 					$extendedFilterQueryArray[] = $extendedQuery;					
 				}
-//                if($key == 'super_attribute_size_color_facet') {
-//                    $filterQueryArray[] = 'super_attribute_size_color_boost'.':%22'.urlencode(trim(addslashes($value))).'%22';
-//                }
             }
         }
 		
@@ -317,7 +314,7 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
                 $filterQueryString .= '%28'.@implode('%29+AND+%28', $filterQueryArray);
             }
         }
-Mage::log($filterQueryArray);
+        Mage::log($filterQueryArray);
         if(count($extendedFilterQueryArray) > 0) {
 			$filterQueryString .= '%29+AND+%28'.@implode('+OR+', $extendedFilterQueryArray).'%29';
         } else {

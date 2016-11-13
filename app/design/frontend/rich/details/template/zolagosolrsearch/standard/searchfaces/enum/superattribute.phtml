@@ -11,8 +11,8 @@ $solrDataDocs = $solrData['response']['docs'];
 $items = [];
 foreach ($solrDataDocs as $solrDataDoc){
     krumo($solrDataDoc);
-    if(isset($solrDataDoc['super_attribute_size_color_boost'])){
-        foreach ($solrDataDoc['super_attribute_size_color_boost'] as $i){
+    if(isset($solrDataDoc['super_attribute_boost'])){
+        foreach ($solrDataDoc['super_attribute_boost'] as $i){
             $items[ $i][] = 1;
         }
     }

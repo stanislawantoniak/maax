@@ -235,18 +235,10 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		// Sku process
 		$sku = $item->getOrigData("sku");
 		if($sku == "test-product"){
-			$docData['super_attribute_size_color_boost'] = array(
-				'czevony_18"',
-				'biały_17"',
-				'czarny_16"'
-			);
-			$docData['super_attribute_size_facet_color_facet_facet'] = array(
-				'czevony_18"',
-				'biały_17"',
-				'czarny_16"'
-			);
+			$docData['super_attribute_boost'] = $item->getSuperAttributeBoost();
+			$docData['super_attribute_facet'] = $item->getSuperAttributeBoost();
 		}
-		Mage::log($sku, null, "solr.log");
+		Mage::log($item->getData() , null, 'product_super_attribute.log');
 		$docData['sku_static'] = $sku;
 		$docData['sku_boost'] = $sku;
 		$docData['sku_boost_exact'] = $sku;
