@@ -4,7 +4,7 @@ class Zolago_Solrsearch_Model_Solr extends SolrBridge_Solrsearch_Model_Solr
 	
 	const REGISTER_KEY = "current_solr_data";
 	const FLAGS_FACET = "flags_facet";
-    const SUPER_ATTRIBUTE_FACET = "flags_facet";
+    const SUPER_ATTRIBUTE_FACET = "super_attribute_facet";
 	const RATING_FACET = "product_rating_facet";
 	const FLAGS_CODE = "flags";
 	const RATING_CODE = "product_rating";
