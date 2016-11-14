@@ -234,11 +234,13 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 
 		// Sku process
 		$sku = $item->getOrigData("sku");
-		if($sku == "test-product"){
-			$docData['super_attribute_boost'] = $item->getSuperAttributeBoost();
-			$docData['super_attribute_facet'] = $item->getSuperAttributeBoost();
-		}
+
+		$superAttributeBoost = $item->getSuperAttributeBoost();
+		$docData['super_attribute_boost'] = $superAttributeBoost;
+		$docData['super_attribute_facet'] = $superAttributeBoost;
+		unset($superAttributeBoost);
 		Mage::log($item->getData() , null, 'product_super_attribute.log');
+
 		$docData['sku_static'] = $sku;
 		$docData['sku_boost'] = $sku;
 		$docData['sku_boost_exact'] = $sku;
@@ -389,7 +391,7 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		
 		// Finally clear id
 		$item->unsetData('id');
-		
+
 		return $this;
 	}
 

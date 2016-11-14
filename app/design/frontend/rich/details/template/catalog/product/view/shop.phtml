@@ -25,7 +25,24 @@ $productAttrs = array();
 if ($_product->getTypeId() == 'configurable') {
 	$productAttrs = $_product->getTypeInstance(true)->getConfigurableAttributesAsArray($_product);
 }
+$collection = Mage::getModel('catalog/product')->getCollection();
+//$collection->setStore(2);
+$collection->addAttributeToSelect("color");
+$collection->addAttributeToSelect("size");
+$collection->addIdFilter(array(5903,5904,5920));
 
+$resource = Mage::getResourceModel("catalog/product");
+$labels = array();
+
+foreach ($collection as $collectionItem) {
+	$labels[$collectionItem->getId()] = implode(" / ", array($collectionItem->getAttributeText("color"), $collectionItem->getAttributeText("size")));
+}
+krumo($labels);
+
+
+$attributeCode = Mage::getResourceModel('catalog/product')
+	->getAttribute(92);
+krumo($attributeSize->getAttributeCode());
 
 $_helperSizetable = Mage::helper('zolagosizetable');
 /** @var Zolago_Sizetable_Helper_Data $_helperSizetable */
