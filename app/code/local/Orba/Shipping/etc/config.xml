@@ -145,6 +145,7 @@
           <tracking_gateway>https://tt.poczta-polska.pl/Sledzenie/services/Sledzenie?wsdl</tracking_gateway>
           <tracking_id>sledzeniepp</tracking_id>
           <tracking_password>PPSA</tracking_password>
+          <tracking_url><![CDATA[http://emonitoring.poczta-polska.pl/?numer=%s]]></tracking_url>
           <title>Poczta Polska</title>          
           <model>orbashipping/post</model>
           <cod_allowed>1</cod_allowed>
