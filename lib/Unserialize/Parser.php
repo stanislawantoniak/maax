@@ -34,7 +34,6 @@ class Unserialize_Parser
     const TYPE_DOUBLE = 'd';
     const TYPE_ARRAY = 'a';
     const TYPE_BOOL = 'b';
-    const TYPE_NULL = 'N';
 
     const SYMBOL_QUOTE = '"';
     const SYMBOL_SEMICOLON = ';';
