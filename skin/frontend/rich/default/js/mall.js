@@ -591,6 +591,7 @@ var Mall = {
         jQuery.each(Mall.product._options.attributes[superOptionId].options, function(index, opt) {
             if(optionId == opt.id) {
                 Mall.product.setPrices((parseFloat(Mall.product._options.basePrice) + parseFloat(opt.price)), (parseFloat(Mall.product._options.oldPrice) + parseFloat(opt.oldPrice)), Mall.product._options.template);
+                Mall.product.setDelivery(opt.delivery);
             }
             return ;
         });

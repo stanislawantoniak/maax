@@ -161,7 +161,6 @@ class Zolago_Catalog_Block_Product_View_Type_Configurable extends Mage_Catalog_B
 			if (!$minQtyData) {
 				$minQtyData = 1;
 			}
-
 			foreach ($this->getAllowAttributes() as $attribute) {
 				$productAttribute = $attribute->getProductAttribute();
 				$productAttributeId = $productAttribute->getId();
@@ -219,11 +218,16 @@ class Zolago_Catalog_Block_Product_View_Type_Configurable extends Mage_Catalog_B
 					$configurablePrice = $currentProduct->getConfigurablePrice();
 
 					if (isset($options[$attributeId][$value['value_index']])) {
-						$productsIndex = $options[$attributeId][$value['value_index']];
+						$productsIndex = $options[$attributeId][$value['value_index']];						
 					} else {
 						$productsIndex = array();
 					}
-
+					// delivery info (if more that one, get only last)
+					$deliveryData = '';
+					foreach ($productsIndex as $pId) {
+						$productTmp = Mage::getModel('catalog/product')->load($pId);						
+						$deliveryData = Mage::helper('zolagocatalog')->getStoreDeliveryHeadline($productTmp);
+					}
 					$info['options'][] = array(
 						'id'        => $value['value_index'],
 						'position' => $optionPositions[$value['value_index']],
@@ -233,6 +237,7 @@ class Zolago_Catalog_Block_Product_View_Type_Configurable extends Mage_Catalog_B
 						'maxQty'    => $maxQty[$value['value_index']],
 						'minQty'    => $minQty[$value['value_index']],
 						'products'  => $productsIndex,
+						'delivery'  => $deliveryData,
 					);
 					$optionPrices[] = $configurablePrice;
 				}
@@ -297,7 +302,6 @@ class Zolago_Catalog_Block_Product_View_Type_Configurable extends Mage_Catalog_B
 		if ($preconfiguredFlag && !empty($defaultValues)) {
 			$config['defaultValues'] = $defaultValues;
 		}
-
 		$config = array_merge($config, $this->_getAdditionalConfig());
 		return Mage::helper('core')->jsonEncode($config);
 	}
