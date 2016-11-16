@@ -186,9 +186,16 @@ class ZolagoOs_OmniChannelPo_Helper_Protected
 
 				$item = $poHlp->itemToUdpoItem($orderItem)->setQty($qty);
 				$orderToPoItemMap[$orderItem->getId() . "-" . $udpoKey] = $item;
-				if (!$orderItem->getHasChildren() || $orderItem->getProductType() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) {
+				$item->setAdditionalData('product_type',$orderItem->getProductType());
+				if (!$orderItem->getHasChildren() || 
+					($orderItem->getProductType() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE)) {
+					$options = $orderItem->getProductOptions();
+					if (!empty($options['bundle_selection_attributes'])) {
+						$item->setAdditionalData('bundle_selection_attributes',$options['bundle_selection_attributes']);
+					} 
 					if (0.001 < abs($orderItem->getUdpoBaseCost())) {
 						$item->setBaseCost($orderItem->getUdpoBaseCost());
+						
 					} else {
 						if (abs($orderItem->getBaseCost()) < 0.001) {
 							$item->setBaseCost($orderItem->getBasePrice());
