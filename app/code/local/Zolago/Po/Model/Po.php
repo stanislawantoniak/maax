@@ -892,125 +892,6 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
     }
 
     /**
-     * @param $ids
-     * @param $vendor
-     * @param bool $showCustomerEmail
-     * @return array
-     */
-    public function ghapiGetOrdersByIncrementIds($ids, $vendor, $showCustomerEmail = FALSE) {
-
-        if (is_numeric($ids)) $ids = array($ids);
-        if (!is_array($ids)) return array();
-        if (!$vendor->getId()) return array();
-
-        /** @var Zolago_Po_Model_Resource_Po_Collection $coll */
-        $coll = Mage::getResourceModel('zolagopo/po_collection');
-        $coll->addFieldToFilter('udropship_vendor', $vendor->getId());
-        $coll->addFieldToFilter('increment_id', $ids);
-        $coll->addPosData("external_id");
-        $list = array();
-        $i = 0;
-        /** @var Zolago_Po_Model_Po $po */
-        foreach ($coll as $po) {
-            $dueAmount = ($po->getDebtAmount() > 0)? 0:abs($po->getDebtAmount());
-            /** @var Zolago_Po_Model_Po $po */
-            $list[$i]['vendor_id']                = $vendor->getId();
-            $list[$i]['vendor_name']              = $vendor->getVendorName();
-            $list[$i]['order_id']                 = $po->getIncrementId();
-            $list[$i]['order_date']               = $po->getCreatedAt();
-            $list[$i]['order_max_shipping_date']  = $po->getMaxShippingDate();
-            $list[$i]['order_status']             = $this->getStatusModel()->ghapiOrderStatus($po->getUdropshipStatus());
-            $list[$i]['order_total']              = $po->getGrandTotalInclTax();
-            $list[$i]['payment_method']           = $po->ghapiPaymentMethod();
-            $list[$i]['order_due_amount']         = $dueAmount;
-            $list[$i]['delivery_method']          = $po->getApiDeliveryMethod();
-            $list[$i]['shipment_tracking_number'] = $po->getShipmentTrackingNumber();
-            $list[$i]['pos_id']                   = $po->getExternalId();
-            $list[$i]['external_order_id']	  = $po->getExternalOrderId();
-            $list[$i]['order_currency']           = $po->getStore()->getCurrentCurrencyCode();
-            $list[$i]['order_email']              = $this->getApiOrderEmail($po->getIncrementId());
-            $list[$i]['customer_id']              = $po->getCustomerId();
-
-            if ($showCustomerEmail)
-                $list[$i]['customer_email'] = $po->getCustomerEmail();
-
-
-
-            $list[$i]['invoice_data']['invoice_required'] = $po->needInvoice();
-            if ($list[$i]['invoice_data']['invoice_required']) {
-                /** @var Zolago_Sales_Model_Order_Address $ba */
-                $ba = $po->getBillingAddress();
-                $list[$i]['invoice_data']['invoice_address']['invoice_first_name']   = $ba->getFirstname();
-                $list[$i]['invoice_data']['invoice_address']['invoice_last_name']    = $ba->getLastname();
-                $list[$i]['invoice_data']['invoice_address']['invoice_company_name'] = $ba->getCompany();
-                $list[$i]['invoice_data']['invoice_address']['invoice_street']       = $ba->getStreet()[0];
-                $list[$i]['invoice_data']['invoice_address']['invoice_city']         = $ba->getCity();
-                $list[$i]['invoice_data']['invoice_address']['invoice_zip_code']     = $ba->getPostcode();
-                $list[$i]['invoice_data']['invoice_address']['invoice_country']      = $ba->getCountryId();
-                $list[$i]['invoice_data']['invoice_address']['invoice_tax_id']       = $ba->getVatId();
-//                $list[$i]['invoice_data']['invoice_address']['phone']                = $ba->getTelephone(); // No telephone?
-            }
-
-            $list[$i]['delivery_data']['inpost_locker_id']                          = $po->getDeliveryInpostLocker()->getName();
-            $list[$i]['delivery_data']['delivery_point_name']                       = $po->getApiDeliveryPointName();
-            $sa = $po->getShippingAddress();
-            $list[$i]['delivery_data']['delivery_address']['delivery_first_name']   = $sa->getFirstname();
-            $list[$i]['delivery_data']['delivery_address']['delivery_last_name']    = $sa->getLastname();
-            $list[$i]['delivery_data']['delivery_address']['delivery_company_name'] = $sa->getCompany();
-            $list[$i]['delivery_data']['delivery_address']['delivery_street']       = $sa->getStreet()[0];
-            $list[$i]['delivery_data']['delivery_address']['delivery_city']         = $sa->getCity();
-            $list[$i]['delivery_data']['delivery_address']['delivery_zip_code']     = $sa->getPostcode();
-            $list[$i]['delivery_data']['delivery_address']['delivery_country']      = $sa->getCountryId();
-            $list[$i]['delivery_data']['delivery_address']['phone']                 = $sa->getTelephone();
-
-            $j = 0;
-            foreach ($po->getItemsCollection() as $item) {
-                /** @var Zolago_Po_Model_Po_Item $item */
-                if (!$item->isDeleted()) {
-
-                    if (!$item->getParentItemId()) {
-                        if ($item->getAdditionalData('product_type') != Mage_Catalog_Model_Product_Type::TYPE_BUNDLE) {
-                            // all expect bundle
-                            $list[$i]['order_items'][$j]['is_delivery_item']           = 0;
-                            $list[$i]['order_items'][$j]['item_sku']                   = $item->getFinalSku();
-                            $list[$i]['order_items'][$j]['item_name']                  = $item->getName();
-                            $list[$i]['order_items'][$j]['item_qty']                   = $item->getQty();
-                            $list[$i]['order_items'][$j]['item_value_before_discount'] = $item->getPriceInclTax() * $item->getQty();
-                            $list[$i]['order_items'][$j]['item_discount']              = $item->getDiscount() * $item->getQty();
-                            $list[$i]['order_items'][$j]['item_value_after_discount']  = ($item->getPriceInclTax() - $item->getDiscount()) * $item->getQty();
-                            $j++;
-                        }
-                    } else if ($data = $item->getAdditionalData('bundle_selection_attributes')) {                        
-                        // simple products from bundle
-                        $bundle = unserialize($data);
-                        $parent = $item->getParentItem();
-                        $qty = $parent->getQty();
-                        $list[$i]['order_items'][$j]['is_delivery_item']           = 0;
-                        $list[$i]['order_items'][$j]['item_sku']                   = $item->getSku();
-                        $list[$i]['order_items'][$j]['item_name']                  = $item->getName();
-                        $list[$i]['order_items'][$j]['item_qty']                   = $item->getQty() * $qty;
-                        $list[$i]['order_items'][$j]['item_value_before_discount'] = $bundle['price'] * $qty; // price is for all items
-                        $list[$i]['order_items'][$j]['item_discount']              = 0; //no discount for bundle element
-                        $list[$i]['order_items'][$j]['item_value_after_discount']  = $bundle['price'] * $qty;
-                        $j++;
-                    }
-                }
-            }
-            // Shipping cost
-            $list[$i]['order_items'][$j]['is_delivery_item']           = 1;
-            $list[$i]['order_items'][$j]['item_sku']                   = '';
-            $list[$i]['order_items'][$j]['item_name']                  = Mage::helper('ghapi')->__('Delivery and package');
-            $list[$i]['order_items'][$j]['item_qty']                   = 1;
-            $list[$i]['order_items'][$j]['item_value_before_discount'] = $po->getBaseShippingAmountIncl();
-            $list[$i]['order_items'][$j]['item_discount']              = $po->getShippingDiscountIncl();
-            $list[$i]['order_items'][$j]['item_value_after_discount']  = $po->getShippingAmountIncl();
-            $i++;
-        }
-
-        return $list;
-    }
-
-    /**
      * Get payment_method for GH API
      *
      * @return string
@@ -1037,7 +918,7 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
      * @return string
      */
     protected function getApiOrderEmail($orderId) {
-        return sprintf(Mage::getStoreConfig('ghapi_options/ghapi_general/ghapi_order_email'),$orderId);
+        return Mage::helper('ghapi')->getApiOrderEmail($orderId);
     }
 
     /**
