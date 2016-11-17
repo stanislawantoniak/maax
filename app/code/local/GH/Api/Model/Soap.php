@@ -140,10 +140,10 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
 
 
             /** @var Zolago_Po_Model_Po $model */
-            $model    = Mage::getModel('zolagopo/po');
+            $helper    = Mage::helper('ghapi');
             $user = $this->getUserByToken($token);
             $vendor = Mage::getModel('udropship/vendor')->load($user->getVendorId());
-            $allData = $model->ghapiGetOrdersByIncrementIds($orderIds, $vendor, $showCustomerEmail);
+            $allData = $helper->ghapiGetOrdersByIncrementIds($orderIds, $vendor, $showCustomerEmail);
 
             // Checking if ids are correct
             $allDataIds = array();
