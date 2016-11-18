@@ -29,10 +29,7 @@ foreach ($_items as $_item){
 $totalSum = number_format($totalSum, 2, '.', '');
 $differenceSum = $totalSum - $sumExistTransactions;
 $differenceInputSum = number_format($differenceSum, 2, '.', '');
-<<<<<<< HEAD
-=======
 $automaticCost = Mage::getStoreConfig('urma/general/zolagorma_automatic_return_cost');
->>>>>>> 817c2e4b7e53f267b8aa19d177ac4f17880290d9
 
 ?>
 <div class="modal fade" id="refundModalSimple">
@@ -67,8 +64,6 @@ $automaticCost = Mage::getStoreConfig('urma/general/zolagorma_automatic_return_c
 								</div>
 							</div>
 						</li>
-<<<<<<< HEAD
-=======
 						<?php if ($automaticCost > 0) : ?>
 						<li class="form-group">
 							<label for="return_cost" class="col-md-6 control-label"><?php echo $_hlp->__("Delivery return cost");?></label>
@@ -80,7 +75,6 @@ $automaticCost = Mage::getStoreConfig('urma/general/zolagorma_automatic_return_c
 							</div>
 						</li>
 						<?php endif;?>
->>>>>>> 817c2e4b7e53f267b8aa19d177ac4f17880290d9
 					</ul>
 				</div>
 				<div class="modal-footer" style="margin-top:0;">
