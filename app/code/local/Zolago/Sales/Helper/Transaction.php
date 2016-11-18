@@ -2,6 +2,11 @@
 
 class Zolago_Sales_Helper_Transaction extends Mage_Core_Helper_Abstract
 {
+    
+    /**
+     * find existing transaction for order
+     */
+
     public function getExistingTransaction($order,$customerId) {
         /** @var Mage_Sales_Model_Order_Payment_Transaction $existTransaction */
         $existTransactionCollection = $this->_getTransactionList($order,$customerId,Mage_Sales_Model_Order_Payment_Transaction::TYPE_ORDER);
@@ -9,6 +14,11 @@ class Zolago_Sales_Helper_Transaction extends Mage_Core_Helper_Abstract
         return $existTransaction;
 
     }
+    
+    /**
+     * prepare transaction collecttion
+     */
+
     protected function _getTransactionList($order,$customerId,$type) {
         $orderId = $order->getId();
         $paymentId = $order->getPayment()->getId();
@@ -18,7 +28,22 @@ class Zolago_Sales_Helper_Transaction extends Mage_Core_Helper_Abstract
                                       ->addFieldToFilter('payment_id', $paymentId);
         return $existTransactionCollection;
     }
+    
+    /**
+     * create refund transaction
+     */
+
     public function createRefundTransaction($order,$customerId,$amount,$customerAccount = null) {
+        return $this->_createTransaction($order,$customerId,$amount,$customerAccount,Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND,0,Zolago_Payment_Model_Client::TRANSACTION_STATUS_NEW);
+    }
+    
+    /**
+     * create transaction 
+     * @param 
+     * @return 
+     */
+
+    protected function _createTransaction($order,$customerId,$amount,$customerAccount,$type,$closed,$status) {
         $transaction = Mage::getModel("sales/order_payment_transaction");
         $transaction->setOrderPaymentObject($order->getPayment());
 
@@ -26,10 +51,10 @@ class Zolago_Sales_Helper_Transaction extends Mage_Core_Helper_Abstract
 
         $transaction
             ->setTxnId(uniqid())
-            ->setTxnType(Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND)
-            ->setIsClosed(0)
+            ->setTxnType($type)
+            ->setIsClosed($closed)
             ->setTxnAmount($amount)
-            ->setTxnStatus(Zolago_Payment_Model_Client::TRANSACTION_STATUS_NEW)
+            ->setTxnStatus($status)
             ->setOrderId($order->getId())
             ->setCustomerId($customerId);
         if ($customerAccount) {
@@ -46,5 +71,15 @@ class Zolago_Sales_Helper_Transaction extends Mage_Core_Helper_Abstract
         }
         return $transaction->save();
 
+    }
+    
+    /**
+     * create transaction for delivery charge in rma
+     * @param 
+     * @return 
+     */
+
+    public function createDeliveryTransaction($order,$customerId,$amount) {
+        return $this->_createTransaction($order,$customerId,$amount,'',Zolago_Sales_Model_Order_Payment_Transaction::TYPE_DELIVERY_CHARGE,1,Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED);                
     }
 }

@@ -4,6 +4,8 @@
  * Class Zolago_Sales_Model_Order_Payment_Transaction
  */
 class Zolago_Sales_Model_Order_Payment_Transaction extends Mage_Sales_Model_Order_Payment_Transaction {
+    
+    const TYPE_DELIVERY_CHARGE = 'delivery_charge';
 
     /**
      * @param array $data
@@ -57,4 +59,33 @@ class Zolago_Sales_Model_Order_Payment_Transaction extends Mage_Sales_Model_Orde
 
         return $this;
     }
+    
+    
+    /**
+     * override (new transaction type)
+     * @return array
+     */
+     public function getTransactionTypes() {
+         $out = parent::getTransactionTypes();
+         $out[self::TYPE_DELIVERY_CHARGE] = Mage::helper('sales')->__('Return delivery charge');
+         return $out;
+     }
+     
+     
+    /**
+     * override 
+     * @param 
+     * @return 
+     */
+    protected function _verifyTxnType($txnType = null)
+    {
+        if (null === $txnType) {
+            $txnType = $this->getTxnType();
+        }
+        if ($txnType === self::TYPE_DELIVERY_CHARGE) {
+            return; // new type, OK
+        }
+        parent::_verifyTxnType($txnType);
+    }
+
 }
