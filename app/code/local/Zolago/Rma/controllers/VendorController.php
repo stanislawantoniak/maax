@@ -228,6 +228,10 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
     public function makeSimpleRefundAction() {
         $rmaId = $this->getRequest()->getParam('id');
         $amount = $this->getRequest()->getParam('refund');
+        $charge = $this->getRequest()->getParam('return_cost',0);
+        if ($charge > $amount) {
+            $charge = $amount;
+        }
         $hlp = Mage::helper("zolagorma");
         try {
             $rma = Mage::getModel('urma/rma')->load($rmaId);
@@ -244,49 +248,15 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
                 if($rma->getCustomerAccount()) {
                     $customerAccount = $rma->getCustomerAccount();
                 }
-                /* @var Mage_Sales_Model_Resource_Order_Payment_Transaction_Collection $existTransactionCollection */
-                $existTransactionCollection = Mage::getModel('sales/order_payment_transaction')->getCollection()
-                    ->addFieldToFilter('order_id', $orderId)
-                    ->addFieldToFilter('customer_id', $customerId)
-                    ->addFieldToFilter('txn_type', Mage_Sales_Model_Order_Payment_Transaction::TYPE_ORDER)
-                    ->addFieldToFilter('payment_id', $paymentId);
-                /** @var Mage_Sales_Model_Order_Payment_Transaction $existTransaction */
-                $existTransaction = $existTransactionCollection->getFirstItem();
-                /** @var Mage_Sales_Model_Order_Payment_Transaction $transaction */
-                $transaction = Mage::getModel("sales/order_payment_transaction");
-                $transaction->setOrderPaymentObject($order->getPayment());
-
-                if($this->validateSimpleRefund($amount, $rma)){
-                    if($existTransaction->getId()){
-                        $transaction
-                            ->setTxnId(uniqid())
-                            ->setTxnType(Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND)
-                            ->setIsClosed(0)
-                            ->setTxnAmount(-$amount)
-                            ->setTxnStatus(Zolago_Payment_Model_Client::TRANSACTION_STATUS_NEW)
-                            ->setParentId($existTransaction->getTransactionId())
-                            ->setOrderId($orderId)
-                            ->setParentTxnId($existTransaction->getTxnId(), $transaction->getTransactionId())
-                            ->setCustomerId($customerId)
-                            ->setBankAccount($customerAccount)
-                            ->setRmaId($rma->getId())
-                            ->setDotpayId($existTransaction->getDotpayId());
-                    }else {
-                        $transaction
-                            ->setTxnId(uniqid())
-                            ->setTransactionId($transaction->getTransactionId())
-                            ->setTxnType(Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND)
-                            ->setIsClosed(0)
-                            ->setTxnAmount(-$amount)
-                            ->setTxnStatus(Zolago_Payment_Model_Client::TRANSACTION_STATUS_NEW)
-                            ->setOrderId($orderId)
-                            ->setCustomerId($customerId)
-                            ->setBankAccount($customerAccount)
-                            ->setRmaId($rma->getId())
-                            ->setPaymentId($paymentId);
+                if($this->validateSimpleRefund($amount, $rma)) {
+                    $done = false;
+                    if ($amount > $charge) {
+                        $done = Mage::helper('zolagosales/transaction')->createRefundTransaction($order,$customerId,-$amount+$charge,$customerAccount);
                     }
-
-                    if($transaction->save()){
+                    if ($charge) {
+                        $done = Mage::helper('zolagosales/transaction')->createDeliveryTransaction($order,$customerId,-$charge);
+                    }
+                    if ($done) {
                         $commentData = array(
                             "parent_id" => $rma->getId(),
                             "is_visible_on_front" => 0,
@@ -299,10 +269,13 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
                         $commentData['vendor_id'] = $vendorSession->getVendorId();
                         if(!$po->isPaymentDotpay()) {
                             //refund confirm
-                            $commentData['comment'] = $hlp->__("{{author_name}} has confirmed refund for this RMA, amount: %s", $po->getCurrencyFormattedAmount($amount));
+                            $commentData['comment'] = $hlp->__("{{author_name}} has confirmed refund for this RMA, amount: %s", $po->getCurrencyFormattedAmount($amount-$charge));
                         } else {
                             //refund order
-                            $commentData['comment'] = $hlp->__("{{author_name}} has ordered refund for this RMA, amount: %s", $po->getCurrencyFormattedAmount($amount));
+                            $commentData['comment'] = $hlp->__("{{author_name}} has ordered refund for this RMA, amount: %s", $po->getCurrencyFormattedAmount($amount-$charge));
+                        }
+                        if ($charge) {
+                            $commentData['comment'] .= $hlp->__('. Charge for returned delivery: %s',$po->getCurrencyFormattedAmount($charge));
                         }
                         $commentModel = Mage::getModel("zolagorma/rma_comment");
                         $commentModel->setRma($rma);
@@ -310,7 +283,10 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
                         $commentModel->setAuthorName($commentModel->getAuthorName(false));
                         $commentModel->save();
 
-                        $this->_getSession()->addSuccess($hlp->__("RMA refund successful! Amount refunded %s", $po->getCurrencyFormattedAmount($amount)));
+                        $this->_getSession()->addSuccess($hlp->__("RMA refund successful! Amount refunded %s", $po->getCurrencyFormattedAmount($amount-$charge)));
+                        if ($charge) {
+                            $this->_getSession()->addSuccess($hlp->__("Charge for freturned delivery %s", $po->getCurrencyFormattedAmount($charge)));
+                        }
                     }
                 } else {
                     $this->_getSession()->addError($hlp->__("An amount to refund can not be more than total order sum"));
