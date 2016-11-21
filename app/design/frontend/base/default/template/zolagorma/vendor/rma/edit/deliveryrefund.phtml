@@ -29,7 +29,11 @@ foreach ($_items as $_item){
 $totalSum = number_format($totalSum, 2, '.', '');
 $differenceSum = $totalSum - $sumExistTransactions;
 $differenceInputSum = number_format($differenceSum, 2, '.', '');
-$automaticCost = Mage::getStoreConfig('urma/general/zolagorma_automatic_return_cost');
+if ($showDeliveryCost = Mage::helper('zolagosales/transaction')->checkChargeTransaction($_rma)) {
+	$automaticCost = Mage::getStoreConfig('urma/general/zolagorma_automatic_return_cost');
+} else {
+	$automaticCost = 0;
+}
 
 ?>
 <div class="modal fade" id="refundModalSimple">
@@ -71,7 +75,7 @@ $automaticCost = Mage::getStoreConfig('urma/general/zolagorma_automatic_return_c
 						</li>
 						<li class="form-group">
 						</li>
-						<li class="form-group">
+						<li class="form-group" <?php if (!$showDeliveryCost): echo "style='display:none'";endif;?>>
 							<label for="return_cost" class="col-md-6 control-label"><?php echo $_hlp->__("Delivery return cost");?></label>
 							<div class="col-md-3">
 								<div class="input-group">
@@ -127,7 +131,7 @@ $automaticCost = Mage::getStoreConfig('urma/general/zolagorma_automatic_return_c
 				refund_cost: {
 					required: true,
 					number: true,
-					min: 0.01,
+					min: 0.00,
 					max: <?php echo $differenceSum; ?>
 				},
 				refund_sum: {

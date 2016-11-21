@@ -248,13 +248,17 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
                 if($rma->getCustomerAccount()) {
                     $customerAccount = $rma->getCustomerAccount();
                 }
-                if($this->validateSimpleRefund($amount, $rma)) {
+                if(!$this->validateSimpleRefund($amount, $rma)) {
+                    $this->_getSession()->addError($hlp->__("An amount to refund can not be more than total order sum"));
+                } elseif(!$this->_checkChargeTransaction($charge,$rma)) {
+                    $this->_getSession()->addError($hlp->__("Charge delivery transaction already exists"));
+                } else {
                     $done = false;
                     if ($amount > $charge) {
-                        $done = Mage::helper('zolagosales/transaction')->createRefundTransaction($order,$customerId,-$amount+$charge,$customerAccount);
+                        $done = Mage::helper('zolagosales/transaction')->createRefundTransaction($order,$customerId,-$amount+$charge,$customerAccount,$rmaId);
                     }
                     if ($charge) {
-                        $done = Mage::helper('zolagosales/transaction')->createDeliveryTransaction($order,$customerId,-$charge);
+                        $done = Mage::helper('zolagosales/transaction')->createDeliveryTransaction($order,$customerId,-$charge,$rmaId);
                     }
                     if ($done) {
                         $commentData = array(
@@ -288,8 +292,6 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
                             $this->_getSession()->addSuccess($hlp->__("Charge for returned delivery: %s", $po->getCurrencyFormattedAmount($charge)));
                         }
                     }
-                } else {
-                    $this->_getSession()->addError($hlp->__("An amount to refund can not be more than total order sum"));
                 }
                 $this->_redirect("urma/vendor/edit", array('id' => $rmaId));
             }
@@ -301,7 +303,18 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
         }
     }
 
+
     /**
+     * check if charge delivery transaction exists in rma
+     * @return bool (ok if not exists)
+     */
+    protected function _checkChargeTransaction($charge,$rma) {
+        if (!$charge) {
+            return true;
+        }
+        return Mage::helper('zolagosales/transaction')->checkChargeTransaction($rma);
+    }
+    /**    
      * @param $amount
      * @param $rma
      * @return bool
