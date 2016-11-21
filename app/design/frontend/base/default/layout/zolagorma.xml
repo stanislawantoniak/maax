@@ -42,7 +42,7 @@
 				<block name="vendor_rma_edit_shipping_address" type="zolagorma/vendor_rma_edit_address" template="zolagopo/vendor/po/edit/address.phtml"/>
 				<block name="vendor_rma_edit_shipping" type="zolagorma/vendor_rma_edit_shipping" template="zolagopo/vendor/po/edit/shipping/carrier.phtml"/>
 				<block name="vendor_rma_edit_refund" type="zolagorma/vendor_rma_edit_refund" template="zolagorma/vendor/rma/edit/refund.phtml"/>
-				<block name="vendor_rma_edit_simple_refund" type="zolagorma/vendor_rma_edit_simple_refund" template="zolagorma/vendor/rma/edit/simplerefund.phtml"/>
+				<block name="vendor_rma_edit_simple_refund" type="zolagorma/vendor_rma_edit_simple_refund" template="zolagorma/vendor/rma/edit/deliveryrefund.phtml"/>
 			</block>
 		</reference>
     </urma_vendor_edit>
