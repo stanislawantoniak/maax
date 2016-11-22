@@ -157,18 +157,29 @@ jQuery(function($){
             // Handle next click
             s.find(".next").click(function(){
                 var valid = true,
-	                claim = false;
+	                claim = false,
+	                reclamation = false;
                 s.find(":checkbox:checked").each(function(){
                     var el = $(this),
                         select = el.parents("tr").find("select");
                     if(!select.valid()){
                         valid = false;
-                    } else if(self.getReturnReasons(select.val()).isClaim) {
+                    } else {
+                    	if(self.getReturnReasons(select.val()).isClaim) {
 	                    claim = true;
+	                }
+	                if(self.getReturnReasons(select.val()).isReclamation) {
+	                	reclamation = true;
+	                }
                     }
                 });
-				
+		if (reclamation) {
+			jQuery('.rma-cost-info').hide();
+		} else {
+			jQuery('.rma-cost-info').show();
+		}
                 if(valid && !claim && !self.dhlDisabled){
+		    // show or hide message info
                     self.next();
                 } else if(valid && (claim || self.dhlDisabled)) {
 	                self.step2.detach();
@@ -193,7 +204,6 @@ jQuery(function($){
                 self.prev();
                 return false;
             });
-
             // Handle next click
             s.find(".next").click(function(){
                 var valid = true,
@@ -1195,7 +1205,6 @@ jQuery(function($){
 		getNotAvailableText: function(){
 			return this.notAvailableText;
 		},
-		
 		setUnloadMessage: function(msg){
 			this.unloadMessage = msg;
 		}

@@ -53,7 +53,6 @@ if ($showDeliveryCost = Mage::helper('zolagosales/transaction')->checkChargeTran
 						<?php if($_rma->getPo()->isPaymentDotpay()): ?>
 							<?php echo $_hlp->__("Ordering a refund will inform gallery administrators about need of refunding the money. Refund will be processed manually and then will change it's status to completed"); ?>
 						<?php else: ?>
-							<?php echo $_hlp->__("Confirming refund means that you have already made a bank transfer with refund to customer.");?>
 						<?php endif; ?>
 					</div>
 				</div>

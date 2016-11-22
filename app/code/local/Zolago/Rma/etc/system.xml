@@ -36,6 +36,15 @@
                             <show_in_website>0</show_in_website>
                             <show_in_store>0</show_in_store>
                         </zolagorma_automatic_return_cost>
+                        <zolagorma_reclamation_ids translate="label" module="zolagorma">
+                            <label>Ids of reasons which are reclamations</label>
+                            <comment>Insert ids of reasons separated by comma</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>9500</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </zolagorma_reclamation_ids>
                     </fields>
                 </general>
 		   </groups>
