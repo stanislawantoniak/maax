@@ -220,7 +220,8 @@ class Zolago_Rma_Helper_Data extends ZolagoOs_Rma_Helper_Data {
                 $is_reason_available = ($days_elapsed >= $allowed_days) ? false : true;
 
                 $is_reason_claim = $days_elapsed >= $auto_days;
-
+                $reclamationIds = Mage::getStoreConfig('urma/general/zolagorma_reclamation_ids');
+                $reclamationArray = explode(',',$reclamationIds);
                 $reasons_array[$return_reason_id] = array(
                                                         'isAvailable' => $is_reason_available,
                                                         'isClaim' => $is_reason_claim,
@@ -228,7 +229,8 @@ class Zolago_Rma_Helper_Data extends ZolagoOs_Rma_Helper_Data {
                                                         'flow' => $this->getFlow($vendor_reason, $days_elapsed),
                                                         'auto_days' => $auto_days,
                                                         'allowed_days' => $allowed_days,
-                                                        'message' => $message
+                                                        'message' => $message,
+                                                        'isReclamation' => in_array($return_reason_id,$reclamationArray),
                                                     );
             }
         }

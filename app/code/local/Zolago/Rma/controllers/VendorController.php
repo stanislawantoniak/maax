@@ -228,7 +228,7 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
     public function makeSimpleRefundAction() {
         $rmaId = $this->getRequest()->getParam('id');
         $amount = $this->getRequest()->getParam('refund');
-        $charge = $this->getRequest()->getParam('return_cost',0);
+        $charge = $this->getRequest()->getParam('refund_cost',0);
         if ($charge > $amount) {
             $charge = $amount;
         }
@@ -248,22 +248,26 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
                 if($rma->getCustomerAccount()) {
                     $customerAccount = $rma->getCustomerAccount();
                 }
-                if($this->validateSimpleRefund($amount, $rma)) {
+                if(!$this->validateSimpleRefund($amount, $rma)) {
+                    $this->_getSession()->addError($hlp->__("An amount to refund can not be more than total order sum"));
+                } elseif(!$this->_checkChargeTransaction($charge,$rma)) {
+                    $this->_getSession()->addError($hlp->__("Charge delivery transaction already exists"));
+                } else {
                     $done = false;
                     if ($amount > $charge) {
-                        $done = Mage::helper('zolagosales/transaction')->createRefundTransaction($order,$customerId,-$amount+$charge,$customerAccount);
+                        $done = Mage::helper('zolagosales/transaction')->createRefundTransaction($order,$customerId,-$amount+$charge,$customerAccount,$rmaId);
                     }
                     if ($charge) {
-                        $done = Mage::helper('zolagosales/transaction')->createDeliveryTransaction($order,$customerId,-$charge);
+                        $done = Mage::helper('zolagosales/transaction')->createDeliveryTransaction($order,$customerId,-$charge,$rmaId);
                     }
                     if ($done) {
                         $commentData = array(
-                            "parent_id" => $rma->getId(),
-                            "is_visible_on_front" => 0,
-                            "is_vendor_notified" => 0,
-                            "is_customer_notified" => 0,
-                            "is_visible_to_vendor" => 1
-                        );
+                                           "parent_id" => $rma->getId(),
+                                           "is_visible_on_front" => 0,
+                                           "is_vendor_notified" => 0,
+                                           "is_customer_notified" => 0,
+                                           "is_visible_to_vendor" => 1
+                                       );
                         /* @var $vendorSession  Zolago_Dropship_Model_Session*/
                         $vendorSession = Mage::getSingleton('udropship/session');
                         $commentData['vendor_id'] = $vendorSession->getVendorId();
@@ -275,7 +279,7 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
                             $commentData['comment'] = $hlp->__("{{author_name}} has ordered refund for this RMA, amount: %s", $po->getCurrencyFormattedAmount($amount-$charge));
                         }
                         if ($charge) {
-                            $commentData['comment'] .= $hlp->__('. Charge for returned delivery: %s',$po->getCurrencyFormattedAmount($charge));
+                            $commentData['comment'] .= '. '.$hlp->__('Charge for returned delivery: %s',$po->getCurrencyFormattedAmount($charge));
                         }
                         $commentModel = Mage::getModel("zolagorma/rma_comment");
                         $commentModel->setRma($rma);
@@ -285,11 +289,9 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
 
                         $this->_getSession()->addSuccess($hlp->__("RMA refund successful! Amount refunded %s", $po->getCurrencyFormattedAmount($amount-$charge)));
                         if ($charge) {
-                            $this->_getSession()->addSuccess($hlp->__("Charge for freturned delivery %s", $po->getCurrencyFormattedAmount($charge)));
+                            $this->_getSession()->addSuccess($hlp->__("Charge for returned delivery: %s", $po->getCurrencyFormattedAmount($charge)));
                         }
                     }
-                } else {
-                    $this->_getSession()->addError($hlp->__("An amount to refund can not be more than total order sum"));
                 }
                 $this->_redirect("urma/vendor/edit", array('id' => $rmaId));
             }
@@ -301,7 +303,18 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
         }
     }
 
+
     /**
+     * check if charge delivery transaction exists in rma
+     * @return bool (ok if not exists)
+     */
+    protected function _checkChargeTransaction($charge,$rma) {
+        if (!$charge) {
+            return true;
+        }
+        return Mage::helper('zolagosales/transaction')->checkChargeTransaction($rma);
+    }
+    /**    
      * @param $amount
      * @param $rma
      * @return bool
@@ -311,12 +324,12 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
         $orderId = $rma->getOrder()->getId();
         $paymentId = $rma->getOrder()->getPayment()->getId();
         $existRefunds = Mage::getModel('sales/order_payment_transaction')->getCollection()
-            ->addFieldToFilter('order_id', $orderId)
-            ->addFieldToFilter('customer_id', $customerId)
-            ->addFieldToFilter('txn_type', Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND)
-            ->addFieldToFilter('payment_id', $paymentId);
+                        ->addFieldToFilter('order_id', $orderId)
+                        ->addFieldToFilter('customer_id', $customerId)
+                        ->addFieldToFilter('txn_type', Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND)
+                        ->addFieldToFilter('payment_id', $paymentId);
         $refundSum = 0;
-        foreach($existRefunds as $existRefund){
+        foreach($existRefunds as $existRefund) {
             $refundSum +=  abs($existRefund->getTxnAmount());
         }
         $newRefundSum = $refundSum + $amount;

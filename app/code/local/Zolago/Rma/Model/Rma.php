@@ -529,4 +529,27 @@ class Zolago_Rma_Model_Rma extends ZolagoOs_Rma_Model_Rma
         }
         return false;
     }
+    
+    /**
+     * check if rma is delivery return 
+     */
+
+    public function isDeliveryReturn() {
+        $reclamationIds = Mage::getStoreConfig('urma/general/zolagorma_reclamation_ids');
+        if (!$reclamationIds) {
+            return true;
+        }
+        $reclamationArray = explode(',',$reclamationIds);
+        $isReturn = true;
+        foreach ($this->getAllItems() as $item) {
+            if ($condition = $item->getItemCondition()) {
+                if (!in_array($condition,$reclamationArray)) {
+                    return true;
+                } else {
+                    $isReturn = false; // at least one product as reclamation
+                }
+            }
+        }
+        return $isReturn;
+    }
 }

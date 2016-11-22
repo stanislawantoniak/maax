@@ -110,7 +110,7 @@ class  Zolago_Payment_Helper_Data extends Mage_Core_Helper_Abstract
                        $email,
                        '',
                        $templateId,
-                       $this->_getRmaRefundEmailVars($rma->getIncrementId(),$refundAmount,$paymentType),
+                       $this->_getRmaRefundEmailVars($rma,$refundAmount,$paymentType),
                        true,
                        $this->_getRefundEmailSender()
                    );
@@ -159,13 +159,16 @@ class  Zolago_Payment_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::getStoreConfig("payment_refunds/payment_refunds_emails/refund_rma_email_template");
     }
 
-    protected function _getRmaRefundEmailVars($rmaId,$refundAmount,$paymentType) {
+    protected function _getRmaRefundEmailVars($rma,$refundAmount,$paymentType) {
+        $charge = Mage::helper('zolagosales/transaction')->getChargeDeliveryTransactionValue($rma->getId());
+        
         return array(
                    'store_name' => Mage::app()->getStore()->getName(),
-                   'rma_id' => $rmaId,
+                   'rma_id' => $rma->getIncrementId(),
                    'return_amount' => $refundAmount,
                    'payment_type' => $paymentType,
-                   'use_attachments' => true
+                   'use_attachments' => true,
+                   'charge_value' => Mage::helper('zolagopayment')->getCurrencyFormattedAmount(-$charge),
                );
     }
 
