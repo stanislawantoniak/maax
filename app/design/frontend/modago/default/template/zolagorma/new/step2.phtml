@@ -9,7 +9,7 @@
 <?php $dateList = array() ;?>
 <?php $weekdays = Mage::app()->getLocale()->getOptionWeekdays();?>
 <?php $vendor = $_po->getVendor();?>
-<?php $rmaCostInfo = Mage::app()->getLayout()->createBlock('cms/block')->setBlockId('rma-cost-info')->toHtml();?>
+<?php $rmaCostInfo = ($_rma->isDeliveryReturn()? Mage::app()->getLayout()->createBlock('cms/block')->setBlockId('rma-cost-info')->toHtml():'');?>
 <?php echo $this->getChildHtml("zolagormatranslate"); ?>
 
 <div class="steps step-2 background-wrapper box-wrapper" id="step-2">

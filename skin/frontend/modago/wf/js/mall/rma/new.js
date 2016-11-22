@@ -158,7 +158,7 @@ jQuery(function($){
             s.find(".next").click(function(){
                 var valid = true,
 	                claim = false,
-	                reclamation = false;
+	                isReturn = false;
                 s.find(":checkbox:checked").each(function(){
                     var el = $(this),
                         select = el.parents("tr").find("select");
@@ -168,15 +168,15 @@ jQuery(function($){
                     	if(self.getReturnReasons(select.val()).isClaim) {
 	                    claim = true;
 	                }
-	                if(self.getReturnReasons(select.val()).isReclamation) {
-	                	reclamation = true;
+	                if(!self.getReturnReasons(select.val()).isReturn) {
+	                	isReturn = true;
 	                }
                     }
                 });
-		if (reclamation) {
-			jQuery('.rma-cost-info').hide();
-		} else {
+		if (isReturn) {
 			jQuery('.rma-cost-info').show();
+		} else {
+			jQuery('.rma-cost-info').hide();
 		}
                 if(valid && !claim && !self.dhlDisabled){
 		    // show or hide message info
