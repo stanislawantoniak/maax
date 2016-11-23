@@ -214,3 +214,5 @@
 "Delivery return cost","Odejmij koszt transportu za zwrot"
 "Value to refund cannot be lower than 0","Wartość zwrotu nie może być mniejsza od 0"
 "Charge delivery transaction already exists","Opłata za zwrot była już pobrana"
+"Enter delivery charge","Wpisz potrącaną kwotę za zwrot"
+"Delivery cost to charge can not be more than total order sum","Potrącana kwota za zwrot nie może być większa od wartości zamówienia"
