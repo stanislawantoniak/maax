@@ -137,6 +137,9 @@ Mall.product = {
 		// set price
 		price_selector.html(template.replace("#{price}", number_format(this.roundUp(price, 2), "2", ",", " ")));
 	},
+	setDelivery: function (delivery) {
+		jQuery("#delivery-item-text").html(delivery);
+	},
 	roundUp: function(value, exp) {
 		if (typeof exp === 'undefined' || +exp === 0)
 			return Math.round(value);
