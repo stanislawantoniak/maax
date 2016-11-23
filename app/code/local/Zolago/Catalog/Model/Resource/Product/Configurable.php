@@ -323,15 +323,9 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                 &&
                 (float)$_product["msrp"]
                 &&
-                ((float)$_product["msrp"] - (float)$_product["price"] >= ((float)$_product["msrp"] * (float)($percent / 100))
-                )
+                ((float)$_product["msrp"] > (float)$_product["price"])
             ) {
-                $isNew = (bool)$_product["is_new"];
-                if (!$isNew) {
-                    $setFlagSale[$storeId][] = $_product["entity_id"];
-                } else {
                     $setFlagPromo[$storeId][] = $_product["entity_id"];
-                }
 
             } else {
                 $setFlagEmpty[$storeId][] = $_product["entity_id"];
