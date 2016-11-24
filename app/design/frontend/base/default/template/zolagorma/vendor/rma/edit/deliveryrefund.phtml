@@ -29,10 +29,11 @@ foreach ($_items as $_item){
 $totalSum = number_format($totalSum, 2, '.', '');
 $differenceSum = $totalSum - $sumExistTransactions;
 $differenceInputSum = number_format($differenceSum, 2, '.', '');
+$automaticCost = 0;
 if ($showDeliveryCost = Mage::helper('zolagosales/transaction')->checkChargeTransaction($_rma)) {
-	$automaticCost = Mage::getStoreConfig('urma/general/zolagorma_automatic_return_cost');
-} else {
-	$automaticCost = 0;
+	if ($_rma->isDeliveryReturn()) {
+		$automaticCost = empty(Mage::getStoreConfig('urma/general/zolagorma_automatic_return_cost'))? 0:Mage::getStoreConfig('urma/general/zolagorma_automatic_return_cost');
+	}
 }
 
 ?>
@@ -204,6 +205,7 @@ if ($showDeliveryCost = Mage::helper('zolagosales/transaction')->checkChargeTran
 		var toReturn = jQuery("#refund").val();
 		var deliveryReturn = jQuery("#return_cost").val();
 		var value = parseFloat(toReturn) - parseFloat(deliveryReturn);
+		value = value.toFixed(2);
 		jQuery("#refund_sum").val(value);		
 	};
 	
