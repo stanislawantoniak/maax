@@ -168,6 +168,7 @@ class  Zolago_Payment_Helper_Data extends Mage_Core_Helper_Abstract
                    'return_amount' => $refundAmount,
                    'payment_type' => $paymentType,
                    'use_attachments' => true,
+                   'is_charge_value' => !empty($charge),
                    'charge_value' => Mage::helper('zolagopayment')->getCurrencyFormattedAmount(-$charge),
                );
     }
