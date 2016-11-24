@@ -203,15 +203,13 @@
         <!---->
         <!--</ca>-->
         <!--Płacę z IPKONET-->
-        <!--<ipkonet>-->
-        <!---->
-        <!--<method>dotpay</method>-->
-        <!--<additional_information>-->
-        <!--<channel></channel>-->
-        <!--<type>4</type><is_gateway>1</is_gateway>-->
-        <!--</additional_information>-->
-        <!---->
-        <!--</ipkonet>-->
+        <ipkonet>
+        <method>dotpay</method>
+        <additional_information>
+        <channel></channel>
+        <type>4</type><is_gateway>1</is_gateway>
+        </additional_information>
+        </ipkonet>
         <!--Przelew z Bank BPH-->
         <bph>
           <method>dotpay</method>
