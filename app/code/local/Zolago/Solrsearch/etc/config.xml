@@ -131,6 +131,14 @@
                     </zolagosolrsearch>
                 </observers>
             </admin_manually_push_to_solr_after>
+            <admin_manually_push_to_price_queue_after>
+                <observers>
+                    <zolagosolrsearch>
+                        <class>zolagocatalog/observer</class>
+                        <method>collectProductsAndPushToQueue</method>
+                    </zolagosolrsearch>
+                </observers>
+            </admin_manually_push_to_price_queue_after>
 			
 			<!-- Converter stock save -->
 			<zolagocatalog_converter_stock_complete>
