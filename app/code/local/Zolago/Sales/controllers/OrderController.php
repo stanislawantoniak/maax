@@ -82,10 +82,6 @@ class Zolago_Sales_OrderController extends ZolagoOs_Rma_OrderController
 				));
 			}
 		}
-		if($this->_getRefererUrl()) {
-			$this->_redirectReferer();
-		} else {
-			$this->_redirect("sales/order/process");
-		}
+		$this->_redirect("sales/order/process");
 	}
 }
