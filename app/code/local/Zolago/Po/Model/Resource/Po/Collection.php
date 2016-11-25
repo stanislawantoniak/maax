@@ -286,8 +286,28 @@ class Zolago_Po_Model_Resource_Po_Collection
         
     }
 
-	protected function _joinAllocationsTable() {
-		if(!$this->_allocationsJoined) {
+	/**
+	 * @return $this
+	 */
+	protected function _joinTransactionsTable()
+	{
+		if (!$this->_transactionsJoined) {
+			$this->getSelect()->joinLeft(
+				array("transaction" => $this->getTable("sales/payment_transaction")),
+				"transaction.order_id = main_table.order_id and transaction.txn_status = '".Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED."'",
+				"IF(SUM(transaction.txn_amount)>=main_table.grand_total_incl_tax,1,0) AS payment_status"
+			);
+			$this->_transactionsJoined = true;
+		}
+		return $this;
+	}
+
+	/**
+	 * @return $this
+	 */
+	protected function _joinAllocationsTable()
+	{
+		if (!$this->_allocationsJoined) {
 			$this->getSelect()->joinLeft(
 				array("allocation"=>$this->getTable("zolagopayment/allocation")),
 				"allocation.po_id = main_table.entity_id AND allocation.allocation_type = '".Zolago_Payment_Model_Allocation::ZOLAGOPAYMENT_ALLOCATION_TYPE_PAYMENT."'",
