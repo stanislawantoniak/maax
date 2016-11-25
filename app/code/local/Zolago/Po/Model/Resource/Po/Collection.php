@@ -308,7 +308,7 @@ class Zolago_Po_Model_Resource_Po_Collection
 		if (!$this->_transactionsJoined) {
 			$this->getSelect()->joinLeft(
 				array("transaction" => $this->getTable("sales/payment_transaction")),
-				"transaction.order_id = main_table.order_id",
+				"transaction.order_id = main_table.order_id and transaction.txn_status = '".Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED."'",
 				"IF(SUM(transaction.txn_amount)>=main_table.grand_total_incl_tax,1,0) AS payment_status"
 			);
 			$this->_transactionsJoined = true;
