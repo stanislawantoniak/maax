@@ -14,20 +14,8 @@ $_items = $_rma->getAllItems();
 $_hlp = $this->getRmaHelper();
 /** @var Zolago_Common_Helper_Data $_zolagoHlp */
 $_modagoHlp = Mage::helper("zolagocommon");
-$sumExistTransactions = $this->getSumExistTransactions();
 
-$totalSum = 0;
-foreach ($_items as $_item){
-	$_poItemId = $_item->getPoItem()->getId();
-	if($_poItemId) {
-		$paidNum = $_item->getPoItem()->getFinalItemPrice();
-	} else {
-		$paidNum = $_item->getPrice();
-	}
-	$totalSum += floatval($paidNum);
-}
-$totalSum = number_format($totalSum, 2, '.', '');
-$differenceSum = $totalSum - $sumExistTransactions;
+$differenceSum = $_rma->getRmaRefundAmountMax();
 $differenceInputSum = number_format($differenceSum, 2, '.', '');
 $automaticCost = 0;
 if ($showDeliveryCost = Mage::helper('zolagosales/transaction')->checkChargeTransaction($_rma)) {
