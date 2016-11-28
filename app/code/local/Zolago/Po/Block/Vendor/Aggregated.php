@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 class Zolago_Po_Block_Vendor_Aggregated extends Mage_Core_Block_Template
 {
@@ -52,6 +52,9 @@ class Zolago_Po_Block_Vendor_Aggregated extends Mage_Core_Block_Template
                 if ($manager->isActive()) {
                     $client = $manager->getClient();
                     $list = $client->getPostOfficeList();
+                    if (!is_array($list)) {
+                        $list = array($list);
+                    }
                     foreach ($list as $item) {
                         $out[$item->urzadNadania] = sprintf('%s [%s]',$item->opis,$item->nazwaWydruk);
                     }
