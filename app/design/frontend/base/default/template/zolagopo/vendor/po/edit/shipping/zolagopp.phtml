@@ -9,6 +9,9 @@ $_availableMethods =  $this->getAvailableMethods();
 $_modagoHlp = Mage::helper("zolagocommon");
 $_defaultWeight = Mage::getStoreConfig('carriers/zolagopp/default_package_weight');
 $_insurance = Mage::getSingleton('orbashipping/system_source_post_insurance')->toOptionArray();
+if (Orba_Shipping_Model_Post_Client::useBusinessPackType()) {
+	$_size = Mage::getSingleton('orbashipping/system_source_post_sizes')->toOptionHash();
+}
 ?>
 <!-- Modal add letter-->
 <div class="modal fade" id="shippingModal">
@@ -36,12 +39,24 @@ $_insurance = Mage::getSingleton('orbashipping/system_source_post_insurance')->t
 			                                </label>
 							</div>
 						</li>
+						<?php if (!empty($_size)) : ?>
+						<li class="form-group specify specify-carrier">
+							<label for="shipping-size" class="col-md-3 control-label"><?php echo $_hlp->__('Package size') ?></label>
+							<div class="col-md-2">
+								<select id="shipping-size"  name="size" class="form-control text-align:right">
+								<?php foreach ($_size as $key => $val) : ?>
+								<?php printf("<option value='%s'>%s</option>",$key,$val); ?>
+								<?php endforeach; ?>
+								</select>
+							</div>
+						</li>
+						<?php endif;?>
 						<li class="form-group specify specify-carrier">
 							<label for="shipping-weight" class="col-md-3 control-label"><?php echo $_hlp->__('Weight') ?></label>
 							<div class="col-md-2">
 								<input id="shipping-weight"  name="weight" title="<?php echo $_hlp->__('Weight') ?>" type="text" class="form-control align-right" value="<?php echo $_defaultWeight;?>"/>
 							</div>
-                            <label for="shipping-weight" class="col-md-7 control-label" style="text-align:left"><?php echo $_hlp->__('grams');?></label>
+        	                    <label for="shipping-weight" class="col-md-7 control-label" style="text-align:left"><?php echo $_hlp->__('grams');?></label>
 						</li>
 						<li class="form-group specify specify-carrier">
 							<label for="shipping-insurance" class="col-md-3 control-label"><?php echo $_hlp->__('Insurance value') ?></label>
