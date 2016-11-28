@@ -44,3 +44,6 @@
 "Default box size for shipment labels","Domyślny rozmiar paczki przy generowaniu listu przewozowego" 
 "No assigned post offices","Brak przypisanych urzędów nadania"
 "Document not generated yet. You should send post packet","Dokument jeszcze nie wygenerowany. Najpierw wyślij przesyłkę"
+"Gauge %s","Gabaryt %s"
+"Package size","Rozmiar paczki"
+"Use business pack type","Użyj biznesowego typu paczki do wysyłki"
