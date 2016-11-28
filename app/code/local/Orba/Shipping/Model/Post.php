@@ -102,7 +102,11 @@ class Orba_Shipping_Model_Post extends Orba_Shipping_Model_Carrier_Abstract {
             $client->setShipmentSettings($settings);
             $this->_clearEnvelope();
             $this->_assignAggregatedDispatch();
-            $retval = $client->createDeliveryPacks($settings);
+            if (Orba_Shipping_Model_Post_Client::useBusinessPackType()) {
+                $retval = $client->createDeliveryPackBusiness($settings);
+            } else {
+                $retval = $client->createDeliveryPacks($settings);
+            }
             $code = empty($retval->guid)? 0:$retval->guid;
             $message = 'OK';
         } catch (Exception $xt) {

@@ -428,6 +428,15 @@
               <show_in_website>0</show_in_website>
               <show_in_store>0</show_in_store>            	
             </default_package_weight>
+            <business_type translate="label">
+              <label>Use business pack type</label>
+              <frontend_type>select</frontend_type>
+              <sort_order>84</sort_order>
+              <source_model>adminhtml/system_config_source_yesno</source_model>              
+              <show_in_default>1</show_in_default>
+              <show_in_website>0</show_in_website>
+              <show_in_store>0</show_in_store>
+            </business_type>
             <cod_settlement_type tranlsate="label">
               <label>Type of settlement for COD</label>
               <frontend_type>select</frontend_type>

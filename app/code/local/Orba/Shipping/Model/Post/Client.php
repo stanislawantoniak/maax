@@ -362,11 +362,19 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
 
     public function _createDeliveryPackBusiness($settings) {
         $message = new addShipment();
-        $data = new PrzesylkaBiznesowaType();
+        $data = new PrzesylkaBiznesowaPlusType();
         $data->adres = $this->_prepareAddress();
         $data->gabaryt = $this->_settings['size'];
         $data->masa = $this->_settings['weight'];
+        $data->wartosc = $this->_settings['value']*100; // gr
         $data->guid = $this->_getGuid();
+        $data->numerPrzesylkiKlienta = $settings['orderId'];        
+        if ($codValue = $this->_settings['cod']) {
+            $data->pobranie = $this->_prepareCod($codValue);
+        }
+        if ($insurance = $this->_prepareInsurance()) {
+            $data->ubezpieczenie = $insurance;
+        }
         $message->przesylki[] = $data;
         $result = $this->_sendMessage('addShipment',$message);
         return $this->_prepareResult($result);
@@ -473,7 +481,7 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
         return $insurance;
     }
     /**
-     * create standard packs
+     * create standard packs (POCZTEX)
      */
 
     public function createDeliveryPacks($settings) {
