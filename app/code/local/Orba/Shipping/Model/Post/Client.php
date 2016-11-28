@@ -362,7 +362,7 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
 
     public function createDeliveryPackBusiness($settings) {
         $message = new addShipment();
-        $data = new PrzesylkaBiznesowaPlusType();
+        $data = new PrzesylkaBiznesowaType();
         $data->adres = $this->_prepareAddress();
         $data->gabaryt = $this->_settings['size'];
         $data->masa = $this->_settings['weight'];
