@@ -5,6 +5,7 @@
 class Zolago_Po_Model_Aggregated_Pdf extends Orba_Common_Model_Pdf {
     const PO_AGGREGATED_PATH = 'shipping';
     const PO_AGGREGATED_PREFIX = 'aggregate_';
+    const PO_AGGREGATED_ON_PAGE = 13;
     // Aggregation
     protected $_aggregated;
     protected $_line_count = 1;
@@ -205,7 +206,7 @@ class Zolago_Po_Model_Aggregated_Pdf extends Orba_Common_Model_Pdf {
             $collection = Mage::getModel('udpo/po')->getCollection();
             $collection->addFieldToFilter('aggregated_id',$id);
             $count =  count($collection);
-            $pages = ceil(($count+6)/16);
+            $pages = ceil(($count+6)/(self::PO_AGGREGATED_ON_PAGE+1));
             $counter = 0;
             $num = 0;
             $this->_prepareDate($collection);
@@ -220,7 +221,7 @@ class Zolago_Po_Model_Aggregated_Pdf extends Orba_Common_Model_Pdf {
                 foreach ($shipmentCollection as $ship) {
                     if ($ship->getUdropshipStatus() != ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_CANCELED) {
                         $this->_addShip($ship,$po,$page,$counter);
-                        if ($counter++>15) {
+                        if ($counter++>self::PO_AGGREGATED_ON_PAGE) {
                             $counter = 0;
                         }
                     }
