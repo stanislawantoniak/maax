@@ -548,7 +548,6 @@ class Zolago_Catalog_Model_Resource_Product extends Mage_Catalog_Model_Resource_
             "attributes.attribute_code=?", Zolago_Catalog_Model_Product::ZOLAGO_CATALOG_CONVERTER_PRICE_TYPE_CODE
         );
         $select->where("products.sku IN(?)", $skus);
-        Mage::log((string)$select, null, "xxx.log");
 
         try {
             $priceType = $readConnection->fetchAll($select);
