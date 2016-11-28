@@ -301,7 +301,7 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
             if (!empty($source)) {
                 return true;
             } else {
-                $ret = $this->_getDhlPostalService($zip,time());
+                $ret = $this->_getDhlPostalService($zip,time()+3601);
                 if ($ret) {
                     $zipModel = Mage::getResourceModel('orbashipping/zip');
                     $zipModel->updateDhlZip($country, $zip);
