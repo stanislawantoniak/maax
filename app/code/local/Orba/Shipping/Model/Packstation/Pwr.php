@@ -67,7 +67,7 @@ class Orba_Shipping_Model_Packstation_Pwr extends Orba_Shipping_Model_Carrier_Ab
             $client->setShipperAddress($senderAddress);
             $receiverAddress = $this->_receiverAddress;
             $receiverAddress['email'] = $this->_settings['udpo']->getCustomerEmail();
-            $client->setReceiverAddress($this->_receiverAddress);
+            $client->setReceiverAddress($receiverAddress);
             $code = $client->generateLabelBusinessPack();
             $message = 'OK';
         } catch (Exception $xt) {
