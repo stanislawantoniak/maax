@@ -18,6 +18,7 @@ class Zolago_Rma_Model_Rma extends ZolagoOs_Rma_Model_Rma
     const FLOW_INSTANT = 1;
     const FLOW_ACKNOWLEDGED = 2;
 
+    protected $_refundSimpleAmount = array();
     /**
      * @return boolean
      * @todo implement
@@ -399,8 +400,8 @@ class Zolago_Rma_Model_Rma extends ZolagoOs_Rma_Model_Rma
     /**
      * @return float
      */
-    public function getRmaSimpleRefundAmount() {
-        if(!isset($this->_refundSimpleAmount)) {
+    public function getRmaSimpleRefundAmount($total = false) {
+        if(!isset($this->_refundSimpleAmount[$total])) {
 
             $customerId = $this->getCustomerId();
             $order = $this->getOrder();
@@ -412,18 +413,24 @@ class Zolago_Rma_Model_Rma extends ZolagoOs_Rma_Model_Rma
                                  ->addFieldToFilter('customer_id', $customerId)
                                  ->addFieldToFilter('txn_type', $types)
                                  ->addFieldToFilter('payment_id', $paymentId);
+            if (!$total) {
+                $existTransactions->addFieldToFilter('rma_id',$this->getId());
+            }
 
             $amount = 0;
             foreach($existTransactions as $existTransaction) {
                 $amount +=  -$existTransaction->getTxnAmount();
             }
-            $this->_refundSimpleAmount = $amount;
+            $this->_refundSimpleAmount[$total] = $amount;
         }
-        return $this->_refundSimpleAmount;
+        return $this->_refundSimpleAmount[$total];
     }
+    
+    /**
+     * max value to return from product value
+     */
 
-    public function getRmaRefundAmountMax() {
-        if(!isset($this->_refundAmountMax)) {
+    public function getRmaRefundProductValueMax() {
             $_items = $this->getAllItems();
             $amount = 0;
             foreach($_items as $item) {
@@ -433,7 +440,35 @@ class Zolago_Rma_Model_Rma extends ZolagoOs_Rma_Model_Rma
                     $amount += $item->getPrice();
                 }
             }
-            $this->_refundAmountMax = $amount;
+            return $amount;
+    }
+    
+    /**
+     * max value to return from order value
+     */
+    public function getRmaRefundOrderValueMax() {
+        $order = $this->getPo();
+        $value = $order->getGrandTotalInclTax();
+        $returned = $this->getRmaSimpleRefundAmount(true);
+        return $value-$returned;        
+    }
+    
+    /**
+     * max value to refund
+     */
+
+    public function getRmaRefundAmountMax() {
+        if(!isset($this->_refundAmountMax)) {
+            
+            $paymentHelper = Mage::helper('zolagopayment');
+            if ($paymentHelper->getConfigUseAllocation()) {
+                $value = $this->getRmaRefundProductValueMax();
+            } else {
+                $product = $this->getRmaRefundProductValueMax();
+                $order = $this->getRmaRefundOrderValueMax();
+                $value = ($order<$product)? $order:$product;
+            }
+            $this->_refundAmountMax = $value;
         }
         return $this->_refundAmountMax;
     }
