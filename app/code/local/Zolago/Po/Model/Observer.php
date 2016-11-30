@@ -805,7 +805,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract {
     public function poAlertUpdate($observer)
     {
         $po = $observer->getPo();
-        $this->_zipAlertUpdate();
+        $this->_zipAlertUpdate($po);
     }
     
     /**
