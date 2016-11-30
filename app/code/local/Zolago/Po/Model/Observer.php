@@ -251,6 +251,9 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract {
                 case Zolago_Po_Model_Po_Status::STATUS_CANCELED:
                     $this->_refundAll($po);
                     break;
+                case Zolago_Po_Model_Po_Status::STATUS_EXPORTED:
+                    $this->_checkZipAlert($po);
+                    break;
                 default:
                     ;
 
@@ -258,7 +261,18 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract {
             }
         }
     }
+    
+    /**
+     * read zip databaze one again
+     */
 
+    public function _checkZipAlert($po) {
+        $alert = $po->getAlert();
+        if ($alert | Zolago_Po_Model_Po_Alert::ALERT_DHL_ZIP_CHECKING) {
+            $this->_zipAlertUpdate($po);
+        }            
+    }
+    //
     public function updatePoStatusByAllocation($observer) {
         /* @var $po Zolago_Po_Model_Po */
         $po = $observer->getEvent()->getData('po');
@@ -792,8 +806,15 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract {
     public function poAlertUpdate($observer)
     {
         $po = $observer->getPo();
-        $alert = $po->getAlert();
+        $this->_zipAlertUpdate();
+    }
+    
+    /**
+     * dhl zip validation
+     */
 
+    protected function _zipAlertUpdate($po) {
+        $alert = $po->getAlert();
         $shippingId = $po->getShippingAddressId();
         $address = Mage::getModel('sales/order_address')->load($shippingId);
         $dhlEnabled = Mage::helper('core')->isModuleEnabled('Zolago_Dhl');
