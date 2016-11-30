@@ -8,10 +8,20 @@ class Dotpay_Dotpay_Block_Redirect extends Mage_Core_Block_Template {
   }
 
   protected function _getOrder() {
-    if ($this->getOrder())
+    if ($this->getOrder()) {
+      Mage::log('getorder',null,'dotpay.log');
+      Mage::log($this->getOrder()->getId(),null,'dotpay.log');
+      Mage::log(Mage::getSingleton('checkout/session')->getData(),null,'dotpay.log');
+      Mage::log(Mage::getSingleton('customer/session')->getData(),null,'dotpay.log');
       return $this->getOrder();
-    if ($orderIncrementId = Mage::getSingleton('checkout/session')->getLastRealOrderId())
+    }
+    if ($orderIncrementId = Mage::getSingleton('checkout/session')->getLastRealOrderId()) {
+      Mage::log('increment',null,'dotpay.log');
+      Mage::log($orderIncrementId,null,'dotpay.log');
+      Mage::log(Mage::getSingleton('checkout/session')->getData(),null,'dotpay.log');
+      Mage::log(Mage::getSingleton('customer/session')->getData(),null,'dotpay.log');
       return Mage::getModel('sales/order')->loadByIncrementId($orderIncrementId);
+    }
   }
 
   public function getForm() {

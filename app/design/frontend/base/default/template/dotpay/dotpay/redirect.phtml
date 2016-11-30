@@ -1,6 +1,7 @@
 <html>
   <body>
-    <?php echo $this->getForm()->toHtml() ?>
+    <?php echo $this->getForm()->toHtml(); ?>
+    <?php Mage::log($this->getForm()->toHtml(),null,'dotpay.log'); ?>
     <script type="text/javascript">
     //<![CDATA[
       var form = document.getElementById('dotpay_dotpay_redirection_form');
