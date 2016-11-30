@@ -1022,7 +1022,13 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         }
 
         if($this->_getVendor()) {
-            $comment = "[" .$this->_getVendor()->getVendorName() . "] " . $comment;
+                $session = Mage::getSingleton('udropship/session');
+                if ($session->isOperatorMode()) {
+                    $operator = $session->getOperator();
+                    $comment = "[" .$this->_getVendor()->getVendorName() . " / ".$operator->getEmail()."] " . $comment;
+                } else {
+                    $comment = "[" .$this->_getVendor()->getVendorName() . "] " . $comment;
+                }
         }
 
         try {
