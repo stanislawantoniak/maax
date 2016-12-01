@@ -160,7 +160,9 @@ $isPickUpPaymentCanBeEntered = $this->isPickUpPaymentCanBeEntered();
 							
 						</dd> 
 						<dt><?php echo $_hlp->__("Order date");?>:</dt> 
-						<dd><?php echo Mage::helper('core')->formatDate($_po->getCreatedAt(), 'medium')?></dd> 
+						<dd><?php echo Mage::helper('core')->formatDate($_po->getCreatedAt(), 'medium').
+							' '.
+							Mage::helper('core')->formatTime($_po->getCreatedAt(),'medium');?></dd> 
 						<dt><?php echo $_hlp->__("Max. ship. date");?>:</dt> 
 						<dd><?php echo Mage::helper('core')->formatDate($_po->getMaxShippingDate(), 'medium')?></dd> 
 						<?php if($_po->getPos()):?>
