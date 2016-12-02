@@ -377,10 +377,13 @@ class GH_Api_Helper_Data extends Mage_Core_Helper_Abstract {
         $order['order_email']              = $this->getApiOrderEmail($po->getIncrementId());
         $order['customer_id']              = $po->getCustomerId();
 
-        if ($showCustomerEmail)
+        if ($showCustomerEmail) {
             $order['customer_email'] = $po->getCustomerEmail();
-
-
+            if (empty($order['order_email'])) {
+                $order['order_email'] = $po->getCustomerEmail();
+            }
+        }
+            
 
         $order['invoice_data']['invoice_required'] = $po->needInvoice();
         if ($order['invoice_data']['invoice_required']) {
