@@ -134,7 +134,7 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
                 $orderIds = array($orderIds);
             }
 
-            $showCustomerEmail = FALSE;
+            $showCustomerEmail = Mage::helper("core")->isModuleEnabled('ZolagoOs_OutsideStore'); // domyślnie włączony dla indywidualnych sklepów
             if (property_exists($request, 'showCustomerEmail'))
                 $showCustomerEmail = $request->showCustomerEmail;
 
@@ -144,7 +144,6 @@ class GH_Api_Model_Soap extends Mage_Core_Model_Abstract {
             $user = $this->getUserByToken($token);
             $vendor = Mage::getModel('udropship/vendor')->load($user->getVendorId());
             $allData = $helper->ghapiGetOrdersByIncrementIds($orderIds, $vendor, $showCustomerEmail);
-
             // Checking if ids are correct
             $allDataIds = array();
             foreach ($allData as $po) {
