@@ -654,13 +654,12 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
          return Mage::helper('orbashipping/post');
      }
      
+     
     /**
-     * aggregated
+     * create aggregated document
      */
-     public function getOutboxBook($id) {
-         $message = new getOutboxBook();
-         $message->idEnvelope = $id;
-         $result = $this->_sendMessage('getOutboxBook',$message);
+    protected function _createAggregatedDocument($message,$function) {
+        $result = $this->_sendMessage($function,$message);
         if (!empty($result->error)) {
             Mage::log($result);            
             Mage::throwException($result->error->errorDesc);
@@ -669,6 +668,23 @@ class Orba_Shipping_Model_Post_Client extends Orba_Shipping_Model_Client_Soap {
             Mage::throwException(Mage::helper('orbashipping')->__('Empty content'));
         }
         return $result;
+    }
+         
+    /**
+     * aggregated for business pack
+     */
+     public function getFirmowaPocztaBook($id) {         
+         $message = new getFirmowaPocztaBook();
+         $message->idEnvelope = $id;
+         return $this->_createAggregatedDocument($message,'getFirmowaPocztaBook');
+     }
+    /**
+     * aggregated
+     */
+     public function getOutboxBook($id) {
+         $message = new getOutboxBook();
+         $message->idEnvelope = $id;
+         return $this->_createAggregatedDocument($message,'getOutboxBook');
      }
 
 }

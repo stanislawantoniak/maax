@@ -160,6 +160,9 @@ class Orba_Shipping_Model_Packstation_Inpost extends Orba_Shipping_Model_Carrier
             Mage::logException($xt); // if something wrong - only log exception (not break process)
         }
     }
+    public function getAggregatedPdfObject() {
+        return Mage::getModel('zolagopo/aggregated_inpost');
+    }
     public function getShippingModal() {
         return Mage::app()->getLayout()->createBlock('zolagopo/vendor_po_edit_shipping_inpost');
     }

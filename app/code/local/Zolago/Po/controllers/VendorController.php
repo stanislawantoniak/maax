@@ -1022,7 +1022,13 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         }
 
         if($this->_getVendor()) {
-            $comment = "[" .$this->_getVendor()->getVendorName() . "] " . $comment;
+                $session = Mage::getSingleton('udropship/session');
+                if ($session->isOperatorMode()) {
+                    $operator = $session->getOperator();
+                    $comment = "[" .$this->_getVendor()->getVendorName() . " / ".$operator->getEmail()."] " . $comment;
+                } else {
+                    $comment = "[" .$this->_getVendor()->getVendorName() . "] " . $comment;
+                }
         }
 
         try {
@@ -1508,8 +1514,11 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                 $this->_getSession()->addSuccess($message);
                 $session = Mage::getSingleton('udropship/session');
                 if ($session->isOperatorMode()) {
-                    $operator = $session->getOperator();
-                    $name = sprintf('%s %s',$operator->getFirstName(),$operator->getLastName());                    
+                    $operator = $session->getOperator();                    
+                    $name = trim(sprintf('%s %s',$operator->getFirstName(),$operator->getLastName()));                    
+                    if (empty($name)) {
+                        $name = $operator->getEmail();
+                    }
                 } else {
                     $name = $session->getVendor()->getVendorName();
                 }

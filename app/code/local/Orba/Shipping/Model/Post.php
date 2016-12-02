@@ -144,7 +144,11 @@ class Orba_Shipping_Model_Post extends Orba_Shipping_Model_Carrier_Abstract {
             $client = $this->getClient();
             $client->setParam('postOffice',$postOfficeId);            
             $result = $client->sendEnvelope();
-            $box = $client->getOutboxBook($result->idEnvelope);
+            if (Orba_Shipping_Model_Post_Client::useBusinessPackType()) {
+                $box = $client->getFirmowaPocztaBook($result->idEnvelope);
+            } else {
+                $box = $client->getOutboxBook($result->idEnvelope);
+            }
             // save pdf
             $pdf = $this->getAggregatedPdfObject();
             $pdf->saveFile($box->pdfContent,$aggregatedId);
