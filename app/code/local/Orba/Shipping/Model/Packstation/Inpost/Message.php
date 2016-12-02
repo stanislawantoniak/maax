@@ -97,5 +97,20 @@ class Orba_Shipping_Model_Packstation_Inpost_Message extends Varien_Object {
          $data['labelFormat'] = '';
          return $data;
      }
+     
+    /**
+     * confirm printout
+     */
+     public function getConfirmPrintoutMessage($email,$password,$packcodes) {
+         $data = array();
+         $data['email'] = $email;
+         $data['password'] = $password;
+         foreach ($packcodes as $code) {
+             $pack = $this->_xmlMessage->addChild('pack');
+             $pack->addChild('packcode',$code);
+         }
+         $data['content'] = $this->_xmlMessage->asXML();
+         return $data; 
+     }
 
 }
