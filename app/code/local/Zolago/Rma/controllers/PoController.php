@@ -217,7 +217,8 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
 				'shipmentDate' => $data['carrier_date'],
 				'shipmentStartHour' => $data['carrier_time_from'],
 				'shipmentEndHour' => $data['carrier_time_to'],
-				'shippingPaymentType' => Orba_Shipping_Model_Carrier_Client_Dhl::PAYER_TYPE_USER // chyba powinno być USER ale trzeba jeszcze sprawdzić to w DHL
+				'shippingPaymentType' => Orba_Shipping_Model_Carrier_Client_Dhl::PAYER_TYPE_RECEIVER, // chyba powinno być USER ale trzeba jeszcze sprawdzić to w DHL
+				'paymentType' = Orba_Shipping_Model_Carrier_Client_Dhl::PAYMENT_TYPE_CASH
 			);
 		}
 		else{

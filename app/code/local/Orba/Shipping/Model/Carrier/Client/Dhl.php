@@ -11,6 +11,7 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Client_
     const SHIPMENT_DOMESTIC			= 'AH';
 
     const PAYMENT_TYPE				= 'BANK_TRANSFER';
+    const PAYMENT_TYPE_CASH			= 'CASH';
     const PAYER_TYPE_SHIPPER		= 'SHIPPER';
     const PAYER_TYPE_RECEIVER		= 'RECEIVER';
     const PAYER_TYPE_USER			= 'USER';
