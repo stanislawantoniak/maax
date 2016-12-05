@@ -227,6 +227,7 @@ class Zolago_Catalog_Block_Product_View_Type_Configurable extends Mage_Catalog_B
                     foreach ($productsIndex as $pId) {
                         $productTmp = Mage::getModel('catalog/product')->load($pId);
                         $deliveryData = Mage::helper('zolagocatalog')->getStoreDeliveryHeadline($productTmp);
+                        $msrp = $productTmp->getMsrp();
                     }
                     $info['options'][] = array(
                                              'id'        => $value['value_index'],
@@ -238,11 +239,11 @@ class Zolago_Catalog_Block_Product_View_Type_Configurable extends Mage_Catalog_B
                                              'minQty'    => $minQty[$value['value_index']],
                                              'products'  => $productsIndex,
                                              'delivery'  => $deliveryData,
+                                             'msrp'	 => $msrp,
                                          );
                     $optionPrices[] = $configurablePrice;
                 }
             }
-
             $this->arraySortByColumn($info['options'], 'position');
 
             /**
