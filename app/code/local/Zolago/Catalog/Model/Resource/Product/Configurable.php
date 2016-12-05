@@ -446,9 +446,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         //$collection->addAttributeToSelect("udropship_vendor");
         $collection->addFieldToFilter('entity_id', array('in' => $ids));
         $collection->getSelect()->where("at_converter_msrp_type.value=?", Zolago_Catalog_Model_Product_Source_Convertermsrptype::FLAG_MANUAL);
-
         $productsMSRPManual = $collection->getAllIds();
-
         return $productsMSRPManual;
     }
 
@@ -579,7 +577,6 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                     ->getDefaultStoreId();
 
                 $childProductsMSRP = $configModel->getMSRPForChildren($defaultStoreId, $parentIds, true);
-
                 foreach ($parentIds as $parentId) {
                     $msrpRelation = isset($childProductsMSRP[$parentId]) ? $childProductsMSRP[$parentId] : false;
 
@@ -591,7 +588,6 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                 Mage::logException($e);
             }
         }
-
         //2. Update
         unset($websiteId, $defaultStoreId);
         $options = array();
@@ -608,8 +604,10 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                     ->getDefaultStoreId();
 
                 foreach ($data as $value => $productIds) {
-                    $aM->updateAttributesPure($productIds, array("msrp" => (string)$value), $defaultStoreId);
-                    $ids = array_merge($ids, $productIds);
+                    if (!empty((float)$value)) {
+                        $aM->updateAttributesPure($productIds, array("msrp" => (string)$value), $defaultStoreId);
+                        $ids = array_merge($ids, $productIds);
+                    }
                 }
             }
 
@@ -689,7 +687,9 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         //1. Collect price
         $productMinPrice = array();
         foreach ($msrpRelation as $item) {
-            $productMinPrice[] = $item['msrp'];
+            if (!empty((float)$item['msrp'])) {
+                $productMinPrice[] = $item['msrp'];
+            }
         }
 
         $productMinimalPrice = min($productMinPrice);
@@ -853,7 +853,6 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                 }
             }
         }
-
 
         if (empty($recoverOptionsProducts) || empty($recoverMSRP)) {
             return $productsIdsPullToSolr;

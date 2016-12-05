@@ -410,8 +410,10 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
                         $priceMSRPToInsert = (!empty($priceMSRPSelected) && isset($pricesConverter[$priceMSRPSelected]))
                             ? $pricesConverter[$priceMSRPSelected] : false;  //msrp
-
-
+                        if ($priceMSRPToInsert == $priceToInsert) {
+                            // wtedy nie ma msrp
+                            $priceMSRPToInsert = 0;
+                        }
                         // 1. update price
                         if ($priceToInsert) {
                             //margin
@@ -431,10 +433,8 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                                 'value' => Mage::app()->getLocale()->getNumber($priceToInsert + (($priceToInsert * $marginSelected) / 100))
                             );
 
-                        }
 
-                        // 2. update msrp
-                        if ($priceMSRPToInsert) {
+                            // 2. update msrp (only if price exists)
                             $insert[] = array(
                                 'entity_type_id' => $productEt,
                                 'attribute_id' => $specialPriceAttributeId,
