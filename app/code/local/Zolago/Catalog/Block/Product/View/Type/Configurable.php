@@ -242,7 +242,6 @@ class Zolago_Catalog_Block_Product_View_Type_Configurable extends Mage_Catalog_B
                     $optionPrices[] = $configurablePrice;
                 }
             }
-            Mage::log($optionPrices);
 
             $this->arraySortByColumn($info['options'], 'position');
 
