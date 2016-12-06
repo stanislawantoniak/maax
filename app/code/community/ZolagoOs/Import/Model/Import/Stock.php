@@ -97,7 +97,7 @@ class ZolagoOs_Import_Model_Import_Stock
                     $stockData = array_slice($data, 1, count($data)-1, true);
                     if (count($data) !== 2 ||
                         $this->getHelper()->isContainNonNumericValues($stockData) ||
-                        $this->getHelper()->isContainNegativeValues($stockData)
+                        0 // $this->getHelper()->isContainNegativeValues($stockData)
                     ) {
                         $wrongLineFormatScan[$row] = "LINE#{$row} (SKU: {$sku})";
                         continue;
