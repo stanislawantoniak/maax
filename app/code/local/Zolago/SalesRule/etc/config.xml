@@ -58,6 +58,11 @@
 					<!--<coupon_collection>Zolago_SalesRule_Model_Resource_Coupon_Collection</coupon_collection>-->
                 </rewrite>
             </salesrule_resource>
+            <salesrule>
+            	<rewrite>
+            		<rule_condition_address>Zolago_SalesRule_Model_Rule_Condition_Address</rule_condition_address>
+            	</rewrite>
+            </salesrule>
         </models>
         <resources>
             <zolagosalesrule_setup>
