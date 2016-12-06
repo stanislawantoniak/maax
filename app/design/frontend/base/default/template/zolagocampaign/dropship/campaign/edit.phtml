@@ -170,8 +170,8 @@ $_modagoHlp = Mage::helper("zolagocommon");
                         startLoading();
                         jQuery.ajax({
                             url:  '<?php echo Mage::getUrl('campaign/vendor/saveProducts', array("_secure" => true)); ?>'   ,
-                            contentType: "application/json; charset=utf-8",
-                            type: 'POST',
+//                            contentType: "application/json; charset=utf-8",
+                            type: "POST",
                             data: {id: modelId, products: campaignProductsSource, isAjax: true},
                             success: function () {
                                 refreshProductGrid(modelId);
