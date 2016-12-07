@@ -269,6 +269,8 @@ $isPickUpPaymentCanBeEntered = $this->isPickUpPaymentCanBeEntered();
 				</div>
 				<div class="widget-content orders">
 					<dl class="dl-horizontal dl-z"> 
+						<dt><?php echo $_hlp->__("Email");?>:</dt> 
+						<dd><?php echo $this->escapeHtml($_po->getCustomerEmail());?></dd> 
 						<dt><?php echo $_hlp->__("Fullname");?>:</dt> 
 						<dd><?php echo $this->escapeHtml($_po->getBillingAddress()->getName());?></dd> 
 						<dt><?php echo $_hlp->__("Phone");?>:</dt> 
