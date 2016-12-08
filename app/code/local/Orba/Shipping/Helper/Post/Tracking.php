@@ -10,6 +10,8 @@ class Orba_Shipping_Helper_Post_Tracking extends Orba_Shipping_Helper_Post {
 	const PP_REPEAT_AWIZO = 'P_PA';
 	const PP_RETURNED = 'P_ZDUN';
 	const PP_DELIVERED = 'P_D';
+	const PP_PICKUP = 'P_OWU';
+	const PP_PICKUP_CORRECT = 'P_OWUK';
 
     /**
      * Initialize PP Web API Client for tracking
@@ -57,6 +59,8 @@ class Orba_Shipping_Helper_Post_Tracking extends Orba_Shipping_Helper_Post {
                                 }
                                 break;
                             case self::PP_DELIVERED:
+                            case self::PP_PICKUP:
+                            case self::PP_PICKUP_CORRECT:
                                     $status = $this->__('Delivered');
                                     $track->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_DELIVERED);
                                     $track->setDeliveredDate($event->czas);
