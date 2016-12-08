@@ -410,15 +410,23 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
 
     public function getSubtotalInclTax() {
         $total = 0;
-        foreach($this->getAllItems() as $item) {
+        foreach($this->getAllVisibleItems() as $item) {
             $total += $this->calcuateItemPrice($item) * $item->getQty() - $item->getDiscountAmount();
         }
         return $total;
     }
-
+    public function getAllVisibleItems() {
+        $items = array();
+        foreach ($this->getItemsCollection() as $item) {
+            if (!$item->isDeleted() && !$item->getParentItemId()) {
+                $items[] =  $item;
+            }
+        }
+        return $items;
+    }
     public function getSubtotalDiscount() {
         $discount = 0;
-        foreach($this->getAllItems() as $item) {
+        foreach($this->getAllVisibleItems() as $item) {
             $discount += $item->getDiscountAmount();
         }
         return $discount;
