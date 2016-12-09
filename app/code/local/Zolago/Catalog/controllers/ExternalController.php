@@ -25,9 +25,16 @@ class Zolago_Catalog_ExternalController extends Mage_Core_Controller_Front_Actio
     public function stockAction() {
         try {
             $key = $this->_getKey();
+            
+            $skuv = $key[1];
+            $collection = Mage::getModel('catalog/product')
+                ->getCollection()
+                ->addAttributeToFilter('skuv', $skuv);
+            $product = $collection->getFirstItem();
+            $sku = $product->getSku();
             $collection = Mage::getModel('zolagocatalog/external_stock')->getCollection();
             $collection->addFieldToFilter('vendor_id',$key[0]);
-            $collection->addFieldToFilter('external_sku',$key[1]);
+            $collection->addFieldToFilter('external_sku',$sku);
             $count = $collection->count();
             $out = array (
                        'total_rows' => $count,
