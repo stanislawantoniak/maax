@@ -1,78 +1,167 @@
 <?xml version="1.0"?>
 <config>
-    <modules>
+  <modules>
+    <Wf_Wf>
+      <version>0.2.2</version>
+    </Wf_Wf>
+  </modules>
+  <global>
+    <models>
+      <wfwf>
+        <class>Wf_Wf_Model</class>
+        <resourceModel>wfwf_resource</resourceModel>
+      </wfwf>
+      <wfwf_resource>
+        <class>Wf_Wf_Model_Resource</class>
+      </wfwf_resource>
+    </models>
+    <helpers>
+      <wfwf>
+        <class>Wf_Wf_Helper</class>
+      </wfwf>
+      <zolagosolrsearch>
+        <rewrite>
+          <data>Wf_Wf_Helper_Solrsearch_Data</data>
+        </rewrite>
+      </zolagosolrsearch>
+      <orbacommon>
+        <rewrite>
+          <ajax_customer_cache>Wf_Wf_Helper_Orbacommon_Ajax_Customer_Cache</ajax_customer_cache>
+        </rewrite>
+      </orbacommon>
+    </helpers>
+    <resources>
+      <wfwf_setup>
+        <setup>
+          <module>Wf_Wf</module>
+        </setup>
+      </wfwf_setup>
+    </resources>
+    <template>
+      <email>
+        <wf_email_template module="wfwf">
+          <label>WF email template</label>
+          <file>wf_email_template.html</file>
+          <type>html</type>
+        </wf_email_template>
+      </email>
+    </template>
+    <events>
+            <catalog_converter_queue_configurable_complete>
+                <observers>
+                    <wf_wf_observer_ban>
+                        <class>wfwf/observer</class>
+                        <method>banFeaturedProductsCache</method>
+                    </wf_wf_observer_ban>
+                </observers>
+            </catalog_converter_queue_configurable_complete>
+
+            <zolagocatalog_converter_stock_complete>
+                <observers>
+                    <wf_wf_observer_ban>
+                        <class>wfwf/observer</class>
+                        <method>banFeaturedProductsCache</method>
+                    </wf_wf_observer_ban>
+                </observers>
+            </zolagocatalog_converter_stock_complete>
+
+            <!-- After vendor change price manual from vendor portal grid (modal price window) -->
+            <vendor_manual_save_price_after>
+                <observers>
+                    <wf_wf_observer_ban>
+                        <class>wfwf/observer</class>
+                        <method>banFeaturedProductsCache</method>
+                    </wf_wf_observer_ban>
+                </observers>
+            </vendor_manual_save_price_after>
+
+            <!-- After vendor manual change product status from vendor portal price grid  -->
+            <vendor_manual_save_status_after>
+                <observers>
+                    <wf_wf_observer_ban>
+                        <class>wfwf/observer</class>
+                        <method>banFeaturedProductsCache</method>
+                    </wf_wf_observer_ban>
+                </observers>
+            </vendor_manual_save_status_after>
+                        <!-- After vendor manual change product flag (sale/promo) from vendor portal price grid  -->
+                        <vendor_manual_save_product_flag_after>
+                                <observers>
+                                        <wf_wf_observer_ban>
+                                                <class>wfwf/observer</class>
+                                                <method>banFeaturedProductsCache</method>
+                                        </wf_wf_observer_ban>
+                                </observers>
+                        </vendor_manual_save_product_flag_after>
+            <!-- After vendor mass change product status from vendor portal price grid  -->
+            <vendor_manual_mass_save_status_after>
+                <observers>
+                    <wf_wf_observer_ban>
+                        <class>wfwf/observer</class>
+                        <method>banFeaturedProductsCache</method>
+                    </wf_wf_observer_ban>
+                </observers>
+            </vendor_manual_mass_save_status_after>
+
+            <!-- After vendor manual change product politics from vendor portal price grid  -->
+            <vendor_manual_save_politics_after>
+                <observers>
+                    <wf_wf_observer_ban>
+                        <class>wfwf/observer</class>
+                        <method>banFeaturedProductsCache</method>
+                    </wf_wf_observer_ban>
+                </observers>
+            </vendor_manual_save_politics_after>
+            <!-- After vendor mass change product politics from vendor portal price grid  -->
+            <vendor_manual_mass_save_status_after>
+                <observers>
+                    <wf_wf_observer_ban>
+                        <class>wfwf/observer</class>
+                        <method>banFeaturedProductsCache</method>
+                    </wf_wf_observer_ban>
+                </observers>
+            </vendor_manual_mass_save_status_after>
+
+            <!-- When vendor mass update attributes by attribute rules mapper -->
+            <mass_autofill_attribute_rules_after>
+                <observers>
+                    <wf_wf_observer_ban>
+                        <class>wfwf/observer</class>
+                        <method>banFeaturedProductsCache</method>
+                    </wf_wf_observer_ban>
+                </observers>
+            </mass_autofill_attribute_rules_after>
+
+ 
+    	
+    </events>
+  </global>
+  <frontend>
+    <!--for map-->
+    <routers>
+      <zolagomodago>
+        <use>standard</use>
+        <args>
+          <module>Zolago_Modago</module>
+          <frontName>wf</frontName>
+        </args>
+      </zolagomodago>
+      <mypromotions>
+        <args>
+          <modules>
+            <wf_wf before="Zolago_SalesRule">Wf_Wf</wf_wf>
+          </modules>
+        </args>
+      </mypromotions>
+    </routers>
+    <translate>
+      <modules>
         <Wf_Wf>
-            <version>0.2.2</version>
+          <files>
+            <default>Wf_Wf.csv</default>
+          </files>
         </Wf_Wf>
-    </modules>
-    <global>
-        <models>
-            <wfwf>
-                <class>Wf_Wf_Model</class>
-                <resourceModel>wfwf_resource</resourceModel>
-            </wfwf>
-            <wfwf_resource>
-                <class>Wf_Wf_Model_Resource</class>
-            </wfwf_resource>
-        </models>
-        <helpers>
-            <wfwf>
-                <class>Wf_Wf_Helper</class>
-            </wfwf>
-            <zolagosolrsearch>
-                <rewrite>
-                    <data>Wf_Wf_Helper_Solrsearch_Data</data>
-                </rewrite>
-            </zolagosolrsearch>
-			<orbacommon>
-				<rewrite>
-					<ajax_customer_cache>Wf_Wf_Helper_Orbacommon_Ajax_Customer_Cache</ajax_customer_cache>
-				</rewrite>
-			</orbacommon>
-        </helpers>
-        <resources>
-            <wfwf_setup>
-                <setup>
-                    <module>Wf_Wf</module>
-                </setup>
-            </wfwf_setup>
-        </resources>
-		<template>
-			<email>
-				<wf_email_template module="wfwf">
-					<label>WF email template</label>
-					<file>wf_email_template.html</file>
-					<type>html</type>
-				</wf_email_template>
-			</email>
-		</template>
-    </global>
-    <frontend>
-		<!--for map-->
-		<routers>
-			<zolagomodago>
-				<use>standard</use>
-				<args>
-					<module>Zolago_Modago</module>
-					<frontName>wf</frontName>
-				</args>
-			</zolagomodago>
-            <mypromotions>
-                <args>
-                    <modules>
-                        <wf_wf before="Zolago_SalesRule">Wf_Wf</wf_wf>
-                    </modules>
-                </args>
-            </mypromotions>
-        </routers>
-		<translate>
-			<modules>
-				<Wf_Wf>
-					<files>
-						<default>Wf_Wf.csv</default>
-					</files>
-				</Wf_Wf>
-			</modules>
-		</translate>		
-    </frontend>
+      </modules>
+    </translate>
+  </frontend>
 </config>
