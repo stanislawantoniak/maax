@@ -18,13 +18,24 @@ class Orba_Shipping_DhlController extends Orba_Shipping_Controller_Lp
     protected function _getLpDownloadUrl() {
         return 'orbashipping/dhl/lpDownload';
     }
+    
+    /**
+     * set label type depends from logged user
+     */
+    protected function _getLabelType() {
+        $helper = Mage::helper('orbashipping/carrier_dhl');
+        return $helper->getUserDhlLabelType();
+    }
     protected function _getSettings() {
         $request = $this->getRequest();
         $vendorId   = $request->getParam('vId');
         $posId      = $request->getParam('posId');
         $vendorModel    = Mage::getModel('udropship/vendor')->load($vendorId);
+        $labelType = $this->_getLabelType();
                 
-        return Mage::helper('udpo')->getDhlSettings($vendorModel, $posId);        
+        $settings = Mage::helper('udpo')->getDhlSettings($vendorModel, $posId);        
+        $settings['labelType'] = $labelType;
+        return $settings;
     }
 
     public function checkDhlZipAction()
