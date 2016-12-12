@@ -115,7 +115,8 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Client_
         $contact->phoneNumber = $data['phone'];
         $contact->emailAddress = $data['email'];
         $message->address = $address;
-        $message->contact = $contact;
+        $message->contact = $contact;        
+//        $message->preaviso = $contact;
         return $message;
 
     }
@@ -131,7 +132,7 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Client_
         $obj->contactPerson = $data['contact_person'];
         $obj->contactPhone = $data['contact_phone'];
         $obj->contactEmail = $data['contact_email'];
-		$this->_address = null;
+        $this->_address = null;
         return $obj;
     }
     
@@ -175,6 +176,7 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Client_
             $obj->insurance					= true;
             $obj->insuranceValue			= $collectOnDeliveryValue;
         }
+        $obj->predeliveryInformation = true;
         return $obj;
     }
     /**
