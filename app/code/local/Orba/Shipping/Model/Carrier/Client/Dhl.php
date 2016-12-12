@@ -21,7 +21,6 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Client_
     protected $_default_params = array (
         'dropOffType' => 'REQUEST_COURIER',
         'serviceType' => 'AH',
-        'labelType' => self::DHL_LABEL_TYPE,
         'shippingPaymentType' => self::PAYER_TYPE_SHIPPER,
         'paymentType'   => self::PAYMENT_TYPE,
         'labelType' => self::DHL_LABEL_TYPE,
@@ -277,7 +276,7 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Client_
         foreach ($tracking as $track) {
             if ($track->getCarrierCode() == Orba_Shipping_Model_Carrier_Dhl::CODE) {
                 $obj = new StdClass();
-                $obj->labelType = self::DHL_LABEL_TYPE;
+                $obj->labelType = $this->getParam('labelType');
                 $obj->shipmentId = $track->getNumber();
                 $print->item[] = $obj;
             }

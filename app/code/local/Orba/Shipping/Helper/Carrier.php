@@ -51,6 +51,9 @@ class Orba_Shipping_Helper_Carrier extends Mage_Core_Helper_Abstract {
     public function isActive() {
         return false; //abstract
     }
+    public function getFileExt() {
+        return static::FILE_EXT;
+    }
 
     public function addUdpoComment($udpo, $comment, $isVendorNotified=false, $visibleToVendor=false, $userName = false)
     {
@@ -99,7 +102,7 @@ class Orba_Shipping_Helper_Carrier extends Mage_Core_Helper_Abstract {
             $this->setFileDir();
             if (count($trackNumber)) {
                 $ioAdapter = new Varien_Io_File();
-                $fileLocation = $this->_fileDir . $trackNumber . '.' . static::FILE_EXT;
+                $fileLocation = $this->_fileDir . $trackNumber . '.' . $this->getFileExt();
                 if ($ioAdapter->fileExists($fileLocation)) {
                     $file = $fileLocation;
                 }
