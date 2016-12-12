@@ -2,7 +2,7 @@
 /**
  * lp master controller
  */
-abstract class Orba_Shipping_Controller_Lp extends Mage_Core_Controller_Front_Action
+abstract class Orba_Shipping_Controller_Lp extends Zolago_Dropship_Controller_Vendor_Abstract
 {
     protected $_helper;
     public function indexAction() {
@@ -93,6 +93,7 @@ abstract class Orba_Shipping_Controller_Lp extends Mage_Core_Controller_Front_Ac
 
             $settings = $this->_getSettings();
             $client		= $this->_getHelper()->startClient($settings);
+            $client->setShipmentSettings($settings);
             $file 		= $client->getLabelFile($trackModel);
             if (!$file['status']) {
                 $this->_getHelper()->addUdpoComment($udpoModel, $file['message'], false, true, false);

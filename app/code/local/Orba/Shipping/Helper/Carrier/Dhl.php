@@ -12,6 +12,7 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
 
     const FILE_DIR		= 'dhl';
     const FILE_EXT	= 'pdf';
+    const FILE_ZPL 	= 'zpl';
 
     const DHL_STATUS_DELIVERED	= 'DOR';
     const DHL_STATUS_RETURNED	= 'ZWN';
@@ -544,4 +545,33 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
         }
         return $mess;
     }
+    
+    /**
+     * get dhl type depends from logged user
+     */
+     public function getUserDhlLabelType() {
+         $session = Mage::getSingleton('udropship/session');
+         if ($session->isOperatorMode()) {
+             $type = $session->getOperator()->getDhlLabelType();
+         } else {
+             $vendor = $session->getVendor();;
+             $type = $vendor->getDhlLabelType();
+         }
+         if (!$type) {
+             $type = Orba_Shipping_Model_Carrier_Client_Dhl::DHL_LABEL_TYPE;
+         }
+         return $type;     
+     }
+     
+    /**
+     * file ext depends from label type
+     */
+     public function getFileExt() {
+         $out = static::FILE_EXT;
+         $type = $this->getUserDhlLabelType();
+         if ($type == Orba_Shipping_Model_System_Source_Carrier_Dhl_Label::ZBLP) {
+             $out = static::FILE_ZPL;
+         }
+         return $out;
+     }
 }
