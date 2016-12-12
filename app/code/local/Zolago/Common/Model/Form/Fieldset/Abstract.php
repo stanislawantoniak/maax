@@ -15,6 +15,10 @@ abstract class Zolago_Common_Model_Form_Fieldset_Abstract  {
         }
     }
     
+    public function getFieldset() {
+        return $this->_fieldset;
+    }
+
     /**
      * abstract method for creating helper
      */
