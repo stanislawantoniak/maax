@@ -650,6 +650,13 @@
             <fieldset>dhl</fieldset>
             <position>50</position>
           </dhl_terminal>
+          <dhl_label_type>
+            <label>Default label type</label>
+            <type>select</type>
+            <fieldset>dhl</fieldset>
+            <source_model>orbashipping/system_source_carrier_dhl_label</source_model>
+            <position>55</position>
+          </dhl_label_type>
           <dhl_insurance_charge_amount>
             <label>Insurance charge amount</label>
             <type>text</type>

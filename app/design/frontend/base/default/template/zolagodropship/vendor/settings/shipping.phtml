@@ -77,6 +77,18 @@ $useDpd = $_vendor->getData('use_zolagodpd');
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <label for="dhl_label_type" class="col-md-3 control-label">
+                                        <?php echo Mage::helper("zolagodropship")->__("DHL label type");?>
+                                    </label>
+                                    <div class="col-md-9">
+                                        <select name="dhl_label_type" id="dhl_label_type" class="form-control">
+                                        <?php foreach (Mage::getModel('orbashipping/system_source_carrier_dhl_label')->toArray() as $label => $value) :?>
+                                            <option value="<?php echo $value ?>" <?php if ($_vendor->getData('dhl_label_type')== $label) echo "selected"; ?>><?php echo $label;?></option>
+                                        <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group">
                                     <label for="dhl_check" class="col-md-3 control-label">
                                     </label>
                                     <div class="col-md-9">
