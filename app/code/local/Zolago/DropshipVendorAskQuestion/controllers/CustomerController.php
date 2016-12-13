@@ -47,12 +47,14 @@ class Zolago_DropshipVendorAskQuestion_CustomerController extends ZolagoOs_OmniC
                 ->setData($question)
                 ->setQuestionDate(now())
                 ->setStoreId(Mage::app()->getStore()->getStoreId());
+/*   KTO TO WYMYŚLIŁ ?
             if ($cSess->isLoggedIn() && !isset($question['customer_id'])) {
                 $qModel
                     ->setCustomerEmail($customer->getEmail())
                     ->setCustomerName($customer->getFirstname().' '.$customer->getLastname())
                     ->setCustomerId($customer->getId());
             }
+*/
             $validate = $qModel->validate();
             if ($validate === true) {
                 try {
