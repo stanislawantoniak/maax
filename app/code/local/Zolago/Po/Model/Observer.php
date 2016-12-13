@@ -219,7 +219,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract {
                 }
                 $connection->commit();
             } catch (Exception $xt) {
-                Mage::logExcepton($xt);
+                Mage::logException($xt);
                 $po->addComment(Mage::helper('zolagopayment')->__('[%s] Error at create overpayment refund. Please contact with administrators.','Automat'),false,true);
                 $connection->rollback();
             }

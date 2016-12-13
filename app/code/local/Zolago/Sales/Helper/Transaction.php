@@ -15,6 +15,14 @@ class Zolago_Sales_Helper_Transaction extends Mage_Core_Helper_Abstract
 
     }
     
+    
+    /**
+     * returns number of transactions
+     */
+    public function getTransactionsCount() {
+        $existTransactionCollection = $this->_getTransactionList($order,$customerId,Mage_Sales_Model_Order_Payment_Transaction::TYPE_ORDER);
+        return $existTransactionCollection->count();
+    }
     /**
      * prepare transaction collecttion
      */
@@ -63,8 +71,10 @@ class Zolago_Sales_Helper_Transaction extends Mage_Core_Helper_Abstract
         if($existTransaction->getId()) {
             $transaction
                 ->setParentId($existTransaction->getTransactionId())
-                ->setParentTxnId($existTransaction->getTxnId(), $transaction->getTransactionId())
-                ->setDotpayId($existTransaction->getDotpayId());
+                ->setParentTxnId($existTransaction->getTxnId(), $transaction->getTransactionId());
+            if ($this->getTransactionsCount() == 1) {
+                $transaction->setDotpayId($existTransaction->getDotpayId());
+            }
         } else {
             $transaction
                 ->setPaymentId($order->getPayment()->getId());
