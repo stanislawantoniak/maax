@@ -25,7 +25,7 @@ class Zolago_Operator_Block_Dropship_Operator_Edit extends Mage_Core_Block_Templ
         $fieldset = $builder->getFieldset();
         $fieldset->addField("dhl_label_type","select", array(
              "name" => "dhl_label_type",
-             "label" => "DHL label type",
+             "label" => Mage::helper('orbashipping')->__("DHL label type"),
              "values" => Mage::getModel('orbashipping/system_source_carrier_dhl_label')->toOptionArray(),
              "class"  => "form-control",
           )
