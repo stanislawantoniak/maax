@@ -78,7 +78,17 @@
 				this._currentPopup.modal("hide");
 			}
 		},
-
+		_prepareButton: function (form) {
+			var ff = form.find('.vendor-contact-form');
+			ff.submit(function() {
+				if (ff.valid()) {
+					var submitButton = form.find('button[type=submit]');
+					submitButton.prop("disabled", true);
+					submitButton.find('i').addClass('fa fa-spinner fa-spin');
+				}
+			});
+			
+		},
 		_prepareInlineForm: function(vId, oId, sId){
 			
 			var obj = {
@@ -93,6 +103,7 @@
 					this._prepareValidation(content);
 					inlineForm.html(content);
 					inlineForm.hide();
+					this._prepareButton(inlineForm);
 				}
 			}
 			
@@ -116,7 +127,8 @@
 			var content = jQuery(this._getTemplate(obj));
 			this._prepareValidation(content);
 			this._currentPopup.find('.modal-body').html(content);
-			
+			this._prepareButton(this._currentPopup);
+
 		}
 	};
 	
