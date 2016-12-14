@@ -1,3 +1,3 @@
 <?php
 
-class Orba_Common_Exception extends Mage_Exception {}
+class Orba_Common_Exception extends Mage_Core_Exception {}
