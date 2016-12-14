@@ -1011,7 +1011,6 @@
 "Content Box Configuration","Konfiguracja kreacji"
 "Converter settings","Ustawienia konwerterów"
 "Converter update settings","Konfiguracja aktualizacji"
-"PO open orders","Otwarte zamówienia dla konwerterów"
 "Transactions","Transakcje płatności"
 "Manage Feeds","Zarządzanie feedami"
 "Manage Templates","Szablony"
@@ -1023,3 +1022,5 @@
 "Indices management","Indeksowanie"
 "Logs","Log przetwarzania"
 "SolrBridge","Wyszukiwarka Solr"
+"Remove reservation","Kasowanie rezerwacji"
+"PO statuses which removes reservation flag","Statusy zamówień w których kasowana jest flaga rezerwacji"
