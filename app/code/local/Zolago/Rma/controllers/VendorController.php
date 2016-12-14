@@ -311,16 +311,16 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
         $orderId = $rma->getOrder()->getId();
         $paymentId = $rma->getOrder()->getPayment()->getId();
         $existRefunds = Mage::getModel('sales/order_payment_transaction')->getCollection()
-            ->addFieldToFilter('order_id', $orderId)
-            ->addFieldToFilter('customer_id', $customerId)
-            ->addFieldToFilter('txn_type', Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND)
-            ->addFieldToFilter('payment_id', $paymentId);
+                        ->addFieldToFilter('order_id', $orderId)
+                        ->addFieldToFilter('customer_id', $customerId)
+                        ->addFieldToFilter('txn_type', Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND)
+                        ->addFieldToFilter('payment_id', $paymentId)
+                        ->addFieldToFilter('rma_id',$rma->getId());
         $refundSum = 0;
-        foreach($existRefunds as $existRefund){
-            $refundSum +=  abs($existRefund->getTxnAmount());
+        foreach($existRefunds as $existRefund) {
+            $refundSum -=  $existRefund->getTxnAmount();
         }
         $newRefundSum = $refundSum + $amount;
-
         $items = $rma->getAllItems();
         $totalOrderSum = 0;
         foreach ($items as $item){
