@@ -58,6 +58,18 @@ class Zolago_Adminhtml_Model_Sales_Transactions_Source extends Varien_Object
             $collection->addAttributeToFilter('po.udropship_status', array("in" => 
                 array( Zolago_Po_Model_Po_Status::STATUS_PAYMENT,Zolago_Po_Model_Po_Status::STATUS_ACK,Zolago_Po_Model_Po_Status::STATUS_BACKORDER)
             ));
+        } else {
+            $txn_id = Mage::app()->getRequest()->getParam('txn_id',0);
+            if ($txn_id) {
+                $collection->getSelect()->join(
+                    array('transaction' => $collection->getTable('sales/payment_transaction')),
+                    'order_payment.entity_id = transaction.payment_id',
+                    array()
+                    );
+                $collection->addAttributeToFilter('transaction.transaction_id',$txn_id);
+            } else {
+                $collection->getSelect()->limit(20);
+            }
         }
         $collection->addAttributeToFilter('main_table.parent_item_id', array("null" => true));
 

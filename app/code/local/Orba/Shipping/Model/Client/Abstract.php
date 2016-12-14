@@ -126,7 +126,6 @@ class Orba_Shipping_Model_Client_Abstract extends Mage_Core_Model_Abstract {
                 );
         $result = $this->getLabels($trackModel);
         $result	= $this->processLabelsResult('getLabels', $result);
-        
         if ($result['status']) {
             $file['file'] = $this->_saveFile($result['labelName'],$result['labelData']);
             $file['status'] = true;
