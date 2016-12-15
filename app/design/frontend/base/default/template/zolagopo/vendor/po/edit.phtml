@@ -296,8 +296,7 @@ $isPickUpPaymentCanBeEntered = $this->isPickUpPaymentCanBeEntered();
 					</h4> 
 					<div class="toolbar no-padding"> 
 						<div class="btn-group"> 
-							
-							
+										
 							<?php /* Add new item button */ ?>
 							<?php if($_isEditable):?>
 							<button data-toggle="modal" data-target="#addItemModal" class="btn btn-xs" >
@@ -305,6 +304,19 @@ $isPickUpPaymentCanBeEntered = $this->isPickUpPaymentCanBeEntered();
 								<?php echo $_hlp->__("Add new item");?>
 							</button>
 							<?php endif;?>
+							<?php if ($_po->getReservation()): ?>
+								<span title="<?php echo $_hlp->__('Reservation flag set')?>" class="bs-tooltip inline-block">							
+								<button class="btn btn-xs">
+									<i class="icon-flag"></i>
+								</button>
+								</span>
+							<?php else: ?>
+								<span title="<?php echo $_hlp->__('Reservation flag deleted'); ?>" class="bs-tooltip inline-block">							
+								<button class="btn btn-xs">
+									<i class="icon-flag-alt"></i>
+								</button>
+								</span>
+							<?php endif; ?>
 						</div> 
 					</div>
 				</div>

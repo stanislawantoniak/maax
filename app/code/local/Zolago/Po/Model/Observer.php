@@ -696,10 +696,6 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract {
         //Mage::log($poOpenOrder, null, 'setOrderReservationOnSave.log');
         if (in_array($newStatus, explode(',', $poOpenOrder))) {
             //set reservation=1
-            $po->setReservation(1);
-            $po->getResource()->saveAttribute($po, 'reservation');
-        } else {
-            //set reservation=0
             $po->setReservation(0);
             $po->getResource()->saveAttribute($po, 'reservation');
         }
@@ -713,10 +709,6 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract {
         $poOpenOrder = Mage::getStoreConfig('zolagocatalog/config/po_open_order');
         if (in_array($newStatus, explode(',', $poOpenOrder))) {
             //set reservation=1
-            $po->setReservation(1);
-            $po->getResource()->saveAttribute($po, 'reservation');
-        } else {
-            //set reservation=0
             $po->setReservation(0);
             $po->getResource()->saveAttribute($po, 'reservation');
         }

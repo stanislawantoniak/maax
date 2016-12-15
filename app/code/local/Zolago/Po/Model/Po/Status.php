@@ -56,7 +56,7 @@ class Zolago_Po_Model_Po_Status
     /*
      * gotowe do odbioru
      */
-    const STATUS_TO_PICK    = Zolago_Po_Model_Source::UDPO_STATUS_TO_PICK;
+    const STATUS_TO_PICK    = Zolago_Po_Model_Source::UDPO_STATUS_TO_PICK; // 13
 
     static function getFinishStatuses() {
         return array(
