@@ -789,7 +789,16 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         if($product->getTypeId()!=Mage_Catalog_Model_Product_Type::TYPE_SIMPLE) {
             $errors[] = $hlp->__("It's not simple product");
         }
-
+        $stock = $product->getStockItem();
+        if (!$stock || $stock->getIsInStock() != Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK) {
+            $errors[] = $hlp->__("Product out of stock");
+        } else {
+            if (!$stock->getBackorders()) {
+                if ($qty > $stock->getStockQty()) {
+                    $errors[] = $hlp->__("Not enough stock. On stock is %s items",$stock->getStockQty());
+                }            
+            }
+        }
         if($errors) {
             foreach($errors as $error) {
                 $this->_getSession()->addError($error);
@@ -987,7 +996,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                                 ));
 
             $po->updateTotals(true);
-
+            // update stock
+            $stock->subtractQty($qty);
+            $stock->save();
+            // update status
             $po->getStatusModel()->processDirectRealisation($po, true);
             $this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Item added"));
         } catch (Mage_Core_Exception $e) {
