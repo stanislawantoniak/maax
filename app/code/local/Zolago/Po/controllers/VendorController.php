@@ -631,12 +631,12 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         $price    = $this->_getParamPrice();
         $qty      = $this->_getParamQty();
         $discount = $this->_getParamDiscount();
-
         $product = Mage::getModel("catalog/product");//
 
         if($item && $item->getId()) {
             $product->load($item->getProductId());
         }
+    
 
         if(empty($discount) || $discount<0) {
             $discount = 0;
@@ -663,6 +663,23 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         if(!$product->getId() || $product->getUdropshipVendor()!=$this->_getVendor()->getId()) {
             $errors[] = $hlp->__("It's not your product");
         }
+        $collection = Mage::getResourceModel('zolagopo/po_item_collection');
+         /* @var $collection Zolago_Po_Model_Resource_Po_Item_Collection */
+
+        $collection->addParentFilter($item);
+        $stockList = array();
+        foreach ($collection as $childItem) {
+            $childProduct = Mage::getModel("catalog/product")->load($childItem->getProductId());
+            $stock = $childProduct->getStockItem();
+            if (!$stock) {
+                $errors[] = $hlp->__("Product %s out of stock",$childProduct->getName());
+            } elseif (!$stock->getBackorders()) {
+                if ($qty > ($stock->getStockQty()+$item->getQty())) {
+                    $errors[] = $hlp->__("Not enough stock of %s. On stock is %s items",$childProduct->getName(),$stock->getStockQty());
+                }            
+            }
+            $stockList[] = $stock;
+        }       
 
 
         if($errors) {
@@ -734,6 +751,21 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                                 ));
 
             $po->updateTotals(true);
+            $diff = $oldItem->getQty() - $item->getQty();
+            
+            foreach ($stockList as $stock) {
+                if ($diff > 0) {            
+                    $stock->addQty($diff);                    
+                    if ($stock->verifyStock()) {
+                        $stock->setIsInStock(Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
+                    }                
+                } elseif ($diff < 0) {
+                    $stock->subtractQty(-$diff);
+                }
+                if ($diff != 0) {                
+                    $stock->save();
+                }
+            }
             $this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Item saved"));
         } catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
