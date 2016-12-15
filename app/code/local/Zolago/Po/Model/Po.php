@@ -989,7 +989,23 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
         }
     }
 
-
+    
+    /**
+     * set reservation flag
+     */
+    public function setReservation($flag) {
+        if ($this->getReservation() == $flag) {
+            return;  // no changed
+        }
+        if ($flag) {
+            $comment = Mage::helper('zolagopo')->__('Reservation flag set');
+        } else {
+            $comment = Mage::helper('zolagopo')->__('Reservation flag removed');
+        }
+        $this->addComment(sprintf("[%s]",$comment),false,true);
+        parent::setReservation($flag);
+        $this->saveComments();
+    }
 
     const GH_API_RESERVATION_STATUS_OK = 'ok';
     const GH_API_RESERVATION_STATUS_PROBLEM = 'problem';

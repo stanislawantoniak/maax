@@ -503,8 +503,21 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             /* @var $collection Zolago_Po_Model_Resource_Po_Item_Collection */
 
             $collection->addParentFilter($item);
-
+            $qty = 0;
+            if ($po->getReservation()) { // only if reservation
+                $qty = $item->getQty();
+            }
             foreach($collection as $childItem) {
+                if ($qty) {                    
+                // update stock
+                    $product = $product = Mage::getModel("catalog/product")->load($childItem->getProductId());
+                    $stock = $product->getStockItem();
+                    $stock->addQty($qty);
+                    if ($stock->verifyStock()) {
+                        $stock->setIsInStock(Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
+                    }
+                    $stock->save();
+                }
                 $childItem->delete();
             }
 
@@ -515,10 +528,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                                     "po"		=> $po,
                                     "item"		=> $item,
                                 ));
-
+            
             $item->delete();
-
-            $po->updateTotals(true);
+            
+            $po->updateTotals(true);            
 
             $this->_getSession()->addSuccess(
                 Mage::helper("zolagopo")->__("Item %s has been removed", $itemName)

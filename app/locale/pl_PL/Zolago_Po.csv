@@ -336,3 +336,5 @@
 "Reservation flag deleted","Bez rezerwacji stanu magazynowego"
 "Product out of stock","Brak produktu na magazynie"
 "Not enough stock. On stock is %s items","Niewstarczająca liczba produktów. Na stanie pozostało %s sztuk"
+"Reservation flag set","Stan magazynowy zarezerwowany"
+"Reservation flag removed","Usunięto rezerwację stanów magazynowych"
