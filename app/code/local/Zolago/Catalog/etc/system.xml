@@ -57,8 +57,8 @@
           <show_in_store>1</show_in_store>
           <fields>
             <po_open_order translate="label">
-              <label>PO open orders</label>
-              <comment><![CDATA[PO open orders]]></comment>
+              <label>Remove reservation</label>
+              <comment><![CDATA[PO statuses which removes reservation flag]]></comment>
               <frontend_type>multiselect</frontend_type>
               <sort_order>0</sort_order>
               <show_in_default>1</show_in_default>
