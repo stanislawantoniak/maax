@@ -755,7 +755,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             
             foreach ($stockList as $stock) {
                 if ($diff > 0) {            
-                    if ($po->getReservation) {
+                    if ($po->getReservation()) {
                         $stock->addQty($diff);                    
                         if ($stock->verifyStock()) {
                             $stock->setIsInStock(Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
