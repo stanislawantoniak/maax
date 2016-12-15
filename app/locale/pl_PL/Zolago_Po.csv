@@ -332,3 +332,7 @@
 "City","Miasto"
 "Ready to pick up","Gotowe do odbioru"
 "Item changed %s (%s)","Zmieniono produkt %s (%s)"
+"Reservation flag set","Stan magazynowy zarezerwowany"
+"Reservation flag deleted","Bez rezerwacji stanu magazynowego"
+"Product out of stock","Brak produktu na magazynie"
+"Not enough stock. On stock is %s items","Niewstarczająca liczba produktów. Na stanie pozostało %s sztuk"
