@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<config>
+  <modules>
+    <Ipson_Ipson>
+      <version>0.0.1</version>
+    </Ipson_Ipson>
+  </modules>
+  <global>
+    <helpers>
+      <ipson>
+        <class>Ipson_Ipson_Helper</class>
+      </ipson>
+    </helpers>
+    <models>
+        <ipson>
+                <class>Ipson_Ipson_Model</class>
+        </ipson>
+    </models>
+    <blocks>
+        <ipson>
+                <class>Ipson_Ipson_Block</class>
+        </ipson>
+    </blocks>
+    <events>
+        <checkout_type_onepage_save_order_after>
+                <observers>
+                        <ipson>
+                                <class>ipson/observer</class>
+                                <method>setCeneoAgreements</method>
+                        </ipson>
+                </observers>
+        </checkout_type_onepage_save_order_after>
+    </events>
+  </global>
+  <default>
+    <customer>
+      <agreements>
+        <ceneo><![CDATA[zgoda ceneo | W celu wysłania drogą elektroniczną ankiet badających satysfakcję klientów z dokonanych zakupów w sklepie w ramach programu “Zaufane Opinie” wyrażam zgodę na przekazanie moich danych osobowych, w tym adresu e-mail oraz informacji o dokonanym zakupie w sklepie Ortohab.pl, spółce Ceneo Sp. z o.o. z siedzibą w Poznaniu, 60-166 Poznań, ul. Grunwaldzka 182 oraz ich przetwarzanie przez Ceneo.]]></ceneo>
+      </agreements>
+    </customer>
+  </default>
+</config>

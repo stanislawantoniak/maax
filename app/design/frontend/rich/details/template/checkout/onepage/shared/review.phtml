@@ -130,6 +130,13 @@ $carrierLogo = Mage::helper("zolagocheckout")->getCarrierLogo($deliveryMethodCod
 						</div>
 						<?php endif; ?>
 						<div class="form-group form-checkbox small text-align-left">
+							<input type="checkbox" id="ceneo_agreement" class="css-checkbox ceneo_agreement"
+							       name="ceneo_agreement" style="opacity: 0; visibility: visible;" checked="checked">
+							<label for="ceneo_agreement" class="css-label ceneo_agreement-label">
+								<?php echo $modagoHelper->getAgreementHtml('ceneo') ?>
+							</label>
+						</div>
+						<div class="form-group form-checkbox small text-align-left">
 							<input type="checkbox" id="dotpay_agreement" class="css-checkbox dotpay_agreement"
 							       name="dotpay_agreement" style="opacity: 0; visibility: visible;" required="required" disabled="disabled">
 							<label for="dotpay_agreement" class="css-label dotpay_agreement-label">

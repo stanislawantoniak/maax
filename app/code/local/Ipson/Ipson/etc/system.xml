@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+  <sections>
+    <customer>
+      <groups>
+        <agreements>
+          <fields>
+            <ceneo translate="label">
+              <label>Trusted Opinions Ceneo</label>
+              <frontend_type>textarea</frontend_type>
+              <sort_order>60</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </ceneo>
+          </fields>
+        </agreements>
+      </groups>
+    </customer>
+  </sections>
+</config>

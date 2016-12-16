@@ -1,0 +1,9 @@
+<?php if ($this->getCeneoAgreement()) : ?>
+<script type="text/javascript">
+        ceneo_client_email = '<?php echo $this->getClientEmail();?>';
+        ceneo_order_id = '<?php echo $this->getOrderId();?>';
+        ceneo_shop_product_ids = '<?php echo $this->getCeneoProductIds();?>';
+        ceneo_work_days_to_send_questionnaire = 3;
+</script>
+<script type="text/javascript" src="https://ssl.ceneo.pl/transactions/track/v2/script.js?accountGuid=<?php echo $this->getCeneoGuid()?>"></script>
+<?php endif;?>
