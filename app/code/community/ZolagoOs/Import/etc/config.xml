@@ -53,12 +53,12 @@
     </admin>
     <crontab>
         <jobs>
-            <zolagoosimport_import_price_stock>
+            <zolagoosimport_import_products>
                 <schedule><cron_expr>0 * * * *</cron_expr></schedule>
                 <run>
-                    <model>zolagoosimport/observer::cronImportPriceStock</model>
+                    <model>zolagoosimport/observer::cronImportProducts</model>
                 </run>
-            </zolagoosimport_import_price_stock>
+            </zolagoosimport_import_products>
         </jobs>
     </crontab>
 </config>
