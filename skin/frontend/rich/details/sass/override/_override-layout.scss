@@ -723,13 +723,13 @@ form {
         }
         input[type=checkbox].css-checkbox + label.css-label:hover,
         input[type=radio].css-radio + label.css-label:hover {
-          background-position: 0 -80px;
+          background-position: 0 -100px;
           //@include sprite($btnCheck, hover);
           color:$color_999999;
         }
         input[type=checkbox].css-checkbox:checked + label.css-label,
         input[type=radio].css-radio:checked + label.css-label {
-          background-position: 0 -160px;
+          background-position: 0 -200px;
           //@include sprite($btnCheck, checked);
           color:$gray-darker;
         }
