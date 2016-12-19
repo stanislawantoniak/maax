@@ -597,9 +597,11 @@ form {
     }
     input[type=checkbox].css-checkbox + label.css-label {
       background-image:url('../images/checkbox.png');
+      background-repeat:no-repeat;
     }
     input[type=radio].css-radio + label.css-label {
       background-image:url('../images/radio.png');
+      background-repeat:no-repeat;
     }
     input[type=checkbox].css-checkbox + label.css-label:hover,
 
@@ -611,6 +613,7 @@ form {
     input[type=radio].css-radio:checked + label.css-label {
       background-position: 0 -55px;
       color:$gray-darker;
+      background-repeat:no-repeat;
     }
     input[type=checkbox].css-checkbox:disabled + label.css-label,
     input[type=radio].css-radio:disabled + label.css-label {
@@ -710,10 +713,12 @@ form {
           background-image: url("../images/checkbox_filter-bg.png");
           //@include sprite-dimensions($bulletMap, remove-coupon);
           background-position: 0 0px;
+          background-repeat:no-repeat;
 
         }
         input[type=radio].css-radio + label.css-label {
           background-image:url('../images/radio.png');
+          background-repeat:no-repeat;
 
         }
         input[type=checkbox].css-checkbox + label.css-label:hover,
