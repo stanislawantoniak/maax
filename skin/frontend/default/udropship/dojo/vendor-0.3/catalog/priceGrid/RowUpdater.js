@@ -180,7 +180,7 @@ define([
 							
 						tbody.append(
 							jQuery("<tr>").addClass("header-row").
-								append(jQuery("<td>").attr("colspan", 7).
+								append(jQuery("<td>").attr("colspan", 11).
 									addClass("align-center").text(Translator.translate("Child products"))
 							)
 						);	
@@ -192,8 +192,12 @@ define([
 									append(jQuery("<td>").text(item.label)).
 									append(jQuery("<td>").text(Translator.translate("SKU"))).
 									append(jQuery("<td>").text(Translator.translate("Price Variation"))).
+									append(jQuery("<td>").text(Translator.translate("Price update date"))).
 									append(jQuery("<td>").text(Translator.translate("In stock"))).
 									append(jQuery("<td>").text(Translator.translate("Stock Qty"))).
+									append(jQuery("<td>").text(Translator.translate("Reservations"))).
+									append(jQuery("<td>").text(Translator.translate("Stock Disp."))).
+									append(jQuery("<td>").text(Translator.translate("Stock update date"))).
 									append(jQuery("<td>").text(Translator.translate("POS Stock")))
 							);
 					
@@ -210,9 +214,13 @@ define([
 											addClass("signle-price-edit" + (!data.campaign ? " editable" : "")).
 											append(jQuery("<" + (!data.campaign ? "a" : "span") + ">").
 											text(misc.currency(child.price)))).
+										append(jQuery("<td>").text(child.children[0].update_price_date)).
 										append(jQuery("<td>").text(
 											Translator.translate(parseInt(child.children[0].is_in_stock) ? "Yes" : "No"))).
+										append(jQuery("<td>").text(parseInt(child.children[0].all_qty))).
+										append(jQuery("<td>").text(parseInt(child.children[0].reservation))).
 										append(jQuery("<td>").text(parseInt(child.children[0].qty))).
+										append(jQuery("<td>").text(child.children[0].update_stock_date)).										
 										append(jQuery("<td>").append(jQuery("<a>").
 											data("product_id", child.children[0].entity_id). // @todo can be lot of matched products
 											addClass("editable signle-stock-edit").
