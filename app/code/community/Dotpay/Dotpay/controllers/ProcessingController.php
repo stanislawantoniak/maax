@@ -16,18 +16,18 @@ class Dotpay_Dotpay_ProcessingController extends Mage_Core_Controller_Front_Acti
   public function statusAction() {
     if(!$status = $this->getRequest()->getParam('status'))
       return $this->norouteAction();
-    $this->_redirect('dotpay/processing/'.($this->getRequest()->getParam('status') == 'OK' ? 'success' : 'cancel'));
+    $this->_redirect('dotpay/processing/'.($this->getRequest()->getParam('status') == 'OK' ? 'success' : 'cancel'),array('_secure'=>true));
   }
 
   public function successAction() {
     $this->_getCheckout()->setQuoteId($this->_getCheckout()->getDotpayQuoteId(TRUE));
     $this->_getCheckout()->getQuote()->setIsActive(FALSE)->save();
-    $this->_redirect('checkout/onepage/success');
+    $this->_redirect('checkout/onepage/success',array('_secure'=>true));
   }
 
   public function cancelAction() {
     $this->_getCheckout()->setQuoteId($this->_getCheckout()->getDotpayQuoteId(TRUE));
     $this->_getCheckout()->addError(Mage::helper('dotpay')->__('The order has been canceled.'));
-    $this->_redirect('checkout/cart');
+    $this->_redirect('checkout/cart',array('_secure'=>true));
   }
 }
