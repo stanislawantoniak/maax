@@ -461,6 +461,10 @@ class Zolago_Po_Model_Po_Status
         /** @var Zolago_Po_Helper_Data $hlp */
         $hlp = Mage::helper("udpo");
         $po->setForceStatusChangeFlag(true);
+        if (($newStatus2 == self::STATUS_CANCELED) &&
+            ($po->getReservation())) {
+            $po->cancelPoStocks();
+        }
         $hlp->processPoStatusSave($po, $newStatus2, true);
         $store = $po->getStore();
         if (in_array($newStatus2, $this->getOverpaymentStatuses()) && Mage::helper('zolagopayment')->getConfigUseAllocation($store)) {
