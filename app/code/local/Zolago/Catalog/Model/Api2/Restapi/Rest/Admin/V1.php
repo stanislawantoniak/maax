@@ -139,7 +139,6 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         foreach ($stockBatch as $stockBatchItem) {
             $skuS = array_merge($skuS, array_keys($stockBatchItem));
         }
-
         $stockId = 1;
         $availableStockByMerchant = array();
 
@@ -226,14 +225,13 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         /*  @var $zcSDItemModel Zolago_CatalogInventory_Model_Resource_Stock_Item */
         $zcSDItemModel = Mage::getResourceModel('zolago_cataloginventory/stock_item');
         $zcSDItemModel->saveCatalogInventoryStockItem($cataloginventoryStockItem);
-
         //reindex
         Mage::getResourceModel('cataloginventory/indexer_stock')
             ->reindexProducts($productsIds);
-
+        self::updateExternalData($productsIds,'update_stock_date');
         // Varnish & Turpentine
         $coll = Zolago_Turpentine_Model_Observer_Ban::collectProductsBeforeBan($productsIdsForSolrAndVarnishBan);
-
+        
         //send to solr queue & ban url in varnish
         Mage::dispatchEvent("zolagocatalog_converter_stock_complete", array("products" => $coll));
     }
@@ -261,6 +259,11 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
         }
     }
 
+    public static function updateExternalData($productsIds,$attr) {        
+        // update external date
+        $updater = Mage::getSingleton('catalog/product_action');
+        $updater->updateAttributes($productsIds, array($attr => Mage::getModel('core/date')->date('Y-m-d H:i:s')),0);
+    }
     /**
      * @param $priceBatch
      */
@@ -452,6 +455,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             //no data to update
             return;
         }
+        self::updateExternalData(array_keys($ids),'update_price_date');
 
         //Save price
         $model->savePriceValues($insert, $ids);
