@@ -1033,6 +1033,7 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
         $this->addComment(sprintf("[%s]",$comment),false,true);
         parent::setReservation($flag);
         $this->saveComments();
+        return $this;
     }
 
     const GH_API_RESERVATION_STATUS_OK = 'ok';
