@@ -10,33 +10,33 @@ class Modago_Test_Shell2 extends Mage_Shell_Abstract
         $c = 180;
 
         $priceBatch = array(
-            "1-WW1629TL1BXX3/140" => array(
+            "1-WTSLEDDKLR4/098" => array(
                 "A" => $a,
                 "B" => $b,
                 "salePriceBefore" => $c
             ),
-            "10-08B105-4-181" => array(
-                "A" => $a,
+            "1-WTSLEDDKLR4/092" => array(
+                "A" => $a+2,
                 "B" => $b,
                 "salePriceBefore" => $c
             ),
-            "10-08B105-4-182" => array(
-                "A" => $a,
+            "1-WTSLEDDKLR4/086" => array(
+                "A" => $a+4,
                 "B" => $b,
                 "salePriceBefore" => $c
             ),
-            "10-08B105-4-183" => array(
-                "A" => $a,
+            "1-WTSLEDDKLR4/080" => array(
+                "A" => $a+6,
                 "B" => $b,
                 "salePriceBefore" => $c
             ),
-            "10-08B105-4-186" => array(
-                "A" => $a,
+            "1-WTSLEDDKLR4/074" => array(
+                "A" => $a+8,
                 "B" => $b,
                 "salePriceBefore" => $c
             ),
             "10-08B105-4-184" => array(
-                "A" => $a,
+                "A" => $a+810,
                 "B" => $b,
                 "salePriceBefore" => $c
             ),
@@ -120,15 +120,23 @@ class Modago_Test_Shell2 extends Mage_Shell_Abstract
     public function run2() {
         $stock = array (
             '1' => array(
-            "1-WW1629TL1BXX3/140" => array (
-                'MAGAZYN' => 3,
+            "1-WTSLEDDKLR4/098" => array (
+                'MAGAZYN' => 0,
+                'E-SKLEP' => 0
+            ),
+            "1-WTSLEDDKLR4/092" => array (
+                'MAGAZYN' => 0,
+                'E-SKLEP' => 0
+            ),
+            "1-WTSLEDDKLR4/086" => array (
+                'MAGAZYN' => 2,
                 'E-SKLEP' => 9
             ),
-            "1-WW1629TL1BXX3/134" => array (
-                'MAGAZYN' => 4,
+            "1-WTSLEDDKLR4/080" => array (
+                'MAGAZYN' => 2,
                 'E-SKLEP' => 9
             ),
-            "1-WW1629TL1BXX3/158" => array (
+            "1-WTSLEDDKLR4/074" => array (
                 'MAGAZYN' => 2,
                 'E-SKLEP' => 9
             ),
