@@ -176,7 +176,8 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Client_
             $obj->insurance					= true;
             $obj->insuranceValue			= $collectOnDeliveryValue;
         }
-        $obj->predeliveryInformation = true;
+//        $obj->predeliveryInformation = true;
+        $obj->preaviso = true;
         return $obj;
     }
     /**
