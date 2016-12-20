@@ -10,7 +10,7 @@ class Modago_Test_Shell2 extends Mage_Shell_Abstract
         $c = 180;
 
         $priceBatch = array(
-            "10-08B105-4-180" => array(
+            "1-WW1629TL1BXX3/140" => array(
                 "A" => $a,
                 "B" => $b,
                 "salePriceBefore" => $c
@@ -117,9 +117,31 @@ class Modago_Test_Shell2 extends Mage_Shell_Abstract
 
         Zolago_Catalog_Model_Observer::processConfigurableQueue();
     }
+    public function run2() {
+        $stock = array (
+            '1' => array(
+            "1-WW1629TL1BXX3/140" => array (
+                'MAGAZYN' => 3,
+                'E-SKLEP' => 9
+            ),
+            "1-WW1629TL1BXX3/134" => array (
+                'MAGAZYN' => 4,
+                'E-SKLEP' => 9
+            ),
+            "1-WW1629TL1BXX3/158" => array (
+                'MAGAZYN' => 2,
+                'E-SKLEP' => 9
+            ),
+            )
+        );
+        $vi = new Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1();
+        $vi::updateStockConverter($stock);
+    
+    }
 
 }
 
 $shell = new Modago_Test_Shell2();
+$shell->run2();
 $shell->run();
 
