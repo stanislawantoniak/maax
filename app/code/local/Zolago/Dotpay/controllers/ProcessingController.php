@@ -7,7 +7,7 @@ class Zolago_Dotpay_ProcessingController extends Dotpay_Dotpay_ProcessingControl
 	 */
 	public function successAction() {
 		  parent::successAction();
-		  $this->_redirect($this->_getRedirectRoute(true));
+		  $this->_redirect($this->_getRedirectRoute(true),array('_secure'=>true));
 	}
 	/**
 	 * Override redirect
@@ -15,7 +15,7 @@ class Zolago_Dotpay_ProcessingController extends Dotpay_Dotpay_ProcessingControl
 	public function cancelAction() {
 //		  parent::cancelAction(); // no cancel order
           Mage::getSingleton('core/session')->addError(Mage::helper('zolagopayment')->__('Payment failed'));
-		  $this->_redirect($this->_getRedirectRoute(true));
+		  $this->_redirect($this->_getRedirectRoute(true),array('_secure'=>true));
 	}
 
 	/**
