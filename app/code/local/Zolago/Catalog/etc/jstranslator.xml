@@ -69,6 +69,18 @@
     <price-view-pos-stock translate="message" module="zolagocatalog">
         <message>View POS Stock</message>
     </price-view-pos-stock>
+    <price-update-date translate="message" module="zolagocatalog">
+        <message>Price update date</message>
+    </price-update-date>
+    <stock-update-date translate="message" module="zolagocatalog">
+        <message>Stock update date</message>
+    </stock-update-date>
+    <reservations translate="message" module="zolagocatalog">
+        <message>Reservations</message>
+    </reservations>
+    <stock-dispose translate="message" module="zolagocatalog">
+        <message>Stock Disp.</message>
+    </stock-dispose>
     <price-yes translate="message" module="zolagocatalog">
         <message>Yes</message>
     </price-yes>
