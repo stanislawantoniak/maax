@@ -14,7 +14,7 @@ class Dotpay_Dotpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
   }
 
   public function getOrderPlaceRedirectUrl() {
-    return Mage::getUrl('dotpay/processing/redirect');
+    return Mage::getUrl('dotpay/processing/redirect',array('_secure'=>true));
   }
 
   public function getRedirectUrl() {
@@ -35,8 +35,8 @@ class Dotpay_Dotpay_Model_PaymentMethod extends Mage_Payment_Model_Method_Abstra
       'firstname'   => $billing->getFirstname(),
       'lastname'    => $billing->getLastname(),
       'control'     => $this->getOrder()->getRealOrderId(),
-      'URL'         => Mage::getUrl('dotpay/processing/status'),
-      'URLC'        => Mage::getUrl('dotpay/notification'),
+      'URL'         => Mage::getUrl('dotpay/processing/status',array('_secure'=>true)),
+      'URLC'        => Mage::getUrl('dotpay/notification',array('_secure'=>true)),
       'country'     => $billing->getCountryModel()->getIso2Code(),
       'city'        => $billing->getCity(),
       'postcode'    => $billing->getPostcode(),
