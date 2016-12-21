@@ -146,6 +146,11 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
                 "e.entity_id = link_table.product_id",
                 array("link_table.parent_id")
             )
+            ->joinInner(
+                array("stock" => 'cataloginventory_stock_item'),
+                "e.entity_id = stock.product_id AND stock_id = 1",
+                array("stock.is_in_stock")
+            )                
             ->where("link_table.parent_id IN(?)", $productIds)
             ->where("(`e`.`required_options` != '1') OR (`e`.`required_options` IS NULL)")
             ->where("at_size.value IS NOT NULL")
@@ -159,7 +164,8 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
                 "sku" => $product->getSku(),    //Simple product sku
                 "skuv" => $product->getSkuv(),  //Simple product skuv
                 "size" => $product->getSize(),  //Simple product size
-                "price" => $product->getPrice() //Simple product price
+                "price" => $product->getPrice(), //Simple product price
+                "is_in_stock" => $product->getIsInStock()
             );
         }
         Mage::app()->setCurrentStore($origStore);
@@ -199,6 +205,11 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
                 "e.entity_id = at_msrp.entity_id",
                 array("msrp" => "at_msrp.value")
             )
+            ->joinInner(
+                array("stock" => 'cataloginventory_stock_item'),
+                "e.entity_id = stock.product_id AND stock_id = 1",
+                array("stock.is_in_stock")
+            )                
 
             ->where("at_msrp.attribute_id=?", $attributeMSRPId)
             ->where("at_msrp.store_id=?", $store)
@@ -210,7 +221,8 @@ class Zolago_Catalog_Model_Product_Type_Configurable extends Mage_Catalog_Model_
             $mSRPForChildren[$product->getParentId()][$product->getId()] = array(
                 "id" => $product->getId(),      //Simple product id
                 "sku" => $product->getSku(),    //Simple product sku
-                "msrp" => $product->getMsrp() //Simple product msrp
+                "msrp" => $product->getMsrp(), //Simple product msrp
+                "is_in_stock" => $product->getIsInStock(),
             );
         }
 
