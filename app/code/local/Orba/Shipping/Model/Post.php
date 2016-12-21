@@ -60,14 +60,17 @@ class Orba_Shipping_Model_Post extends Orba_Shipping_Model_Carrier_Abstract {
      */
     protected function _clearEnvelope() {
         $settings = $this->_settings;
-        $lastDate = Mage::getStoreConfig('carriers/zolagopp/last_date',0);
+        $lastDate = Mage::getStoreConfig('carriers/zolagopp/last_date',0);        
         if ($lastDate != date('Y-m-d')) {
+            Mage::log(sprintf('Clear envelope %s',$lastDate),null,'zolagopp.log');            
             if ($this->getClient()->clearEnvelope($settings)) {
                 Mage::getConfig()->saveConfig('carriers/zolagopp/last_date',date('Y-m-d'),'default',0);
                 Mage::getConfig()->reinit();
                 Mage::app()->reinitStores();
                 // @todo should create new dispatch
                 
+            } else {
+                Mage::log('Clear envelope error',null,'zolagopp.log');
             }
         }
     }
@@ -80,6 +83,7 @@ class Orba_Shipping_Model_Post extends Orba_Shipping_Model_Carrier_Abstract {
         $po = $this->_settings['udpo'];
         $vendor = $po->getUdropshipVendor();
         $item = $helper->getZolagoPPAggregated($vendor)->getFirstItem();
+        Mage::log(sprintf('Aggregated id %s',$item->getId()),null,'zolagopp.log');
         if (!$item->getId()) {
             $poId = $po->getId();
             $helper->createAggregated(array($poId),$vendor);
@@ -128,6 +132,7 @@ class Orba_Shipping_Model_Post extends Orba_Shipping_Model_Carrier_Abstract {
         try {
             if ($number = $track->getTrackNumber()) {
                 $client = $this->getClient();
+                Mage::log(sprintf('Cancel pack %s',$number),null,'zolagopp.log');
                 $client->cancelPack($number);
             }
         } catch (Exception $xt) {
