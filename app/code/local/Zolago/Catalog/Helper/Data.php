@@ -177,4 +177,39 @@ class Zolago_Catalog_Helper_Data extends Mage_Core_Helper_Abstract {
 		}
 		return (float)str_replace(",", ".", $percent);
 	}
+    public function getStoreDeliveryHeadline($product, $vendor = null,$inventory = null) {
+        $storeDeliveryHeadline = "";
+        /* @var $product Zolago_Catalog_Model_Product */
+        if (is_null($inventory)) {
+            $inventory = Mage::getModel('cataloginventory/stock_item')->loadByProduct($product);
+        }
+
+        $backorders = (int)$inventory->getBackorders();        
+        $qty = (int)$inventory->getQty();
+
+        $backordersInfo = $product->getBackordersInfo();
+        if(!$product->isSalable()){
+            return $storeDeliveryHeadline;
+        }
+
+        if(
+            $inventory->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_BUNDLE
+        ){
+            //fo bundle always show from product
+            return $backordersInfo;
+        }
+        if (
+            $backorders > 0
+            && $qty <= 0
+        ) {
+            $storeDeliveryHeadline = $backordersInfo;
+        } else {
+            if (is_null($vendor)) {
+                $vendor = Mage::helper('udropship')->getVendor($product->getUdropshipVendor());
+            }
+            $storeDeliveryHeadline = $vendor->getStoreDeliveryHeadline();
+        }
+        return $storeDeliveryHeadline;
+
+    }	
 }
