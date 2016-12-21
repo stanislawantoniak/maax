@@ -645,10 +645,16 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
         //1. Collect price
         $productMinPrice = array();
+        $productMinAllPrice = array();
         foreach ($priceSizeRelation as $item) {
-            $productMinPrice[] = $item['price'];
+            $productMinAllPrice[] = $item['price'];
+            if ($item['is_in_stock']) {
+                $productMinPrice[] = $item['price'];
+            }
         }
-
+        if (empty($productMinPrice)) {
+            $productMinPrice = $productMinAllPrice;
+        }
         $productMinimalPrice = min($productMinPrice);
         $dataToUpdate["price"][number_format(Mage::app()->getLocale()->getNumber($productMinimalPrice), 2)][$websiteId] = $productConfigurableId;
 
@@ -686,10 +692,17 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
         //1. Collect price
         $productMinPrice = array();
-        foreach ($msrpRelation as $item) {
+        $productMinAllPrice = array();
+        foreach ($msrpRelation as $item) {            
             if (!empty((float)$item['msrp'])) {
-                $productMinPrice[] = $item['msrp'];
-            }
+                if ($item['is_in_stock']) {
+                   $productMinPrice[] = $item['msrp'];
+                }
+                $productMinAllPrice[] = $item['msrp'];
+            } 
+        }
+        if (empty($productMinPrice)) {
+            $productMinPrice = $productMinAllPrice;
         }
 
         $productMinimalPrice = min($productMinPrice);
