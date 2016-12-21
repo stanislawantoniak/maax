@@ -129,7 +129,7 @@ Mall.product = {
 		var price_box = jQuery(".price-box"),
 			old_price_selector = price_box.find(".old-price"),
 			price_selector = price_box.find("span.price");
-		if(price != oldPrice) {
+		if((price != oldPrice) && (oldPrice>0)) {
 			old_price_selector.html(template.replace("#{price}", number_format(this.roundUp(oldPrice, 2), "2", ",", " ")));
 		} else {
 			old_price_selector.html("");
