@@ -127,6 +127,7 @@ class ZolagoOs_Import_Model_Import_Product
             //Start update configurable with children session
             $dp->beginImportSession($importProfile, "update", new ZolagoOs_Import_Model_ImportProductsLogger());
             $this->updateRelations($dp,$skusCreated);
+            $this->updateVendorAssign($vendorId,$skusCreated);
             $dp->endImportSession();
 
 
@@ -142,6 +143,28 @@ class ZolagoOs_Import_Model_Import_Product
         }
     }
 
+    
+    /**
+     * assign products to vendor
+     */
+    public function updateVendorAssign($vendorId,$skusCreated) {
+        $list = array();
+        foreach ($skusCreated as $skuConfigurable=>$simples) {
+            foreach ($simples as $item) {
+                $list[] = $item;
+            }
+            $list[] = $skuConfigurable;            
+        }
+        if (empty($list)) return; //no skus no assign
+        $resource = Mage::getSingleton("core/resource");
+        $connection = $resource->getConnection('core_write');
+        $table = $resource->getTableName('udropship/vendor_product_assoc');
+        $productTable = $resource->getTableName('catalog/product');
+        $skuList = implode("','",$list);
+        $query = "INSERT IGNORE INTO {$table} (vendor_id,product_id,is_attribute,is_udmulti) ".
+            "SELECT {$vendorId},entity_id,1,0 from {$productTable} WHERE sku in ('$skuList')";
+        $connection->query($query);                
+    }
 
     /**
      * @return array
@@ -224,6 +247,7 @@ class ZolagoOs_Import_Model_Import_Product
 
         //3c. Set additional attributes (status brandshop for configurable products)
         $aM->updateAttributesPure($idsConfigurable, array('brandshop' => $vendorId), 0);
+        
     }
 
     public function updateRelations($dp,$skusCreated)
