@@ -37,22 +37,33 @@ class Zolago_Po_Model_Aggregated_Pdf extends Orba_Common_Model_Pdf {
     public function _getFilePath() {
         return self::PO_AGGREGATED_PATH;
     }
-
-    protected function _addShip($ship,$po,$page,$counter) {
-        $this->_setFont($page,9);
+    protected function _drawBarcodes($page,$tracks,$counter) {        
         $rel = 475-30*$counter;
-        $this->_drawCells($page,$rel,$rel-30);
-        $page->drawText($this->_line_count++,40,$rel-20,'UTF-8');
-        $tracks = $ship->getTracksCollection();
-        // tracking numbers
+        $nubmers = array();
         $num = count($tracks)-1;
         $pos_tmp = $rel-20+$num*6;
         foreach ($tracks as $track) {
+            $page->saveGS();
+            $page->clipRectangle($this->_rows[1],$pos_tmp-10,$this->_rows[2],$pos_tmp+18);
             $number = $track->getNumber();
             $center = ($this->_rows[2] - $this->_rows[1])/2 - (strlen($number)*6)/2+$this->_rows[1];
-            $page->drawText($track->getNumber(),$center,$pos_tmp,'UTF-8');
+            $page->drawText($number,$center,$pos_tmp-8,'UTF-8');
+            $this->_setFont($page,36,'barcode');
+            $page->drawText($number,$center-20,$pos_tmp+2);
+            $this->_setFont($page,9);
             $pos_tmp -= 10;
+            $page->restoreGS();
         }
+    }
+    protected function _addShip($ship,$po,$page,$counter) {
+        $this->_setFont($page,9);
+        $rel = 475-30*$counter;
+        // draw barcodes
+        $tracks = $ship->getTracksCollection();
+        $this->_drawBarcodes($page,$tracks,$counter);
+        $this->_drawCells($page,$rel,$rel-30);
+        $page->drawText($this->_line_count++,40,$rel-20,'UTF-8');
+        // tracking numbers
         // europalets
         $page->drawText('0',400,$rel-20,'UTF-8');
         // shipment address
