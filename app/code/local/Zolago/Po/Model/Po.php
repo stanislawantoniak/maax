@@ -1097,9 +1097,13 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
      */
     public function ghApiSetOrdersReservationAfterRead($posIds) {
         foreach($posIds as $poId) {
-            $this->loadByIncrementId($poId)
-            ->setReservation(0)
-            ->save();
+            $po = $this->loadByIncrementId($poId)
+            ->setReservation(0);
+            if ($po) {
+                $po->save();
+            } else {
+                Mage::log('Wrong poId '.$poId);
+            }
         }
         $this->unsetData();
         return $this;
