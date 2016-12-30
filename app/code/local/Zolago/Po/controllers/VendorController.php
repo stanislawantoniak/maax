@@ -399,7 +399,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
         try {
             $po = $this->_registerPo();
-            $price = $this->getRequest()->getParam("price");
+            $price = $this->_getParamShippingPrice();
             $oldPrice = $po->getShippingAmountIncl();
             $store = $po->getOrder()->getStore();
 
@@ -552,6 +552,11 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         return $this->_redirectReferer();
     }
 
+
+    protected function _getParamShippingPrice($default = null) {
+        $val = str_replace(",",".",$this->getRequest()->getParam("price", $default));
+        return $this->_parseForFloat($val, $default);
+    }
     /**
      * Gets param price and parse
      * If no set, default value taken
