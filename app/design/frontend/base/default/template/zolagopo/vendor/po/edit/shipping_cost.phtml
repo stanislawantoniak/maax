@@ -21,9 +21,9 @@ $_modagoHlp = Mage::helper("zolagocommon");
 				<div class="modal-body">
 					<ul class="list-unstyled">
 						<li class="form-group">
-							<label for=shippingcost-price" class="col-md-3 control-label"><?php echo $_hlp->__('Price') ?> <span class="required">*</span></label>
+							<label for="shippingcost-price" class="col-md-3 control-label"><?php echo $_hlp->__('Price') ?> <span class="required">*</span></label>
 							<div class="col-md-4">
-								<input name="price" required="required" id="shippingcost-price" type="text" value="" min="0" class="form-control pricePositive required numeric"/> 
+								<input name="price" required="required" id="shippingcost-price" type="text" value="" min="0" class="form-control pricePositive required numeric priceTwoPositionPrecision"/> 
 							</div>
 							<div class="col-md-2">
 								<div class="after-filed-label text-muted">
@@ -48,6 +48,9 @@ jQuery(function($){
 	var form = $("#shippigncost-form");
 	var price = $("#shippingcost-price");
 	
+	price.keyup(function() {
+		Zolago.parseForFloatWithReplace(this);
+	});
 	var validator = form.validate();
 	
 	
