@@ -956,7 +956,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                     'order_item_id' => null,
                     'additional_data' => null,
                     'description' => null,
-                    'name' => $product->getName(),
+                    'name' => $productP->getName(),
                     'sku' => $product->getSku(),
                     'base_cost' => $productP->getCost(),
                     'qty_invoiced' => null,
