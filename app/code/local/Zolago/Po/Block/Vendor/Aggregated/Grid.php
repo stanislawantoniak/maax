@@ -57,7 +57,7 @@ class Zolago_Po_Block_Vendor_Aggregated_Grid extends Mage_Adminhtml_Block_Widget
 		$this->addColumn("created_at", array(
 			"type"		=>	"date",
 			"index"		=>	"created_at",
-			"align"		=>  "center",
+			"align"		=>      "center",
 			"header"	=>	Mage::helper("zolagopo")->__("Created date"),
 			"width"		=>	"150px"
 		));
@@ -112,8 +112,8 @@ class Zolago_Po_Block_Vendor_Aggregated_Grid extends Mage_Adminhtml_Block_Widget
 	}
 	
 	
-	public function _addColumnFilterToCollection($column) {
-		if($column->getIndex()=="created_at"){
+	public function _addColumnFilterToCollection($column) {		
+		if($column->getIndex()=="created_at" && $column->getFilter()->getCondition()){
 			$this->getCollection()->addFieldToFilter("main_table.created_at", $column->getFilter()->getCondition());
 			return $this;
 		}
