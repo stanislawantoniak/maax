@@ -373,7 +373,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
             ->group('external.external_sku');
         $select->joinLeft(
             array('ext' => new Zend_Db_Expr('('.$subselect.')')),
-            "ext.sku = res.sku",
+            "ext.sku = cpe.sku",
             array('all_qty' => 'ext.qty')
         );
         $select->where("stock.product_id IN (?)", $ids);
