@@ -340,3 +340,4 @@
 "Not enough stock of %s. On stock is %s items","Niewystarczająca liczba sztuk produktu %s. Na stanie pozostało %s sztuk"
 "Reservation flag set","Stan magazynowy zarezerwowany"
 "Reservation flag removed","Usunięto rezerwację stanów magazynowych"
+"Reservation","Rezerwacja"
