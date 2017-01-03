@@ -60,6 +60,9 @@
     <price-child-products translate="message" module="zolagocatalog">
         <message>Child products</message>
     </price-child-products>
+    <price-product-details translate="message" module="zolagocatalog">
+        <message>Product details</message>
+    </price-product-details>
     <price-price-variation translate="message" module="zolagocatalog">
         <message>Price Variation</message>
     </price-price-variation>
