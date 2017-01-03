@@ -83,6 +83,7 @@ define([
 			return this.getExpandAll();
 		},
 		toggle: function(row){
+			// for all (simple/configurable/bundle)
 			this._set(row.data, !this._get(row.data));
 			var self = this;
 			query("td.field-expander", row.element).forEach(function(item){
@@ -110,7 +111,7 @@ define([
 			put(node, ".collapsed");
 		},
 		cellRender: function(item){
-			return this.is(item) ? this._yes : this._can;
+			return this.is(item) ? this._yes : this._can; // allways
 		},
 		queueItem: function(item){
 			if(this._queue.indexOf(item.entity_id)<0){
