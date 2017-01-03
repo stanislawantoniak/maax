@@ -83,18 +83,17 @@ define([
 			return this.getExpandAll();
 		},
 		toggle: function(row){
-			if (row.data.type_id != "simple") {
-				this._set(row.data, !this._get(row.data));
-				var self = this;
-				query("td.field-expander", row.element).forEach(function (item) {
-					item.innerHTML = self.cellRender(row.data);
-				});
-				// toggle state of node which was clicked
-				if (this.is(row.data)) {
-					this.doRowExpand(row.data, row.element);
-				} else {
-					this.doRowCollapse(row.data, row.element)
-				}
+			// for all (simple/configurable/bundle)
+			this._set(row.data, !this._get(row.data));
+			var self = this;
+			query("td.field-expander", row.element).forEach(function(item){
+				item.innerHTML = self.cellRender(row.data);
+			});
+			// toggle state of node which was clicked
+			if(this.is(row.data)){
+				this.doRowExpand(row.data, row.element);
+			}else{
+				this.doRowCollapse(row.data, row.element)
 			}
 		},
 		clear: function(id){
@@ -112,7 +111,7 @@ define([
 			put(node, ".collapsed");
 		},
 		cellRender: function(item){
-			return this.is(item) ? this._yes : (item.type_id == "simple" ? this._not : this._can);
+			return this.is(item) ? this._yes : this._can; // allways
 		},
 		queueItem: function(item){
 			if(this._queue.indexOf(item.entity_id)<0){
