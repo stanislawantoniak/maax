@@ -224,7 +224,14 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 			"renderer"	=>	Mage::getConfig()->
 				getBlockClassName("zolagopo/vendor_po_grid_column_renderer_alert"),
 		));
-		
+		$this->addColumn("reservation", array(
+			"type"          => "options",
+			"options"       => Mage::getSingleton('adminhtml/system_config_source_yesno')->toArray(),		
+			"index"         => "reservation",
+			"header"        => Mage::helper('zolagopo')->__('Reservation'),
+			"align"		=> "center",
+			"width"         => "50px",
+		));
 		$this->addColumn("actions", array(
                 'header'    => Mage::helper('zolagopo')->__('Action'),
 				'renderer'	=> Mage::getConfig()->getBlockClassName("zolagoadminhtml/widget_grid_column_renderer_link"),
