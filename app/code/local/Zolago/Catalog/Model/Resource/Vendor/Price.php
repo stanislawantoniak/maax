@@ -82,14 +82,20 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
 
         $baseSelect->from(array("product"=>$this->getMainTable()));
         $baseSelect->where("product.entity_id IN (?)", $ids);
-
+        $simpleIds = array();
+        $multipleIds = array();
         // Tmp var
         foreach($adapter->fetchAll($baseSelect) as $row) {
             $out[$row['entity_id']] = array_merge($row, array(
-                    "var" => rand(0,10000),
-                                                  ));
+                "var" => rand(0,10000),
+            ));
+            if ($row['type_id'] == Mage_Catalog_Model_Product_Type::TYPE_SIMPLE) {
+                $simpleIds[] = $row['entity_id'];
+            } else {
+                $multipelIds[] = $row['entity_id'];
+            }            
         }
-
+        
         // Child data
         foreach($this->getChilds($ids, $storeId) as $child) {
             if(!isset($out[$child['parent_id']]['children'][$child['attribute_id']])) {
@@ -121,10 +127,24 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
                         'update_stock_date' => empty($child['update_stock_date'])? '':$child['update_stock_date'],
                         'update_price_date' => empty($child['update_price_date'])? '':$child['update_price_date'],
                         'reservation' => empty($child['reservation'])? 0:$child['reservation'],
-                        'all_qty' => $child['qty']+$child['reservation'],
+                        'all_qty' => empty($child['all_qty'])? 0:$child['all_qty'],
                     );
         }
-
+        // Simple data
+        foreach($this->getSimpleDetails($simpleIds, $storeId) as $child) {
+            $out[$child['product_id']]['children'][]['children'][]['children'][] = array(
+                        'entity_id'=>$child['product_id'],
+                        'qty'=>$child['qty'],
+                        'is_in_stock' => $child['is_in_stock'],
+                        'update_stock_date' => empty($child['update_stock_date'])? '':$child['update_stock_date'],
+                        'update_price_date' => empty($child['update_price_date'])? '':$child['update_price_date'],
+                        'reservation' => empty($child['reservation'])? 0:$child['reservation'],
+                        'all_qty' => empty($child['all_qty'])? 0:$child['all_qty'],
+                        'children' => array(),
+            );
+            // Group products by option
+        }
+        
         // Camapign data
 
         foreach($this->_getCampaign($ids, $storeId, $isAllowedToCampaign) as $campaign) {
@@ -254,6 +274,127 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
     }
 
 
+    
+    /**
+     * details for simple product
+     * @param array $ids
+     * @param int $storeId
+     * @return type
+     */
+    public function getSimpleDetails(array $ids,$storeId) {
+        $websiteId = Mage::app()->getStore($storeId)->getWebsiteId();
+        $model     = Mage::getSingleton('eav/config');
+
+        $select = $this->getReadConnection()->select();
+
+
+        // Add stock
+        $select->from(
+            array("stock"=>$this->getTable("cataloginventory/stock_item")),
+            array("is_in_stock", "qty", "product_id")
+        );
+
+        // update price date
+        $attribute = $model->getAttribute('catalog_product', 'update_price_date');
+        $updTable = $attribute->getBackendTable();
+
+        $select->joinLeft(
+            array('uptable' => $updTable),
+            implode(" AND ", array(
+                        "uptable.entity_id = stock.product_id",
+                        $this->getReadConnection()->quoteInto("uptable.entity_type_id=?", $attribute->getEntityTypeId()),
+                        $this->getReadConnection()->quoteInto("uptable.attribute_id=?", $attribute->getId()),
+                        $this->getReadConnection()->quoteInto("uptable.store_id=?", 0), 
+                    )),
+            array("update_price_date" => "uptable.value")
+        );
+        // Add sku
+        $select->joinLeft(
+            array("cpe" => $this->getTable("catalog/product")),
+            "cpe.entity_id = stock.product_id",
+            array("sku")
+        );
+        
+        // update stock date
+        $attribute = $model->getAttribute('catalog_product', 'update_stock_date');
+        $updTable = $attribute->getBackendTable();
+
+        $select->joinLeft(
+            array('ustable' => $updTable),
+            implode(" AND ", array(
+                        "ustable.entity_id = stock.product_id",
+                        $this->getReadConnection()->quoteInto("ustable.entity_type_id=?", $attribute->getEntityTypeId()),
+                        $this->getReadConnection()->quoteInto("ustable.attribute_id=?", $attribute->getId()),
+                        $this->getReadConnection()->quoteInto("ustable.store_id=?", 0), 
+                    )),
+            array("update_stock_date" => "ustable.value")
+        );
+        // Add skuv
+        $skuvCode  = Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute');
+        /** @var Mage_Eav_Model_Config $model */
+        $attribute = $model->getAttribute('catalog_product', $skuvCode);
+        $skuvTable = $attribute->getBackendTable();
+
+        $select->joinLeft(
+            array('skuvtable' => $skuvTable),
+            implode(" AND ", array(
+                        "skuvtable.entity_id = stock.product_id",
+                        $this->getReadConnection()->quoteInto("skuvtable.entity_type_id=?", $attribute->getEntityTypeId()),
+                        $this->getReadConnection()->quoteInto("skuvtable.attribute_id=?", $attribute->getId()),
+                        $this->getReadConnection()->quoteInto("skuvtable.store_id=?", 0), // For now skuv is only for default store
+                    )),
+            array("skuv" => "skuvtable.value")
+        );
+        // reservations
+        $subselect = $this->getReadConnection()->select();
+        $subselect
+            ->from(
+                array('po_item'=>$this->getTable("udpo/po_item")),
+                array(
+                    'sku' => 'po_item.sku',
+                    'reservation' => new Zend_Db_Expr('SUM(po_item.qty)')
+                )
+            )
+            ->join(
+                array('po' => $this->getTable('udpo/po')),
+                'po.entity_id=po_item.parent_id',
+                array()
+            )            
+            ->where("po_item.parent_item_id IS NULL")
+            ->where("po.reservation=?",1)
+            ->group('po_item.sku');
+        $select->joinLeft(
+            array('res' => new Zend_Db_Expr('('.$subselect.')')),
+            "res.sku = cpe.sku",
+            array('reservation'=> 'reservation')
+        );
+        // pos stocks
+        $subselect = $this->getReadConnection()->select();
+        $subselect
+            ->from(
+                array('external' => $this->getTable('zolagocatalog/external_stock')),
+                array(
+                    'sku' => 'external_sku',
+                    'qty' => new Zend_Db_Expr('SUM(IF(external.qty - pos.minimal_stock<0,0,external.qty - pos.minimal_stock))')
+                )
+            )
+            ->join(
+                array('pos' => $this->getTable('zolagopos/pos')),
+                implode(" AND ", array(
+                    'pos.external_id = external.external_stock_id',
+                    'pos.vendor_owner_id = external.vendor_id'
+                )),
+                array()
+            )
+            ->group('external.external_sku');
+        $select->joinLeft(
+            array('ext' => new Zend_Db_Expr('('.$subselect.')')),
+            "ext.sku = skuvtable.value",
+            array('all_qty' => 'ext.qty')
+        );
+        $select->where("stock.product_id IN (?)", $ids);
+        return $this->getReadConnection()->fetchAll($select);        
+    }
     /**
      * @param array $ids
      * @param int $storeId
@@ -378,7 +519,30 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
             "res.sku = cpe.sku",
             array('reservation'=> 'reservation')
         );
-
+        // pos stocks
+        $subselect = $this->getReadConnection()->select();
+        $subselect
+            ->from(
+                array('external' => $this->getTable('zolagocatalog/external_stock')),
+                array(
+                    'sku' => 'external_sku',
+                    'qty' => new Zend_Db_Expr('SUM(IF(external.qty - pos.minimal_stock<0,0,external.qty - pos.minimal_stock))')
+                )
+            )
+            ->join(
+                array('pos' => $this->getTable('zolagopos/pos')),
+                implode(" AND ", array(
+                    'pos.external_id = external.external_stock_id',
+                    'pos.vendor_owner_id = external.vendor_id'
+                )),
+                array()
+            )
+            ->group('external.external_sku');
+        $select->joinLeft(
+            array('ext' => new Zend_Db_Expr('('.$subselect.')')),
+            "ext.sku = skuvtable.value",
+            array('all_qty' => 'ext.qty')
+        );
         // Optional price
         $select->columns(array("price"=>new Zend_Db_Expr("IF(sa_price.value_id>0, sa_price.pricing_value, 0)")));
 
