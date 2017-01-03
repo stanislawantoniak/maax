@@ -329,22 +329,6 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
                     )),
             array("update_stock_date" => "ustable.value")
         );
-        // Add skuv
-        $skuvCode  = Mage::getStoreConfig('udropship/vendor/vendor_sku_attribute');
-        /** @var Mage_Eav_Model_Config $model */
-        $attribute = $model->getAttribute('catalog_product', $skuvCode);
-        $skuvTable = $attribute->getBackendTable();
-
-        $select->joinLeft(
-            array('skuvtable' => $skuvTable),
-            implode(" AND ", array(
-                        "skuvtable.entity_id = stock.product_id",
-                        $this->getReadConnection()->quoteInto("skuvtable.entity_type_id=?", $attribute->getEntityTypeId()),
-                        $this->getReadConnection()->quoteInto("skuvtable.attribute_id=?", $attribute->getId()),
-                        $this->getReadConnection()->quoteInto("skuvtable.store_id=?", 0), // For now skuv is only for default store
-                    )),
-            array("skuv" => "skuvtable.value")
-        );
         // reservations
         $subselect = $this->getReadConnection()->select();
         $subselect
@@ -389,7 +373,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
             ->group('external.external_sku');
         $select->joinLeft(
             array('ext' => new Zend_Db_Expr('('.$subselect.')')),
-            "ext.sku = skuvtable.value",
+            "ext.sku = res.sku",
             array('all_qty' => 'ext.qty')
         );
         $select->where("stock.product_id IN (?)", $ids);
@@ -540,7 +524,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price
             ->group('external.external_sku');
         $select->joinLeft(
             array('ext' => new Zend_Db_Expr('('.$subselect.')')),
-            "ext.sku = skuvtable.value",
+            "ext.sku = cpe.sku",
             array('all_qty' => 'ext.qty')
         );
         // Optional price
