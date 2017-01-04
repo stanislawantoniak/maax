@@ -15,7 +15,7 @@ $_hlp = $this->getRmaHelper();
 /** @var Zolago_Common_Helper_Data $_zolagoHlp */
 $_modagoHlp = Mage::helper("zolagocommon");
 
-$differenceSum = $_rma->getRmaRefundAmountMax();
+$differenceSum = $_rma->getRmaRefundAmountMax()-$_rma->getRmaSimpleRefundAmount();
 $differenceInputSum = number_format($differenceSum, 2, '.', '');
 $automaticCost = 0;
 if ($showDeliveryCost = Mage::helper('zolagosales/transaction')->checkChargeTransaction($_rma)) {
