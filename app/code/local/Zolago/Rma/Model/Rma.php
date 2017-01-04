@@ -398,6 +398,8 @@ class Zolago_Rma_Model_Rma extends ZolagoOs_Rma_Model_Rma
     }
 
     /**
+     * wartość zwróconych zamówień
+     * @param bool $total liczenie z całego zamówienia, lub tylko z konkretnego rma
      * @return float
      */
     public function getRmaSimpleRefundAmount($total = false) {
@@ -410,13 +412,14 @@ class Zolago_Rma_Model_Rma extends ZolagoOs_Rma_Model_Rma
             $types = $this->_getRefundTransactionTypes();
             $existTransactions = Mage::getModel('sales/order_payment_transaction')->getCollection()
                                  ->addFieldToFilter('order_id', $orderId)
-                                 ->addFieldToFilter('customer_id', $customerId)
                                  ->addFieldToFilter('txn_type', $types)
                                  ->addFieldToFilter('payment_id', $paymentId);
+            if (!empty($customerId)) {
+                $existTransactions->addFieldToFilter('customer_id', $customerId);
+            }
             if (!$total) {
                 $existTransactions->addFieldToFilter('rma_id',$this->getId());
             }
-
             $amount = 0;
             foreach($existTransactions as $existTransaction) {
                 $amount +=  -$existTransaction->getTxnAmount();
