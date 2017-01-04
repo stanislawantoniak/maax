@@ -320,35 +320,12 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
      * @return bool
      */
     protected function validateSimpleRefund($amount, $rma) {
-        $customerId = $rma->getCustomerId();
-        $orderId = $rma->getOrder()->getId();
-        $paymentId = $rma->getOrder()->getPayment()->getId();
-        $existRefunds = Mage::getModel('sales/order_payment_transaction')->getCollection()
-                        ->addFieldToFilter('order_id', $orderId)
-                        ->addFieldToFilter('customer_id', $customerId)
-                        ->addFieldToFilter('txn_type', Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND)
-                        ->addFieldToFilter('payment_id', $paymentId)
-                        ->addFieldToFilter('rma_id',$rma->getId());
-        $refundSum = 0;
-        foreach($existRefunds as $existRefund) {
-            $refundSum -=  $existRefund->getTxnAmount();
+        $max = $rma->getRmaRefundAmountMax();
+        $returned = $rma->getRmaSimpleRefundAmount();
+        if ($amount > ($max-$returned)) {
+            return false;
         }
-        $newRefundSum = $refundSum + $amount;
-        $items = $rma->getAllItems();
-        $totalOrderSum = 0;
-        foreach ($items as $item) {
-            $poItemId = $item->getPoItem()->getId();
-            if($poItemId) {
-                $paidNum = $item->getPoItem()->getFinalItemPrice();
-            } else {
-                $paidNum = $item->getPrice();
-            }
-            $totalOrderSum += floatval($paidNum);
-        }
-        if(round($newRefundSum,4) <= round($totalOrderSum,4)) {
-            return true;
-        }
-        return false;
+        return true;
     }
 
     protected function _throwRefundTooMuchAmountException() {
