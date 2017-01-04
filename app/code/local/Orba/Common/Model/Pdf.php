@@ -89,7 +89,7 @@ abstract class Orba_Common_Model_Pdf extends Varien_Object {
      protected function _setFont($page,$size = 7,$type = '') {
         switch ($type) {
         case 'barcode':
-            $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir() . '/lib/font/code128.ttf');
+            $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir() . '/lib/font/fre3of9x.ttf');
             break;
         case 'b':
             $font = Zend_Pdf_Font::fontWithPath(Mage::getBaseDir() . '/lib/font/Arial_Bold.ttf');

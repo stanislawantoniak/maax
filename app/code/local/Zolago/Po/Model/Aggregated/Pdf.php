@@ -11,7 +11,7 @@ class Zolago_Po_Model_Aggregated_Pdf extends Orba_Common_Model_Pdf {
     protected $_aggregated;
     protected $_line_count = 1;
     protected $_rows = array (
-                           1 => 60,
+                           1 => 50,
                            2 => 180,
                            3 => 380,
                            4 => 435,
@@ -49,8 +49,8 @@ class Zolago_Po_Model_Aggregated_Pdf extends Orba_Common_Model_Pdf {
             $number = $track->getNumber();
             $center = ($this->_rows[2] - $this->_rows[1])/2 - (strlen($number)*6)/2+$this->_rows[1];
             $page->drawText($number,$center,$pos_tmp-8,'UTF-8');
-            $this->_setFont($page,36,'barcode');
-            $page->drawText($number,$center-20,$pos_tmp+2);
+            $this->_setFont($page,24,'barcode');
+            $page->drawText('*'.$number.'*',$center-28,$pos_tmp+2);
             $this->_setFont($page,9);
             $pos_tmp -= 10;
             $page->restoreGS();
@@ -63,7 +63,7 @@ class Zolago_Po_Model_Aggregated_Pdf extends Orba_Common_Model_Pdf {
         $tracks = $ship->getTracksCollection();
         $this->_drawBarcodes($page,$tracks,$counter);
         $this->_drawCells($page,$rel,$rel-30);
-        $page->drawText($this->_line_count++,40,$rel-20,'UTF-8');
+        $page->drawText($this->_line_count++,37,$rel-20,'UTF-8');
         // tracking numbers
         // europalets
         $page->drawText('0',400,$rel-20,'UTF-8');
