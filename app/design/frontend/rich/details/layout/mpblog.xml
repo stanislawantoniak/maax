@@ -177,12 +177,6 @@
     <mpblog_index_post>
         <update handle="mpblog_default"/>
         <reference name="head">
-            <action method="addJs">
-                <styles>mpblog/comments.js</styles>
-            </action>
-            <action method="addJs">
-                <styles>scriptaculous/effects.js</styles>
-            </action>
 
             <block type="mpblog/social_wrapper"
                    name="mpblog.social.wrapper"
