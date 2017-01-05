@@ -1,0 +1,99 @@
+<div id="gr-automation">
+
+	<?php if (empty($settings->api['campaign_id']) || $settings->api['active_subscription'] == 0) { ?>
+		<div id="gr-messages">
+			<ul class="messages">
+				<li class="error-msg">
+					<ul>
+						<li>
+							<span>The rules work only when you enable subscriptions via the registration page.</span>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	<?php } ?>
+
+	<div class="content-header">
+		<h3 class="icon-head head-categories">Campaign rules</h3>
+	</div>
+
+	<p>
+		You can automatically move or copy your customers between your GetResponse
+		campaigns when people purchase in a particular Magento product category.
+		To do this, click “Create a new rule” button. When you select "move" option,
+		the rule moves contacts from ALL existing campaigns to the destination campaign.
+		To add contacts to another campaign choose "copy" option.
+	</p>
+
+	<p style="padding: 10px 10px 10px 0px;float: right;">
+		<button class="create-automation">Create a new rule</button>
+	</p>
+
+	<div class="grid" id="automation-list"
+		 style="<?php if (empty($settings->automations)) : echo 'display:none'; endif ?>">
+		<table cellspacing="0" class="data" id="automation-table">
+			<tbody>
+			<tr class="headings">
+				<th>Category</th>
+				<th>Campaign</th>
+				<th>Cycle day</th>
+				<th>Rule</th>
+				<th>Is active</th>
+				<th>Actions</th>
+			</tr>
+			<?php
+			if ( !empty($settings->automations)) {
+				foreach ($settings->automations as $automation) { ?>
+					<tr class="even pointer gr-tr" id="automation_<?php echo $automation['id']; ?>">
+						<td id="category_<?php echo $automation['id']; ?>">
+							<?php if (isset($settings->categories[$automation['category_id']])) : echo $settings->categories[$automation['category_id']]['name']; endif ?>
+						</td>
+						<td id="campaign_<?php echo $automation['id']; ?>">
+							<?php if (isset($settings->campaigns[$automation['campaign_id']])) : echo $settings->campaigns[$automation['campaign_id']]; endif ?>
+						</td>
+						<td id="cycle_day_<?php echo $automation['id']; ?>">
+							<?php if (is_numeric($automation['cycle_day'])) { echo $automation['cycle_day']; } else {
+								echo "No autoresponders"; } ?>
+						</td>
+						<td id="action_<?php echo $automation['id']; ?>">
+							<?php
+							echo $automation['action']; ?>
+						</td>
+						<td style="text-align:center;">
+							<input id="active_<?php echo $automation['id']; ?>"
+								   data-automation="<?php echo $automation['id']; ?>"
+								   class="gr-active" type="checkbox" value="<?php echo $automation['active']; ?>"
+								<?php if ($automation['active'] == 1) : echo "checked"; endif ?>
+							>
+						</td>
+						<td style="text-align:center;width:130px;">
+							<button id="edit_<?php echo $automation['id']; ?>" class="edit-automation"
+									data-automation="<?php echo $automation['id']; ?>"
+									data-category="<?php echo $automation['category_id']; ?>"
+									data-campaign="<?php echo $automation['campaign_id']; ?>"
+									data-cycle_day="<?php echo $automation['cycle_day']; ?>"
+									data-action="<?php echo $automation['action']; ?>"
+							>Edit
+							</button>
+
+							<button class="delete-automation" data-automation="<?php echo $automation['id']; ?>">
+								Delete
+							</button>
+						</td>
+					</tr>
+				<?php }
+			} ?>
+			</tbody>
+		</table>
+	</div>
+	<input type="hidden" name="show_box" id="show_box" value="0">
+</div>
+
+<div id="dialog-confirm" title="Do you want to delete rule?" style="display:none;">
+	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>These rule will be
+		permanently deleted. Are you sure?</p>
+</div>
+
+
+<?php include_once('add_automation.phtml'); ?>

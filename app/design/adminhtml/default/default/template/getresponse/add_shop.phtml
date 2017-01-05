@@ -1,0 +1,99 @@
+<div id="shop-form" title="Create new campaign" style="display: none;">
+    <p class="validateTips"></p>
+    <form>
+        <fieldset>
+            <p>
+                <label class="GR_label_short" for="shop_name">Name</label>
+                <input class="GR_input" type="text" name="shop_name" id="shop_name" value="">
+            </p>
+            <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        </fieldset>
+    </form>
+</div>
+
+<script>
+    jQuery(function () {
+
+        var shop, form,
+            shop_name = jQuery("#shop_name"),
+            from = jQuery("#from"),
+            tips = jQuery(".validateTips");;
+
+        function updateTips(t) {
+            tips
+                .text(t)
+                .addClass("ui-state-highlight");
+            setTimeout(function () {
+//				tips.removeClass( "ui-state-highlight", 1500 );
+            }, 500);
+        }
+
+        function addNewShop() {
+
+            jQuery.post('<?php echo Mage::helper("adminhtml")->getUrl('getresponse/shop/add'); ?>', {
+                shop_name: jQuery('input[name="shop_name"]').val(),
+                form_key: '<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>'
+            }, function(json) {
+
+                if ('success' == json.type) {
+
+                    jQuery('select#shop_id').append(
+                        '<option value="' + json.shop_id + '" selected="selected">' + json.shop_name + '</option>');
+
+                    updateTips(json.msg);
+
+                    jQuery('#showSelectShopBox').show();
+                    jQuery('#saveButonBox').show();
+                    jQuery('#selectBoxNotFoundError').hide();
+
+                    window.setTimeout(function() {
+                        shop.dialog("close");
+                    }, 2000);
+                } else {
+
+                    updateTips(json.msg);
+
+                    window.setTimeout(function() {
+                        shop.dialog("close");
+                    }, 2000);
+                }
+            }, 'json');
+        }
+
+        shop = jQuery("#shop-form").dialog({
+            autoOpen: false,
+            modal: true,
+            width: 500,
+            buttons: [
+                {
+                    text: 'Create shop',
+                    "class": 'campaignButton',
+                    click: function () {
+                        addNewShop();
+                    }
+                },
+                {
+                    text: "Cancel",
+                    click: function () {
+                        shop.dialog("close");
+                    }
+                }
+            ],
+            close: function () {
+                shop_name.val('');
+            }
+        });
+
+        form = shop.find("form").on("submit", function (event) {
+            event.preventDefault();
+            addNewShop();
+        });
+
+        jQuery("#create_shop").on("click", function (event) {
+            shop.dialog("open");
+            event.preventDefault();
+        });
+
+    });
+
+</script>

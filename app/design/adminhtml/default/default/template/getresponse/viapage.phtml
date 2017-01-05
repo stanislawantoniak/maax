@@ -1,0 +1,217 @@
+<div>
+	<div class="content-header">
+		<h3 class="icon-head head-categories">Subscription via registration page</h3>
+	</div>
+
+	<?php include_once('add_campaign.phtml'); ?>
+
+	<form id="getresponse_export_form" method="post"
+		  action="<?php echo Mage::helper("adminhtml")->getUrl('getresponse/index/subpage'); ?>">
+
+		<p style="padding-bottom: 10px;">
+			You can add subscribers to a specific GetResponse campaign when people register to your online shop
+			(using the registration page). Select an existing campaign or create a new one for your visitors.
+			Select if you want to update specific fields. When this option is off only new contacts are exported.
+		</p>
+
+		<p>
+			<span class="switch_active_subscription">
+				<input
+					class="GR_checkbox"
+					type="checkbox"
+					name="active_subscription"
+					id="active_subscription"
+					value="1"
+					<?php if (isset($settings->api['active_subscription']) and $settings->api['active_subscription'] == 1) : ?>
+						checked="checked"
+					<?php endif; ?>
+					/>
+			</span>
+			<label class="GR_label" for="active_subscription">Allow subscriptions when customers register</label>
+
+		</p>
+
+		<div id="details"
+			 style="<?php if ( !isset($settings->api['active_subscription']) || $settings->api['active_subscription'] !== 1) {
+				 echo "display: none;";
+			 } ?>">
+			<p>
+				<label class="GR_label" for="campaign_id">Select your campaign</label>
+				<?php
+				if ( !empty($settings->campaigns)) {
+					?>
+					<select class="GR_input" name="campaign_id" id="campaign_id">
+						<?php
+						foreach ($settings->campaigns as $id => $name) {
+							echo '<option value="' . $id . '"', ($id == $settings->api['campaign_id']) ? ' selected="selected"' : '', '>' . $name . '</option>';
+						}
+						?>
+					</select>
+				<?php }
+				else {
+					?>
+					<span class="error">An error occurred while trying to get campaigns.</span>
+					<?php
+				}
+				?>
+				<button id="create-campaign">Add new campaign</button>
+			</p>
+
+			<p id="cycle_day_section" style="padding: 5px 0px 10px 0px;">
+
+				<label class="GR_label"></label>
+
+				<span>
+					<input type="checkbox" class="GR_checkbox" name="gr_autoresponder" id="gr_autoresponder" value="1" />
+				</span>
+
+				<label for="gr_autoresponder">Add to autoresponder sequence</label>
+				<br />
+				<label class="GR_label" for="cycle_day"></label>
+				<select class="GR_input" name="cycle_day" id="cycle_day"></select>
+
+			</p>
+
+			<p>
+			<span>
+				<input
+					class="GR_checkbox"
+					type="checkbox"
+					name="subscription_on_checkout"
+					id="subscription_on_checkout"
+					value="1"
+					<?php if (isset($settings->api['subscription_on_checkout']) and $settings->api['subscription_on_checkout'] == 1) : ?>
+						checked="checked"
+					<?php endif; ?>
+				/>
+			</span>
+				<label style="font-weight: bold" for="subscription_on_checkout">Add <i>Sing Up for Newsletter</i> block on your checkout page.</label>
+			</p>
+
+			<p>
+
+				<span class="switch_gr_sync_order_data">
+					<input
+						class="GR_checkbox"
+						type="checkbox"
+						name="gr_sync_order_data"
+						id="gr_sync_order_data"
+						value="1"
+						<?php if (isset($settings->api['update_address']) and $settings->api['update_address'] == 1) : ?>
+							checked="checked"
+						<?php endif; ?>
+						/>
+				</span>
+				<label style="font-weight: 600" for="gr_sync_order_data">Update contact details</label>
+				<a class="gr-tooltip">
+				<span class="gr-tip" style="width:178px">
+					<span>
+						Select this option if you want to overwrite contact details that already exist in your GetResponse database. Clear this option to keep existing data intact.
+					</span>
+				</span>
+				</a>
+			</p>
+
+			<div id="customNameFields" style="display: none;">
+				<p>Copy Magento customer details to custom fields</p>
+				<div class="gr-custom-field">
+					<select class="jsNarrowSelect" name="gr_custom_field" multiple="multiple">
+						<?php
+						if ( !empty($settings->customs) and is_array($settings->customs)) {
+							foreach ($settings->customs as $custom) {
+								echo '<option data-inputvalue="' . $custom['custom_value'] . '" value="' . $custom['custom_field'] . '" id="' . $custom['custom_value'] . '"', ($custom['default'] == '1' || $custom['active_custom'] == '1') ? ' selected="selected"' : '', $custom['default'] == '1' ? ' disabled="disabled"' : '', '>', $custom['custom_field'], '</option>';
+							}
+						}
+						?>
+					</select>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			var sod = jQuery('#gr_sync_order_data'),
+				actvie = jQuery('#active_subscription'),
+				details = jQuery('#details'),
+				cfp = jQuery('#customNameFields');
+			if (sod.prop('checked') == true) {
+				cfp.show();
+			}
+			if (actvie.prop('checked') == true) {
+				details.show();
+			}
+			jQuery('.jsNarrowSelect').selectNarrowDown();
+
+			//sod.switchButton();
+			//actvie.switchButton();
+
+			function switchSubscriptionHandler() {
+				jQuery('.switch_active_subscription').find('[class*=GR_checkbox]').on("click", function (e) {
+					details.toggle('slow');
+				});
+			}
+			switchSubscriptionHandler();
+
+			function switchSyncDataHandler() {
+				jQuery('.switch_gr_sync_order_data').find('[class*=GR_checkbox]').on("click", function (e) {
+					cfp.toggle('slow');
+				});
+			}
+			switchSyncDataHandler();
+
+			jQuery('#campaign_id').change(function () {
+				getCycleDays();
+			});
+
+			function getCycleDays() {
+				var campaign_id = jQuery('#campaign_id').val(),
+					day_element = jQuery('#cycle_day'),
+					checkbox = jQuery('#gr_autoresponder'),
+					cycles = jQuery.parseJSON('<?php echo isset($settings->campaign_days) ? addslashes(json_encode($settings->campaign_days)) : "{}"; ?>');
+
+				if (cycles.hasOwnProperty(campaign_id)) {
+					day_element.html('');
+					checkbox.removeAttr('disabled');
+					day_element.removeAttr('disabled');
+					var obj = cycles[campaign_id];
+					for (var prop in obj) {
+						if (obj.hasOwnProperty(prop)) {
+
+							var selected = '<?php if (isset($settings->api['cycle_day'])) {
+								echo $settings->api['cycle_day'];
+							}
+							else {
+								echo '';
+							} ?>';
+
+							var select = (selected == obj[prop].day) ? 'selected' : '';
+
+							if ('' != select) {
+								checkbox.attr('checked', 'checked');
+							}
+
+							var option = '<option value="' + parseInt(obj[prop].day) + '" ' + select + '>Day ' +
+								obj[prop].day + ': ' + obj[prop].name + ' (' + obj[prop].status + ')' +
+								'</option>';
+
+							day_element.append(option);
+						}
+					}
+				} else {
+					day_element.html('<option value="">no autoresponders</option>');
+					day_element.attr('disabled', 'disabled');
+					checkbox.attr('disabled', 'disabled');
+				}
+			}
+
+			getCycleDays();
+		</script>
+
+		<input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>"/>
+
+		<div style="margin-left: 212px;">
+			<button style="margin-top: 12px;" id="gr_export" type="submit" name="Submit" class="save">
+				<span><span>Save subscription settings</span></span></button>
+		</div>
+
+	</form>
+</div>

@@ -1,0 +1,76 @@
+<div class="side-col" id="page:left">
+	<ul class="gr_menu tabs">
+		<li>
+			<a href="<?php echo Mage::helper("adminhtml")->getUrl('getresponse/index/index'); ?>"
+			   class="tab-item-link <?php if ($active_tab == 'index') : echo 'active'; endif; ?>" title="api">
+				<span>GetResponse account</span>
+			</a>
+		</li>
+
+		<?php if ( !empty($settings->api['api_key'])) { ?>
+			<li class="">
+				<a href="<?php echo Mage::helper("adminhtml")->getUrl("getresponse/index/export"); ?>"
+				   class="tab-item-link <?php if ($active_tab == 'export') : echo 'active'; endif; ?>" title="export">
+					<span>Export customers</span>
+				</a>
+			</li>
+			<li class="">
+				<a href="<?php echo Mage::helper("adminhtml")->getUrl('getresponse/index/viapage'); ?>"
+				   class="tab-item-link <?php if ($active_tab == 'viapage') : echo 'active'; endif; ?>"
+				   title="viapage">
+					<span>Subscription via registration page</span>
+				</a>
+			</li>
+			<li class="">
+				<a href="<?php echo Mage::helper("adminhtml")->getUrl('getresponse/index/viawebform'); ?>"
+				   class="tab-item-link <?php if ($active_tab == 'viawebform') : echo 'active'; endif; ?>"
+				   title="viawebform">
+					<span>Subscription via a form</span>
+				</a>
+			</li>
+			<li class="">
+				<a href="<?php echo Mage::helper("adminhtml")->getUrl('getresponse/index/automation'); ?>"
+				   class="tab-item-link <?php if ($active_tab == 'automation') : echo 'active'; endif; ?>"
+				   title="automation">
+					<span>Campaign rules</span>
+				</a>
+			</li>
+			<?php /*
+			<li class="">
+				<a href="<?php echo Mage::helper("adminhtml")->getUrl('getresponse/index/webtraffic'); ?>"
+				   class="tab-item-link <?php if ($active_tab == 'webtraffic') : echo 'active'; endif; ?>"
+				   title="webtraffic">
+					<span>Web Traffic Tracking</span>
+				</a>
+			</li>
+			<li class="">
+				<a href="<?php echo Mage::helper("adminhtml")->getUrl('getresponse/shop/index'); ?>"
+				   class="tab-item-link <?php if ($active_tab == 'shop') : echo 'active'; endif; ?>"
+				   title="shop">
+					<span>GetResponse E-commerce</span>
+				</a>
+			</li> */ ?>
+		<?php }
+		else { ?>
+			<li>
+				<span>Export customers</span>
+			</li>
+			<li>
+				<span>Subscription via registration page</span>
+			</li>
+			<li>
+				<span>Subscription via a form</span>
+			</li>
+			<li>
+				<span>Automation</span>
+			</li>
+			<li>
+				<span>GetResponse E-commerce</span>
+			</li>
+			<li>
+				<span>Web Traffic Tracking</span>
+			</li>
+		<?php } ?>
+
+	</ul>
+</div>

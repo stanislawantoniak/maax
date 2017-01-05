@@ -1,0 +1,70 @@
+<div class="content-header">
+    <h3 class="icon-head head-categories">Web Traffic Tracking</h3>
+</div>
+
+<?php if (isset($settings->api['has_gr_traffic_feature_enabled']) and $settings->api['has_gr_traffic_feature_enabled'] == 1) : ?>
+
+    <form action="<?php echo Mage::helper("adminhtml")->getUrl('getresponse/index/activate_webtraffic'); ?>" method="POST">
+
+        <p style="padding-bottom: 10px;">You are able to activate GetResponse automation feature.</p>
+
+        <p>
+			<span class="switch_active_subscription">
+				<input
+                    class="GR_checkbox"
+                    type="checkbox"
+                    name="has_active_traffic_module"
+                    id="has_active_traffic_module"
+                    value="1"
+                    <?php if (isset($settings->api['has_active_traffic_module']) and $settings->api['has_active_traffic_module'] == 1) : ?>
+                        checked="checked"
+                    <?php endif; ?>
+                />
+			</span>
+            <label class="GR_label" for="active_subscription">Enable Traffic Tracking</label>
+
+        </p>
+
+        <input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>"/>
+
+        <div style="margin-left: 170px;">
+            <button style="margin-top: 12px;" id="gr_export" type="submit" name="Submit" class="save">
+                <span><span>Update</span></span></button>
+        </div>
+
+    </form>
+
+    <script>
+        jQuery("input#has_active_traffic_module").on("change", function (event) {
+
+            if (false == jQuery("input#has_active_traffic_module").is(':checked')) {
+
+                var confirmation = jQuery("#dialog-disconnect").dialog({
+                    resizable: false,
+                    height: 160,
+                    width: 430,
+                    modal: true,
+                    buttons: [
+                        {
+                            text: 'Yes, disable',
+                            "class": 'automationButton',
+                            click: function () {
+                                confirmation.dialog("close");
+                            }
+                        },
+                    ]
+                });
+                event.preventDefault();
+            }
+        });
+    </script>
+
+    <div id="dialog-disconnect" title="Are you sure you want to disable Traffic Tracking?" style="display:none;">
+        <p><br /><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 35px 0;"></span>Your Automation workflows may stop working properly.</p>
+    </div>
+
+<?php else: ?>
+
+    <p>Your Traffic Tracking should be enabled in GetResponse. For more info please check this <a href="url">link</a>.</p>
+
+<?php endif ?>

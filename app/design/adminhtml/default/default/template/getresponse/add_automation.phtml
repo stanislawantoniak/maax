@@ -1,0 +1,76 @@
+<div id="dialog-form" title="Create new rule" style="display: none;">
+	<p class="validateTips"></p>
+	<form>
+		<fieldset>
+			<p>
+				<label class="GR_label_short" for="category_id">If customers buy in the category</label>
+				<?php
+				if ( !empty($settings->categories_tree)) {
+					?>
+					<select class="GR_input" name="category_id" id="category_id">
+						<?php
+						echo $settings->categories_tree;
+						?>
+					</select>
+				<?php }
+				else {
+					?>
+					<span class="error">An error occurred while trying to get categories.</span>
+					<?php
+				}
+				?>
+			</p>
+			<p>
+				<label class="GR_label_short" for="action">they are</label>
+				<?php
+				if ( !empty($settings->actions)) {
+					?>
+					<select class="GR_input" name="action" id="action">
+						<?php
+						foreach ($settings->actions as $id => $name) {
+							echo '<option value="' . $id . '">' . $name . '</option>';
+						}
+						?>
+					</select>
+				<?php }
+				else {
+					?>
+					<span class="error">An error occurred while trying to get action.</span>
+					<?php
+				}
+				?>
+			</p>
+			<p>
+				<label class="GR_label_short" for="campaign_id">into the camapaign</label>
+				<?php
+				if ( !empty($settings->campaigns)) {
+					?>
+					<select class="GR_input" name="campaign_id" id="campaign_id">
+						<?php
+						foreach ($settings->campaigns as $id => $name) {
+							echo '<option value="' . $id . '">' . $name . '</option>';
+						}
+						?>
+					</select>
+				<?php }
+				else {
+					?>
+					<span class="error">An error occurred while trying to get campaigns.</span>
+					<?php
+				}
+				?>
+			</p>
+			<p id="cycle_day_section">
+				<label class="GR_label_short" for="cycle_day">
+					<input type="checkbox" name="enable_cycle_day" id="GR_enable_cycle_day" value="1">
+					add into the cycle on day
+				</label>
+				<select class="GR_input" disabled="disabled" name="cycle_day" id="cycle_day"></select>
+			</p>
+			<input type="hidden" id="automation_id" value=""/>
+			<input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+		</fieldset>
+	</form>
+</div>
+
+<?php include_once('automation_js.phtml'); ?>

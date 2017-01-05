@@ -1,0 +1,250 @@
+<div id="dialog-form" title="Create new campaign" style="display: none;">
+	<p class="validateTips"></p>
+	<form>
+		<fieldset>
+			<p>
+				<label class="GR_label_short" for="campaign_name">Campaign name</label>
+				<input class="GR_input" type="text" name="campaign_name" id="campaign_name" value="">
+			</p>
+			<p>
+				<label class="GR_label_short" for="from">From field</label>
+				<?php
+				if ( !empty($settings->from)) {
+					?>
+					<select class="GR_input" name="from" id="from">
+						<?php
+						foreach ($settings->from as $from) {
+							if ($from->isActive == true) {
+								echo '<option value="' . $from->fromFieldId . '"', ($from->isDefault == true) ? ' selected="selected"' : '', '>' . $from->name . ' (' . $from->email . ')</option>';
+							}
+						}
+						?>
+					</select>
+				<?php }
+				else {
+					?>
+					<span class="error">An error occurred while trying to get from fields.</span>
+					<?php
+				}
+				?>
+			</p>
+			<p>
+				<label class="GR_label_short" for="reply_to">Reply to</label>
+				<?php
+				if ( !empty($settings->from)) {
+					?>
+					<select class="GR_input" name="reply_to" id="reply_to">
+						<?php
+						foreach ($settings->from as $from) {
+							if ($from->isActive == true) {
+								echo '<option value="' . $from->fromFieldId . '"', ($from->isDefault == true) ? ' selected="selected"' : '', '>' . $from->name . ' (' . $from->email . ')</option>';
+							}
+						}
+						?>
+					</select>
+				<?php }
+				else {
+					?>
+					<span class="error">An error occurred while trying to get reply to fields.</span>
+					<?php
+				}
+				?>
+			</p>
+			<p>
+				<label class="GR_label_short" for="confirmation_subject">Confirmation subject</label>
+				<?php
+				if ( !empty($settings->confirmation_subject)) {
+					?>
+					<select class="GR_input" name="confirmation_subject" id="confirmation_subject">
+						<?php
+						foreach ($settings->confirmation_subject as $cs) {
+							echo '<option value="' . $cs->subscriptionConfirmationSubjectId . '">' . $cs->subject . '</option>';
+						}
+						?>
+					</select>
+				<?php }
+				else {
+					?>
+					<span class="error">An error occurred while trying to Confirmation subject fields.</span>
+					<?php
+				}
+				?>
+			</p>
+			<p>
+				<label class="GR_label_short" for="confirmation_body">Confirmation body</label>
+				<?php
+				if ( !empty($settings->confirmation_body)) {
+					?>
+					<select class="GR_input" name="confirmation_body" id="confirmation_body">
+						<?php
+						foreach ($settings->confirmation_body as $cb) {
+							echo '<option value="' . $cb->subscriptionConfirmationBodyId . '">' . $cb->contentPlain . '</option>';
+						}
+						?>
+					</select>
+				<?php }
+				else {
+					?>
+					<span class="error">An error occurred while trying to get Confirmation body fields.</span>
+					<?php
+				}
+				?>
+			</p>
+			<p>
+				<small class="GR_small_hint">
+					The confirmation message body and subject depend on System >> Configuration >> General >> Locale Options.
+				</small>
+				<small class="GR_small_hint">
+					By default all campaigns you create from Magento have double opt-in enabled. You can change this later in your <a href="https://support.getresponse.com/faq/how-i-disable-confirmation-message" target="_blank">campaign settings</a>.
+				</small>
+			</p>
+			<input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+		</fieldset>
+	</form>
+</div>
+
+<script>
+	jQuery(function () {
+		var dialog, form,
+
+			campaign_name = jQuery("#campaign_name"),
+			from = jQuery("#from"),
+			reply_to = jQuery("#reply_to"),
+			confirmation_subject = jQuery("#confirmation_subject"),
+			confirmation_body = jQuery("#confirmation_body"),
+			allFields = jQuery([]).add(campaign_name).add(from).add(reply_to).add(confirmation_subject).add(confirmation_body),
+			tips = jQuery(".validateTips");
+
+		function updateTips(t) {
+			tips
+				.text(t)
+				.addClass("ui-state-highlight");
+			setTimeout(function () {
+//				tips.removeClass( "ui-state-highlight", 1500 );
+			}, 500);
+		}
+
+		function checkLength(o, n, min, max) {
+			if (0 == o.val().length) {
+				o.addClass("ui-state-error");
+				updateTips('The ' + n + ' can\'t be empty.');
+				return false;
+			} else if (o.val().length < min) {
+				o.addClass("ui-state-error");
+				updateTips("The " + n + " you entered is too short. Please use " + min + "-" + max + " characters.");
+				return false;
+			} else if (o.val().length > max) {
+				o.addClass("ui-state-error");
+				updateTips("The " + n + " you entered is too long. Please use " + min + "-" + max + " characters.");
+				return false;
+			}
+
+			return true;
+		}
+
+		function checkRegexp(o, regexp, n) {
+			if (!( regexp.test(o.val()) )) {
+				o.addClass("ui-state-error");
+				updateTips(n);
+				return false;
+			} else {
+				return true;
+			}
+		}
+
+		function addCampaign() {
+			var valid = true;
+			allFields.removeClass("ui-state-error");
+
+			valid = valid && checkLength(campaign_name, "campaign name", 3, 64);
+			valid = valid && checkRegexp(campaign_name, /^[\w_]+$/i, "Campaign name may consist only a-z (lower case), numbers and \"_\"");
+
+			if (valid) {
+				jQuery('.ui-dialog-buttonset').find('button').each(function () {
+					jQuery(this).prop('disabled', true)
+				});
+				jQuery('.campaignButton').before('<span id="grLoader" class="gr-loader"></span>');
+
+				jQuery.post('<?php echo Mage::helper("adminhtml")->getUrl('getresponse/index/campaign'); ?>', {
+					from: from.val(),
+					campaign_name: campaign_name.val(),
+					reply_to: reply_to.val(),
+					confirmation_subject: confirmation_subject.val(),
+					confirmation_body: confirmation_body.val(),
+					form_key: '<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>'
+				}, function (json) {
+					if (json != null) {
+						if (json.type == 'success') {
+							updateTips(json.msg);
+							window.setTimeout(function () {
+								jQuery('#campaign_id').append(
+									'<option value="' + json.cid + '" selected="selected">' + json.c + '</option>'
+								);
+								jQuery('.ui-dialog-buttonset').find('button').each(function () {
+									jQuery(this).prop('disabled', false)
+								});
+								jQuery('#grLoader').remove();
+								dialog.dialog("close");
+							}, 2000);
+						}
+						else if (json.type == 'error') {
+							campaign_name.addClass("ui-state-error");
+							updateTips(json.msg);
+
+							jQuery('.ui-dialog-buttonset').find('button').each(function () {
+								jQuery(this).prop('disabled', false)
+							});
+							jQuery('#grLoader').remove();
+						}
+					}
+					else {
+						campaign_name.addClass("ui-state-error");
+						updateTips('An error occurred while trying to add new campaign.');
+
+						jQuery('.ui-dialog-buttonset').find('button').each(function () {
+							jQuery(this).prop('disabled', false)
+						});
+						jQuery('#grLoader').remove();
+					}
+				}, 'json');
+			}
+		}
+
+		dialog = jQuery("#dialog-form").dialog({
+			autoOpen: false,
+			modal: true,
+			width: 500,
+			buttons: [
+				{
+					text: 'Create campaign',
+					"class": 'campaignButton',
+					click: function () {
+						addCampaign();
+					}
+				},
+				{
+					text: "Cancel",
+					click: function () {
+						dialog.dialog("close");
+					}
+				}
+			],
+			close: function () {
+				campaign_name.val('');
+				tips.html('');
+				allFields.removeClass("ui-state-error");
+			}
+		});
+
+		form = dialog.find("form").on("submit", function (event) {
+			event.preventDefault();
+			addCampaign();
+		});
+
+		jQuery("#create-campaign").on("click", function (event) {
+			dialog.dialog("open");
+			event.preventDefault();
+		});
+	});
+
+</script>

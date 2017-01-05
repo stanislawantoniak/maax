@@ -1,0 +1,107 @@
+<div>
+
+	<div class="content-header">
+		<h3 class="icon-head head-categories">GetResponse account</h3>
+	</div>
+
+	<h3>
+		Account Info
+	</h3>
+
+	<?php if ( !empty($settings->api['api_key']) && isset($settings->account['firstName'])) : ?>
+		<div id="account_info">
+			<table>
+				<tr>
+					<td class="gr-strong">Status</td>
+					<td>
+						<span
+							style="padding: 4px;background-color: #43C03A;color: #fff;font-size: 11px;">CONNECTED</span>
+						(<a href="#" id="disconnect-btn">disconnect</a>)
+					</td>
+				</tr>
+				<tr>
+					<td class="gr-strong">API Key</td>
+					<td><?php if ( !empty($settings->api['api_key'])) : echo $settings->api['api_key']; endif ?></td>
+				</tr>
+				<!--
+				<tr>
+					<td class="gr-strong">GetResponse 360</td>
+					<td><?php if ( !empty($settings->api['api_domain'])) {
+							echo $settings->api['api_domain'];
+						}
+						else {
+							echo "No";
+						} ?></td>
+				</tr>
+				-->
+				<tr>
+					<td class="gr-strong">First Name</td>
+					<td><?php if ( !empty($settings->account['firstName'])) : echo $settings->account['firstName']; endif ?></td>
+				</tr>
+				<tr>
+					<td class="gr-strong">Last Name</td>
+					<td><?php if ( !empty($settings->account['lastName'])) : echo $settings->account['lastName']; endif ?></td>
+				</tr>
+				<tr>
+					<td class="gr-strong">Email address</td>
+					<td><?php if ( !empty($settings->account['email'])) : echo $settings->account['email']; endif ?></td>
+				</tr>
+				<tr>
+					<td class="gr-strong">Country</td>
+					<td><?php if ( !empty($settings->account['country'])) : echo $settings->account['country']; endif ?></td>
+				</tr>
+				<tr>
+					<td class="gr-strong">State</td>
+					<td><?php if ( !empty($settings->account['state'])) : echo $settings->account['state']; endif ?></td>
+				</tr>
+				<tr>
+					<td class="gr-strong">ZIP/Postal Code</td>
+					<td><?php if ( !empty($settings->account['zipCode'])) : echo $settings->account['zipCode']; endif ?></td>
+				</tr>
+				<tr>
+					<td class="gr-strong">Street</td>
+					<td><?php if ( !empty($settings->account['street'])) : echo $settings->account['street']; endif ?></td>
+				</tr>
+				<tr>
+					<td class="gr-strong">City</td>
+					<td><?php if ( !empty($settings->account['city'])) : echo $settings->account['city']; endif ?></td>
+				</tr>
+				<tr>
+					<td class="gr-strong">Phone</td>
+					<td><?php if ( !empty($settings->account['phone'])) : echo $settings->account['phone']; endif ?></td>
+				</tr>
+			</table>
+		</div>
+	<?php endif ?>
+
+	<script>
+			jQuery("#disconnect-btn").on("click", function (event) {
+				var confirmation = jQuery("#dialog-disconnect").dialog({
+					resizable: false,
+					height: 160,
+					width:430,
+					modal: true,
+					buttons: [
+						{
+							text: 'Yes, disconnect',
+							"class": 'automationButton',
+							click: function () {
+								document.location.href = '<?php echo Mage::helper("adminhtml")->getUrl('getresponse/index/disconnect'); ?>';
+							}
+						},
+						{
+							text: "Stay connected",
+							click: function () {
+								confirmation.dialog("close");
+							}
+						}
+					]
+				});
+				event.preventDefault();
+			});
+	</script>
+
+	<div id="dialog-disconnect" title="Are you sure you want to disconnect from GetResponse?" style="display:none;">
+		<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 35px 0;"></span>This stops new subscribtions via forms, comments, or during account registration.</p>
+	</div>
+</div>

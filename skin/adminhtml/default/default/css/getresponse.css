@@ -1,0 +1,26 @@
+.GR_label { display: inline-block !important; width: 270px !important; font-weight: 600;}
+.GR_label_short { display: inline-block !important; width: 210px !important; font-weight: 600;}
+.GR_input { width: 250px !important; }
+.GR_api { width: 320px !important; }
+.GR_checkbox { width: inherit; vertical-align: text-top; }
+.GR_hint { display: block; margin-left: 273px; }
+.GR_small_hint { padding-top: 7px; display: block; font-size: 0.8em; }
+.GR_checkbox_handler { margin-left: 273px !important; }
+.GR-submit-button { width: 100px; }
+.GR-title { font-family:"Helvetica Neue", Helvetica, Arial, sans-serif; font-size:12px; padding: 1px 2px 2px 6px; width: 237px !important;}
+
+.gr-tooltip { background: url("../images/getresponse/getresponse_icons.png") no-repeat; background-position: -8px -500px; height: 15px; width: 15px; display: inline-block; position: relative; left: 0; top: 4px; }
+.gr-tooltip .gr-tip { display: none; pointer-events: none; z-index: 99999; position: absolute; }
+.gr-tooltip:hover .gr-tip { display: block; }
+
+.gr-tip { background: #fff url("../images/getresponse/getresponse_icons.png") no-repeat; background-position: -4px -1469px; border: 1px solid #bebebe; left: -6px; top: -8px; padding: 7px 10px 4px 25px; z-index: 10001; width: 200px; -webkit-border-radius: 2px; -moz-border-radius: 2px; border-radius: 2px; box-shadow: 1px 1px 0px 0px rgba(190, 190, 190, 0.3); }
+.gr-tip span { font-size: 1em; color: #555; }
+.gr-tip.content-img { padding: 7px 10px 7px 25px; width: 442px; }
+.gr-tip.content-img img { margin-left: -15px; }
+
+.gr-active {font-weight: 800;}
+.gr-loader {background: url("../images/getresponse/loader.big.white.gif") no-repeat; background-size: 20px 20px; padding: 3px 24px 0px 0px;}
+
+.gr-tr { background: #f6f6f6; }
+.gr-td { padding: 3px 4px 3px 4px; }
+.gr-strong {font-weight: 600;}

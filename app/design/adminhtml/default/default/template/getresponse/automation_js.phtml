@@ -1,0 +1,353 @@
+<script>
+	jQuery(function () {
+		var dialog, form, gr_automation_url, automation_type, current_cycle_day = '',
+
+			category_id = jQuery("#category_id"),
+			action = jQuery("#action"),
+			campaign_id = jQuery("#campaign_id"),
+			automation_id = jQuery("#automation_id"),
+			cycle_day = jQuery("#cycle_day"),
+			allFields = jQuery([]).add(category_id).add(action).add(campaign_id).add(cycle_day),
+			tips = jQuery(".validateTips");
+
+		function updateTips(t) {
+			tips
+				.text(t)
+				.addClass("ui-state-highlight");
+		}
+
+		function CreateUpdateAutomation() {
+			var valid = true;
+			allFields.removeClass("ui-state-error");
+
+			if (valid) {
+				jQuery('.ui-dialog-buttonset').find('button').each(function () {
+					jQuery(this).prop('disabled', true)
+				});
+				jQuery('.automationButton').before('<span id="grLoader" class="gr-loader"></span>');
+
+				jQuery.post(gr_automation_url, {
+					campaign_id: campaign_id.val(),
+					cycle_day: cycle_day.is(':disabled') ? '' : cycle_day.val(),
+					category_id: category_id.val(),
+					action: action.val(),
+					automation_id: automation_id.val(),
+					form_key: '<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>'
+				}, function (json) {
+					if (json != null) {
+						if (json.type == 'success') {
+							updateTips(json.msg);
+							window.setTimeout(function () {
+								jQuery('.ui-dialog-buttonset').find('button').each(function () {
+									jQuery(this).prop('disabled', false)
+								});
+								jQuery('#grLoader').remove();
+								dialog.dialog("close");
+							}, 2000);
+							jQuery('#automation-list').show();
+
+							if (automation_type == 'create') {
+								addAutomationList(json);
+								switchHandler();
+							} else if (automation_type == 'edit') {
+								updateAutomationList(json);
+							}
+							deleteHandler();
+							editHandler();
+						}
+						else if (json.type == 'error') {
+							updateTips(json.msg);
+
+							jQuery('.ui-dialog-buttonset').find('button').each(function () {
+								jQuery(this).prop('disabled', false)
+							});
+							jQuery('#grLoader').remove();
+						}
+					}
+					else {
+						campaign_name.addClass("ui-state-error");
+						updateTips('An error occurred while trying to create new rule.');
+
+						jQuery('.ui-dialog-buttonset').find('button').each(function () {
+							jQuery(this).prop('disabled', false)
+						});
+						jQuery('#grLoader').remove();
+					}
+				}, 'json');
+			}
+		}
+
+		function createHandler() {
+			jQuery(".create-automation").on("click", function (event) {
+				automation_id.val('');
+				jQuery('.automationButton').html('<span class="ui-button-text">Create</span>');
+				jQuery('.ui-dialog-title').html('<span class="ui-button-text">Create new rule</span>');
+				jQuery('#campaign_id option:eq(0)').prop('selected', true);
+				jQuery('#action option:eq(0)').prop('selected', true);
+				jQuery('#category_id option:eq(0)').prop('selected', true);
+				gr_automation_url = '<?php echo Mage::helper("adminhtml")->getUrl('getresponse/index/createautomation'); ?>';
+				automation_type = 'create';
+				current_cycle_day = '';
+				dialog.dialog("open");
+				getCycleDays();
+				event.preventDefault();
+			});
+		}
+
+		function editHandler() {
+			jQuery(".edit-automation").on("click", function (event) {
+				var cid = jQuery(this).attr('data-campaign');
+				automation_id.val(jQuery(this).attr('data-automation'));
+				category_id.val(jQuery(this).attr('data-category'));
+				campaign_id.val(cid);
+				cycle_day.val(jQuery(this).attr('data-cycle_day'));
+				action.val(jQuery(this).attr('data-action'));
+				jQuery('#campaign_id option[value=cid]').attr('selected', 'selected');
+				jQuery('.automationButton').html('<span class="ui-button-text">Save</span>');
+				jQuery('.ui-dialog-title').html('<span class="ui-button-text">Edit rule</span>');
+				gr_automation_url = '<?php echo Mage::helper("adminhtml")->getUrl('getresponse/index/updateautomation'); ?>';
+				automation_type = 'edit';
+				current_cycle_day = jQuery(this).attr('data-cycle_day');
+				dialog.dialog("open");
+				getCycleDays();
+				event.preventDefault();
+			});
+		}
+
+		function getCycleDays() {
+			var campaign_id = jQuery('#campaign_id').val(),
+				day_element = jQuery('#cycle_day'),
+				cycle_day_section = jQuery('#cycle_day_section'),
+				cycle_day_switch = jQuery('#GR_enable_cycle_day'),
+				cycles = jQuery.parseJSON('<?php echo isset($settings->campaign_days) ? addslashes(json_encode($settings->campaign_days)) : "{}"; ?>');
+
+			cycle_day_switch.unbind('change').bind('change', function () {
+				day_element.prop('disabled', cycle_day_switch.is(':checked') ? false : true);
+			});
+
+			cycle_day_section.hide();
+			cycle_day_switch.prop('checked', false).trigger('change');
+
+			if (cycles.hasOwnProperty(campaign_id)) {
+				cycle_day_section.show();
+
+				if (jQuery.isNumeric(current_cycle_day)) {
+					cycle_day_switch.prop('checked', true).trigger('change');
+				}
+
+				var obj = cycles[campaign_id];
+				for (var prop in obj) {
+					if (obj.hasOwnProperty(prop)) {
+
+						var select = (current_cycle_day == obj[prop].day) ? 'selected' : '';
+						var option = '<option value="' + parseInt(obj[prop].day) + '" ' + select + '>Day ' +
+							obj[prop].day + ': ' + obj[prop].name + ' (' + obj[prop].status + ')' +
+							'</option>';
+
+						day_element.append(option);
+					}
+				}
+			}
+		}
+
+		function switchHandler() {
+			jQuery('[class*=gr-active]').on( "click", function() {
+				var input = jQuery(this).parents().eq(1).find('.gr-active');
+
+				var automation_id = input.attr('data-automation');
+				var active = true === input.is(':checked') ? 1 : 0;
+
+				var msg = '';
+				jQuery('#grLoader').remove();
+				jQuery('#active_'+automation_id).after('<span id="grLoader" class="gr-loader"></span>');
+
+				jQuery.post('<?php echo Mage::helper("adminhtml")->getUrl('getresponse/index/changestatus'); ?>', {
+					automation_id: automation_id,
+					active: active,
+					form_key: '<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>'
+				}, function (json) {
+					if (json != null) {
+						var msg_class = (json.type == 'success') ? 'success' : 'error';
+						msg = '<div id="gr-messages"><ul class="messages"><li class="'+msg_class+'-msg"><ul><li><span>'+
+								json.msg+'</span></li></ul></li></ul></div>';
+
+						jQuery('#grLoader').remove();
+
+						jQuery('#gr-automation').before(msg);
+
+						setTimeout(function () {
+							jQuery('#gr-messages').remove();
+						}, 2000);
+					}
+				}, 'json');
+			});
+		}
+
+		function deleteHandler() {
+			jQuery(".delete-automation").on("click", function (event) {
+				var input = jQuery(this).parents().eq(1).find('.gr-active');
+				var automation_id = input.attr('data-automation');
+				var active = input.val();
+				var msg;
+
+				var confirmation = jQuery("#dialog-confirm").dialog({
+					resizable: false,
+					height: 155,
+					modal: true,
+					buttons: [
+						{
+							text: 'Delete',
+							"class": 'automationButton',
+							click: function () {
+								jQuery.post('<?php echo Mage::helper("adminhtml")->getUrl('getresponse/index/deleteautomation'); ?>', {
+									automation_id: automation_id,
+									form_key: '<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>'
+								}, function (json) {
+									if (json != null) {
+										if (json.type == 'success') {
+											msg = '<div id="gr-messages"><ul class="messages">' +
+												'<li class="success-msg">' +
+												'<ul><li><span>'+json.msg+'</span>' +
+												'</li></ul></li></ul></div>';
+
+											jQuery('#automation_'+automation_id).hide('slow').remove();
+											if (json.total == 0) {
+												jQuery('#automation-list').hide();
+											}
+										}
+										else if (json.type == 'error') {
+											msg = '<div id="gr-messages"><ul class="messages">' +
+												'<li class="error-msg"><ul>' +
+												'<li><span>'+json.msg+'</span>' +
+												'</li></ul></li></ul></div>';
+										}
+
+										jQuery('#gr-automation').before(msg);
+
+										setTimeout(function () {
+											jQuery('#gr-messages').remove();
+										}, 2000);
+
+										confirmation.dialog("close");
+									}
+								}, 'json');
+							}
+						},
+						{
+							text: "Cancel",
+							click: function () {
+								confirmation.dialog("close");
+							}
+						}
+					]
+				});
+				event.preventDefault();
+			});
+		}
+
+		function checkSyncCampaign () {
+			var id = jQuery('#campaign_id').val();
+			var action = jQuery('#action').val();
+			var sync_campaign = '<?php echo $settings->api['campaign_id']; ?>';
+			if (id == sync_campaign) {
+				var name = jQuery('#campaign_id option:selected').text();
+				updateTips('Notice: You are trying to '+action+' contact from "'+name+'" to "' + name +
+					'" campaign. Please change campaign.');
+			} else {
+				tips.html('').removeClass("ui-state-highlight");
+			}
+		}
+
+		function addAutomationList(json) {
+			var html =
+				'<tr class="even pointer gr-tr" id="automation_'+json.automation_id+'">' +
+				'<td id="category_'+json.automation_id+'">' + json.category_name + '</td>' +
+				'<td id="campaign_'+json.automation_id+'">' + json.campaign_name + '</td>' +
+				'<td id="cycle_day_'+json.automation_id+'">' + getCycleDayValue(json.cycle_day) + '</td>' +
+				'<td id="action_'+json.automation_id+'">' + json.action + '</td>' +
+				'<td style="text-align:center;">' + '<input id="active_'+json.automation_id+
+				'" data-automation="'+json.automation_id+'" class="gr-active" type="checkbox" value="1" checked>' +
+				'</td>' +
+				'<td>' +
+				'<button id="edit_'+json.automation_id+'" class="edit-automation"' +
+				'data-automation="'+json.automation_id+'"'+
+				'data-category="'+json.category_id+'"'+
+				'data-campaign="'+json.campaign_id+'"'+
+				'data-cycle_day="'+json.cycle_day+'"'+
+				'data-action="'+json.action+'">'+
+				'Edit</button> '+
+				'<button class="delete-automation" data-automation="'+json.automation_id+'">Delete</button>'+
+				'</td>' +
+				'</tr>';
+
+			jQuery('#automation-table').append(html);
+			//jQuery('.gr-active').switchButton();
+		}
+
+		function updateAutomationList(json) {
+			jQuery('#category_'+json.automation_id).html(json.category_name);
+			jQuery('#campaign_'+json.automation_id).html(json.campaign_name);
+			jQuery('#action_'+json.automation_id).html(json.action);
+			jQuery('#cycle_day_'+json.automation_id).html(getCycleDayValue(json.cycle_day));
+			jQuery('#edit_'+json.automation_id)
+				.attr('data-category', json.category_id)
+				.attr('data-campaign', json.campaign_id)
+				.attr('data-cycle_day', json.cycle_day)
+				.attr('data-action', json.action);
+		}
+
+		function getCycleDayValue(cycle_day) {
+			return jQuery.isNumeric(cycle_day) ? cycle_day : 'No autoresponders' ;
+		}
+
+		campaign_id.change(function () {
+			getCycleDays();
+			checkSyncCampaign();
+		});
+
+		action.change(function () {
+			checkSyncCampaign();
+		});
+
+		//jQuery('.gr-active').switchButton();
+
+		dialog = jQuery("#dialog-form").dialog({
+			autoOpen: false,
+			modal: true,
+			width: 500,
+			buttons: [
+				{
+					text: 'Create rule',
+					"class": 'automationButton',
+					click: function () {
+						CreateUpdateAutomation();
+					}
+				},
+				{
+					text: "Cancel",
+					click: function () {
+						tips.removeClass("ui-state-highlight");
+						dialog.dialog("close");
+					}
+				}
+			],
+			close: function () {
+				tips.html('');
+				tips.removeClass("ui-state-highlight");
+				allFields.removeClass("ui-state-error");
+			}
+		});
+
+		form = dialog.find("form").on("submit", function (event) {
+			event.preventDefault();
+			CreateUpdateAutomation();
+		});
+
+		createHandler();
+		editHandler();
+		getCycleDays();
+		switchHandler();
+		deleteHandler();
+	});
+
+</script>

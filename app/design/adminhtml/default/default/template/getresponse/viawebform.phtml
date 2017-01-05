@@ -1,0 +1,161 @@
+<div>
+
+	<div class="content-header">
+		<h3 class="icon-head head-categories">Subscription via a form</h3>
+	</div>
+
+	<form id="getresponse_export_form" method="post"
+		  action="<?php echo Mage::helper("adminhtml")->getUrl('getresponse/index/subform'); ?>">
+
+		<p>
+			You can add your GetResponse forms or exit popups to your store. Pick one of
+			the forms you’ve created at GetResponse. Choose the layout and block positions
+			to insert the form. Note that your visitors can see the block title you enter
+			on this page.
+		</p>
+
+		<p>
+			<span>
+				<input
+					class="GR_checkbox"
+					type="checkbox"
+					name="active_subscription"
+					id="active_subscription"
+					value="1"
+					<?php if (isset($settings->webforms_settings['active_subscription']) and $settings->webforms_settings['active_subscription'] == 1) : ?>
+						checked="checked"
+					<?php endif; ?>
+					/>
+			</span>
+			<label class="GR_label" for="active_subscription">Allow subscriptions via forms</label>
+		</p>
+
+		<div id="details"
+			 style="<?php if ( !isset($settings->api['active_subscription']) || $settings->api['active_subscription'] !== 1) {
+				 echo "display: none;";
+			 } ?>">
+
+			<p>
+				<label class="GR_label" for="webform_id" id="webform_id">Select your form</label>
+				<?php
+				if ( !empty($settings->forms) || !empty($settings->webforms)) {
+					?>
+					<select class="GR_input" id="selector_webform_id" name="webform_id"
+							onchange="setType(jQuery(this));">
+					<?php if ( !empty($settings->forms) && !empty($settings->webforms)) { ?>
+						<optgroup label="New Forms:">
+					<?php } ?>
+					<?php
+					foreach ($settings->forms as $form) {
+						$selected = ($form->formId == $settings->webforms_settings['webform_id']) ? 'selected="selected"' : '';
+						echo '<option ' . $selected . ' data-version="new" value="' . $form->formId . '">' . $form->name . ' (' . $form->campaign->name . ')</option>';
+					}
+					?>
+					<?php if ( !empty($settings->forms) && !empty($settings->webforms)) { ?>
+						</optgroup>
+						<optgroup label="Old Forms:">
+					<?php } ?>
+					<?php
+					foreach ($settings->webforms as $webform) {
+						$selected = ($webform->webformId == $settings->webforms_settings['webform_id']) ? 'selected="selected"' : '';
+						echo '<option ' . $selected . ' data-version="old" value="' . $webform->webformId . '">' . $webform->name . ' (' . $webform->campaign->name . ')</option>';
+					}
+					?>
+					<?php if ( !empty($settings->forms) && !empty($settings->webforms)) { ?>
+						</optgroup>
+					<?php } ?>
+					</select>
+				<?php } else { ?>
+					<span class="error">An error occurred while trying to get web forms.</span>
+					<?php
+				}
+				?>
+			</p>
+
+			<p>
+				<label class="GR_label" for="layout_position" id="layout_position">Select the layout position</label>
+				<?php
+				if ( !empty($settings->layout_positions)) {
+					?>
+					<select class="GR_input" name="layout_position">
+						<?php
+						foreach ($settings->layout_positions as $id => $name) {
+							$selected = ($id == $settings->webforms_settings['layout_position']) ? 'selected="selected"' : '';
+							echo '<option ' . $selected . ' value="' . $id . '">' . $name . '</option>';
+						}
+						?>
+					</select>
+				<?php }
+				else {
+					?>
+					<span class="error">An error occurred while trying to get positions.</span>
+					<?php
+				}
+				?>
+			</p>
+
+			<p>
+				<label class="GR_label" for="block_position" id="block_position">Select the block position</label>
+				<?php
+				if ( !empty($settings->block_positions)) {
+					?>
+					<select class="GR_input" name="block_position">
+						<?php
+						foreach ($settings->block_positions as $id => $name) {
+							$selected = ($id == $settings->webforms_settings['block_position']) ? 'selected="selected"' : '';
+							echo '<option ' . $selected . ' value="' . $id . '">' . $name . '</option>';
+						}
+						?>
+					</select>
+				<?php }
+				else {
+					?>
+					<span class="error">An error occurred while trying to get positions.</span>
+					<?php
+				}
+				?>
+			</p>
+
+			<p>
+				<label class="GR_label" for="webform_title">Enter the block title</label>
+				<input class="GR-title" type="text" name="webform_title"
+					   value="<?php if (isset($settings->webforms_settings['webform_title'])) : echo $settings->webforms_settings['webform_title']; endif ?>">
+			<small class="GR_hint">Your customers will be able to see this.</small>
+			</p>
+		</div>
+
+		<input id="gr_webform_type" name="gr_webform_type" type="hidden" value=""/>
+		<input name="form_key" type="hidden" value="<?php echo Mage::getSingleton('core/session')->getFormKey() ?>"/>
+
+		<script>
+			var actvie = jQuery('#active_subscription'),
+				details = jQuery('#details');
+
+			if (actvie.prop('checked') == true) {
+				details.show();
+			}
+
+			//actvie.switchButton();
+
+			function switchHandler() {
+				jQuery('[class*=GR_checkbox]').on("click", function () {
+					details.toggle('slow');
+				});
+			}
+			switchHandler();
+
+			function setType(selector) {
+				var val = selector.find(':selected').attr('data-version');
+				jQuery('#gr_webform_type').val(val);
+			}
+
+			setType(jQuery('#selector_webform_id'));
+		</script>
+
+		<div style="margin-left: 212px;">
+			<button style="margin-top: 12px;" id="gr_export" type="submit" name="Submit" class="save">
+				<span><span>Save subscription settings</span></span></button>
+		</div>
+
+	</form>
+</div>

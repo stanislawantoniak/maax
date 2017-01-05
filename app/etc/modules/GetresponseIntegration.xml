@@ -1,0 +1,8 @@
+<config>
+    <modules>
+        <GetresponseIntegration_Getresponse>
+            <active>true</active>
+            <codePool>community</codePool>
+        </GetresponseIntegration_Getresponse>
+    </modules>
+</config>

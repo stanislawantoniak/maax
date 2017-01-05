@@ -1,0 +1,105 @@
+<div>
+
+    <?php if (false === $has_active_registration_subscription): ?>
+        <div id="gr-messages">
+            <ul class="messages">
+                <li class="error-msg">
+                    <ul>
+                        <li>
+                            <span>GetResponse E-commerce works only when you enable subscriptions via the registration page.</span>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    <?php endif ?>
+
+    <div class="content-header">
+        <h3 class="icon-head head-categories">GetResponse E-commerce</h3>
+    </div>
+
+    <h3>Settings</h3>
+
+    <form
+        id="getresponse_export_form"
+        method="post"
+        action="<?php echo Mage::helper("adminhtml")->getUrl('getresponse/shop/update'); ?>">
+
+        <div>
+            <p>
+				<input
+                    class="GR_checkbox"
+                    type="checkbox"
+                    name="shop_enabled"
+                    id="shop_enabled"
+                    value="1"
+                    <?php if($shop_enabled == 1) : ?>
+                        checked="checked"
+                    <?php endif; ?>
+                />
+                <label class="GR_label" for="shop_enabled">Allow GetResponse E-commerce</label>
+            </p>
+        </div>
+        <div id="details" style="<?php if($shop_enabled != 1):?>display: none<?php endif ?>">
+
+            <?php if (empty($gr_shops)):?>
+
+
+                <div id="selectBoxNotFoundError">
+                    <ul class="messages">
+                        <li class="error-msg">
+                            <ul>
+                                <li>
+                            <span>GetResponse shops not found!
+                            <button style="margin-left: 20px" type="button" id="create_shop">Add new shop</button></span>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+            <?php endif ?>
+            <div id="showSelectShopBox" <?php if(empty($gr_shops)):?>style="display:none"<?php endif ?>>
+                <label class="GR_label" for="shop_id">Select shop</label>
+                <select class="GR_input" name="shop_id" id="shop_id">
+                    <?php
+                    foreach ($gr_shops as $shop):?>
+
+                        <option
+                            <?php if($current_shop_id == $shop->shopId): ?>selected="selected"<?php endif ?>
+                            value="<?php echo $shop->shopId ?>">
+                            <?php echo $shop->name ?>
+                        </option>';
+                    <?php endforeach ?>
+                </select>
+                <button type="button" id="create_shop">Add new shop</button>
+            </div>
+
+        </div>
+
+        <div id="saveButonBox" <?php if(empty($gr_shops)):?>style="display:none"<?php endif ?>>
+            <input name="form_key" type="hidden"
+                   value="<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>"/>
+
+            <div style="margin-left: 212px;">
+                <button style="margin-top: 12px;" id="gr_export" type="submit" name="Submit" class="save">
+                    <span><span>Save</span></span></button>
+            </div>
+        </div>
+
+    </form>
+
+    <script>
+
+        jQuery(function () {
+
+            jQuery('input#shop_enabled').on("click", function (e) {
+                jQuery('div#details').toggle('slow');
+            });
+        });
+
+    </script>
+
+</div>
+
+<?php include_once('add_shop.phtml'); ?>
