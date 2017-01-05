@@ -399,7 +399,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
 
         try {
             $po = $this->_registerPo();
-            $price = $this->getRequest()->getParam("price");
+            $price = $this->_getParamShippingPrice();
             $oldPrice = $po->getShippingAmountIncl();
             $store = $po->getOrder()->getStore();
 
@@ -503,8 +503,21 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
             /* @var $collection Zolago_Po_Model_Resource_Po_Item_Collection */
 
             $collection->addParentFilter($item);
-
+            $qty = 0;
+            if ($po->getReservation()) { // only if reservation
+                $qty = $item->getQty();
+            }
             foreach($collection as $childItem) {
+                if ($qty) {                    
+                // update stock
+                    $product = $product = Mage::getModel("catalog/product")->load($childItem->getProductId());
+                    $stock = $product->getStockItem();
+                    $stock->addQty($qty);
+                    if ($stock->verifyStock()) {
+                        $stock->setIsInStock(Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
+                    }
+                    $stock->save();
+                }
                 $childItem->delete();
             }
 
@@ -515,10 +528,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                                     "po"		=> $po,
                                     "item"		=> $item,
                                 ));
-
+            
             $item->delete();
-
-            $po->updateTotals(true);
+            
+            $po->updateTotals(true);            
 
             $this->_getSession()->addSuccess(
                 Mage::helper("zolagopo")->__("Item %s has been removed", $itemName)
@@ -539,6 +552,11 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         return $this->_redirectReferer();
     }
 
+
+    protected function _getParamShippingPrice($default = null) {
+        $val = str_replace(",",".",$this->getRequest()->getParam("price", $default));
+        return $this->_parseForFloat($val, $default);
+    }
     /**
      * Gets param price and parse
      * If no set, default value taken
@@ -618,12 +636,12 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         $price    = $this->_getParamPrice();
         $qty      = $this->_getParamQty();
         $discount = $this->_getParamDiscount();
-
         $product = Mage::getModel("catalog/product");//
 
         if($item && $item->getId()) {
             $product->load($item->getProductId());
         }
+    
 
         if(empty($discount) || $discount<0) {
             $discount = 0;
@@ -650,6 +668,23 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         if(!$product->getId() || $product->getUdropshipVendor()!=$this->_getVendor()->getId()) {
             $errors[] = $hlp->__("It's not your product");
         }
+        $collection = Mage::getResourceModel('zolagopo/po_item_collection');
+         /* @var $collection Zolago_Po_Model_Resource_Po_Item_Collection */
+
+        $collection->addParentFilter($item);
+        $stockList = array();
+        foreach ($collection as $childItem) {
+            $childProduct = Mage::getModel("catalog/product")->load($childItem->getProductId());
+            $stock = $childProduct->getStockItem();
+            if (!$stock) {
+                $errors[] = $hlp->__("Product %s out of stock",$childProduct->getName());
+            } elseif (!$stock->getBackorders()) {
+                if ($qty > ($stock->getStockQty()+$item->getQty())) {
+                    $errors[] = $hlp->__("Not enough stock of %s. On stock is %s items",$childProduct->getName(),$stock->getStockQty());
+                }            
+            }
+            $stockList[] = $stock;
+        }       
 
 
         if($errors) {
@@ -721,6 +756,25 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                                 ));
 
             $po->updateTotals(true);
+            $diff = $oldItem->getQty() - $item->getQty();
+            
+            foreach ($stockList as $stock) {
+                if ($diff > 0) {            
+                    if ($po->getReservation()) {
+                        $stock->addQty($diff);                    
+                        if ($stock->verifyStock()) {
+                            $stock->setIsInStock(Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
+                        }                
+                    } else {
+                        $diff = 0;
+                    }
+                } elseif ($diff < 0) {
+                    $stock->subtractQty(-$diff);
+                }
+                if ($diff != 0) {                
+                    $stock->save();
+                }
+            }
             $this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Item saved"));
         } catch (Mage_Core_Exception $e) {
             $this->_getSession()->addError($e->getMessage());
@@ -789,7 +843,16 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
         if($product->getTypeId()!=Mage_Catalog_Model_Product_Type::TYPE_SIMPLE) {
             $errors[] = $hlp->__("It's not simple product");
         }
-
+        $stock = $product->getStockItem();
+        if (!$stock || $stock->getIsInStock() != Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK) {
+            $errors[] = $hlp->__("Product out of stock");
+        } else {
+            if (!$stock->getBackorders()) {
+                if ($qty > $stock->getStockQty()) {
+                    $errors[] = $hlp->__("Not enough stock. On stock is %s items",$stock->getStockQty());
+                }            
+            }
+        }
         if($errors) {
             foreach($errors as $error) {
                 $this->_getSession()->addError($error);
@@ -893,7 +956,7 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                     'order_item_id' => null,
                     'additional_data' => null,
                     'description' => null,
-                    'name' => $product->getName(),
+                    'name' => $productP->getName(),
                     'sku' => $product->getSku(),
                     'base_cost' => $productP->getCost(),
                     'qty_invoiced' => null,
@@ -987,7 +1050,10 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                                 ));
 
             $po->updateTotals(true);
-
+            // update stock
+            $stock->subtractQty($qty);
+            $stock->save();
+            // update status
             $po->getStatusModel()->processDirectRealisation($po, true);
             $this->_getSession()->addSuccess(Mage::helper("zolagopo")->__("Item added"));
         } catch (Mage_Core_Exception $e) {

@@ -648,6 +648,34 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
     public function isCod() {
         return $this->isPaymentCheckOnDelivery();
     }
+    
+    /**
+     * cancel order - update stocks
+     */
+     public function cancelPoStocks() {
+         if ($this->getReservation()) {
+             $this->setReservation(0);
+             $itemCollection = $this->getItemsCollection() ;
+             foreach ($itemCollection as $item) {
+                $collection = Mage::getResourceModel('zolagopo/po_item_collection');
+                /* @var $collection Zolago_Po_Model_Resource_Po_Item_Collection */
+                $collection->addParentFilter($item);
+                $qty = $item->getQty();
+                foreach($collection as $childItem) {
+                    if ($qty) {                    
+                    // update stock
+                        $product = $product = Mage::getModel("catalog/product")->load($childItem->getProductId());
+                        $stock = $product->getStockItem();
+                        $stock->addQty($qty);
+                        if ($stock->verifyStock()) {
+                            $stock->setIsInStock(Mage_CatalogInventory_Model_Stock::STOCK_IN_STOCK);
+                        }
+                        $stock->save();
+                    }
+                }                 
+             }             
+         }
+     }
 
     /**
      * @return boolean
@@ -989,7 +1017,23 @@ class Zolago_Po_Model_Po extends ZolagoOs_OmniChannelPo_Model_Po
         }
     }
 
-
+    
+    /**
+     * set reservation flag
+     */
+    public function setReservation($flag) {
+        if ($this->getReservation() == $flag) {
+            return;  // no changed
+        }
+        if ($flag) {
+            $comment = Mage::helper('zolagopo')->__('Reservation flag set');
+        } else {
+            $comment = Mage::helper('zolagopo')->__('Reservation flag removed');
+        }
+        $this->addComment(sprintf("[%s]",$comment),false,true);
+        parent::setReservation($flag);
+        $this->saveComments();
+    }
 
     const GH_API_RESERVATION_STATUS_OK = 'ok';
     const GH_API_RESERVATION_STATUS_PROBLEM = 'problem';

@@ -36,11 +36,20 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract {
         $shipment = $observer->getEvent()->getData('shipment');
         if($shipment instanceof Mage_Sales_Model_Order_Shipment) {
             $po = Mage::getModel("zolagopo/po")->load($shipment->getUdpoId());
-
             /* @var $po Zolago_Po_Model_Po */
             $aggregated = $po->getAggregated();
             if($aggregated->getId()) {
-                $aggregated->delete();
+                if (!in_array($po->getCurrentCarrier(),array(Orba_Shipping_Model_Post::CODE))) {
+                    
+                    $aggregated->delete();
+                } else {
+                    $list = $aggregated->getPoCollection();
+                    if (count($list) <= 1) {
+                        $aggregated->delete(); // usuwamy ostatnią
+                    }
+                }
+                $po->setAggregatedId(null);
+                $po->getResource()->saveAttribute($po,'aggregated_id');
             }
             // Clear tracking
             $trackList = $shipment->getAllTracks();
@@ -181,7 +190,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract {
 
     }
 
-    
+
     /**
      * automatic refund all payment (without allocations)
      */
@@ -189,11 +198,11 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract {
     protected function _refundAll($po) {
         $amount = $po->getPaymentAmount();
         return $this->_refundPayment($po,$amount);
-        
+
     }
     protected function _refundOverpayment($po) {
         $debtAmount = $po->getDebtAmount();
-        return $this->_refundPayment($po,$debtAmount);    
+        return $this->_refundPayment($po,$debtAmount);
     }
     /**
      * automatic refund  on simple payments (without allocations)
@@ -261,7 +270,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract {
             }
         }
     }
-    
+
     /**
      * read zip databaze one again
      */
@@ -270,7 +279,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract {
         $alert = $po->getAlert();
         if ($alert | Zolago_Po_Model_Po_Alert::ALERT_DHL_ZIP_CHECKING) {
             $this->_zipAlertUpdate($po);
-        }            
+        }
     }
     //
     public function updatePoStatusByAllocation($observer) {
@@ -462,33 +471,33 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract {
         $this->_logEvent($po, $text);
     }
 
-	/**
-	 * PO Shipping Method Changed
-	 * @param type $observer
-	 */
-	public function poShippingMethodChange($observer) {
-		$po = $observer->getEvent()->getData('po');
-		/* @var $po Zolago_Po_Model_Po */
+    /**
+     * PO Shipping Method Changed
+     * @param type $observer
+     */
+    public function poShippingMethodChange($observer) {
+        $po = $observer->getEvent()->getData('po');
+        /* @var $po Zolago_Po_Model_Po */
 
-		$newUdropshipMethod = $observer->getEvent()->getData('new_udropship_method');
-		$oldUdropshipMethod = $observer->getEvent()->getData('old_udropship_method');
+        $newUdropshipMethod = $observer->getEvent()->getData('new_udropship_method');
+        $oldUdropshipMethod = $observer->getEvent()->getData('old_udropship_method');
 
-		if(
-			!empty($newUdropshipMethod)
-			&& ($newUdropshipMethod !== $oldUdropshipMethod)
-		){
-			$storeId =$po->getStoreId();
-			$omniChannelMethodInfoByMethodNew = Mage::helper("udropship")
-				->getOmniChannelMethodInfoByMethod($storeId, $newUdropshipMethod, true);
+        if(
+            !empty($newUdropshipMethod)
+            && ($newUdropshipMethod !== $oldUdropshipMethod)
+        ) {
+            $storeId =$po->getStoreId();
+            $omniChannelMethodInfoByMethodNew = Mage::helper("udropship")
+                                                ->getOmniChannelMethodInfoByMethod($storeId, $newUdropshipMethod, true);
 
-			$omniChannelMethodInfoByMethodOld = Mage::helper("udropship")
-				->getOmniChannelMethodInfoByMethod($storeId, $oldUdropshipMethod, true);
+            $omniChannelMethodInfoByMethodOld = Mage::helper("udropship")
+                                                ->getOmniChannelMethodInfoByMethod($storeId, $oldUdropshipMethod, true);
 
-			$message =  Mage::helper('zolagopo')->__('Shipping method changed: ') . $omniChannelMethodInfoByMethodOld['shipping_title'] . "&rarr;" . $omniChannelMethodInfoByMethodNew['shipping_title'];
-			$this->_logEvent($po, $message, false);
-		}
+            $message =  Mage::helper('zolagopo')->__('Shipping method changed: ') . $omniChannelMethodInfoByMethodOld['shipping_title'] . "&rarr;" . $omniChannelMethodInfoByMethodNew['shipping_title'];
+            $this->_logEvent($po, $message, false);
+        }
 
-	}
+    }
 
 
     /**
@@ -696,10 +705,6 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract {
         //Mage::log($poOpenOrder, null, 'setOrderReservationOnSave.log');
         if (in_array($newStatus, explode(',', $poOpenOrder))) {
             //set reservation=1
-            $po->setReservation(1);
-            $po->getResource()->saveAttribute($po, 'reservation');
-        } else {
-            //set reservation=0
             $po->setReservation(0);
             $po->getResource()->saveAttribute($po, 'reservation');
         }
@@ -713,10 +718,6 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract {
         $poOpenOrder = Mage::getStoreConfig('zolagocatalog/config/po_open_order');
         if (in_array($newStatus, explode(',', $poOpenOrder))) {
             //set reservation=1
-            $po->setReservation(1);
-            $po->getResource()->saveAttribute($po, 'reservation');
-        } else {
-            //set reservation=0
             $po->setReservation(0);
             $po->getResource()->saveAttribute($po, 'reservation');
         }
@@ -808,7 +809,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract {
         $po = $observer->getPo();
         $this->_zipAlertUpdate($po);
     }
-    
+
     /**
      * dhl zip validation
      */

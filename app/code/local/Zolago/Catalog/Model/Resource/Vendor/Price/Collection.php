@@ -15,7 +15,7 @@ class Zolago_Catalog_Model_Resource_Vendor_Price_Collection
 			"description_status",
 			"special_price",
 			"price",
-			"skuv"
+			"skuv",			
 		);
 		
 		foreach($attributesToSelect as $attribute){
