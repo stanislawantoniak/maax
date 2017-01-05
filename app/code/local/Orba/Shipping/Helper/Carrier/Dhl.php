@@ -15,6 +15,13 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
     const FILE_ZPL 	= 'zpl';
 
     const DHL_STATUS_DELIVERED	= 'DOR';
+    const DHL_STATUS_DELIVERED_LOK = 'DOR_LOK';
+    const DHL_STATUS_DELIVERED_OTH	= 'DOR_OTH';
+    const DHL_STATUS_DELIVERED_OWL	= 'DOR_OWL';
+    const DHL_STATUS_DELIVERED_POC	= 'DOR_POC';
+    const DHL_STATUS_DELIVERED_RDZ	= 'DOR_RDZ';
+    const DHL_STATUS_DELIVERED_SAS	= 'DOR_SAS';
+    
     const DHL_STATUS_RETURNED	= 'ZWN';
     const DHL_STATUS_WRONG		= 'AN';
     const DHL_STATUS_SHIPPED    = 'DWP';
@@ -358,6 +365,12 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
             foreach ($event as $singleEvent) {
                 switch ($singleEvent->Status) {
                 case Orba_Shipping_Helper_Carrier_Dhl::DHL_STATUS_DELIVERED:
+                case Orba_Shipping_Helper_Carrier_Dhl::DHL_STATUS_DELIVERED_LOK:
+                case Orba_Shipping_Helper_Carrier_Dhl::DHL_STATUS_DELIVERED_OTH:
+                case Orba_Shipping_Helper_Carrier_Dhl::DHL_STATUS_DELIVERED_OWL:
+                case Orba_Shipping_Helper_Carrier_Dhl::DHL_STATUS_DELIVERED_POC:
+                case Orba_Shipping_Helper_Carrier_Dhl::DHL_STATUS_DELIVERED_RDZ:
+                case Orba_Shipping_Helper_Carrier_Dhl::DHL_STATUS_DELIVERED_SAS:
                     $status = $this->__('Delivered');
                     $track->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_DELIVERED);
                     $date = date('Y-m-d',strtotime($singleEvent->Timestamp));
@@ -371,14 +384,13 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
                     $track->getShipment()->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_RETURNED);
                     $shipped = false;
                     break;
+                case Orba_Shipping_Helper_Carrier_Dhl::DHL_STATUS_SORT:
+                    $status = $this->__('In sorting center');
+                    break;
                 case Orba_Shipping_Helper_Carrier_Dhl::DHL_STATUS_WRONG:
-                    $status = $this->__('Canceled');
-                    $track->setUdropshipStatus(Zolago_Dropship_Model_Source::TRACK_STATUS_UNDELIVERED);
-                    $track->getShipment()->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_RETURNED);
-                    $shipped = false;
+                    $status = $this->__('Wrong address');
                     break;
                 case Orba_Shipping_Helper_Carrier_Dhl::DHL_STATUS_SHIPPED:
-                case Orba_Shipping_Helper_Carrier_Dhl::DHL_STATUS_SORT:
                 case Orba_Shipping_Helper_Carrier_Dhl::DHL_STATUS_LP:
                 case Orba_Shipping_Helper_Carrier_Dhl::DHL_STATUS_LK:
                 case Orba_Shipping_Helper_Carrier_Dhl::DHL_STATUS_AWI:
