@@ -154,6 +154,7 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
                        'trackingNumber' => $out->createShipmentResult->shipmentTrackingNumber,
                        'file' => $fileLocation,
                        'size' => $result,
+                       'orderNumber' => $out->createShipmentResult->dispatchNotificationNumber,
                    );
         } else {
             Mage::throwException(Mage::helper('orbashipping')->__('Create shipment error'));
