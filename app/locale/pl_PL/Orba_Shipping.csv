@@ -53,3 +53,4 @@
 "Wrong address","Błędny adres"
 "Shipped","Wysłane"
 "Delivered","Dostarczone"
+"Carrier was ordered. Your order number is %s. DHL phone number (42 634 53 45)","Kurier DHL został zamówiony na podany przez Ciebie dzień i przedział godzin. Numer zlecenia na odbiór Twojej Paczki to: %s. W przypadku konieczności kontaktu w sprawie odbioru, zadzwoń do firmy kurierskiej DHL (tel. 42 634 53 45) i powołaj się na ten numer."
