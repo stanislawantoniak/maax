@@ -61,8 +61,9 @@ class Orba_Shipping_Model_Post extends Orba_Shipping_Model_Carrier_Abstract {
     protected function _clearEnvelope() {
         $settings = $this->_settings;
         $lastDate = Mage::getStoreConfig('carriers/zolagopp/last_date',0);        
-        if ($lastDate != date('Y-m-d')) {
-            Mage::log(sprintf('Clear envelope %s',$lastDate),null,'zolagopp.log');            
+        $date = date('Y-m-d');
+        if ($lastDate != $date) {
+            Mage::log(sprintf('Clear envelope [%s] <> [%s]',$lastDate,$date),null,'zolagopp.log');            
             if ($this->getClient()->clearEnvelope($settings)) {
                 Mage::getConfig()->saveConfig('carriers/zolagopp/last_date',date('Y-m-d'),'default',0);
                 Mage::getConfig()->reinit();
