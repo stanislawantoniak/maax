@@ -320,8 +320,8 @@ class Zolago_Rma_VendorController extends ZolagoOs_Rma_VendorController
      * @return bool
      */
     protected function validateSimpleRefund($amount, $rma) {
-        $max = $rma->getRmaRefundAmountMax();
-        $returned = $rma->getRmaSimpleRefundAmount();
+        $max = round($rma->getRmaRefundAmountMax(),4);
+        $returned = round($rma->getRmaSimpleRefundAmount(),4);
         if ($amount > ($max-$returned)) {
             return false;
         }
