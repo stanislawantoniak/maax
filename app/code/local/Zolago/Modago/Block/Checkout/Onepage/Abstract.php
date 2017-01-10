@@ -318,7 +318,14 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
     public function hasCustomerAddress() {
         return (bool)$this->getQuote()->getCustomer()->getAddressesCollection()->count();
     }
-
+    
+    /**
+     * List of available countries
+     */
+    public function getAvailableCountryJson() {
+        $countries = Mage::helper('zolagocommon')->getAvailableCountry();
+        return $this->asJson($countries);
+    }
     /**
      * Has customer any address?
      * @return type

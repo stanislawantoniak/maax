@@ -51,7 +51,7 @@
 		<?php if($_defaultShipping=$this->getDefaultShipping()):?>
         addressBook.setDefaultShipping(<?php echo $this->asJson($_defaultShipping->getId())?>);
 		<?php endif;?>
-
+        addressBook.setAvailableCountry(<?php echo $this->getAvailableCountryJson(); ?>);
         Mall.rma.new.addressbook.setAddressBook(addressBook);
         <?php if(!$this->isDhlEnabled()): ?>
         Mall.rma.new.dhlDisabled = true;

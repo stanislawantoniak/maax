@@ -101,7 +101,7 @@ $basketDataLayer = $_helper->getBasketDataLayer();
 		addressBook.setDefaultBilling(<?php echo $this->asJson($_customer->getDefaultBilling())?>);
 		addressBook.setSelectedShipping(<?php echo $this->asJson($_quoteShipping->getCustomerAddressId())?>);
 		addressBook.setSelectedBilling(<?php echo $this->asJson($_quoteBilling->getCustomerAddressId())?>);
-			
+                addressBook.setAvailableCountry(<?php echo $this->getAvailableCountryJson(); ?>);			
 		Mall.Checkout.steps.addressbook.setAddressBook(addressBook);
 			
 		checkout.addStep(Mall.Checkout.steps.addressbook);

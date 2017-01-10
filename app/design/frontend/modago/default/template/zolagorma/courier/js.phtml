@@ -46,6 +46,7 @@
 		<?php if($_defaultShipping=$this->getDefaultShipping()):?>
         addressBook.setDefaultShipping(<?php echo $this->asJson($_defaultShipping->getId())?>);
 		<?php endif;?>
+        addressBook.setAvailableCountry(<?php echo $this->getAvailableCountryJson(); ?>);
         Mall.rma.edit.addressbook.setAddressBook(addressBook);
 
         Mall.rma.edit.setNotAvailableText('<?php echo $_helper->__('Not available');?>');
