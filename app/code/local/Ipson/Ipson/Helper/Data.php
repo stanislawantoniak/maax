@@ -21,17 +21,16 @@ class Ipson_Ipson_Helper_Data extends Mage_Core_Helper_Data {
         if ($value) {
             $params = json_decode($value);
             if (!empty($params->utm_source)) {
-                if ($this->getOpineoAgreementGuid() && !strstr($params->utm_source,'ceneo')) { 
-                    return 'opineo';
-                } 
-                if ($this->getCeneoAgreementGuid()) {
+                if ($this->getCeneoAgreementGuid() && strstr($params->utm_source,'ceneo')) { 
                     return 'ceneo';
-                }
-                if ($this->getOpineoAgreementGuid()) {
-                    return 'opineo';
-                }
-                
+                } 
             }
+        }
+        if ($this->getOpineoAgreementGuid()) {
+            return 'opineo';
+        }
+        if ($this->getCeneoAgreementGuid()) {
+            return 'ceneo';
         }
         return null;
     }
