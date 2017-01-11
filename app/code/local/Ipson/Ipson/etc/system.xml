@@ -13,6 +13,30 @@
               <show_in_website>1</show_in_website>
               <show_in_store>1</show_in_store>
             </ceneo>
+            <opineo translate="label">
+              <label>Opineo</label>
+              <frontend_type>textarea</frontend_type>
+              <sort_order>65</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+            </opineo>
+            <opineo_guid translate="label">
+              <label>Opineo guid key</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>66</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </opineo_guid>
+            <ceneo_guid translate="label">
+              <label>Ceneo guid key</label>
+              <frontend_type>text</frontend_type>
+              <sort_order>61</sort_order>
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+            </ceneo_guid>
           </fields>
         </agreements>
       </groups>

@@ -26,16 +26,27 @@
                 <observers>
                         <ipson>
                                 <class>ipson/observer</class>
-                                <method>setCeneoAgreements</method>
+                                <method>setAgreements</method>
                         </ipson>
                 </observers>
         </checkout_type_onepage_save_order_after>
+        <controller_front_init_before>
+                <observers>
+                        <ipson>
+                                <class>ipson/observer</class>
+                                <method>checkAgreementType</method>
+                        </ipson>
+                </observers>
+        </controller_front_init_before>
     </events>
   </global>
   <default>
     <customer>
       <agreements>
-        <ceneo><![CDATA[zgoda ceneo | W celu wysłania drogą elektroniczną ankiet badających satysfakcję klientów z dokonanych zakupów w sklepie w ramach programu “Zaufane Opinie” wyrażam zgodę na przekazanie moich danych osobowych, w tym adresu e-mail oraz informacji o dokonanym zakupie w sklepie Ortohab.pl, spółce Ceneo Sp. z o.o. z siedzibą w Poznaniu, 60-166 Poznań, ul. Grunwaldzka 182 oraz ich przetwarzanie przez Ceneo.]]></ceneo>
+        <ceneo><![CDATA[Wyrażam zgodę na otrzymanie ankiety w ramach programu Zaufane Opinie Ceneo. | W celu wysłania drogą elektroniczną ankiet badających satysfakcję klientów z dokonanych zakupów w sklepie w ramach programu “Zaufane Opinie” wyrażam zgodę na przekazanie moich danych osobowych, w tym adresu e-mail oraz informacji o dokonanym zakupie w sklepie Ortohab.pl, spółce Ceneo Sp. z o.o. z siedzibą w Poznaniu, 60-166 Poznań, ul. Grunwaldzka 182 oraz ich przetwarzanie przez Ceneo.]]></ceneo>
+        <opineo><![CDATA[Wyrażam zgodę na przekazanie moich danych osobowych w ramach programu Słucham Swoich Klientów Opineo.pl. | Wyrażam zgodę na przekazanie moich danych osobowych, w postaci adresu e-mail do Opineo Sp. z o.o. ul. Powstańców Śląskich 2-4, VI piętro 53-333 Wrocław oraz przetwarzanie przez powyższy podmiot mojego adresu e-mail w celu zbadania opinii o poziomie zadowolenia z przeprowadzonego zakupu w sklepie internetowym Ortohab.pl]]></opineo>
+        <ceneo_guid>550b968a-1189-420c-acb2-09f4df09f89b</ceneo_guid>
+        <opineo_guid>24bec7df14</opineo_guid>
       </agreements>
     </customer>
   </default>

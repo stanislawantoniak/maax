@@ -942,7 +942,7 @@
     </reference>
     <reference name="content">
       <block type="checkout/onepage_success" name="checkout.success" template="checkout/success.phtml"/>
-      <block type="ipson/checkout_ceneo" name="checkout.ceneo" template="ipson/checkout/ceneo.phtml"/>
+      <block type="ipson/checkout_script" name="checkout.script"/>
     </reference>
   </checkout_singlepage_success>
   <checkout_guest_success>
@@ -953,7 +953,7 @@
     </reference>
     <reference name="content">
       <block type="checkout/onepage_success" name="checkout.success" template="checkout/success.phtml"/>
-      <block type="ipson/checkout_ceneo" name="checkout.ceneo" template="ipson/checkout/ceneo.phtml"/>
+      <block type="ipson/checkout_script" name="checkout.script"/>
     </reference>
   </checkout_guest_success>
   <!-- ################################################################### -->

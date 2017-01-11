@@ -1,0 +1,8 @@
+<?php if ($this->getOpineoAgreement()) : ?>
+<script type="text/javascript">
+        opi_email = '<?php echo $this->getClientEmail();?>';
+        opi_order_no = '<?php echo $this->getOrderId();?>';
+        opi_queue = '<?php echo $this->getOpineoQueue();?>';
+</script>
+<script type="text/javascript" src="https://www.wiarygodneopinie.pl/shop/wo.js?uid=<?php echo $this->getGuid()?>"></script>
+<?php endif;?>

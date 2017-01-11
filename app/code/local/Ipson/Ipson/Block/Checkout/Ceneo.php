@@ -2,30 +2,22 @@
 /**
  * ceneo script
  */
-class Ipson_Ipson_Block_Checkout_Ceneo extends Mage_Core_Block_Template {
-    protected $_order;
-    
-    
-    protected function _getSession() {
-        return Mage::getSingleton('checkout/session');
+class Ipson_Ipson_Block_Checkout_Ceneo extends Ipson_Ipson_Block_Checkout_Abstract {
+     
+    protected function _construct()
+    {
+        parent::_construct();
+
+        $this->setTemplate('ipson/checkout/ceneo.phtml');
     }
-    protected function _getOrder() {
-        if (is_null($this->_order)) {
-            $id = $this->_getSession()->getLastOrderId();
-            $order = Mage::getModel('sales/order')->load($id);
-            $this->_order = false;
-            if ($order->getId()) {
-                $this->_order = $order;
-            }
-        }
-        return $this->_order;
-    }
+
+
     /**
      * check agreement
      */
 
     public function getCeneoAgreement() {
-        if ($this->_getOrder()) { // no order no script
+        if ($this->_getOrder() && $this->getGuid()) { // no order no script
             return Mage::getSingleton('checkout/session')->getCeneoAgreement();
         }         
         return false;
@@ -36,18 +28,10 @@ class Ipson_Ipson_Block_Checkout_Ceneo extends Mage_Core_Block_Template {
      * @todo make configurable
      */
 
-    public function getCeneoGuid() {
-        return '550b968a-1189-420c-acb2-09f4df09f89b';
+    public function getGuid() {
+         return Mage::helper('ipson')->getCeneoAgreementGuid();
     }
     
-    /**
-     * get order id
-     */
-     public function getOrderId() {
-         return empty($this->_getOrder())? '':$this->_getOrder()->getIncrementId();
-     }
-     
-     
     /**
      * get formatted product ids
      */
@@ -61,16 +45,5 @@ class Ipson_Ipson_Block_Checkout_Ceneo extends Mage_Core_Block_Template {
          }
          return '#'.implode('#',$out).'#';
      }
-     
-    /**
-     * order email
-     */
-     public function getClientEmail() {
-         if (!$order = $this->_getOrder()) {
-             return false;
-         }
-         return $order->getCustomerEmail();
-     }
-
 
 }

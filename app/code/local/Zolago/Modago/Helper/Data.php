@@ -74,7 +74,7 @@ class Zolago_Modago_Helper_Data extends Mage_Core_Helper_Abstract
     protected $_checkoutVendors = array();
 
 	public function getAgreementHtml($type) {
-		$types = array('tos','newsletter','sms','policy','register_info','dotpay','checkout','ceneo');
+		$types = array('tos','newsletter','sms','policy','register_info','dotpay','checkout','ceneo','opineo');
 		if(!in_array($type,$types)) {
 			Mage::throwException("Incorrect agreement type, allowed types are: ".implode(", ",$types));
 		}

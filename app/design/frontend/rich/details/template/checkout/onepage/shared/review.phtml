@@ -118,14 +118,7 @@ $carrierLogo = Mage::helper("zolagocheckout")->getCarrierLogo($deliveryMethodCod
 						</div>
 					</div>
 					<form>
-						<div class="form-group form-checkbox small text-align-left">
-							<input type="checkbox" id="ceneo_agreement" class="css-checkbox ceneo_agreement"
-							       name="ceneo_agreement" style="opacity: 0; visibility: visible;" checked="checked">
-							<label for="ceneo_agreement" class="css-label ceneo_agreement-label">
-								<?php echo $modagoHelper->getAgreementHtml('ceneo') ?>
-							</label>
-						</div>
-					
+						<?php echo Mage::helper('ipson')->getOpinionAgreementHtml();?>					
 						<?php if(!$this->getCustomer()->getId()): //todo: change this check from id to check if customer has agreed to terms of services ?>
 						<div class="form-group form-checkbox small text-align-left">
 							<input type="checkbox" id="tos_agreement_checkout" class="css-checkbox required"
