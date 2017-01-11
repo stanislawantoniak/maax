@@ -50,20 +50,12 @@ class Zolago_Rma_Model_ServicePo extends ZolagoOs_Rma_Model_ServiceOrder
         foreach ($this->_po->getItemsCollection() as $poItem) {
             $poItems[$poItem->getId()] = $poItem;
         }        
-        // repair names
-        foreach ($poItems as $poItem) {
-			$parent = $poItem->getParentItemId() ;
-            if ($parent && isset($poItems[$parent])) {
-                $poItems[$parent]->setName($poItem->getName());
-            }
-        } 
         foreach ($items as $itemId=>$itemPack) {
             $poItem = $poItems[$itemId];
             foreach ($itemPack as $packId => $dummy) {
                 if (empty($conditions[$itemId][$packId])) {
                     continue;
                 }
-    			$orderItem = $poItem->getOrderItem();    			
                 $item = $this->_convertor->itemToRmaItem($poItem);
                 $item->setQty(1); // only 1 by line
                 $item->setItemCondition($conditions[$itemId][$packId]);
