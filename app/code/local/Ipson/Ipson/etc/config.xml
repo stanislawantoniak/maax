@@ -30,14 +30,6 @@
                         </ipson>
                 </observers>
         </checkout_type_onepage_save_order_after>
-        <controller_front_init_before>
-                <observers>
-                        <ipson>
-                                <class>ipson/observer</class>
-                                <method>checkAgreementType</method>
-                        </ipson>
-                </observers>
-        </controller_front_init_before>
     </events>
   </global>
   <default>

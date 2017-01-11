@@ -26,27 +26,4 @@ class Ipson_Ipson_Model_Observer {
          }
 
      }
-     
-    /**
-     * sprawdzamy czy było wejście z ceneo lub opineo
-     */
-     public function checkAgreementType() {
-          $cookie = Mage::getSingleton('core/cookie');
-          $referer = Mage::helper('core/http')->getHttpReferer();
-          $newKey = '';
-          foreach ($this->_domainList as $name => $domain) {
-              if (strstr($referer,$domain)) {
-                   $newKey = $name;
-                   break;
-              }
-          }           
-          $key = $cookie->get('opinion_domain');
-          if (!$newKey && !$key) {
-              $newKey = 'opineo'; // default
-          }
-          if ($newKey && ($key != $newKey)) {                          
-                $cookie->set('opinion_domain',$newKey,3600*24*30);
-          };
-     }
-
 }
