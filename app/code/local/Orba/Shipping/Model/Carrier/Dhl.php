@@ -88,6 +88,7 @@ class Orba_Shipping_Model_Carrier_Dhl extends Orba_Shipping_Model_Carrier_Abstra
                                 'shippingAmount'=> $params->getParam('shipping_amount'),
                                 'deliveryValue' => ($deliveryValue>0)? $deliveryValue:0,
                                 'content'		=> Mage::helper('zolagopo')->__('Shipment') . ': ' . $shipment->getIncrementId(),
+                                'comment'              => Mage::helper('zolagopo')->__('Order number') . ': ' . $udpo->getIncrementId(),                
                             );
         // add shipment settings
         foreach ($shipmentSettings as $key => $val) {
