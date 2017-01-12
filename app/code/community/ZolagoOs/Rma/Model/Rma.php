@@ -157,17 +157,20 @@ class ZolagoOs_Rma_Model_Rma extends Mage_Sales_Model_Abstract
         }
         return $this;
     }
-    
-    public function addComment($comment, $notify=false, $visibleOnFront=false, $notifyVendor=false, $visibleToVendor=true)
-    {
-        $this->_commentsChanged = true;
-        if (!($comment instanceof ZolagoOs_Rma_Model_Rma_Comment)) {
+    public function createComment($comment,$notify=false,$visibleOnFront=false,$notifyVendor=false,$visibleToVendor=true) {
             $comment = Mage::getModel('urma/rma_comment')
                 ->setComment($comment)
                 ->setIsCustomerNotified($notify)
                 ->setIsVisibleOnFront($visibleOnFront)
                 ->setIsVendorNotified($notifyVendor)
                 ->setIsVisibleToVendor($visibleToVendor);
+            return $comment;
+    }
+    public function addComment($comment, $notify=false, $visibleOnFront=false, $notifyVendor=false, $visibleToVendor=true)
+    {
+        $this->_commentsChanged = true;
+        if (!($comment instanceof ZolagoOs_Rma_Model_Rma_Comment)) {
+            $comment = $this->createComment($comment,$notify,$ficibleOnFront,$notifyVendor,$visibleToVendor);
         }
         $comment->setRma($this)
             ->setParentId($this->getId())
