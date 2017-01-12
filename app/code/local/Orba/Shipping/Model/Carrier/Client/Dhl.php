@@ -197,7 +197,7 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Client_
         $obj->skipRestrictionCheck = false;
         $obj->shipmentDate = $this->_processDhlDate($shipmentSettings['shipmentDate']);
         $obj->content = $shipmentSettings['content'];
-        if ($shipmentSettings['comment']) {
+        if (!empty($shipmentSettings['comment'])) {
             $obj->comment = $shipmentSettings['comment'];
         }
         $shipmentObject->item[] = $obj;
