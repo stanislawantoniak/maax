@@ -184,8 +184,14 @@ class Zolago_Rma_PoController extends Zolago_Po_PoController
         $trackingParams = $rma->getDhlTrackingParams();
         if ($trackingParams) {
             // add comment to rma
-            $rma->addComment(Mage::helper('orbashipping')->__('Carrier was ordered. Your order number is %s. DHL phone number (42 634 53 45)',$trackingParams['orderNumber']),true,true);
+            $model = $rma->createComment(Mage::helper('orbashipping')->__('Carrier was ordered. Your order number is %s. DHL phone number (42 634 53 45)',$trackingParams['orderNumber']),true,true);
+            $rma->addComment($model);
             $rma->saveComments();
+            Mage::dispatchEvent("zolagorma_rma_comment_added", array(
+                                        "rma"          => $rma,
+                                        "comment"      => $model,
+                                        "notify"       => true,
+                                    ));
         }
 
     }
