@@ -349,6 +349,9 @@ abstract class Zolago_Checkout_Controller_Abstract
         billing[vat_id]:1
          */
         $billing = $request->getParam("billing");
+        if (!trim($billing['company'])) {
+            unset($billing['company']);
+        }        
         $billingAddressId = isset($billing["entity_id"]) ? $billing["entity_id"] : 0;
         if(is_array($billing)) {
             $billingResponse = $onepage->saveBilling($billing, $billingAddressId);
@@ -382,6 +385,10 @@ abstract class Zolago_Checkout_Controller_Abstract
         shipping[save_in_address_book]:1
          */
         $shipping = $request->getParam("shipping");
+        if (!trim($shipping['company'])) {
+            unset($shipping['company']);
+        }
+
         // If there is locker InPost or Pick-Up point etc.
         // we need to setup correct shipping address
         $deliveryPointData = $request->getParam("delivery_point");
