@@ -196,8 +196,8 @@ abstract class Zolago_Checkout_Controller_Abstract
         if($success) {
             if($logged && isset($customer)) {
                 $customer->setData('salesmanago_cart_event_id', '')
-                    ->getResource()
-                    ->saveAttribute($customer, 'salesmanago_cart_event_id');
+                ->getResource()
+                ->saveAttribute($customer, 'salesmanago_cart_event_id');
             }
             if(isset($_COOKIE['smCartEventId'])) {
                 /** @var Zolago_SalesManago_Helper_Data $salesmanagoHelper */
@@ -348,6 +348,9 @@ abstract class Zolago_Checkout_Controller_Abstract
         billing[vat_id]:1
          */
         $billing = $request->getParam("billing");
+        if (!trim($billing['company'])) {
+            unset($billing['company']);
+        }        
         $billingAddressId = isset($billing["entity_id"]) ? $billing["entity_id"] : 0;
         if(is_array($billing)) {
             $billingResponse = $onepage->saveBilling($billing, $billingAddressId);
@@ -381,6 +384,10 @@ abstract class Zolago_Checkout_Controller_Abstract
         shipping[save_in_address_book]:1
          */
         $shipping = $request->getParam("shipping");
+        if (!trim($shipping['company'])) {
+            unset($shipping['company']);
+        }
+
         // If there is locker InPost or Pick-Up point etc.
         // we need to setup correct shipping address
         $deliveryPointData = $request->getParam("delivery_point");
@@ -488,25 +495,25 @@ abstract class Zolago_Checkout_Controller_Abstract
         $details = $address->getUdropshipShippingDetails();
         $details = $details ? Zend_Json::decode($details) : array();
 
-		$hl = Mage::helper('udropship');
-		foreach ($shippingMethod as $vId => $code) {
-			$vendor = $hl->getVendor($vId);
-			$rate = $address->getShippingRateByCode($code);
-			if (!$rate) {
-				continue;
-			}
-			$details['methods'][$vId] = array(
-				'code' => $code,
-				'cost' => (float)$rate->getCost(),
-				'price' => (float)$rate->getPrice(),
-				'price_excl' => (float)Mage::helper('udropship')->getShippingPrice($rate->getPrice(), $vendor, $address, 'base'),
-				'price_incl' => (float)Mage::helper('udropship')->getShippingPrice($rate->getPrice(), $vendor, $address, 'incl'),
-				'tax' => (float)Mage::helper('udropship')->getShippingPrice($rate->getPrice(), $vendor, $address, 'tax'),
-				'carrier_title' => $rate->getCarrierTitle(),
-				'method_title' => $rate->getMethodTitle(),
-				'is_free_shipping' => (int)$rate->getIsFwFreeShipping()
-			);
-		}
+        $hl = Mage::helper('udropship');
+        foreach ($shippingMethod as $vId => $code) {
+            $vendor = $hl->getVendor($vId);
+            $rate = $address->getShippingRateByCode($code);
+            if (!$rate) {
+                continue;
+            }
+            $details['methods'][$vId] = array(
+                                            'code' => $code,
+                                            'cost' => (float)$rate->getCost(),
+                                            'price' => (float)$rate->getPrice(),
+                                            'price_excl' => (float)Mage::helper('udropship')->getShippingPrice($rate->getPrice(), $vendor, $address, 'base'),
+                                            'price_incl' => (float)Mage::helper('udropship')->getShippingPrice($rate->getPrice(), $vendor, $address, 'incl'),
+                                            'tax' => (float)Mage::helper('udropship')->getShippingPrice($rate->getPrice(), $vendor, $address, 'tax'),
+                                            'carrier_title' => $rate->getCarrierTitle(),
+                                            'method_title' => $rate->getMethodTitle(),
+                                            'is_free_shipping' => (int)$rate->getIsFwFreeShipping()
+                                        );
+        }
 
 
         $address->setUdropshipShippingDetails(Zend_Json::encode($details));
@@ -612,17 +619,17 @@ abstract class Zolago_Checkout_Controller_Abstract
     public function saveBasketShippingAction() {
 
         $response = array(
-            "status"=>true,
-            "content" => array()
-        );
+                        "status"=>true,
+                        "content" => array()
+                    );
 
         try {
             $this->importPostShippingData();
         } catch (Exception $ex) {
             $response = array(
-                "status"=>0,
-                "content"=>$ex->getMessage()
-            );
+                            "status"=>0,
+                            "content"=>$ex->getMessage()
+                        );
         }
 
         if($this->getRequest()->isAjax()) {
