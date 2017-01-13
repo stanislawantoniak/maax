@@ -47,7 +47,7 @@ class Zolago_Po_Block_Vendor_Po_Edit_ShippingMethod
 		$collection = Mage::getModel("udropship/shipping")->getCollection();
 		$collection->joinDeliveryType();
 		$collection->joinSimpleCondRates();
-
+		$collection->getSelect()->group('delivery_code');
 		$methods = array();
 		foreach ($collection as $collectionItem) {
 			$condition = json_decode($collectionItem->getCondition());

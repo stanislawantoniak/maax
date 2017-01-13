@@ -38,6 +38,8 @@ $shippingTotal = empty($totals['shipping'])? 0:$totals["shipping"]->getAddress()
 $grandTotal = $totals["grand_total"]->getValue(); //Suma
 
 $deliveryMethods = $this->getMapDeliveryMethodsJSON($methods);
+Mage::log('rates'.count($rates));
+Mage::log('methods'.count($methods));
 ?>
 
 <script type="text/javascript">
@@ -55,7 +57,6 @@ $deliveryMethods = $this->getMapDeliveryMethodsJSON($methods);
     Mall.translate.add("shipping_map_method_select", "<?php echo $helper->__("choose"); ?>");
 </script>
 <script type="text/javascript" src="<?php echo $this->getSkinUrl("js/mall/checkout/cart/shipping.js") ?>"></script>
-
 <?php if(!empty($rates)): ?>
 <fieldset id="cart-shipping-methods">
     <form action="<?php echo $this->getUrl('checkout/singlepage/saveBasketShipping') ?>" method="post" id="cart-shipping-methods-form">

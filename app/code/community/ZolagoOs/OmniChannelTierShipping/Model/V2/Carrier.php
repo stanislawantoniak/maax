@@ -158,7 +158,7 @@ class ZolagoOs_OmniChannelTierShipping_Model_V2_Carrier
 
         $cscId = 0;
         $extraCond = array();
-        if ($hasShipClass = Mage::helper('udropship')->isModuleActive('udshipclass')) {
+        if (0 && $hasShipClass = Mage::helper('udropship')->isModuleActive('udshipclass')) {
             $cscId = Mage::helper('udshipclass')->getAllCustomerShipClass($address);
             $cscCond = array(
                 $conn->quoteInto('FIND_IN_SET(?,customer_shipclass_id)','*')

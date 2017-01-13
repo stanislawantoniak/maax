@@ -727,6 +727,7 @@ class Mage_Sales_Model_Quote_Address extends Mage_Customer_Model_Address_Abstrac
         if (is_null($this->_rates)) {
             $this->_rates = Mage::getModel('sales/quote_address_rate')->getCollection()
                 ->setAddressFilter($this->getId());
+            Mage::log((string)$this->_rates->getSelect());
             if ($this->getQuote()->hasNominalItems(false)) {
                 $this->_rates->setFixedOnlyFilter(true);
             }

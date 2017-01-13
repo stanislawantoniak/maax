@@ -101,7 +101,7 @@ class ZolagoOs_OmniChannelShippingClass_Model_Observer
             $resFlag = true;
         }
         if ($resFlag !== null) {
-            $result->setResult($resFlag);
+         //   $result->setResult($resFlag);
         }
     }
 

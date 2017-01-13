@@ -210,7 +210,6 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
             'main_table.shipping_id = website_table.shipping_id',
             array("website_table.website_id")
         )->where("website_table.website_id IN(?)", array(0, Mage::app()->getWebsite()->getId()));
-
         return $shipping;
     }
     public function calculateSumVolume() {
@@ -247,8 +246,10 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
 
         }
         foreach ($qRates as $cCode => $cRates) {
-
+            Mage::log($cCode);
+            Mage::log(get_class($this));
             foreach ($cRates as $rate) {
+                Mage::log($rate->getData());
                 /* @var $rate Unirgy_DropshipSplit_Model_Quote_Rate */
                 $vId = $rate->getUdropshipVendor();
 
@@ -257,7 +258,7 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
                 }
                 $rates[$vId][$cCode][] = $rate;
                 $vendors[$vId] = $vId;
-
+                Mage::log($vendors);
                 $deliveryType = "";
                 $deliveryTypeModel = Mage::getModel("udtiership/deliveryType")->load($rate->getMethod());
                 if ($deliveryTypeModel->getId()) {
@@ -374,7 +375,14 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
     public function hasCustomerAddress() {
         return (bool)$this->getQuote()->getCustomer()->getAddressesCollection()->count();
     }
-
+    
+    /**
+     * List of available countries
+     */
+    public function getAvailableCountryJson() {
+        $countries = Mage::helper('zolagocommon')->getAvailableCountry();
+        return $this->asJson($countries);
+    }
     /**
      * Has customer any address?
      * @return type
