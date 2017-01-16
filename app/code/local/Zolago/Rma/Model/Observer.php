@@ -145,8 +145,12 @@ class Zolago_Rma_Model_Observer extends Zolago_Common_Model_Log_Abstract
 						$statusObject->getCustomerNotes() : $statusObject->getTitle())),
 			$notify
 		);
-
-		if ($rma->getRmaType() == Zolago_Rma_Model_Rma::RMA_TYPE_RETURN) {
+// status po zmieniany tylko raz, gdy mamy nowe rma
+ 
+		if (($rma->getRmaType() == Zolago_Rma_Model_Rma::RMA_TYPE_RETURN)
+		    && ($newStatus == Zolago_Rma_Model_Rma_Status::STATUS_ACCEPTED) 
+		) {
+		                        
 		    $po = $rma->getPo();
 		    $oldStatus = $po->getUdropshipStatus();
 
