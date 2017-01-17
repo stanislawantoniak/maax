@@ -357,5 +357,35 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
 	{
 		return ('true' == (string)Mage::getConfig()->getNode('modules/'.$code.'/active'));
 	}
-	
+    /**
+     * list of available countries (for delivery)
+     */
+     public function getAvailableCountry() {
+         /*
+         $collection = Mage::getModel('udropship/vendor_shipping')->getCollection();
+         $collection->joinShipping();
+         $collection->getSelect()->columns('shipping.customer_ship_class');
+         $tmp = array();
+         foreach ($collection as $item) {
+             $class = $item->getCustomerShipClass();
+             foreach (explode(',',$class) as $c) {
+                 $tmp[$c] = $c;
+             }
+         }
+         
+         */
+         $tmp = array(
+             'PL' => Mage::app()->getLocale()->getCountryTranslation('PL') // Polska zawsze
+         );
+         return array($tmp); // chwilowo tylko Polska
+         $collection = Mage::getModel('udshipclass/customer')->getCollection();
+         $conn = $collection->getConnection();
+         $table = $collection->getTable('udshipclass/customer_row');
+         $select = $conn->select()->from($table);
+         foreach ($conn->fetchAll($select) as $country) {           
+             $tmp[$country['country_id']] = Mage::app()->getLocale()->getCountryTranslation($country['country_id']);
+         }
+         return array($tmp);
+     }
+
 }

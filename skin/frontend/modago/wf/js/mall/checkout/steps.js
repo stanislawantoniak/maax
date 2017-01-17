@@ -29,6 +29,13 @@
 				return this._addressBook;
 			},
 			
+                       setAvailableCountry: function(countryArray) {   
+                               this._countryArray = countryArray;
+                       },
+                       getAvailableCountry: function() {
+                               return this._countryArray;
+                       },
+
 			renderSelectedAddress: function(type){
 				var template = this.getSelectedTemplate(),
 					addressBook = this.getAddressBook(),
@@ -411,6 +418,15 @@
                         inputClass: "form-control vat_id nip validate-nip hint"
                     },
                     {
+                        name:       "country_id",
+                        id:         type + "_country_id",
+                        type:       "select",
+                        label:      Mall.translate.__("country"),
+                        labelClass: "col-sm-3",
+                        inputClass: "form-control country hint required",
+                        
+                    },                    
+                    {
                         name:       "street",
                         id:         type + "_street_1",
                         type:       "text",
@@ -454,14 +470,27 @@
                 inputWrapper = jQuery("<div/>", {
                     "class": "col-lg-9 col-md-9 col-sm-9 col-xs-11"
                 });
+               if (type == 'select') {
+                       var s = jQuery("<select/>", {
+                               class: inputClass,
+                               id: id,
+                               name: name                              
+                       }).appendTo(inputWrapper);
+                      var data = this.getAddressBook().getAvailableCountry();
+                       var list = data[0];
+                       for (var val in list) {
+                               jQuery("<option/>",{value: val, text: list[val]}).appendTo(s);
+                       }                       
+               } else {
+                       jQuery("<input/>", {
+                           type: type,
+                           class: inputClass,
+                           value: value,
+                           name: name,
+                           id: id
+                       }).appendTo(inputWrapper);
+               }
 
-                jQuery("<input/>", {
-                    type: type,
-                    class: inputClass,
-                    value: value,
-                    name: name,
-                    id: id
-                }).appendTo(inputWrapper);
 
                 result.input = inputWrapper;
 

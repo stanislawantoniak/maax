@@ -96,6 +96,7 @@ $basketDataLayer = $_helper->getBasketDataLayer();
 		<?php if($this->customerHasAddresses()):?>
 		var addressBook = new Mall.customer.AddressBook();
 		
+		addressBook.setAvailableCountry(<?php echo $this->getAvailableCountryJson(); ?>);
 		addressBook.setAddressBook(<?php echo $this->getCustomerAddressesJson(); ?>);
 		addressBook.setDefaultShipping(<?php echo $this->asJson($_customer->getDefaultShipping())?>);
 		addressBook.setDefaultBilling(<?php echo $this->asJson($_customer->getDefaultBilling())?>);
