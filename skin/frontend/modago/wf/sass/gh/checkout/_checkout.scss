@@ -808,6 +808,12 @@ body.checkout {
 			height:29px;
 			padding:0 15px 0 15px;
 		}
+                select  {
+			height:29px;
+                        line-height:29px;
+			padding:0 15px 0 15px;                
+                        max-width: 266px;
+                }
 		#remember_data {
 			> .row {
 				margin-bottom: 20px;
