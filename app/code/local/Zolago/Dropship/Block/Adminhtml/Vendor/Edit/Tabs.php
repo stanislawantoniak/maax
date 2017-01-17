@@ -13,6 +13,7 @@ class Zolago_Dropship_Block_Adminhtml_Vendor_Edit_Tabs extends
         // add sections
         $this->addSection('settings',Mage::helper('zolagodropship')->__('Settings'),10);
         $this->addSection('vendor_rights',Mage::helper('zolagodropship')->__('Vendor rights'),20);
+        $this->addSection('regulations',Mage::helper('zolagodropship')->__('Agreements / Regulations'),25);
         $this->addSection('logistic',Mage::helper('zolagodropship')->__('Logistics parameters'),30);
         $this->addSection('vendor_data',Mage::helper('zolagodropship')->__('Vendor data'),40);
         $this->addSection('transaction_data',Mage::helper('zolagodropship')->__('Transaction data'),50);

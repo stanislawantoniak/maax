@@ -54,6 +54,7 @@ class GH_Regulation_Block_Adminhtml_Dropship_Acceptance extends
 	    
 	    $json = $data["regulation_accept_document_data"];
 	    $data['regulation_accepted'] = $yesNo[$data['regulation_accepted']];
+	    $pdf_link = '<a href="'.Mage::helper('adminhtml')->getUrl('zolagoosadmin/adminhtml_vendor/get_confirmation_pdf',array('id'=>$vendorId)).'">pdf link</a>';
 	    unset($data["regulation_accept_document_data"]);
 	    $block = Mage::getSingleton('core/layout')->createBlock("core/template");
 	    $block->setTemplate("zolagodropship/vendor/helper/form/regulation.phtml");
@@ -102,6 +103,10 @@ class GH_Regulation_Block_Adminhtml_Dropship_Acceptance extends
 		$settingsFieldset->addField("regulation_accept_document_data","label",array(
 			"label" => $hlp->__("Acceptation details"),
 			"after_element_html" => $customHtml
+		));
+		$settingsFieldset->addField("pdf_link","label",array(
+			"label" => $hlp->__('Pdf link'),
+                        "after_element_html" => $pdf_link,
 		));
 		
 		

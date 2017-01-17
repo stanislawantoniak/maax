@@ -1,0 +1,26 @@
+<?php $vendor = $this->getVendorData(); ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl" lang="pl">
+<style>
+    body {
+        font-family:arial;
+    }
+</style>
+<body>
+    <table style="border:none">
+        <tbody>
+            <?php foreach($vendor as $item) : ?>
+            <tr>
+                <td><b><?php echo $item['field_name'];?>:</b></td>
+                <td><?php echo $item['field_value']?></td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+    <div style="text-align:right">
+        <img  align="right" src="<?php echo $this->getSkinUrl('img/poig/POIG_s_i.png',array('_secure'=>false));; ?>" width="300"/>    
+    </div>
+    <br/>
+    <br/>
+</body>
+</html>

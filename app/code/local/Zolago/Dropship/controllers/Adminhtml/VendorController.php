@@ -26,6 +26,18 @@ class Zolago_Dropship_Adminhtml_VendorController extends ZolagoOs_OmniChannel_Ad
         $this->renderLayout();
     }
 
+    
+    /**
+     * print pdf with agreements
+     */
+     public function get_confirmation_pdfAction() {
+         $model = Mage::getModel('zolagodropship/pdf_regulations');             
+         $file = $model->getPdfFile($this->getRequest()->getParam('id'));
+         header("Content-type:application/pdf");
+         readfile($file);
+         die();
+     }
+
     /**
      * Send link to accept regulations
      */
