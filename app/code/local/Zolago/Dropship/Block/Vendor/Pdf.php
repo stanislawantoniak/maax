@@ -5,7 +5,7 @@ class Zolago_Dropship_Block_Vendor_Pdf
     protected $_vendor;
     protected $_helper;
     
-    public function getHelper() {
+    protected function _getHelper() {
         if (empty($this->_helper)) {
             $this->_helper = Mage::helper('zolagodropship');
         }
@@ -21,7 +21,7 @@ class Zolago_Dropship_Block_Vendor_Pdf
     }
 
     protected function _getItem($name,$value) {
-        $hlp = $this->getHelper();
+        $hlp = $this->_getHelper();
         $item = array(
             'field_name' => $hlp->__($name),
             'field_value' => $this->getVendor()->getData($value),
@@ -49,7 +49,7 @@ class Zolago_Dropship_Block_Vendor_Pdf
         $block->setValue($json);
         $customHtml = $block->toHtml();;
         $out[] = array (
-            'field_name' => $this->getHelper()->__('Acceptation details'),
+            'field_name' => $this->_getHelper()->__('Acceptation details'),
             'field_value' => $customHtml,
         );
 
