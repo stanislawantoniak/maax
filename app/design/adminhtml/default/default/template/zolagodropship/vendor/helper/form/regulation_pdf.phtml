@@ -1,0 +1,42 @@
+<?php
+/** @var $this Zolago_Dropship_Block_Adminhtml_Vendor_Helper_Form_Regulation */
+$_value = $this->getValue();
+$_hlp = Mage::helper("ghregulation");
+?>
+
+<?php if (!empty($_value)): ?>
+    <?php $_valueDecoded = json_decode($_value); ?>
+    <div><b>IP: <?php echo $_valueDecoded->IP; ?></b></div>
+
+
+    <div>
+        <b><?php echo $_hlp->__("Regulations accepted by"); ?>: </b>
+        <?php if (isset($_valueDecoded->accept_regulations_vendor_login)): ?>
+            <div><?php echo $_valueDecoded->accept_regulations_vendor_login; ?></div>
+        <?php endif; ?>
+        <div>
+            <?php echo isset($_valueDecoded->accept_regulations_declared_by_first_name) ? $_valueDecoded->accept_regulations_declared_by_first_name : ""; ?>
+            <?php echo isset($_valueDecoded->accept_regulations_declared_by_last_name) ? $_valueDecoded->accept_regulations_declared_by_last_name : ""; ?>
+        </div>
+    </div>
+
+
+    <div>
+        <?php switch ($_valueDecoded->accept_regulations_role) {
+            case GH_Regulation_Helper_Data::REGULATION_DOCUMENT_VENDOR_ROLE_SINGLE:
+                echo $_hlp->__("I am authorized to represent company single");
+                break;
+            case GH_Regulation_Helper_Data::REGULATION_DOCUMENT_VENDOR_ROLE_PROXY:
+                echo $_hlp->__("I have full powers to accept the regulations MODAGO.");
+                break;
+        } ?>
+    </div>
+    <?php if (!empty($_valueDecoded->document_name)) : ?>
+        <div>
+            <b><?php echo $_hlp->__("Scan of regulations"); ?></b>
+            <a href="<?php echo Mage::helper("ghregulation")->getVendorUploadedDocumentUrlForAdmin(Mage::app()->getRequest()->getParam("id"), $_valueDecoded->document_name); ?>">
+                <?php echo $_valueDecoded->document_name; ?>
+            </a>
+        </div>
+    <?php endif; ?>
+<?php endif; ?>

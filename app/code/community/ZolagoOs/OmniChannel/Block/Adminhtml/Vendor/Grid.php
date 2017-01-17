@@ -76,6 +76,23 @@ class ZolagoOs_OmniChannel_Block_Adminhtml_Vendor_Grid extends Mage_Adminhtml_Bl
             'type'      => 'options',
             'options'   => Mage::getSingleton('udropship/source')->setPath('vendor_statuses')->toOptionHash(),
         ));
+        $this->addColumn('pdf',
+            array(
+                'header'    => Mage::helper('sales')->__('Pdf link'),
+                'width'     => '50px',
+                'type'      => 'action',
+                'getter'     => 'getId',
+                'actions'   => array(
+                    array(
+                        'caption' => 'Pdf link',
+                        'url'     => array('base' => 'zolagoosadmin/adminhtml_vendor/get_confirmation_pdf'),
+                        'field'   => 'id',
+                    ),
+                ),
+                'filter'    => false,
+                'sortable'  => false,
+                'is_system' => true
+        ));
 
         $this->addColumn('action',
             array(
@@ -88,7 +105,7 @@ class ZolagoOs_OmniChannel_Block_Adminhtml_Vendor_Grid extends Mage_Adminhtml_Bl
                         'caption' => Mage::helper('sales')->__('View'),
                         'url'     => array('base'=>'zolagoosadmin/adminhtml_vendor/edit'),
                         'field'   => 'id'
-                    )
+                    ),
                 ),
                 'filter'    => false,
                 'sortable'  => false,
