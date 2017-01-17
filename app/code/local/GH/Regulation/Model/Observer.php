@@ -37,8 +37,8 @@ class Gh_Regulation_Model_Observer
 						->setVendorId(Mage::app()->getRequest()->getParam('id'))
 						->toHtml()
 				));
-				$block->addTabToSection('regulation_type', 'vendor_rights', 50);
-				$block->addTabToSection('regulation_accept', 'vendor_rights', 55);
+				$block->addTabToSection('regulation_type', 'regulations', 50);
+				$block->addTabToSection('regulation_accept', 'regulations', 55);
 			}
 		}
 	}
