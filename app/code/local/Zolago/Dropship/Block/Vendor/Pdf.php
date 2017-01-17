@@ -45,7 +45,7 @@ class Zolago_Dropship_Block_Vendor_Pdf
         $out[] = $this->_getItem('Acceptation date','regulation_accept_document_date');
         $json = $this->getVendor()->getData('regulation_accept_document_data');
         $block = Mage::getSingleton('core/layout')->createBlock("core/template");
-        $block->setTemplate("zolagodropship/vendor/helper/form/regulation.phtml");
+        $block->setTemplate("zolagodropship/vendor/helper/form/regulation_pdf.phtml");
         $block->setValue($json);
         $customHtml = $block->toHtml();;
         $out[] = array (
