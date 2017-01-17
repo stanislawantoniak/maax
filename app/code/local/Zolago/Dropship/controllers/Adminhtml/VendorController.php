@@ -31,9 +31,13 @@ class Zolago_Dropship_Adminhtml_VendorController extends ZolagoOs_OmniChannel_Ad
      * print pdf with agreements
      */
      public function get_confirmation_pdfAction() {
-         $model = Mage::getModel('zolagodropship/pdf_regulations');             
+         $model = Mage::getModel('zolagodropship/pdf_regulations');      
+         $vendorId = $this->getRequest()->getParam('id');       
          $file = $model->getPdfFile($this->getRequest()->getParam('id'));
-         header("Content-type:application/pdf");
+         $vendor = Mage::getModel('udropship/vendor')->load($vendorId);
+         header("Content-type:application/pdf");         
+         $name = sprintf('Potwierdzenie umowy %s.pdf',$vendor->getVendorName());
+         header('Content-disposition: inline; filename="' . $name . '"');
          readfile($file);
          die();
      }
