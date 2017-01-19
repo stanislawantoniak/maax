@@ -986,7 +986,8 @@
 				"#shipping_firstname",
 				"#shipping_street",
 				"#shipping_postcode",
-				"#shipping_city"
+				"#shipping_city",
+				"#shipping_country_id",
 			],
 
             /**
@@ -1000,7 +1001,8 @@
 				"billing[vat_id]",
 				"billing[street][]",
 				"billing[postcode]",
-				"billing[city]"
+				"billing[city]",
+				"billing[country_id]",
 			],
 
             /**

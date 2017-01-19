@@ -980,7 +980,7 @@ jQuery(function($){
                     formGroup,
                     self = this,
                     address;
-
+                    
                 element = this.getInput("firstname"
                     , type + "_firstname"
                     , "text"
