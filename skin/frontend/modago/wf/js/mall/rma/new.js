@@ -285,14 +285,17 @@ jQuery(function($){
                 var zip = jQuery('.selected-postcode').filter(function( index ) {
                     return jQuery(this).text().indexOf("{{") === -1;
                 }).first().text();
+                var country_id = jQuery('.selected-country-id').filter(function( index ) {
+                    return jQuery(this).text().indexOf("{{") === -1;
+                }).first().text();
 
-                _rma.getDateList(zip);
+                _rma.getDateList(country_id,zip);
             }
 
             jQuery(this.addressbook.content).on("selectedAddressChange", function(e, address) {
-                //console.log(address.getData());
                 var zip = address.getData().postcode;
-                _rma.getDateList(zip);
+                var country_id = address.getData().country_id;
+                _rma.getDateList(country_id,zip);
             });
         },
 		
@@ -487,7 +490,7 @@ jQuery(function($){
          * @param zip
          * @returns {boolean}
          */
-        getDateList: function(zip) {
+        getDateList: function(country_id,zip) {
             "use strict";
             if(zip === undefined) {
                 zip = '';
@@ -505,6 +508,7 @@ jQuery(function($){
 
             OrbaLib.Rma.getDateList({
                 //'poId': poId,
+                'country_id':country_id,
                 'zip': zip
             }, {
                 'done': function (data) {
@@ -829,6 +833,10 @@ jQuery(function($){
 					addressObject = addressBook.getSelected(type);
 
 				if(addressObject){
+				        if (addressObject.getData().country_id) {
+				            var countries = addressBook.getAvailableCountry();
+				            addressObject.setData("country",countries[0][addressObject.getData().country_id]);
+				        }
 					var node = jQuery(Mall.replace(
 						template, 
 						this.processAddressToDisplay(addressObject)
@@ -867,6 +875,10 @@ jQuery(function($){
 						}
 						
 						var data = self.processAddressToDisplay(this);
+						if (data.country_id) {
+						    var countries = addressBook.getAvailableCountry();
+						    data.country = countries[0][data.country_id];
+						}    
 						var node = jQuery(Mall.replace(template, data));
 						self.processAddressNode(node, this, addressBook, type);
 						target.append(node);

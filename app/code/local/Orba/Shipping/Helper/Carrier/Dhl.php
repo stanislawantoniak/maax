@@ -243,13 +243,13 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
      * @param int $timestamp
      * @return array
      */
-    protected function _getDhlPostalService($zip,$timestamp) {
+    protected function _getDhlPostalService($zip,$country,$timestamp) {
         $dhlClient = Mage::getModel('orbashipping/carrier_client_dhl');
         $login = $this->getDhlLogin();
         $password = $this->getDhlPassword();
         $dhlClient->setAuth($login, $password);
 
-        $ret = $dhlClient->getPostalCodeServices($zip, date("Y-m-d", $timestamp));
+        $ret = $dhlClient->getPostalCodeServices($zip, date("Y-m-d", $timestamp),$country);
 
         $url = Mage::getStoreConfig('carriers/orbadhl/gateway');
 
@@ -288,8 +288,8 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
      * @param int $timestamp
      * @return stdClass
      */
-    public function getDhlPickupParamsForDay($timestamp,$zip) {
-        $ret = $this->_getDhlPostalService($zip,$timestamp);
+    public function getDhlPickupParamsForDay($timestamp,$country,$zip) {
+        $ret = $this->_getDhlPostalService($zip,$country,$timestamp);
         return $ret;
     }
     /**
@@ -305,7 +305,13 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
         if (!empty($zip)) {
             $zip = str_replace('-', '', $zip);
             $zipModel = Mage::getModel('orbashipping/zip');
-            $source = $zipModel->load($zip, 'zip')->getId();
+            $source = $zipModel->getCollection()
+                ->addFieldToFilter('zip',$zip)
+                ->addFieldToFilter('country',$country)
+                ->getFirstItem();
+            Mage::log($source);
+            Mage::log($country);
+            
             if (!empty($source)) {
                 return true;
             } else {

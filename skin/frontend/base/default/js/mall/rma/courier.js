@@ -24,6 +24,7 @@ jQuery(function ($) {
                 next = s.find("button.next"),
                 back = s.find(".back"),
                 zip = '',
+                country_id = '',
                 rmaId = jQuery("input[name=rma_id]").val();
 
             back.click(function () {
@@ -67,11 +68,16 @@ jQuery(function ($) {
                 return jQuery(this).text().indexOf("{{") === -1;
             }).first().text();
 
-            self.getDateList(zip);
+            country_id = jQuery('.selected-country-id').filter(function( index ) {
+                return jQuery(this).text().indexOf("{{") === -1;
+            }).first().text();
+
+            self.getDateList(country_id,zip);
 
             jQuery(this.addressbook.content).on("selectedAddressChange", function (e, address) {
                 var zip = address.getData().postcode;
-                self.getDateList(zip);
+                var country_id = address.getData().country_id;
+                self.getDateList(country_id,zip);
             });
         }
     });

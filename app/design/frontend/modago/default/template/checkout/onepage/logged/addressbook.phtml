@@ -27,6 +27,7 @@ $shippingAddress	= $this->getQuote()->getShippingAddress();
 				<dd class="vatIdAddress" style="display:none"><?php echo $this->__("VAT ID"); ?>: {{vat_id}}</dd>
 				<dd>{{street}}</dd>
 				<dd>{{postcode}} {{city}}</dd>
+				<dd>{{country}}</dd>
 				<dd class="separator phone"><?php echo $helper->__("Contact phone")?>: <span>{{telephone}}</span></dd>
 				<dd class="action separator">
 					<a href="#" class="underline edit"><?php echo $this->__("edit");?></a> 
@@ -49,6 +50,7 @@ $shippingAddress	= $this->getQuote()->getShippingAddress();
 						<dd class="vatIdAddress" style="display:none"><?php echo $this->__("VAT ID"); ?>: {{vat_id}}</dd>
 						<dd>{{street}}</dd>
 						<dd>{{postcode}} {{city}}</dd>
+						<dd>{{country}}</dd>
 						<dd class="action separator">
 							<a href="#" class="underline edit"><?php echo $this->__("edit");?></a> 
 							<a href="#" class="underline remove"><?php echo $this->__("remove");?></a> 

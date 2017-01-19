@@ -831,6 +831,11 @@
 				if(addressData.street){
 					addressData.street = addressData.street[0]
 				}
+				if (addressData.country_id) {
+				    var country = this.getAddressBook().getAvailableCountry();
+				    addressData.country = country[0][addressData.country_id];
+				}
+				console.log(address);
 				return addressData;
 			},
 			

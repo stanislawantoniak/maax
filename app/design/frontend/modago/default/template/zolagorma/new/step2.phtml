@@ -5,7 +5,6 @@
 <?php $_itemsSingle = $_rma->getItemsSingle(); ?>
 <?php $_itemsConditionSingle = $_rma->getItemsConditionSingle(); ?>
 <?php $_selectedShipping = $this->getSelectedShippingAddress();?>
-<?php //$dateList = $this->getDateList($_helper->getPostcode($_selectedShipping));?>
 <?php $dateList = array() ;?>
 <?php $weekdays = Mage::app()->getLocale()->getOptionWeekdays();?>
 <?php $vendor = $_po->getVendor();?>
@@ -33,6 +32,7 @@
 					<dt>{{firstname}} {{lastname}}</dt>
 					<dd>{{street}}</dd>
 					<dd><span class="selected-postcode">{{postcode}}</span> {{city}}</dd>
+					<dd>{{country}}<span class="selected-country-id" style="display:none">{{country_id}}</span></dd>
 					<dd class="phone"><?php echo $_helper->__("Contact phone")?>: <span>{{telephone}}</span></dd>
 					<dd class="action separator">
 						<a href="#" class="underline edit"><?php echo $this->__("edit");?></a> 
@@ -48,6 +48,7 @@
 							<dt>{{firstname}} {{lastname}}</dt>
 							<dd>{{street}}</dd>
 							<dd>{{postcode}} {{city}}</dd>
+                					<dd>{{country}}</dd>							
 							<dd class="action separator">
 								<a href="#" class="underline edit"><?php echo $this->__("edit");?></a> 
 								<a href="#" class="underline remove"><?php echo $this->__("remove");?></a> 

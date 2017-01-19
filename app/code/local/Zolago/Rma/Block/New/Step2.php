@@ -86,19 +86,21 @@ class Zolago_Rma_Block_New_Step2 extends  Zolago_Rma_Block_New_Abstract {
     }
 
     /**
-     * @param Mage_Customer_Model_Address | string | null $newZip
+     * @param Mage_Customer_Model_Address | null $newZip
      * @return array
      */
-    public function getDateList($newZip = '') {
-        if($newZip instanceof Mage_Customer_Model_Address) {
-            $newZip = $newZip->getPostcode();
+    public function getDateList(Mage_Customer_Model_Address $address = null) {
+        if (empty($address)) {
+            return array();
         }
+        $country = $address->getCountryId();
+        $newZip = $newZip->getPostcode();
         // No selected zip / null - return empty array
-        if(empty($newZip)) {
+        if (empty($country) || empty($newZip)) {
             return array();
         }
         return Mage::helper('zolagorma')->
-               getDateList($this->getRequest()->getParam('po_id'), $newZip);
+               getDateList($country, $newZip);
     }
 
     /**
@@ -141,5 +143,8 @@ class Zolago_Rma_Block_New_Step2 extends  Zolago_Rma_Block_New_Abstract {
     public function getLegend() {
         return Mage::helper("zolagorma")->__("Report a return or claim");
     }
-
+    public function getAvailableCountryJson() {
+        $countries = Mage::helper('zolagocommon')->getAvailableCountry();
+        return $this->asJson($countries);
+    }
 }

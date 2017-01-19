@@ -387,5 +387,12 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
          }
          return array($tmp);
      }
+     
+    /**
+     * country name from id
+     */
+     public function getCountryName($id) {
+         return Mage::app()->getLocale()->getCountryTranslation($id);
+     }
 
 }

@@ -8,7 +8,6 @@ $deliveryCode = $po->getOmniChannelMethodInfoByMethod()->getDeliveryCode();
 $ghInpostCarrierCode = Mage::getModel("ghinpost/carrier")->getCarrierCode();
 $address = $this->getItem()->getShippingAddress();
 $inpostLockerName = $po->getDeliveryPointName();
-
 ?>
 <div class="sales-order-top col-md-6 col-sm-6 col-xs-12 sales-order-hide">
 	<div class="sales-order-info">
@@ -21,6 +20,7 @@ $inpostLockerName = $po->getDeliveryPointName();
 			<?php endif; ?>
 			<span class="order-top-txt order-top-address"><?php echo implode('<br />',$address->getStreet()); ?></span>
 			<span class="order-top-txt"><?php echo $this->escapeHtml($address->getPostcode().' '.$address->getCity()); ?></span>
+			<span class="order-top-txt"><?php echo $this->escapeHtml(Mage::helper('zolagocommon')->getCountryName($address->getCountryId())); ?></span>
 			<span class="order-top-txt"><?php echo $this->__('tel').': '.$this->escapeHtml($address->getTelephone()); ?></span>
 		</div>
 		<div class="order-info-document">

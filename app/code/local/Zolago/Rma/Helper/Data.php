@@ -407,21 +407,7 @@ class Zolago_Rma_Helper_Data extends ZolagoOs_Rma_Helper_Data {
     }
 
 
-    public function getDateList($zip = '') {
-        error_reporting(E_ALL);
-        ini_set("display_errors", 1);
-//        $zip = '';
-//        if (!is_null($this->getSelectedShipping())) {
-//            $addresses = $this->getCustomerAddressesArray();
-//            if(empty($addresses)) {
-//                return array();
-//            }
-//            $zip = $addresses[$this->getSelectedShipping()]["postcode"];
-//        }
-//
-//        $po = Mage::getModel('zolagopo/po')->load($poId);
-//        $shippingAddress = $po->getShippingAddress();
-//        $zip = empty($newZip) ? ( empty($zip) ? $shippingAddress->getPostcode() : $zip ) : $newZip;
+    public function getDateList($country,$zip = '') {
 
         $helper = Mage::helper('orbashipping/carrier_dhl');
         $dateList = array();
@@ -431,7 +417,7 @@ class Zolago_Rma_Helper_Data extends ZolagoOs_Rma_Helper_Data {
             // start from today
             $timestamp = time()+$count*3600*24;
             if ($holidaysHelper->isPickupDay($timestamp)) {
-                if ($params = $helper->getDhlPickupParamsForDay($timestamp,$zip)) {
+                if ($params = $helper->getDhlPickupParamsForDay($timestamp,$country,$zip)) {
                     if($params->getPostalCodeServicesResult->exPickupFrom !== "brak") {
                         $dateList[$timestamp] = $params;
                     }

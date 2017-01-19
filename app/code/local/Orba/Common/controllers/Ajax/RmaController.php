@@ -10,8 +10,9 @@ class Orba_Common_Ajax_RmaController extends Orba_Common_Controller_Ajax {
 
 
         $zip = $this->getRequest()->getParam('zip');
+        $country = $this->getRequest()->getParam('country_id');
 
-        $dateList = Mage::helper('zolagorma')->getDateList($zip);
+        $dateList = Mage::helper('zolagorma')->getDateList($country,$zip);
 
         $arrayDateList = (array) $dateList;//only for easy counting
 
