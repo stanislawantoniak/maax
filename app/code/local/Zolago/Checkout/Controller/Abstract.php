@@ -627,6 +627,7 @@ abstract class Zolago_Checkout_Controller_Abstract
         try {
             $this->importPostShippingData();
         } catch (Exception $ex) {
+            Mage::logException($ex);
             $response = array(
                             "status"=>0,
                             "content"=>$ex->getMessage()

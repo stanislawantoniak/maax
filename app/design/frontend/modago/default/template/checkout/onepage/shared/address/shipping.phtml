@@ -6,7 +6,7 @@
 /** @var Zolago_Checkout_Helper_Data $helper */
 $helper 			= Mage::helper("zolagocheckout");
 $shippingAddress	= $this->getShippingAddress();
-
+$countryList   = $this->getCountryList();
 $deliveryPoint = $this->getDeliveryPointCheckout();
 ?>
 
@@ -87,6 +87,20 @@ $deliveryPoint = $this->getDeliveryPointCheckout();
             <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12 double-line" for="shipping_company"><?php echo $this->__("Company<br>(optional)"); ?></label>
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
                 <input type="text" value="<?php echo $this->escapeHtml($shippingAddress->getCompany()); ?>" class="form-control firm hint" id="shipping_company" title="" name="shipping[company]" />
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group clearfix border-top hide-success-vaild">
+        <div class="row">
+            <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="country_id"><?php echo $this->__("Country"); ?></label>
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
+                <select name="shipping[country_id]" class="form-control select-styled" id="country_id">
+                <?php foreach (Mage::helper('zolagocommon')->getAvailableCountry()[0] as $key => $name) :?>
+                    <option value="<?php echo $key?>"><?php echo $name ?></option>
+                <?php endforeach; ?>
+                </select>
+                <input type="hidden" name="shipping[country]" value="">
             </div>
         </div>
     </div>

@@ -15,6 +15,7 @@
 			  <dd class="billing vat_id">{{vat_id_caption}} {{vat_id}}</dd>\
 			  <dd>{{street}}</dd>\
 			  <dd>{{postcode}} {{city}}</dd>\
+			  <dd class="country">{{country}}</dd> \
 			  <dd>{{telephone_caption}} {{telephone}}</dd>\
 		  </dl>';
 

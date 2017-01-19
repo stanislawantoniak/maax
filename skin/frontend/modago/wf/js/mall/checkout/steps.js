@@ -1333,7 +1333,9 @@
 
 				// Push method
 				stepData.push({name: "method", value: this.checkout.getMethod()});
-
+				// Country name
+				var select = form.find("select[name='shipping[country_id]']").find(':selected').text();
+                                form.find("input[name='shipping[country]']").val(select);
 				return stepData;
 			},
 			

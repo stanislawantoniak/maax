@@ -158,17 +158,8 @@ class ZolagoOs_OmniChannelTierShipping_Model_V2_Carrier
 
         $cscId = 0;
         $extraCond = array();
-        if (0 && $hasShipClass = Mage::helper('udropship')->isModuleActive('udshipclass')) {
+        if ($hasShipClass = Mage::helper('udropship')->isModuleActive('udshipclass')) {
             $cscId = Mage::helper('udshipclass')->getAllCustomerShipClass($address);
-            $cscCond = array(
-                $conn->quoteInto('FIND_IN_SET(?,customer_shipclass_id)','*')
-            );
-            foreach ($cscId as $_cscId) {
-                $cscCond[] = $conn->quoteInto('FIND_IN_SET(?,customer_shipclass_id)',$_cscId);
-            }
-            $extraCond = array(
-                '( '.implode(' OR ', $cscCond).' ) '
-            );
         }
 
         $vId = $request->getVendorId();
@@ -184,6 +175,18 @@ class ZolagoOs_OmniChannelTierShipping_Model_V2_Carrier
         }
         if (empty($tierRates)) {
             return false;
+        }
+        if ((count($tierRates) > 1) && $cscId) { // więcej niż jeden, nakładamy filtr na klasy customera
+            $tmpRates = array();
+            foreach ($tierRates as $key => $trate) {
+                $customerShipclassIds = explode(',',$trate['customer_shipclass_id']);
+                if (array_intersect($customerShipclassIds,$cscId)) {
+                    $tmpRates[$key] = $trate;
+                }
+            }
+            if (count($tmpRates)) {
+                $tierRates = $tmpRates;
+            }
         }
         $totalQty = $totalWeight = $totalValue = 0;
         $total = 0;
