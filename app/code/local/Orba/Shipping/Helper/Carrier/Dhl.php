@@ -308,8 +308,6 @@ class Orba_Shipping_Helper_Carrier_Dhl extends Orba_Shipping_Helper_Carrier {
                 ->addFieldToFilter('zip',$zip)
                 ->addFieldToFilter('country',$country)
                 ->getFirstItem();
-            Mage::log($source);
-            Mage::log($country);
             
             if (!empty($source)) {
                 return true;

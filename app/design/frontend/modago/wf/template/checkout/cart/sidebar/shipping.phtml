@@ -38,8 +38,6 @@ $shippingTotal = empty($totals['shipping'])? 0:$totals["shipping"]->getAddress()
 $grandTotal = $totals["grand_total"]->getValue(); //Suma
 
 $deliveryMethods = $this->getMapDeliveryMethodsJSON($methods);
-Mage::log('rates'.count($rates));
-Mage::log('methods'.count($methods));
 ?>
 
 <script type="text/javascript">

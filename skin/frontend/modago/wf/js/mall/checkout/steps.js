@@ -835,7 +835,6 @@
 				    var country = this.getAddressBook().getAvailableCountry();
 				    addressData.country = country[0][addressData.country_id];
 				}
-				console.log(address);
 				return addressData;
 			},
 			

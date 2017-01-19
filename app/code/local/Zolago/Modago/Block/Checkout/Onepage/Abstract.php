@@ -246,10 +246,7 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
 
         }
         foreach ($qRates as $cCode => $cRates) {
-            Mage::log($cCode);
-            Mage::log(get_class($this));
             foreach ($cRates as $rate) {
-                Mage::log($rate->getData());
                 /* @var $rate Unirgy_DropshipSplit_Model_Quote_Rate */
                 $vId = $rate->getUdropshipVendor();
 
@@ -258,7 +255,6 @@ abstract class Zolago_Modago_Block_Checkout_Onepage_Abstract extends Mage_Checko
                 }
                 $rates[$vId][$cCode][] = $rate;
                 $vendors[$vId] = $vId;
-                Mage::log($vendors);
                 $deliveryType = "";
                 $deliveryTypeModel = Mage::getModel("udtiership/deliveryType")->load($rate->getMethod());
                 if ($deliveryTypeModel->getId()) {

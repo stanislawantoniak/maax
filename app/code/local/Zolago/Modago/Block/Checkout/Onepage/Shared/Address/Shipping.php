@@ -88,7 +88,4 @@ class Zolago_Modago_Block_Checkout_Onepage_Shared_Address_Shipping
 		}
 		return 0;
 	}
-	public function getCountryList() {
-            Mage::log($this->shippingAddress->getData());
-	}
 } 

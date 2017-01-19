@@ -86,7 +86,6 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
             foreach ($qRates as $cRates) {
                 foreach ($cRates as $rate) {
                     $vId = $rate->getUdropshipVendor();
-                    Mage::log('vendor -id'.$vId);
                     if (!$vId) {
                         continue;
                     }
@@ -115,13 +114,10 @@ class Zolago_Modago_Block_Checkout_Cart_Sidebar_Shipping
         $a = $q->getShippingAddress();
 
         $qRates = $a->getGroupedAllShippingRates();
-        Mage::log(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
         /**
          * Fix rate quto query
          */
-         Mage::log('qrates');
         if (!$qRates) {
-         Mage::log('qrates2');
             $a->setCountryId(Mage::app()->getStore()->getConfig("general/country/default"));
             $a->setCollectShippingRates(true);
             $a->collectShippingRates();
