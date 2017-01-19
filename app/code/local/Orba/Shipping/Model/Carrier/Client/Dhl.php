@@ -214,11 +214,15 @@ class Orba_Shipping_Model_Carrier_Client_Dhl extends Orba_Shipping_Model_Client_
      */
     public function getPostalCodeServices($postCode, $pickupDate, $country = 'PL')
     {
+        // hardcode: only from PL
+        if ($country != 'PL') {
+            return null;
+        }
         $return = array();
         $message = new StdClass();
         $message->authData = $this->_auth;
         $message->postCode = $this->formatDhlPostCode($postCode);
-        $message->pickupDate = $pickupDate;
+        $message->pickupDate = $pickupDate;        
         try {
             $return = $this->_sendMessage('getPostalCodeServices', $message);
         } catch (Exception $e) {
