@@ -72,6 +72,7 @@ class Zolago_Adminhtml_Block_Sales_Transactions_Grid extends Mage_Adminhtml_Bloc
         $grid->addColumn('customer_id', array(
             'header'    => 'Customer ID',
             'index'     => 'customer_id',
+            'filter_index' => 'main_table.customer_id',
             'type'      => 'number'
         ));
 
