@@ -562,12 +562,11 @@
 		}
 		
 		// Submit action - call from 
-		proto.submit = function(){
+		proto.submit = function(object){
 			// Is valdidated
 			if(proto.onSubmit.apply(self)===false){
-				return;
+				return false;
 			}
-			
 			if(proto.content.find("form").length && proto.doSave){
 				var saveUrl = proto.content.find("form").attr("action");
 				self.saveStepData(saveUrl, proto.collect()).then(function(response){
@@ -578,15 +577,16 @@
 							// Pushing data (shipping/payment) to data layer
 							dataLayer.push(dl);
 						}
-						self.next();
-					}else{
-						alert(response.content);
-					}
+                                                self.next();
+					} else {
+					    alert(response.content); 
+					    object.submitUnlockButton();
+
+    					}
 				})
-			}else{
-				self.next();
+			} else {
+			    self.next();
 			}
-			
 		}
 		
 		jQuery.extend(proto, config);

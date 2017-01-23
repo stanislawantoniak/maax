@@ -7,6 +7,7 @@
 	
 	
     Mall.Checkout.steps = {
+                _tmpSubmitButton: null,
 
 		////////////////////////////////////////////////////////////////////////
 		// Addressbook
@@ -364,14 +365,25 @@
                 return jQuery("#addressbook-modal");
             },
 
-            lockButton: function (button) {
+            submitLockButton: function (button) {
+                var spinner;
                 jQuery(button).prop("disabled", true);
+                this._tmpSubmitButton = button;
+                if (spinner = button.find('i')) {
+                    spinner.addClass('fa fa-spinner fa-spin');
+                }
             },
 
-            unlockButton: function (button) {
+            submitUnlockButton: function () {
+                var spinner;
+                var button;
+                if (button = this._tmpSubmitButton) {
                 jQuery(button).prop("disabled", false);
+                    if (spinner = button.find('i')) {
+                        spinner.removeClass('fa fa-spinner fa-spin');
+                    }
+                }
             },
-
             getNewAddressConfig: function (type) {
                 return [
                     //{
@@ -924,11 +936,8 @@
                     if (jQuery(this).valid()) {
                         jQuery("button[id*='-prev']").prop("disabled", false);
                         var submit0Button = jQuery(this).find('button[target=step-0-submit]');
-                        submit0Button.prop("disabled", true);
-                        var i0 = submit0Button.find('i');
-                        i0.addClass('fa fa-spinner fa-spin');
-
-                        self.submit();
+                        self.submitLockButton(submit0Button);
+                        self.submit(self);
                     }
 					return false;
 				});
