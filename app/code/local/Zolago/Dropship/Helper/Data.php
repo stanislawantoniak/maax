@@ -406,4 +406,32 @@ class Zolago_Dropship_Helper_Data extends ZolagoOs_OmniChannel_Helper_Data
 
         return $this;
     }
+    
+    /**
+     * check if country_id is valid for shipping method
+     * @param 
+     * @return 
+     */
+     public function validateCountry($countryId,$shippingMethod) {
+         $udropshipMethod = array_shift($shippingMethod);
+         $storeId = Mage::app()->getStore()->getId();
+         $info = $this->getOmniChannelMethodInfoByMethod($storeId, $udropshipMethod);
+         $carrier = $info->getDeliveryCode();
+         $delivery = Mage::getModel('udtiership/deliveryType')->load($carrier,'delivery_code');
+         $list = Mage::helper('udtiership')->getV2SimpleCondRates($delivery->getDeliveryTypeId());
+         $class = array();
+         foreach ($list as $item) {
+             $class[] = $item['customer_shipclass_id'];
+         }
+         $collection = Mage::getModel('udshipclass/customer')->getCollection()
+             ->addFieldToFilter('class_id',array('in'=>$class));
+         $out = array();
+         foreach ($collection as $item) {
+             $country = $item->getRows();
+             foreach ($country as $row) {
+                 $out[] = $row['country_id'];
+             }
+         }
+         return in_array($countryId,$out);
+     }
 }

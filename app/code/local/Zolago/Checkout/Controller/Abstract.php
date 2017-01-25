@@ -37,7 +37,12 @@ abstract class Zolago_Checkout_Controller_Abstract
             $address->setUdropshipShippingDetails(Zend_Json::encode($details));
         }
     }
-
+    
+    protected function _validateCountry($countryId) {
+        $onepage = $this->getOnepage();
+        $shippingMethod = $this->_getCheckoutSession()->getShippingMethod();
+        return Mage::helper('zolagodropship')->validateCountry($countryId,$shippingMethod);
+    }
     /**
      * Process place order action
      * Make parial save of all data to quote
@@ -349,7 +354,7 @@ abstract class Zolago_Checkout_Controller_Abstract
         billing[vat_id]:1
          */
         $billing = $request->getParam("billing");
-        if (!trim($billing['company'])) {
+        if (isset($billing['company']) && !trim($billing['company'])) {
             unset($billing['company']);
         }        
         $billingAddressId = isset($billing["entity_id"]) ? $billing["entity_id"] : 0;
@@ -392,10 +397,10 @@ abstract class Zolago_Checkout_Controller_Abstract
         // If there is locker InPost or Pick-Up point etc.
         // we need to setup correct shipping address
         $deliveryPointData = $request->getParam("delivery_point");
+        $helper = Mage::helper("zolagocheckout");
         if (isset($deliveryPointData['name'])) {
 
             /** @var Zolago_Checkout_Helper_Data $helper */
-            $helper = Mage::helper("zolagocheckout");
             $deliveryPoint = $helper->getDeliveryPointShippingAddress();
 
 
@@ -411,7 +416,6 @@ abstract class Zolago_Checkout_Controller_Abstract
             $shipping['firstname']	= $customer->getFirstname();
             $shipping['lastname']	= $customer->getLastname();
         }
-
         if(is_array($shipping)) {
             $shippingResponse = $onepage->saveShipping($shipping, $shippingAddressId);
             if(isset($shippingResponse['error']) && $shippingResponse['error']==1) {
@@ -436,6 +440,10 @@ abstract class Zolago_Checkout_Controller_Abstract
 
 
         $address = $onepage->getQuote()->getShippingAddress();
+        // validate country id
+        if (!$this->_validateCountry($address->getCountryId())) {
+            Mage::throwException(Zend_Json::encode(array('type' => 'country','message'=>$helper->__('Wrong delivery country. Please change address or delivery method'))));
+        }
         if ($shippingPointCode = $request->getParam("shipping_point_code")) {
             $address->setDeliveryPointName($shippingPointCode);
             $this->_getCheckoutSession()->setDeliveryPointName($shippingPointCode);
@@ -452,6 +460,7 @@ abstract class Zolago_Checkout_Controller_Abstract
         payment[method]:zolagopayment
         payment[additional_information][provider]:m
          */
+         
         $payment = $request->getParam("payment");
         if(is_array($payment)) {
             $paymentResponse = $onepage->savePayment($payment);
@@ -529,8 +538,7 @@ abstract class Zolago_Checkout_Controller_Abstract
             return;
         }
         $response = array(
-                        "status"=>true,
-                        "content" => array()
+                        "status"=> true,
                     );
         try {
             $this->importPostData();
@@ -610,7 +618,7 @@ abstract class Zolago_Checkout_Controller_Abstract
         if (!empty($data)) {
             $response["dataLayer"] = $data;
         }
-
+        // @todo basket summary
         if($this->getRequest()->isAjax()) {
             $this->_prepareJsonResponse($response);
         }

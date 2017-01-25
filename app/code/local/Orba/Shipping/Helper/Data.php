@@ -102,6 +102,9 @@ class Orba_Shipping_Helper_Data extends Mage_Core_Helper_Abstract {
         case Orba_Shipping_Model_Carrier_Default::CODE:
             $model = Mage::getModel('orbashipping/carrier_default');
             break;
+        case Orba_Shipping_Model_Carrier_Foreign::CODE:
+            $model = Mage::getModel('orbashipping/carrier_foreign');
+            break;
         default:
             $model = Mage::getModel('orbashipping/carrier_empty');
 
