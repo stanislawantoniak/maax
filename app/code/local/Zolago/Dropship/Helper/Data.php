@@ -421,7 +421,13 @@ class Zolago_Dropship_Helper_Data extends ZolagoOs_OmniChannel_Helper_Data
          $list = Mage::helper('udtiership')->getV2SimpleCondRates($delivery->getDeliveryTypeId());
          $class = array();
          foreach ($list as $item) {
-             $class[] = $item['customer_shipclass_id'];
+             $tmp = explode(',',$item['customer_shipclass_id']);
+             foreach ($tmp as $tmpItem) {
+                 if ($tmpItem === '*') {
+                     return true; // akceptuje wszystko
+                 }
+                 $class[$tmpItem] = $tmpItem;
+             }
          }
          $collection = Mage::getModel('udshipclass/customer')->getCollection()
              ->addFieldToFilter('class_id',array('in'=>$class));
