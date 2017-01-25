@@ -1206,6 +1206,11 @@ class Zolago_Po_VendorController extends Zolago_Dropship_Controller_Vendor_Abstr
                     $po->setDeliveryPointName($data['pickuppoint_delivery_point_name']);
                 } else {
                     $po->setDeliveryPointName('');
+                    // check address and shipping method
+                    if (!Mage::helper('zolagodropship')->validateCountry($data['country_id'],$data['udropship_method'])) {
+                        Mage::throwException(Mage::helper("zolagocheckout")->__("Wrong delivery country. Please change address or delivery method"));
+                    }
+            
                 }
 
                 $oldUdropshipMethod = $po->getUdropshipMethod();

@@ -413,7 +413,11 @@ class Zolago_Dropship_Helper_Data extends ZolagoOs_OmniChannel_Helper_Data
      * @return 
      */
      public function validateCountry($countryId,$shippingMethod) {
-         $udropshipMethod = array_shift($shippingMethod);
+         if (is_array($shippingMethod)) {
+             $udropshipMethod = array_shift($shippingMethod);
+         } else {
+             $udropshipMethod = $shippingMethod;
+         }
          $storeId = Mage::app()->getStore()->getId();
          $info = $this->getOmniChannelMethodInfoByMethod($storeId, $udropshipMethod);
          $carrier = $info->getDeliveryCode();
