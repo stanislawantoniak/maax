@@ -835,7 +835,7 @@ jQuery(function($){
 				if(addressObject){
 				        if (addressObject.getData().country_id) {
 				            var countries = addressBook.getAvailableCountry();
-				            addressObject.setData("country",countries[0][addressObject.getData().country_id]);
+				            addressObject.setData("country",countries[addressObject.getData().country_id]);
 				        }
 					var node = jQuery(Mall.replace(
 						template, 
@@ -877,7 +877,7 @@ jQuery(function($){
 						var data = self.processAddressToDisplay(this);
 						if (data.country_id) {
 						    var countries = addressBook.getAvailableCountry();
-						    data.country = countries[0][data.country_id];
+						    data.country = countries[data.country_id];
 						}    
 						var node = jQuery(Mall.replace(template, data));
 						self.processAddressNode(node, this, addressBook, type);

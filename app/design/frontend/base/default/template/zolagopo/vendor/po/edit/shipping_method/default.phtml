@@ -57,7 +57,7 @@ $_modagoHlp = Mage::helper("zolagocommon");
                 <?php if (count($_countries) > 0): ?>
                     <select id="<?php echo $_type;?>-address-country"  name="country_id" class="form-control" >
                         <option value="">-- Please Select --</option>
-                        <?php foreach($_countries[0] as $key => $_country): ?>
+                        <?php foreach($_countries as $key => $_country): ?>
                             <option value="<?php echo $key ?>" <?php if($_address->getCountryId()==$key):?>selected="selected"<?php endif;?>>
                                 <?php echo $_country; ?>
                             </option>

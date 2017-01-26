@@ -181,7 +181,7 @@ class Zolago_Po_Model_Observer extends Zolago_Common_Model_Log_Abstract {
                       "inpost_delivery" => $inpostLabel,
                       "pwr_delivery" => $pwrLabel,
                       "_ATTACHMENTS" => $helper->getPoImagesAsAttachments($po)
-                  );
+                  );    
         $po->sendEmailTemplate(
             Zolago_Po_Model_Po::XML_PATH_UDROPSHIP_PURCHASE_ORDER_STATUS_CHANGED_SHIPPED,
             $params

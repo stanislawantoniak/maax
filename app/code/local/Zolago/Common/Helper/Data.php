@@ -385,7 +385,7 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
          foreach ($conn->fetchAll($select) as $country) {           
              $tmp[$country['country_id']] = Mage::app()->getLocale()->getCountryTranslation($country['country_id']);
          }
-         return array($tmp);
+         return $tmp;
      }
      
     /**

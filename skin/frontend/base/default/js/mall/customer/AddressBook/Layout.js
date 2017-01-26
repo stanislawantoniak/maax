@@ -215,8 +215,7 @@
 				id: id,
 				name: name				
         			}).appendTo(inputWrapper);
-	        		var data = this.getAddressBook().getAvailableCountry();
-        			var list = data[0];
+	        		var list = this.getAddressBook().getAvailableCountry();
         			for (var val in list) {
 	        			jQuery("<option/>",{value: val, text: list[val]}).appendTo(s);
 		        	}			

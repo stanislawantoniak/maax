@@ -95,7 +95,7 @@ $deliveryPoint = $this->getDeliveryPointCheckout();
             <label class="col-lg-3 col-md-3 col-sm-3 col-xs-12" for="country_id"><?php echo $this->__("Country"); ?></label>
             <div class="col-lg-9 col-md-9 col-sm-9 col-xs-12">
                 <select name="shipping[country_id]" class="form-control select-styled" id="country_id">
-                <?php foreach (Mage::helper('zolagocommon')->getAvailableCountry()[0] as $key => $name) :?>
+                <?php foreach (Mage::helper('zolagocommon')->getAvailableCountry() as $key => $name) :?>
                     <option value="<?php echo $key?>"><?php echo $name ?></option>
                 <?php endforeach; ?>
                 </select>

@@ -45,6 +45,7 @@ $basketDataLayer = $_helper->getBasketDataLayer();
 	Mall.translate.add("street-and-number", "<?php echo $_helper->__("Street and number");?>");
 	Mall.translate.add("postcode", "<?php echo $_helper->__("Postcode");?>");
 	Mall.translate.add("city", "<?php echo $_helper->__("City");?>");
+	Mall.translate.add("country", "<?php echo $_helper->__("Country");?>");
 	Mall.translate.add("phone", "<?php echo $_helper->__("Phone");?>");
 	Mall.translate.add("country", "<?php echo $_helper->__("Country");?>");
 	Mall.translate.add("address-cant-be-removed", "<?php echo $_helper->__("Address can't be removed.");?>");
@@ -97,6 +98,7 @@ $basketDataLayer = $_helper->getBasketDataLayer();
 		<?php if($this->customerHasAddresses()):?>
 		var addressBook = new Mall.customer.AddressBook();
 		
+		addressBook.setAvailableCountry(<?php echo $this->getAvailableCountryJson(); ?>);
 		addressBook.setAddressBook(<?php echo $this->getCustomerAddressesJson(); ?>);
 		addressBook.setDefaultShipping(<?php echo $this->asJson($_customer->getDefaultShipping())?>);
 		addressBook.setDefaultBilling(<?php echo $this->asJson($_customer->getDefaultBilling())?>);

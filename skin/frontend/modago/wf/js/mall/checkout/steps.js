@@ -475,6 +475,25 @@
                 inputWrapper = jQuery("<div/>", {
                     "class": "col-lg-9 col-md-9 col-sm-9 col-xs-11"
                 });
+               if (type == 'select') {
+                       var s = jQuery("<select/>", {
+                               class: inputClass,
+                               id: id,
+                               name: name                              
+                       }).appendTo(inputWrapper);
+                      var list = this.getAddressBook().getAvailableCountry();
+                       for (var val in list) {
+                               jQuery("<option/>",{value: val, text: list[val]}).appendTo(s);
+                       }                       
+               } else {
+                       jQuery("<input/>", {
+                           type: type,
+                           class: inputClass,
+                           value: value,
+                           name: name,
+                           id: id
+                       }).appendTo(inputWrapper);
+               }
 
                 if (type == 'select') {
                     var s = jQuery("<select/>", {
@@ -482,8 +501,7 @@
                         id: id,
                         name: name
                     }).appendTo(inputWrapper);
-                    var data = this.getAddressBook().getAvailableCountry();
-                    var list = data[0];
+                    var list = this.getAddressBook().getAvailableCountry();
                     for (var val in list) {
                         jQuery("<option/>", {
                             value: val,
@@ -843,7 +861,7 @@
                 }
                 if (addressData.country_id) {
                     var country = this.getAddressBook().getAvailableCountry();
-                    addressData.country = country[0][addressData.country_id];
+                    addressData.country = country[addressData.country_id];
                 }
                 return addressData;
             },

@@ -591,6 +591,12 @@
                             // Pushing data (shipping/payment) to data layer
                             dataLayer.push(dl);
                         }
+                        var totals = response.shippingCost;
+                        if (totals && typeof totals != "undefined") {
+                            var costs = Mall.reg.get("vendor_costs");                            
+                            costs[1][totals.method] = totals.value;
+                            Mall.reg.set('vendor_costs',costs);
+                        }
                         self.next();
                     } else {
                         Mall.Checkout.steps.submitUnlockButton();
@@ -633,9 +639,9 @@
             var addressBook = addressBookStep.getAddressBook();
             var countryList = addressBook.getAvailableCountry();
             billing = jQuery.extend(billing, addressBook.getSelectedBilling().getData());
-            billing.country = countryList[0][billing.country_id];
+            billing.country = countryList[billing.country_id];
             shipping = jQuery.extend(shipping, addressBook.getSelectedShipping().getData());
-            shipping.country = countryList[0][shipping.country_id];
+            shipping.country = countryList[shipping.country_id];
             // Regular address form used
         } else if (addressStep) {
             billing = jQuery.extend(billing, addressStep.getBillingAddress());

@@ -458,6 +458,12 @@
 			// Return by fallback
 			return this.getDefaultShipping() || this.getAddressBook()[0];
         },
+        setAvailableCountry: function (country) {
+            this._availableCountry = country;
+        },
+        getAvailableCountry: function () {
+            return this._availableCountry;
+        },
 
         setAvailableCountry: function (country) {
             this._availableCountry = country;

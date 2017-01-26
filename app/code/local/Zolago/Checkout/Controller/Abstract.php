@@ -39,7 +39,6 @@ abstract class Zolago_Checkout_Controller_Abstract
     }
     
     protected function _validateCountry($countryId) {
-        $onepage = $this->getOnepage();
         $shippingMethod = $this->_getCheckoutSession()->getShippingMethod();
         return Mage::helper('zolagodropship')->validateCountry($countryId,$shippingMethod);
     }
@@ -390,7 +389,7 @@ abstract class Zolago_Checkout_Controller_Abstract
         shipping[save_in_address_book]:1
          */
         $shipping = $request->getParam("shipping");
-        if (!trim($shipping['company'])) {
+        if (!empty($shipping['company']) && !trim($shipping['company'])) {
             unset($shipping['company']);
         }
 
@@ -618,7 +617,15 @@ abstract class Zolago_Checkout_Controller_Abstract
         if (!empty($data)) {
             $response["dataLayer"] = $data;
         }
-        // @todo basket summary
+        // @todo basket summary        
+        $address = $this->getOnepage()->getQuote()->getShippingAddress();
+        $method = $this->_getCheckoutSession()->getShippingMethod();
+        $response['shippingCost'] = array(
+            'method' => array_shift($method),
+            'value' => $address -> getShippingInclTax(),
+        );
+        
+
         if($this->getRequest()->isAjax()) {
             $this->_prepareJsonResponse($response);
         }

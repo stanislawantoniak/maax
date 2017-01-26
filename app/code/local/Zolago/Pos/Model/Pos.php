@@ -160,7 +160,17 @@ class Zolago_Pos_Model_Pos extends Mage_Core_Model_Abstract
         return $data;
     }
 
-
+    
+    /**
+     * formatted address as html
+     */
+     public function getShippingAddressHtml() {
+         $out = 
+             $this->getName().'<br/>'.
+             $this->getStreet().'<br/>'.
+             $this->getPostcode().' '.$this->getCity().'<br/>';
+         return $out;
+     }
     /**
      *
      * @return string
