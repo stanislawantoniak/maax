@@ -500,8 +500,8 @@ class Zolago_Po_Model_Po_Status
                     || $status == Zolago_Po_Model_Po_Status::STATUS_PENDING
                     || $status == Zolago_Po_Model_Po_Status::STATUS_BACKORDER)
             {
-                $grandTotal = $po->getGrandTotalInclTax();
-                $sumAmount  = $po->getPaymentAmount();
+                $grandTotal = round($po->getGrandTotalInclTax(),4);
+                $sumAmount  = round($po->getPaymentAmount(),4);
                 //czeka na płatność lub czeka na rezerwacje
                 if (($status == Zolago_Po_Model_Po_Status::STATUS_PAYMENT || $status == Zolago_Po_Model_Po_Status::STATUS_BACKORDER)
                         && (($grandTotal <= $sumAmount) || $po->isCod()))
