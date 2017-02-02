@@ -181,6 +181,7 @@ class Zolago_Dropship_Model_Observer extends ZolagoOs_OmniChannel_Model_Observer
                     'max_shipping_days',
                     'max_shipping_time',
                     'automatic_strikeout_price_percent',
+                    'automatic_flag_price_percent',
                     'external_id',
                     'super_vendor_id',
                     'statements_calendar',

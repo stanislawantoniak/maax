@@ -271,6 +271,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
 
     public static $_vendorAutomaticStrikeoutPricePercent;
+    public static $_vendorAutomaticFlagPricePercent;
 
 
 
@@ -296,7 +297,8 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         $setFlagEmpty = array();
         $setFlagPromo = array();
         $setFlagSale = array();
-
+        $setMsrpEmpty = array();
+        
         $data = $coll->getData();
 
         if (empty($data))
@@ -314,6 +316,16 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
             }
 
+            if (isset(self::$_vendorAutomaticFlagPricePercent[$_product["udropship_vendor"]])) {
+                $percentFlag = self::$_vendorAutomaticFlagPricePercent[$_product["udropship_vendor"]];
+            } else {
+                $_vendor = Mage::getModel("udropship/vendor")->load($_product["udropship_vendor"]);
+
+                $percentFlag = Mage::helper("zolagocatalog")->getAutomaticFlagPricePercent($_vendor);
+                self::$_vendorAutomaticFlagPricePercent[$_product["udropship_vendor"]] = $percent;
+
+            }
+
             if (!empty($_product["campaign_regular_id"])) {
                 // przypadek dotyczy tylko sytuacji gdy produkt nie jest w kampanii promo/sale
                 continue;
@@ -323,7 +335,17 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                 &&
                 (float)$_product["msrp"]
                 &&
-                ((float)$_product["msrp"] - (float)$_product["price"] >= ((float)$_product["msrp"] * (float)($percent / 100))
+                ((float)$_product["msrp"] - (float)$_product["price"] < ((float)$_product["msrp"] * (float)($percent / 100))
+                )
+            ) {
+                $setMsrpEmpty[$storeId][] = $_product["entity_id"];                
+            }
+            if (
+                (float)$_product["price"] > 0
+                &&
+                (float)$_product["msrp"]
+                &&
+                ((float)$_product["msrp"] - (float)$_product["price"] >= ((float)$_product["msrp"] * (float)($percentFlag / 100))
                 )
             ) {
                 $isNew = (bool)$_product["is_new"];
@@ -367,6 +389,14 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
             foreach ($setFlagEmpty as $storeId => $productIds) {
                 $aM->updateAttributesPure($productIds,
                     array("product_flag" => null),
+                    $storeId
+                );
+            }
+        }
+        if (!empty($setMsrpEmpty)) {
+            foreach ($setMsrpEmpty as $storeId => $productIds) {
+                $aM->updateAttributesPure($productids,
+                    array("msrp" => null),
                     $storeId
                 );
             }

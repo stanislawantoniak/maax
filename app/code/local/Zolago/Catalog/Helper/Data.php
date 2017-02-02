@@ -177,6 +177,17 @@ class Zolago_Catalog_Helper_Data extends Mage_Core_Helper_Abstract {
 		}
 		return (float)str_replace(",", ".", $percent);
 	}
+	/**
+	 * @param Zolago_Dropship_Model_Vendor $vendor
+	 * @return float
+	 */
+	public function getAutomaticFlagPricePercent(Zolago_Dropship_Model_Vendor $vendor) {
+		$percent = $vPercent = $vendor->getAutomaticFlagPricePercent();
+		if (empty($vPercent)) {
+			$percent = Mage::getStoreConfig('catalog/price/automatic_flag_price_percent');
+		}
+		return (float)str_replace(",", ".", $percent);
+	}
     public function getStoreDeliveryHeadline($product, $vendor = null,$inventory = null) {
         $storeDeliveryHeadline = "";
         /* @var $product Zolago_Catalog_Model_Product */

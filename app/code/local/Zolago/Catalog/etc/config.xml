@@ -9,6 +9,7 @@
 		<catalog>
 			<price>
 				<automatic_strikeout_price_percent>5</automatic_strikeout_price_percent>
+				<automatic_flag_price_percent>5</automatic_flag_price_percent>
 			</price>
 		</catalog>
         <zolagocatalog>
@@ -216,6 +217,13 @@
 						<fieldset>vendor_info</fieldset>
 						<position>1</position>
 					</automatic_strikeout_price_percent>
+					<automatic_flag_price_percent>
+						<label>Automatic promotion/sale flag by percent</label>
+						<note>When difference between effective price and msrp is >= % show flag promotion/sale. Leave empty for use default</note>
+						<type>text</type>
+						<fieldset>vendor_info</fieldset>
+						<position>3</position>
+					</automatic_flag_price_percent>
 				</fields>
 			</vendor>
 		</udropship>
