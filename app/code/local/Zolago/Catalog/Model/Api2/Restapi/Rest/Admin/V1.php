@@ -269,6 +269,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
      */
     public static function updatePricesConverter($priceBatch)
     {
+        
         //queue inform_magento
         $skuS = array_keys($priceBatch);
 
@@ -386,6 +387,8 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             ->getAttribute('catalog_product', 'msrp')
             ->getData('attribute_id');
 
+        $percent = Mage::getStoreConfig('catalog/price/automatic_flag_price_percent');
+        // @todo uzależnić procent od vendora - teraz jest tylko default
 
         foreach ($skeleton as $sku => $productId) {
             foreach ($stores as $storeId) {
@@ -409,7 +412,11 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
 
                         $priceMSRPToInsert = (!empty($priceMSRPSelected) && isset($pricesConverter[$priceMSRPSelected]))
                             ? $pricesConverter[$priceMSRPSelected] : false;  //msrp
-
+                        
+                        // check if msrp should be set
+                        if (((float)$priceMSRPToInsert - (float)$priceToInsert) < (float)(($priceMSRPToInsert*$percent)/100)) {
+                            $priceMSRPToInsert = 0;
+                        }
 
                         // 1. update price
                         if ($priceToInsert) {
@@ -431,7 +438,6 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                         }
 
                         // 2. update msrp
-                        if ($priceMSRPToInsert) {
                             $insert[] = array(
                                 'entity_type_id' => $productEt,
                                 'attribute_id' => $specialPriceAttributeId,
@@ -439,7 +445,6 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
                                 'entity_id' => $productId,
                                 'value' => Mage::app()->getLocale()->getNumber($priceMSRPToInsert)
                             );
-                        }
                         $ids[$productId] = $productId;
                     }
                 }

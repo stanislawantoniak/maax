@@ -253,6 +253,8 @@
 "Account created: %s, email for login: %s","Konto założone dnia: %s, email do logowania: %s"
 "Check DHL Settings","Sprawdź konfigurację DHL"
 "Automatic strikeout price by percent","Automatyczna cena przekreślona poprzez procentową różnicę"
+"Automatic sale/promotion by percent","Automatyczna promocja/wyprzedaż poprzez procentową różnicę"
+"When difference between effective price and msrp is >= % show sale/promotion flag","Gdy różnica między ceną msrp a regularną jest >= n% ustaw flagę promocji/wyprzedaży"
 "RMA created successfully","RMA zostało utworzone"
 "Use DPD","Wysyłaj przez DPD"
 "DPD Settings","Konfiguracja DPD"

@@ -361,7 +361,6 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
 
         }
 
-
         /* @var $aM Zolago_Catalog_Model_Product_Action */
         $aM = Mage::getSingleton('catalog/product_action');
 
@@ -395,8 +394,8 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
         }
         if (!empty($setMsrpEmpty)) {
             foreach ($setMsrpEmpty as $storeId => $productIds) {
-                $aM->updateAttributesPure($productids,
-                    array("msrp" => null),
+                $aM->updateAttributesPure($productIds,
+                    array("msrp" => 0),
                     $storeId
                 );
             }

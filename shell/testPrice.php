@@ -5,9 +5,9 @@ class Modago_Test_Shell2 extends Mage_Shell_Abstract
 {
     public function run()
     {
-        $a = 118.99;
+        $a = 100;
         $b = 140;
-        $c = 180;
+        $c = 141;
 
         $priceBatch = array(
             "1-WTSLEDDKLR4/098" => array(
@@ -16,22 +16,22 @@ class Modago_Test_Shell2 extends Mage_Shell_Abstract
                 "salePriceBefore" => $c
             ),
             "1-WTSLEDDKLR4/092" => array(
-                "A" => $a+2,
+                "A" => $a,
                 "B" => $b,
                 "salePriceBefore" => $c
             ),
             "1-WTSLEDDKLR4/086" => array(
-                "A" => $a+4,
+                "A" => $a,
                 "B" => $b,
                 "salePriceBefore" => $c
             ),
             "1-WTSLEDDKLR4/080" => array(
-                "A" => $a+6,
+                "A" => $a,
                 "B" => $b,
                 "salePriceBefore" => $c
             ),
             "1-WTSLEDDKLR4/074" => array(
-                "A" => $a+8,
+                "A" => $a,
                 "B" => $b,
                 "salePriceBefore" => $c
             ),

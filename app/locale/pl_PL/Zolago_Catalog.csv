@@ -280,6 +280,8 @@
 "See product on %s","Obejrzyj produkt na %s"
 "When difference between effective price and msrp is >= % show strikeout price","Kiedy różnica pomiedzy ceną a msrp jest >= % pokaż cenę przekreśloną"
 "When difference between effective price and msrp is >= % show strikeout price. Leave empty for use default","Kiedy różnica pomiedzy ceną a msrp jest >= % pokaż cenę przekreśloną. Pozostaw puste aby użyć wartości domyślnej"
+"When difference between effective price and msrp is >= % show flag promotion/sale. Leave empty for use default","Kiedy różnica między ceną a msrp >= % ustaw flagę promocji/wyprzedaży w produkcie. Pozostaw puste aby użyć wartości domyślnej"
+"Automatic promotion/sale flag by percent","Automatyczne flaga promocji/wyprzedaży ustawiana procentowo"
 "Product temporary unavailable","Chwilowy brak produktu"
 "From this same collection","Z tej samej z kolekcji"
 "show more","zobacz więcej"
