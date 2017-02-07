@@ -54,10 +54,10 @@ class Orba_Informwhenavailable_Model_Entry extends Mage_Core_Model_Abstract {
                         ->addAttributeToSelect('sku')
                         ->addAttributeToFilter('sku', array('in' => $sku_array));
                 $products_collection = $this->updateCollection($products_collection);
-				
 				//Add Stock Filter to get Only Saleable Products
 				Mage::getSingleton('cataloginventory/stock')->addInStockFilterToCollection($products_collection);
 				
+		Mage::log((string)$products_collection->getSelect());		
                 foreach ($products_collection as $product) {
                     if ($this->isAvailable($product)) {
                         if (!isset($this->available[$store_id])) {
@@ -70,6 +70,7 @@ class Orba_Informwhenavailable_Model_Entry extends Mage_Core_Model_Abstract {
                 }
             }
         }
+        Mage::log($this->available);
         if (!empty($this->available)) {
             foreach ($collection as $entry) {
                 if (isset($this->available[$entry->getStoreId()][$entry->getSku()])) {
@@ -84,7 +85,7 @@ class Orba_Informwhenavailable_Model_Entry extends Mage_Core_Model_Abstract {
     }
     
     public function isAvailable($product) {
-        return $product->isSaleable();
+        return true;// $product->isSaleable();
     }
     
     protected function informSingle($entry, $product) {
