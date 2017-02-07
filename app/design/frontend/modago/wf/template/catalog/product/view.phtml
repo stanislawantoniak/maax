@@ -266,6 +266,21 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 	</div>
 </div>
 <!--end zadaj pytanie sprzedajacemu-->
+<!-- inform when available -->
+<div class="modal fade bs-example-modal-lg" id="inform_available" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"></button>
+				<h2 class="title_section"><?php echo Mage::helper('wfwf')->__("Inform when available"); ?></h2>
+			</div>
+			<div class="modal-body">
+				<?php echo $this->getChildHtml('product.vendor.informavailable'); ?>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- end inform when available -->
 
 <?php echo $this->getChildHtml('product.info.media.modal'); ?>
 <?php echo $this->getChildHtml('zolago_modago_home_sliderlastseen'); ?>
@@ -299,7 +314,7 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 	Mall.reg.set("varnish_category_id", <?php echo $_product->getCategory()->getId();?>);
 	<?php endif;?>
 
-	jQuery('.no-size').attr('title', "<?php echo $this->__("This size is temporarily unavailable."); ?>");
+	jQuery('.no-size').attr('title', "<?php echo $this->__("This size is temporarily unavailable.");?> <?php echo $this->__("Click to inform when available."); ?>");
 
 	Mall.product.sizetable.setContent(<?php echo $this->getSizeTableForJs();?>);
 

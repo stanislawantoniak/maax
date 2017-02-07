@@ -6,6 +6,7 @@ Mall.product = {
 	_entity_id: '',
 	_path_back_to_category_text: '',
 	_path_back_to_category_link: '',
+	_inform_text_template: '',
 
 	init: function() {
 		if(jQuery("body").hasClass("catalog-product-view")) {
@@ -345,7 +346,20 @@ Mall.product = {
 			}
 
 			if (jQuery(this).hasClass('no-size')) {
+				var size = jQuery(this).find('span').html();
+				var attrValue = jQuery(this).find('input').val();
+				var superAttribute = jQuery(this).find('input').data('superattribute');
+				console.log(attrValue);
+				console.log(superAttribute);				
 				jQuery(this).find('span').append('<canvas class="diagonal" width="'+elFilterSizeWidth+'" height="'+elFilterSizeHeight+'"></canvas>');
+				jQuery(this).click(function (){
+					var modal = jQuery('#inform_available');					
+					modal.modal();
+					modal.find('#inform_attribute_value').val(attrValue);
+					modal.find('#inform_super_attribute').val(superAttribute);
+					var text = Mall.replace(Mall.product._inform_text_template,{size: size});					
+					modal.find("#informavail_modal_template").html(text);
+				});
 			}
 
 			//jQuery(this).find('canvas').drawLine({
@@ -356,7 +370,6 @@ Mall.product = {
 			//});
 		});
 	},
-
 	rating: {
 		init: function() {
 			// RATY{ path: 'assets/images' }

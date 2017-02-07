@@ -95,6 +95,27 @@ i.flag {
 		padding-left: 0px !important;
 	}
 }
+#informavail-form {
+	h4 {
+		strong{
+			text-transform: uppercase;
+		}
+	}
+	p {
+		font-size:15px;
+	}
+	input[type="text"],
+	input[type="email"],
+	input[type="password"] {
+		line-height: 29px;
+	}
+	label {
+		font-weight: normal;
+	}
+	.error {
+		padding-left: 0px !important;
+	}
+}
 #product_long_box {
 	section {
 		color: $colorShortDescription;
@@ -185,12 +206,24 @@ i.flag {
         opacity: 0.6;
       }
     }
+    .informavailable {
+      margin-top:7px;
+      span {
+        padding-left: 7px;
+      }
+      .fa-envelope-o {
+        font-size: 17px;
+        margin-left: 1px;
+        opacity: 0.6;
+      }
+    }
     .wrapper-addthis {
       padding: 0;
     }
   }
-  .question p ,#product-likeboxes p  {
+  .question p ,#product-likeboxes p, .informavailable p {
 	  a {
+		  cursor: pointer;
 		  color: $colorSecondFont !important;
   		  &:hover {
 				text-decoration: underline;

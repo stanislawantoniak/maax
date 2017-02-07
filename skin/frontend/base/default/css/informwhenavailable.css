@@ -1,0 +1,34 @@
+.block-informwhenavailable-form p {
+    font-size: 11px;
+    line-height: 1.25;
+    font-weight: bold;
+}
+.block-informwhenavailable-form #informwhenavailable-content p {
+    color: #CD5033;
+}
+.block-informwhenavailable-form .input-field {
+    padding-bottom: 5px;
+}
+.block-informwhenavailable-form label {
+    color: #666;
+    font-weight: bold;
+    margin-right: 5px;
+    font-size: 11px;
+    display: block;
+}
+.block-informwhenavailable-form #informwhenavailable-email {
+    width: 170px;
+}
+.block-informwhenavailable-form #informwhenavailable-newsletter {
+    float: left;
+    margin: 2px 5px 0 0;
+}
+.block-informwhenavailable-form #informwhenavailable-loader {
+    height: 21px;
+    text-align: right;
+}
+.block-informwhenavailable-form #informwhenavailable-loader img {
+    margin: 3px 0 0 0;
+    width: 16px;
+    height: 16px;
+}

@@ -1,0 +1,91 @@
+<?php if ($this->isActive()): ?>
+<?php $_product = $this->getProduct(); ?>
+<?php $is_request_already_sent = $this->isRequestAlreadySent(); ?>
+<?php if (!$this->isAvailable($_product)): ?>
+<div class="block block-informwhenavailable-form">
+    <div class="block-title">
+        <strong><?php echo $this->__('Product unavailable!'); ?></strong>
+    </div>
+    <div class="block-content" id="informwhenavailable-message" <?php if (!$is_request_already_sent): ?>style="display: none;"<?php endif; ?>>
+        <p class="empty" id="informwhenavailable-message-text">
+            <?php if ($is_request_already_sent): ?>
+            <?php echo $this->__('You have already submitted the request to inform you when this product becomes available. Please wait patiently.'); ?>
+            <?php endif; ?>
+        </p>
+    </div>
+    <?php if (!$is_request_already_sent): ?>
+    <div class="block-content" id="informwhenavailable-content">
+        <p class="empty">
+            <?php echo $this->__('This product is currently unavailable. Do you want to be informed when it will be available again?'); ?>
+        </p>
+        <form id="informwhenavailable-form" method="POST" action="<?php echo Mage::getUrl('informwhenavailable/entry/create'); ?>">
+            <input type="hidden" name="sku" value="<?php echo $_product->getSku(); ?>" />
+            <?php if (!$this->isLoggedIn()): ?>
+            <div class="empty">
+                <div class="input-field">
+                    <label for="informwhenavailable-email"><?php echo $this->__('E-mail'); ?>:</label>
+                    <input class="input-text required-entry validate-email" id="informwhenavailable-email" type="text" name="email" />
+                </div>
+                <div class="input-field">
+                    <input class="input-checkbox" id="informwhenavailable-newsletter" type="checkbox" name="newsletter" value="1" checked="checked" />
+                    <label for="informwhenavailable-newsletter"><?php echo $this->__('Add me to the newsletter'); ?></label>
+                </div>
+            </div>
+            <?php endif; ?>
+            <div class="actions">
+                <div id="informwhenavailable-container">
+                    <button class="button" onclick="informwhenavailableSend();" title="<?php echo $this->__('Inform me'); ?>" type="button">
+                        <span><span><?php echo $this->__('Inform me'); ?></span></span>
+                    </button>
+                </div>
+                <div id="informwhenavailable-loader" style="display: none;">
+                    <img src="<?php echo $this->getSkinUrl('images/informwhenavailable/loader.gif'); ?>" alt="<?php echo $this->__('Loading...'); ?>" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <?php endif; ?>
+</div>
+<?php if (!$is_request_already_sent): ?>
+<script type="text/javascript">
+    //<![CDATA[
+    Translator.add('There was an error while processing your request. Please, try again.', '<?php echo $this->__('There was an error while processing your request. Please, try again.'); ?>');
+    Translator.add('Your request has been sent.', '<?php echo $this->__('Your request has been sent.'); ?>');
+ 
+    function informwhenavailableSend() {
+        var varien_form = new VarienForm('informwhenavailable-form');
+        if (varien_form.validator.validate()) {
+            var form = $('informwhenavailable-form');
+            $('informwhenavailable-container').hide();
+            $('informwhenavailable-loader').show();
+            $('informwhenavailable-message').hide();
+            new Ajax.Request(form.readAttribute('action'), {
+                method: 'post',
+                parameters: form.serialize(true),
+                onSuccess: function(transport) {
+                    if (transport.responseText != '1') {
+                        informwhenavailableFailure();
+                    } else {
+                        $('informwhenavailable-container').show();
+                        $('informwhenavailable-loader').hide();
+                        $('informwhenavailable-message-text').update(Translator.translate('Your request has been sent.'));
+                        $('informwhenavailable-message').show();
+                        $('informwhenavailable-content').hide();
+                    }
+                },
+                onFailure: informwhenavailableFailure
+            });
+        }
+    }
+    
+    function informwhenavailableFailure() {
+        $('informwhenavailable-container').show();
+        $('informwhenavailable-loader').hide();
+        $('informwhenavailable-message-text').update(Translator.translate('There was an error while processing your request. Please, try again.'));
+        $('informwhenavailable-message').show();
+    }
+    //]]>
+</script>        
+<?php endif; ?>
+<?php endif; ?>
+<?php endif; ?>

@@ -697,6 +697,7 @@
       </block>
       <block name="product.vendor.sizecomments" type="zolagocatalog/product_vendor_sizecomments"/>
       <block name="udqa.product.question.product" type="udqa/product_question" template="catalog/product/question-product.phtml"/>
+      <block name="product.vendor.informavailable" type="zolagocatalog/product_vendor_informavailable" template="catalog/product/vendor/informavailable.phtml"/>
       <block name="product.review.section" type="zolagomodago/review_product_view_list" template="review/product/view/list.phtml">
         <block name="product.review.form" type="zolagomodago/review_form"/>
       </block>

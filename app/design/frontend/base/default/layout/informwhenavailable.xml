@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<layout>
+    <catalog_product_view>
+        <reference name="head">
+			<action method="addCss"><stylesheet>css/informwhenavailable.css</stylesheet></action>
+		</reference>
+        <reference name="right">
+            <block type="informwhenavailable/form" name="informwhenavailable_form" before="-" template="informwhenavailable/form.phtml" />
+        </reference>
+    </catalog_product_view>
+</layout>

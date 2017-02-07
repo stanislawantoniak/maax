@@ -218,6 +218,11 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 					<i class="fa fa-comment-o">&nbsp;</i><span><a href="#" data-toggle="modal" data-target="#ask_question"><?php echo Mage::helper('wfwf')->__("Ask about product"); ?></a></span>
 				</p>
 			</div>
+			<div class="informavailable">
+				<p>
+					<i class="fa fa-envelope-o">&nbsp;</i><span><a name="inform_available" title="<?php echo Mage::helper("wfwf")->__("Choose unavailable size to show query form")?>"><?php echo Mage::helper('wfwf')->__("Inform when available"); ?></a></span>
+				</p>
+			</div>
 		</div>
 		<div class="col-lg-6 col-md-5 col-sm-5 hidden-xs wrapper-addthis">
 			<div class="followUs hidden-xs">
@@ -406,6 +411,7 @@ $productName = $_helper->productAttribute($_product, $_product->getName(), 'name
 		jsonConfig.useSizeboxList = useSizeboxList;
 		Mall.product.productOptions(jsonConfig);
 		Mall.product._current_product_type = "<?php echo Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE; ?>";
+		jQuery('.informavailable a').tooltip();
 	</script>
 <?php endif; ?>
 <script type="text/javascript">
