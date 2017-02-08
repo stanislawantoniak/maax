@@ -95,19 +95,32 @@ i.flag {
 		padding-left: 0px !important;
 	}
 }
+#inform_available {
+	.modal-content {
+		.modal-header {
+		}
+	}
+}
 #informavail-form {
+	@media (max-width:$screen-sm) {
+		padding-left:15px;
+		padding-right:15px;
+	}		
 	h4 {
 		strong{
 			text-transform: uppercase;
 		}
 	}
 	p {
-		font-size:15px;
+		font-size:12px;
 	}
 	input[type="text"],
 	input[type="email"],
 	input[type="password"] {
 		line-height: 29px;
+	}
+	#availability-form-customer-email {
+		margin-top:25px;
 	}
 	label {
 		font-weight: normal;
@@ -207,6 +220,7 @@ i.flag {
       }
     }
     .informavailable {
+      min-width:200px;
       margin-top:7px;
       span {
         padding-left: 7px;

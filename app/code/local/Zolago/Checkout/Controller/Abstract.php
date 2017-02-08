@@ -349,7 +349,7 @@ abstract class Zolago_Checkout_Controller_Abstract
         billing[vat_id]:1
          */
         $billing = $request->getParam("billing");
-        if (!trim($billing['company'])) {
+        if (isset($billing['company']) && !trim($billing['company'])) {
             unset($billing['company']);
         }        
         $billingAddressId = isset($billing["entity_id"]) ? $billing["entity_id"] : 0;
