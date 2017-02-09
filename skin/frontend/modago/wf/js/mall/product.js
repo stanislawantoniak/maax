@@ -349,8 +349,6 @@ Mall.product = {
 				var size = jQuery(this).find('span').html();
 				var attrValue = jQuery(this).find('input').val();
 				var superAttribute = jQuery(this).find('input').data('superattribute');
-				console.log(attrValue);
-				console.log(superAttribute);				
 				jQuery(this).find('span').append('<canvas class="diagonal" width="'+elFilterSizeWidth+'" height="'+elFilterSizeHeight+'"></canvas>');
 				jQuery(this).click(function (){
 					var modal = jQuery('#inform_available');					

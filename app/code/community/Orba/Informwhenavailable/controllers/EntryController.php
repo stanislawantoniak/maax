@@ -31,7 +31,7 @@ class Orba_Informwhenavailable_EntryController extends Mage_Core_Controller_Fron
         }
         $simpleProduct = Mage::getModel('catalog/product_type_configurable')->getProductByAttributes(array($superAttribute => $attributeValue),$product);
         if (Mage::getModel('informwhenavailable/entry')->isRequestAlreadySent($simpleProduct, $email)) {
-            return $this->logInfo('Email saved');
+            return $this->logInfo('You have already submitted the request to inform you when this product becomes available. You cant do it again.');
         }
         try {
             $is_subscription = (bool)$request->getParam('newsletter');
@@ -48,7 +48,7 @@ class Orba_Informwhenavailable_EntryController extends Mage_Core_Controller_Fron
             if ($is_subscription) {
                 Mage::getModel('newsletter/subscriber')->subscribe($email);
             }
-            return $this->logInfo('Email saved');
+            return $this->logInfo('Than you for using our information system. We will send you an email when product will be available again.');
         } catch (Exception $e) {
             Mage::logException($e);
             return $this->logError('Internal server error');
