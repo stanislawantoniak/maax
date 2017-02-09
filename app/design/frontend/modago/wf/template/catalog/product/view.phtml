@@ -267,6 +267,7 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 </div>
 <!--end zadaj pytanie sprzedajacemu-->
 <!-- inform when available -->
+<?php if (Mage::getModel('informwhenavailable/config')->isActive()) : ?>
 <div class="modal fade bs-example-modal-lg" id="inform_available" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
@@ -280,6 +281,7 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 		</div>
 	</div>
 </div>
+<?php endif; ?>
 <!-- end inform when available -->
 
 <?php echo $this->getChildHtml('product.info.media.modal'); ?>
@@ -313,8 +315,9 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
 	<?php if($_product->getCategory()):?>
 	Mall.reg.set("varnish_category_id", <?php echo $_product->getCategory()->getId();?>);
 	<?php endif;?>
-
-	jQuery('.no-size').attr('title', "<?php echo $this->__("This size is temporarily unavailable.");?> <?php echo $this->__("Click to inform when available."); ?>");
+	<?php if (!Mage::getModel('informwhenavailable/config')->isActive()) : ?>
+		jQuery('.no-size').attr('title', "<?php echo $this->__("This size is temporarily unavailable.");?>");
+	<?php endif; ?>
 
 	Mall.product.sizetable.setContent(<?php echo $this->getSizeTableForJs();?>);
 

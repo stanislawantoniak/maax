@@ -57,7 +57,6 @@ class Orba_Informwhenavailable_Model_Entry extends Mage_Core_Model_Abstract {
 				//Add Stock Filter to get Only Saleable Products
 				Mage::getSingleton('cataloginventory/stock')->addInStockFilterToCollection($products_collection);
 				
-		Mage::log((string)$products_collection->getSelect());		
                 foreach ($products_collection as $product) {
                     if ($this->isAvailable($product)) {
                         if (!isset($this->available[$store_id])) {
@@ -70,7 +69,6 @@ class Orba_Informwhenavailable_Model_Entry extends Mage_Core_Model_Abstract {
                 }
             }
         }
-        Mage::log($this->available);
         if (!empty($this->available)) {
             foreach ($collection as $entry) {
                 if (isset($this->available[$entry->getStoreId()][$entry->getSku()])) {
@@ -97,6 +95,7 @@ class Orba_Informwhenavailable_Model_Entry extends Mage_Core_Model_Abstract {
             $email_template = Mage::getModel('core/email_template')
                     ->loadDefault('inform_when_available_template');
         }
+        $email_template->setDesignConfig(array('area'=>'frontend','store'=> $entry->getStoreId()));
         $email_template
                 ->setSenderName($this->getConfig()->getSenderName($entry->getStoreId()))
                 ->setSenderEmail($this->getConfig()->getSenderEmail($entry->getStoreId()))

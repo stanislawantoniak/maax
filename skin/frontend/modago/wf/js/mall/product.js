@@ -352,11 +352,13 @@ Mall.product = {
 				jQuery(this).find('span').append('<canvas class="diagonal" width="'+elFilterSizeWidth+'" height="'+elFilterSizeHeight+'"></canvas>');
 				jQuery(this).click(function (){
 					var modal = jQuery('#inform_available');					
-					modal.modal();
-					modal.find('#inform_attribute_value').val(attrValue);
-					modal.find('#inform_super_attribute').val(superAttribute);
-					var text = Mall.replace(Mall.product._inform_text_template,{size: size});					
-					modal.find("#informavail_modal_template").html(text);
+					if (modal) {
+						modal.modal();
+						modal.find('#inform_attribute_value').val(attrValue);
+						modal.find('#inform_super_attribute').val(superAttribute);
+						var text = Mall.replace(Mall.product._inform_text_template,{size: size});					
+						modal.find("#informavail_modal_template").html(text);
+					}
 				});
 			}
 
