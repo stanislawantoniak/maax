@@ -125,6 +125,20 @@ i.flag {
 	label {
 		font-weight: normal;
 	}
+	.label-nowrap {
+		white-space:nowrap;		
+		label {
+			white-space: normal;
+			&#inform-newsletter-checkbox-label {
+				position: absolute;
+				top:2px;
+			}
+			&#inform-newsletter-text {
+				position: relative;
+				left: 25px;
+			}
+		}	
+	}
 	.error {
 		padding-left: 0px !important;
 	}
