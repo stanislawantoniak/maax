@@ -100,8 +100,21 @@ class Orba_Informwhenavailable_Model_Entry extends Mage_Core_Model_Abstract {
                 ->setSenderName($this->getConfig()->getSenderName($entry->getStoreId()))
                 ->setSenderEmail($this->getConfig()->getSenderEmail($entry->getStoreId()))
                 ->setTemplateSubject($this->getConfig()->getEmailSubject($entry->getStoreId()));
+        $attributeValue = $product->getResource()->getAttributeRawValue($product->getId(), 'size', $entry->getStoreId());
+        $attribute = $product->getResource()->getAttribute('size');
+        $size = $attribute->getSource()->getOptionText($attributeValue);
+        // localization
+        Mage::app()->setCurrentStore($entry->getStoreId());
+        $currentStore 	= Mage::app()->getStore()->getCode();
+        $currentLocale 	= Mage::getModel('core/locale')->getLocaleCode();
+        Mage::app()->getLocale()->setLocale($currentLocale);
+        Mage::app()->getTranslator()->init('frontend', true);
+        $parentIds = Mage::getModel('catalog/product_type_configurable')->getParentIdsByChild($product->getId());
+        if (!empty($parentIds[0])) {
+            $product = Mage::getModel('catalog/product')->load($parentIds[0]);
+        }
         $email_template_variables = array(
-            'product_name' => $product->getName(),
+            'product_name' => Mage::helper('wfwf')->__('%s size %s',$product->getName(),$size),
             'product_url' => $product->getProductUrl(),
             'store' => Mage::app()->getStore($entry->getStoreId())
         );
