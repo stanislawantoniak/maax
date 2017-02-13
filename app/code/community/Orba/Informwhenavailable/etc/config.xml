@@ -130,7 +130,7 @@
         <jobs>
             <orba_informwhenavailable>
                 <schedule>
-                    <cron_expr>0 0,6,12,18 * * *</cron_expr>
+                    <cron_expr>0 16 * * *</cron_expr>
                 </schedule>
                 <run>
                     <model>informwhenavailable/entry::informIfAvailable</model>
