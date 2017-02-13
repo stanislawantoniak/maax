@@ -120,17 +120,6 @@ class Zolago_Holidays_Helper_Datecalculator extends Mage_Core_Helper_Abstract{
         // If max_time is set we check if current_timestamp is before or after max_time
         // If is is after we add 1 day to max_days
         if($max_time){
-            $current_hour = date("H", $current_timestamp);
-            $current_minute = date("i", $current_timestamp);
-            $max_hour_array = explode(",", $max_time);
-            $max_hour = 0;
-            if (isset($max_hour_array[0])) {
-                $max_hour = $max_hour_array[0];
-            }
-            $max_minute = 0;
-            if (isset($max_hour_array[1])) {
-                $max_minute = $max_hour_array[1];
-            }
 
             // If it is a working day check number of days
             if($this->_isHoliday($current_timestamp) || $this->_isWeekend($current_timestamp)){
@@ -139,6 +128,17 @@ class Zolago_Holidays_Helper_Datecalculator extends Mage_Core_Helper_Abstract{
             else{
                 $start_day = 0;
 
+                $current_hour = date("H", $current_timestamp);
+                $current_minute = date("i", $current_timestamp);
+                $max_hour_array = explode(",", $max_time);
+                $max_hour = 0;
+                if (isset($max_hour_array[0])) {
+                    $max_hour = $max_hour_array[0];
+                }
+                $max_minute = 0;
+                if (isset($max_hour_array[1])) {
+                    $max_minute = $max_hour_array[1];
+                }
                 if((($current_hour * 60) + $current_minute) > (($max_hour * 60) + $max_minute)){
                     $max_days++;
                 }
@@ -147,7 +147,10 @@ class Zolago_Holidays_Helper_Datecalculator extends Mage_Core_Helper_Abstract{
         else{
             $start_day = 0;
         }
-
+        if ($max_days < $start_day) {
+            $max_days = $start_day;
+        }
+        $current_timestamp = strtotime(date('Y-m-d',$current_timestamp)); // clear hours
         for($i = $start_day; $i <= $max_days; $i++){
 
             $next_day = strtotime("+ " . $i . "days", $current_timestamp);
