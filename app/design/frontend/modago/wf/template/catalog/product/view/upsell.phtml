@@ -39,17 +39,18 @@ if (count($_links)): ?>
                 <div class="wpb_text_column wpb_content_element">
                     <div class="wpb_wrapper">
                         <h2 class="widgettitle">
-                            <?php echo $helper->__("From this same collection") ?>
+                            <?php echo $helper->__("From this same collection") ?><a href="#" class="more_block watch_more_up"><span class="arrow_circle arrow_circle_up"></span></a>
                         </h2>
                     </div>
                 </div>
                 <div class="wpb_widgetised_column wpb_content_element">
                     <div class="wpb_wrapper">
                         <div id="woocommerce_products-4" class="widget-container woocommerce widget_products">
-                            <div class="product_list_widget col-md-12 clearfix">
+                            <div class="product_list_widget col-md-12 clearfix upsell_content">
+                                <div class="upsell_content_scroll">
                                 <?php $_n = 1; ?>
                                 <?php foreach($_links as $_link): ?>
-                                    <div class="col-xs-12 col-sm-6 col-sm-to-smmd-4 col-md-12 product_list_widget_item firstItem <?php if($_n >3): ?>watch_more_item hidden<?php endif; ?>" data-pid="<?php echo $_link->getId();?>">
+                                    <div class="col-xs-12 col-sm-6 col-sm-to-smmd-4 col-md-12 product_list_widget_item firstItem" data-pid="<?php echo $_link->getId();?>">
                                         <div class="media">
                                             <a class="pull-left"
                                                href="<?php echo $_link->getProductUrl() ?>"
@@ -77,21 +78,12 @@ if (count($_links)): ?>
                                             <i class="fa fa-spinner fa-spin"></i>
                                         </div>
                                     </div>
-
-
-                                    <?php if ($_n % 4 == 0): ?>
-                                        <div class="clearfix visible-xs"></div>
-                                    <?php endif; ?>
-                                    <?php if ($_n % 3 == 0): ?>
-                                        <div class="clearfix hidden-xs visible-sm"></div>
-                                    <?php endif; ?>
-
                                     <?php $_n ++; ?>
                                 <?php endforeach; ?>
+                                </div>                                
                             </div>
-                            <div class="col-md-12 watch_more_links">
-                                <?php if(count($_links) >4): ?><a href="" class="watch_more"><?php echo $helper->__("show more"); ?>&nbsp;<i class="fa fa-caret-down"></i></a><?php endif; ?>
-                                <?php if(count($_links) >4): ?><a href="" class="watch_less hidden"><?php echo $helper->__("hide"); ?>&nbsp;<i class="fa fa-caret-up"></i></a><?php endif; ?>
+                            <div class="col-md-12 watch_more_links more_block">
+                                <a href="#" class="watch_more"><span class="more_label"><?php echo $helper->__("show more"); ?></span>&nbsp;<span class="arrow_circle arrow_circle_down"></span></a>
                             </div>
 
                         </div>

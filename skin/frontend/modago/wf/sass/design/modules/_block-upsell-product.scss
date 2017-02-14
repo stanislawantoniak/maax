@@ -1,11 +1,17 @@
 #product_additions_1 {
   padding: 0;
 }
-.box-up-sell {
+.box-up-sell { 
+  .watch_more_up {
+	float:right;
+	position:relative;
+	top:-10px;
+  }
+  .upsell_content_scroll {
+	position:relative;
+  }
   &.product_list_widget {
-
     padding: 0;
-
     .widgettitle {
       font-size: 1.1428em;
       color: #000;
@@ -25,6 +31,7 @@
     }
 	
     .product_list_widget_item {
+      display:none;
       border-bottom: 1px solid #eee;
       padding: 1.4285em 1px;
       height: 190px;
@@ -113,7 +120,7 @@
 	}
 	.watch_more {
 		margin-top:5px;
-		a {
+		a {			
 		        color: $colorSecondFont;
 		}
 	}
@@ -173,18 +180,52 @@
     }
 
     .watch_more_links {
-      padding-top: 10px;
-
-      a.watch_more,
-      a.watch_less {
-        font-size: 14px;
-        text-transform: none;
-        color: $colorSecondFont;
-
-        &:hover {
-          color: $colorLinkHover;
-        }
-      }
+	padding-top: 10px;
+	text-align:right;
+	height:150px;
+	.more_label {
+		position:relative;
+		top:-5px;
+	}
+    }
+    .more_block {
+	display:none;
     }
   }
+}
+.arrow_circle {
+    &:before {
+      position: relative;
+      font-size: 24px;
+      font-family: FontAwesome;
+      color: #252525;
+      top: 0px;
+      @include transition(all 0.2s ease-in-out);
+    }
+    color: #fff;
+    font-size: 22px;
+    width: 35px;
+    height: 35px;
+    line-height: 32px;
+    text-align: center;
+    margin-left: 0px;
+    display: inline-block;
+    background: #fff;
+    top: 45%;
+    border: 1px solid #252525;
+    border-radius: 100%;
+
+    &:hover {
+      border-color: #eee;
+    }
+}
+ .arrow_circle_up {
+      &:before {
+	      content: "\f106";
+      }
+}
+.arrow_circle_down {
+ 	&:before {
+	      content: "\f107";	
+      }
 }

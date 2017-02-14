@@ -25,7 +25,7 @@ Mall.product = {
 				Mall.product.gallery.preloadFirstImage();
 			}
 
-			Mall.product.upsell.init();
+//			Mall.product.upsell.init();
 		}
 	},
 
@@ -1195,6 +1195,7 @@ Mall.product = {
 	    }
 
     },
+    /*
 	upsell: {
 		init: function() {
 			if(Mall.windowWidth() < Mall.Breakpoint.md){
@@ -1243,6 +1244,7 @@ Mall.product = {
 			}
 		},
 	},
+	*/
 	sizetable: {
 		_content: "",
 		_iframe_id: "sizeTableIframe",
