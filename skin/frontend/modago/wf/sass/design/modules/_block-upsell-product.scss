@@ -17,17 +17,112 @@
       text-transform: uppercase;
       padding-top: 13px;
     }
-
+    .widget-container {
+	.product_list_widget {
+		padding-left:5px;
+		padding-right: 5px;
+	}
+    }
+	
     .product_list_widget_item {
       border-bottom: 1px solid #eee;
-      padding: 1.4285em 0;
-      height: 115px;
+      padding: 1.4285em 1px;
+      height: 190px;
+      &:hover {
+	border-bottom:none;
+  	.sizes {
+		display:block;
+	}
+	& > .media {
+	        border-color: $gray;		
+		border-style: solid;	
+		border-width: 1px 1px 0px 1px;
+	}
+	& > .sizeborder {
+	        border-color: $gray;		
+		border-style: solid;	
+		border-width: 0px 1px 1px 1px;		
+	}
 
+      }
+      .sizes_content {
+	z-index: 100;
+	text-align:left;
+	padding-bottom:20px;
+	padding-left:15px;
+	padding-right:4px;
+	position: relative;
+	width: inherit;
+	background-color: $color_fff;
+	border-color: $gray;
+	border-width: 0px 1px 1px 1px;
+	border-style: solid;
+	h5 {
+		text-transform: uppercase;
+	        color: $colorSecondFont;
+		padding-top:15px;
+		padding-bottom:15px;
+	}
+	label {
+		cursor: pointer;
+		display: inline-block;
+		margin-right: 8px;
+		position: relative;
+		height:41px;
+		width: 41px;
+		span {
+			background: $color_fff none repeat scroll 0 0;
+			border:1px solid $gray;
+			display:block;
+			font-size:14px;
+			font-weight:normal;
+			line-height:39px;
+			position:absolute;
+			text-align:center;
+			height:41px;
+			width:41px;
+			color: $gray;
+			&:hover {
+				color: $color_fff;
+				background-color:$gray;
+			}
+		}
+		&.no-size span .diagonal {
+			background: rgba(0, 0, 0, 0) url("../images/diagonal.png") repeat scroll 0 0 / 100% 100%;
+			left:0px;
+		}
+	}
+	.add_to_wishlist {
+		.div-nowrap {
+			white-space:nowrap;
+			.upsell_like_icon {
+				top:-8px;
+				display:inline-block;
+				position:relative;
+				.spinner {
+					margin-right:15px;
+				}
+			}
+			.upsell_like_text {
+				white-space: normal;
+				color: $colorSecondFont;
+				display:inline-block;
+			}
+		}
+	}
+	.watch_more {
+		margin-top:5px;
+		a {
+		        color: $colorSecondFont;
+		}
+	}
+      }
       @media (min-width: $screen-xs-min) and (max-width: $screen-sm-min) {
         width: 50%;
       }
 
       .media {
+        border: 1px solid $color_fff;
         overflow: hidden;
         zoom: 1;
 
@@ -40,16 +135,21 @@
         }
 
         img {
-          max-width: 4.2857em;
+          max-width: 9.2857em;
           height: auto
         }
       }
-
+      .sizes {
+	text-align:center;
+ 	display:none;   
+      }
       h4 {
         text-transform: none;
         font-size: 1em;
         padding: 0;
-        height: 36px;
+        max-height: 70px;
+	margin-bottom:15px;
+	margin-top:10px;
         overflow: hidden;
 
         a {

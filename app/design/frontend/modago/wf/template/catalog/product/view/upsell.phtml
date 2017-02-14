@@ -30,7 +30,6 @@
 $helper = Mage::helper("zolagocatalog");
 $currencyCode = Mage::app()->getStore()->getCurrentCurrencyCode();
 $currencySymbol = Mage::app()->getLocale()->currency($currencyCode)->getSymbol();
-
 $_links = $this->getItemCollection()->getItems();
 
 if (count($_links)): ?>
@@ -50,12 +49,12 @@ if (count($_links)): ?>
                             <div class="product_list_widget col-md-12 clearfix">
                                 <?php $_n = 1; ?>
                                 <?php foreach($_links as $_link): ?>
-                                    <div class="col-xs-12 col-sm-6 col-sm-to-smmd-4 col-md-12 product_list_widget_item firstItem <?php if($_n >3): ?>watch_more_item hidden<?php endif; ?>">
+                                    <div class="col-xs-12 col-sm-6 col-sm-to-smmd-4 col-md-12 product_list_widget_item firstItem <?php if($_n >3): ?>watch_more_item hidden<?php endif; ?>" data-pid="<?php echo $_link->getId();?>">
                                         <div class="media">
                                             <a class="pull-left"
                                                href="<?php echo $_link->getProductUrl() ?>"
                                                title="<?php echo $this->escapeHtml($_link->getName()) ?>">
-                                                <img src="<?php echo $this->helper('catalog/image')->init($_link, 'small_image')->resize(262); ?>"
+                                                <img src="<?php echo $this->helper('catalog/image')->init($_link, 'small_image')->resize(100,150); ?>"
                                                      class="attachment-shop_thumbnail wp-post-image">
                                             </a>
                                             <div class="media-body">
@@ -73,6 +72,9 @@ if (count($_links)): ?>
                                                     </ins>
                                                 </span>
                                             </div>
+                                        </div>
+                                        <div class="sizes">
+                                            <i class="fa fa-spinner fa-spin"></i>
                                         </div>
                                     </div>
 

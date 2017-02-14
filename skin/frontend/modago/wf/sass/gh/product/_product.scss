@@ -192,6 +192,18 @@ i.flag {
 		}
 	}
 }
+    .i-unlike-wf {
+      background: #fff url("../images/svg/unlike.svg") 0px 3px no-repeat;
+      background-size: 18px 18px;
+      padding-left: 24px;
+      font-size: 18px;
+    }
+    .i-like-wf {
+      background: #fff url("../images/svg/like.svg") 0px 3px no-repeat;
+      background-size: 18px 18px;
+      padding-left: 24px;
+      font-size: 18px;
+    }
 #product-shop {
   #box-social {
     border-top:  1px solid $gray-lighter;
@@ -204,18 +216,6 @@ i.flag {
       margin: 0;
       font-family: $font-family-base;
       color: $text-color;
-    }
-    .i-unlike-wf {
-      background: #fff url("../images/svg/unlike.svg") 0px 3px no-repeat;
-      background-size: 18px 18px;
-      padding-left: 24px;
-      font-size: 18px;
-    }
-    .i-like-wf {
-      background: #fff url("../images/svg/like.svg") 0px 3px no-repeat;
-      background-size: 18px 18px;
-      padding-left: 24px;
-      font-size: 18px;
     }
     .addingLike-box, .addedLike-box, .addLike-box {
       height: 32px;
