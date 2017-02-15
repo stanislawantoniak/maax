@@ -89,10 +89,6 @@
 			height:41px;
 			width:41px;
 			color: $gray;
-			&:hover {
-				color: $color_fff;
-				background-color:$gray;
-			}
 		}
 		&.no-size span .diagonal {
 			background: rgba(0, 0, 0, 0) url("../images/diagonal.png") repeat scroll 0 0 / 100% 100%;
@@ -115,6 +111,9 @@
 				color: $colorSecondFont;
 				display:inline-block;
 				max-width:120px;
+				&:hover {
+					text-decoration:underline;
+				}
 			}
 		}
 	}
@@ -122,6 +121,9 @@
 		margin-top:5px;
 		a {			
 		        color: $colorSecondFont;
+			&:hover {
+				text-decoration:underline;
+			}
 		}
 	}
       }
@@ -143,7 +145,7 @@
         }
 
         img {
-          max-width: 9.2857em;
+          max-width: 7.2857em;
           height: auto
         }
       }
@@ -166,6 +168,9 @@
           transition: color .25s ease;
           color: #3d3d3d;
           cursor: pointer;
+	  &:hover {
+		text-decoration:underline;
+	  }
         }
       }
 
@@ -185,7 +190,8 @@
 	height:150px;
 	.more_label {
 		position:relative;
-		top:-5px;
+		top:-4px;
+		marign-right:4px;
 	}
     }
     .more_block {
