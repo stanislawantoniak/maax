@@ -144,6 +144,7 @@
 		<reference name="product.info">
 			<block type="catalog/product_list_upsell" name="product.info.upsell" as="upsell" template="catalog/product/view/upsell.phtml"/>
 			<block type="zolagomodago/page_benefits" name="zolago.page.benefits"/>
-		</reference>
+			<block type="zolagocatalog/product_list_upsell" name="product.upsell.section" template="catalog/product/view/upsell/section.phtml"/>
+		</reference>		
     </catalog_product_view>
 </layout>

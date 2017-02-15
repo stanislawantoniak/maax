@@ -25,7 +25,7 @@ Mall.product = {
 				Mall.product.gallery.preloadFirstImage();
 			}
 
-//			Mall.product.upsell.init();
+			Mall.product.upsell.init();
 		}
 	},
 
@@ -1195,56 +1195,18 @@ Mall.product = {
 	    }
 
     },
-    /*
 	upsell: {
 		init: function() {
-			if(Mall.windowWidth() < Mall.Breakpoint.md){
-				jQuery(".product_list_widget .watch_more_item")
-					.toggleClass("hidden");
-
-				jQuery("a.watch_less").addClass("hidden");
-				jQuery("a.watch_more").addClass("hidden");
-			}
-			jQuery("a.watch_more, a.watch_less").click(this.click);
 			jQuery(window).resize(this.resize);
-		},
-		click: function(e){
-			e.preventDefault();
-			jQuery(".product_list_widget .watch_more_item")
-					.toggleClass("hidden");
-
-			var $el = jQuery(".product_list_widget .watch_more_item");
-
-			if(!$el.hasClass("hidden")){
-				jQuery("a.watch_less").removeClass("hidden");
-				jQuery("a.watch_more").addClass("hidden");
-			}
-			if($el.hasClass("hidden")){
-				jQuery("a.watch_less").addClass("hidden");
-				jQuery("a.watch_more").removeClass("hidden");
-			}
 		},
 		resize: function() {
 			if(Mall.windowWidth() < Mall.Breakpoint.md){
-				if(!jQuery("a.watch_more").hasClass("hidden")){
-					jQuery(".product_list_widget .watch_more_item")
-						.toggleClass("hidden");
-				}
-				jQuery("a.watch_less").addClass("hidden");
-				jQuery("a.watch_more").addClass("hidden");
-			}else{
-				if(jQuery("a.watch_more").hasClass("hidden")){
-					jQuery(".product_list_widget .watch_more_item")
-						.toggleClass("hidden");
-					jQuery("a.watch_more").removeClass("hidden");
-				}
-				if(!jQuery("a.watch_less").hasClass("hidden")){
-					jQuery("a.watch_less").addClass("hidden");
-				}
+				jQuery('.box-up-sell').hide();
+			} else {
+				jQuery('.box-up-sell').show();
 			}
 		},
 	},
-	*/
 	sizetable: {
 		_content: "",
 		_iframe_id: "sizeTableIframe",

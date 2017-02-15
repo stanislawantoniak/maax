@@ -103,6 +103,27 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
         </div>  
         <div id="product_long_box">
             <ul class="title_section">
+            	<li>
+		    <a  class="opened" name="same_collection" href="#same_collection">Z tej samej kolekcji</a>
+            	</li>
+                <li>
+                    <a name="description_product" href="#description_product">Opis produktu</a>
+                </li>
+                <!--
+                <li class="hidden-xs">
+                    <a href="#tab_reviews">Opinie o produkcie (<?php echo $_reviewsCount;?>)</a>
+                </li>
+                -->
+                <?php if (!empty($deliveryReturn)) : ?>
+                <li class="hidden-xs">
+                    <a href="#tab_delivery">Dostawa i zwroty</a>
+                </li>
+                <?php endif; ?>
+            </ul>
+            <section id="same_collection" class="section toggle-xs bg-w clearfix" data-mobiletoggle="false">
+            	<?php echo $this->getChildHtml('product.upsell.section');?>
+	    </section>            
+            <ul class="title_section">
                 <li>
                     <a class="opened" name="description_product" href="#description_product">Opis produktu</a>
                 </li>
@@ -116,7 +137,7 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
                     <a href="#tab_delivery">Dostawa i zwroty</a>
                 </li>
                 <?php endif; ?>
-            </ul>
+	    </ul>	    
             <section id="description_product" class="section toggle-xs bg-w clearfix" data-mobiletoggle="false">
                 <div>
                     <div itemprop="description"><?php echo $productDescription; ?></div>

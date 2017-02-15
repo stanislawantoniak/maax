@@ -1,0 +1,208 @@
+
+.block-upsell-product {
+  h2 {
+    font-size: 1.1428em;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #e6e6e6;
+    text-transform: uppercase;
+    color: #000;
+  }
+  @include productFlagLabel;
+  .rwdCarousel {
+    position: relative;
+    padding: 0;
+
+    .item {
+      margin: 0 20px;
+      @media (max-width: $screen-xs-max) {
+        margin: 0 5px;
+      }
+
+      .img_product {
+        position: relative;
+        overflow: hidden;
+        max-width: 100%;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      .product-details {
+        margin-top: 20px;
+
+        .product-title {
+          font-weight: 400;
+          color: #3d3d3d;
+          font-size: 1.0714em;
+          display: block;
+          text-transform: uppercase;
+          font-family: $fontBlack;
+          width: 100%;
+          margin-bottom: 0.7142em;
+
+          height: 38px;
+          overflow: hidden;
+        }
+
+        .price {
+          width: 100%;
+          text-align: center;
+          margin-bottom: 1.0714em;
+          display: block;
+          font-size: 1.1428em;
+          line-height: 1.4285em;
+
+          @include productPricesBlockKit;
+        }
+      }
+      img {
+
+        max-width: 100%;
+        height: auto;
+      }
+      .price {
+        margin-bottom: 18px;
+        padding: 0 0;
+        position: relative;
+        .label {
+          padding-right: 2px;
+        }
+        .old {
+          margin-right: 10px;
+        }
+        .like {
+          position: absolute;
+          right: 8px;
+          top: 3px;
+        }
+
+      }
+
+      .carousel-caption {
+        position: static;
+        margin: 0px;
+        padding: 0px;
+        span {
+          display: block;
+          padding: 0px;
+          margin: 0px;
+          &.title-caption {
+            padding: 5px 0px;
+            display: block;
+            margin: 0 auto;
+            margin-top: 5px;
+          }
+          &.body-caption {
+            padding: 5px 0px;
+            display: block;
+            margin: 0 auto;
+          }
+          &.seemore-caption {
+            padding: 5px 0px;
+            display: block;
+            margin: 0 auto;
+          }
+
+        }
+
+      }
+    }
+
+  }
+
+  .rwd-controls {
+    .rwd-buttons {
+      .rwd-prev,
+      .rwd-next {
+        position: absolute;
+        top: 37%;
+        margin-top: -10px;
+        &.disabled {
+          visibility: hidden;
+        }
+      }
+      .rwd-prev {
+        left: -55px;
+      }
+      .rwd-next {
+        right: -55px;
+      }
+
+      .owl-prev {
+        position: absolute;
+        left: 45px;
+        @media (min-width: $screen-sm-max) {
+          left: 65px;
+        }
+        top: 50%;
+        width: 45px;
+        line-height: 42px;
+        height: 45px;
+        margin-top: 28px;
+        border: 1px solid #eee;
+        border-radius: 100%;
+        @include transition(all 0.2s ease-in-out);
+        background: $body-bg;
+        &:hover {
+          border-color: #252525;
+        }
+      }
+      .owl-prev:before {
+        content: "\f104";
+        position: absolute;
+        font-size: 30px;
+        font-family: FontAwesome;
+        color: #252525;
+        left: 15px;
+        top: 0px;
+        @include transition(all 0.2s ease-in-out);
+      }
+      .owl-prev:after {
+        top: -20px;
+        left: -20px;
+        height: 70px;
+      }
+
+      .owl-next {
+        position: absolute;
+        right: 45px;
+        @media (min-width: $screen-sm-max) {
+          right: 65px;
+        }
+        top: 50%;
+        width: 45px;
+        margin-top: 28px;
+        height: 45px;
+        line-height: 42px;
+        border: 1px solid #eee;
+        border-radius: 100%;
+        @include transition(all 0.2s ease-in-out);
+        background: $body-bg;
+        &:hover {
+          border-color: #252525;
+        }
+      }
+
+      .owl-next:before {
+        content: "\f105";
+        position: absolute;
+        font-size: 30px;
+        font-family: FontAwesome;
+        color: #252525;
+        left: 18px;
+        top: 0px;
+        @include transition(all 0.2s ease-in-out);
+      }
+
+      .owl-next:after {
+        content: "";
+        position: absolute;
+        width: 88px;
+        height: 300px;
+        left: -20px;
+        top: -140px;
+      }
+    }
+  }
+
+}

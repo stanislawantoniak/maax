@@ -1,0 +1,155 @@
+.block-upsell-product {
+	.rwdCarousel {
+		.item {
+			background: $color_fff;
+			color: $color_515151;
+
+            .name_product {
+                margin-bottom:0px;
+                min-height: 34px;
+            }
+			.price {
+				color:$color_000;
+				font-size: 20px;
+				font-family:$fontRegular;
+				.label {
+					color:$color_000;
+					font-family:$fontRegular;
+					font-weight: normal;
+					font-size: 12px;
+					text-align: left;
+					&+span {
+						font-family: $fontBlack;
+					}
+				}
+				.old {
+					color:$color_000;
+					text-decoration:line-through;
+					font-size:15px;
+				}
+				.like {
+					font-size:11px;
+					font-family:$fontBlack;
+					color:$color_000;
+					margin-top: 7px !important;
+				}
+                .like_count {
+                    display: none!important;
+                }
+                .col-price {
+                    padding: 0 8px;
+                }
+                .final-price {
+
+                }
+                .strikeout-price {
+                  font-size: 12px;
+                  text-decoration: line-through;
+                }
+			}
+			
+			.carousel-caption {
+				span {
+					font-family: $fontRegular;
+					text-shadow:none;
+					&.title-caption {
+						font-family: $fontRegular;
+						text-transform: uppercase;
+						color:$color_000;
+					}
+					&.body-caption {
+						color: $color_8b8b8b;
+					}
+					&.seemore-caption {
+						color: $color_484848;
+						text-transform: uppercase;
+						font-size: 11px;
+					}
+
+				}
+
+			}
+			&:hover {
+				.name_product {
+					text-decoration: underline;
+					span {
+						text-decoration: underline;
+						}
+					}
+				}			
+		}
+
+		.customNavigation {
+			a {
+				font-size: 48px;
+				background:$allMap;
+				&.prev {			
+				@include sprite($allMap, arrow-complementary-left);
+				@media (max-width: $screen-xs-max) {
+					@include sprite($allMap, arrow-rwd-slider-prev-mobile);
+				}
+				&:hover {
+					@include sprite($allMap, arrow-complementary-left-h);
+					@media (max-width: $screen-xs-max) {
+						@include sprite($allMap, arrow-rwd-slider-prev-mobile-h);
+					}
+				}
+			}
+			&.next {
+				right:25px;
+				@include sprite($allMap, arrow-complementary-right);
+				@media (max-width: $screen-xs-max) {
+					@include sprite($allMap, arrow-rwd-slider-next-mobile);
+				}
+				&:hover {
+					@include sprite($allMap, arrow-complementary-right-h);
+					@media (max-width: $screen-xs-max) {
+						@include sprite($allMap, arrow-rwd-slider-next-mobile-h);
+					}
+				}
+			}
+			}
+		}
+
+	}
+
+
+
+	
+}
+.block-upsell-product {
+	.rwd-controls {
+		.rwd-buttons {
+			.rwd-prev,
+			.rwd-next {
+				font-size: 48px;
+				background:$allMap;
+			}
+			.rwd-prev {				
+				@include sprite($allMap, arrow-complementary-left);
+				@media (max-width: $screen-xs-max) {
+					@include sprite($allMap, arrow-rwd-slider-prev-mobile);
+				}
+				&:hover {
+					@include sprite($allMap, arrow-complementary-left-h);
+					@media (max-width: $screen-xs-max) {
+						@include sprite($allMap, arrow-rwd-slider-prev-mobile-h);
+					}
+				}
+
+			}
+			.rwd-next {
+				@include sprite($allMap, arrow-complementary-right);
+				@media (max-width: $screen-xs-max) {
+					@include sprite($allMap, arrow-rwd-slider-next-mobile);
+				}
+				&:hover {
+						@include sprite($allMap, arrow-complementary-right-h);
+						@media (max-width: $screen-xs-max) {
+							@include sprite($allMap, arrow-rwd-slider-next-mobile-h);
+						}
+					}
+			}			
+		}
+	}
+}
