@@ -1197,15 +1197,35 @@ Mall.product = {
     },
 	upsell: {
 		init: function() {
+	                var rwd_upsell_product = jQuery("#rwd-upsell-product .rwd-carousel");
+        	        rwd_upsell_product.rwdCarousel({
+	                        items : 4, //10 items above 1000px browser width
+                        	itemsDesktop : [1000,4], //5 items between 1000px and 901px
+                	        itemsDesktopSmall : [900,3], // betweem 900px and 601px
+        	                itemsTablet: [600,3], //2 items between 600 and 0
+	                        itemsMobile : [480,2], // itemsMobile disabled - inherit from itemsTablet option
+        	                pagination : false,
+	                        navigation: true,
+                        	rewindNav : false,
+                	        itemsScaleUp:false,
+        	                navigationText: ['<div class="owl-arrow owl-prev"></div>','<div class="owl-arrow owl-next"></div>'],
+	                });
+        		this.resize();
 			jQuery(window).resize(this.resize);
 		},
 		resize: function() {
 			if(Mall.windowWidth() < Mall.Breakpoint.md){
 				jQuery('.box-up-sell').hide();
+				jQuery('#same_collection').show();
+				jQuery('.hide_big_upsell').show();
+				jQuery('.show_big_upsell').hide();
 			} else {
 				jQuery('.box-up-sell').show();
+				jQuery('#same_collection').hide();
+				jQuery('.hide_big_upsell').hide();
+				jQuery('.show_big_upsell').show();
 			}
-		},
+		},		
 	},
 	sizetable: {
 		_content: "",

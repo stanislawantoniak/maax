@@ -1,5 +1,6 @@
-
 .block-upsell-product {
+  width:90%;
+  margin:auto;
   h2 {
     font-size: 1.1428em;
     padding-bottom: 10px;
@@ -115,17 +116,17 @@
       .rwd-prev,
       .rwd-next {
         position: absolute;
-        top: 37%;
+        top: 17%;
         margin-top: -10px;
         &.disabled {
           visibility: hidden;
         }
       }
       .rwd-prev {
-        left: -55px;
+        left: -100px;
       }
       .rwd-next {
-        right: -55px;
+        right: -100px;
       }
 
       .owl-prev {
