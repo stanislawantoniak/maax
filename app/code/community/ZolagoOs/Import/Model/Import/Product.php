@@ -243,7 +243,7 @@ class ZolagoOs_Import_Model_Import_Product
         $aM->updateAttributesPure($ids, array('udropship_vendor' => $vendorId), 0);
 
         //3b. Set additional attributes (status opisu = niezatwierdzony for all products)
-        $aM->updateAttributesPure($ids, array('description_status' => 1), 0);
+//        $aM->updateAttributesPure($ids, array('description_status' => 1), 0);
 
         //3c. Set additional attributes (status brandshop for configurable products)
         $aM->updateAttributesPure($idsConfigurable, array('brandshop' => $vendorId), 0);

@@ -170,7 +170,7 @@ class ZolagoOs_Rma_Model_Rma extends Mage_Sales_Model_Abstract
     {
         $this->_commentsChanged = true;
         if (!($comment instanceof ZolagoOs_Rma_Model_Rma_Comment)) {
-            $comment = $this->createComment($comment,$notify,$ficibleOnFront,$notifyVendor,$visibleToVendor);
+            $comment = $this->createComment($comment,$notify,$visibleOnFront,$notifyVendor,$visibleToVendor);
         }
         $comment->setRma($this)
             ->setParentId($this->getId())
