@@ -1,0 +1,82 @@
+<?php 
+$helper = Mage::helper('zolagocatalog'); 
+$product = $this->getProduct();
+$attributes = $this->getAttributes($product);
+$currencyCode = Mage::app()->getStore()->getCurrentCurrencyCode();
+$currencySymbol = Mage::app()->getLocale()->currency($currencyCode)->getSymbol();
+
+?>
+<div class="sizes_content">
+<?php foreach ($attributes as $attribute): ?>
+<h5><?php echo $attribute['store_label'];?></h5>
+        <?php if ($product->getTypeId() == Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE) : ?>
+					<!--    Meta tags-->
+            <?php
+					$childrenData = array();
+					$childProducts = Mage::getModel('catalog/product_type_configurable')
+						->getUsedProducts(null, $product);
+					foreach ($childProducts as $child) {
+						$childrenData[$child->getId()] = $child->getSku();
+					}
+
+					$productViewTypeConfigurableBlock = Mage::getBlockSingleton('zolagocatalog/product_view_type_configurable');
+					$productViewTypeConfigurableBlock->setProduct($product);
+					$config = $productViewTypeConfigurableBlock->getConfig();
+					$basePrice = $config['basePrice'];
+					if (isset($config['attributes']) & !empty($config['attributes'])):
+						$attributes = $config['attributes'];
+						foreach ($attributes as $attributeId => $attributeData):
+							if ($attributeData['code'] == "size" && (isset($attributeData['options']) & !empty($attributeData['options']))):
+								$options = $attributeData['options'];
+								foreach ($options as $option):
+									?>
+                                        <label class="<?php if (empty($option['is_salable'])): echo "no-size";endif;?>">
+                                            <span>
+                                                <?php echo $option['label'];?>
+                                            </span>
+                                        </label>
+									<?php
+								endforeach;
+							endif;
+						endforeach;
+					endif; 					
+            ?>
+                <!--    Meta tags-->
+        <?php endif; ?>
+
+<?php endforeach; ?>
+<div class="row">
+<div class="add_to_wishlist col-xs-6">
+			<div>
+				<div class="addLike-box">
+					<!-- placebo -->
+					<span class="product-context-like-count" style="display: none"></span>
+        				<a href="#" onclick="Mall.wishlist.toggleWishlistFromUpsell(this,<?php echo $product->getEntityId(); ?>);return false;" class="addLike">
+        				<div class="div-nowrap">      
+        				<?php if ($this->isInWishlist($product)): ?>                               
+					<div class="upsell_like_icon">
+							<i class="icon i-like-wf">&nbsp;</i>
+							<div class="spinner"><i class="fa fa-spin fa-spinner"></i></div>
+                                        </div>
+                                        <div class="upsell_like_text">
+						<?php echo $this->__("You like this"); ?>
+					</div>
+					<?php else : ?>
+					<div class="upsell_like_icon">
+							<i class="icon i-unlike-wf">&nbsp;</i>
+							<div class="spinner"><i class="fa fa-spin fa-spinner"></i></div>
+                                        </div>
+                                        <div class="upsell_like_text">
+						<?php echo $this->__("Add to favorites"); ?>
+					</div>
+					
+					<?php endif; ?>
+					</div>
+					</a>					
+				</div>
+			</div>
+
+</div>
+<div class="watch_more col-xs-6"><a href="<?php echo $product->getProductUrl();?>"><?php echo $helper->__('show more');?>&nbsp;<i class="fa fa-caret-right"></i></a></div>
+</div>
+</div>

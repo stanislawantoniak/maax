@@ -283,7 +283,7 @@
 "When difference between effective price and msrp is >= % show flag promotion/sale. Leave empty for use default","Kiedy różnica między ceną a msrp >= % ustaw flagę promocji/wyprzedaży w produkcie. Pozostaw puste aby użyć wartości domyślnej"
 "Automatic promotion/sale flag by percent","Automatyczne flaga promocji/wyprzedaży ustawiana procentowo"
 "Product temporary unavailable","Chwilowy brak produktu"
-"From this same collection","Z tej samej z kolekcji"
+"From this same collection","Z tej samej kolekcji"
 "show more","zobacz więcej"
 "hide","zwiń"
 "loading-spinner-bottom","Ładowanie..."

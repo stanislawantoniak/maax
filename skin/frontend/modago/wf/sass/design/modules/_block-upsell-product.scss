@@ -1,11 +1,17 @@
 #product_additions_1 {
   padding: 0;
 }
-.box-up-sell {
+.box-up-sell { 
+  .watch_more_up {
+	float:right;
+	position:relative;
+	top:-10px;
+  }
+  .upsell_content_scroll {
+	position:relative;
+  }
   &.product_list_widget {
-
     padding: 0;
-
     .widgettitle {
       font-size: 1.1428em;
       color: #000;
@@ -17,17 +23,116 @@
       text-transform: uppercase;
       padding-top: 13px;
     }
-
+    .widget-container {
+	.product_list_widget {
+		padding-left:5px;
+		padding-right: 5px;
+	}
+    }
+	
     .product_list_widget_item {
+      display:none;
       border-bottom: 1px solid #eee;
-      padding: 1.4285em 0;
-      height: 115px;
+      padding: 1.4285em 1px;
+      height: 190px;
+      &:hover {
+	border-bottom:none;
+  	.sizes {
+		display:block;
+	}
+	& > .media {
+	        border-color: $gray;		
+		border-style: solid;	
+		border-width: 1px 1px 0px 1px;
+	}
+	& > .sizeborder {
+	        border-color: $gray;		
+		border-style: solid;	
+		border-width: 0px 1px 1px 1px;		
+	}
 
+      }
+      .sizes_content {
+	z-index: 100;
+	text-align:left;
+	padding-bottom:20px;
+	padding-left:15px;
+	padding-right:4px;
+	position: relative;
+	width: inherit;
+	background-color: $color_fff;
+	border-color: $gray;
+	border-width: 0px 1px 1px 1px;
+	border-style: solid;
+	h5 {
+		text-transform: uppercase;
+	        color: $colorSecondFont;
+		padding-top:15px;
+		padding-bottom:15px;
+	}
+	label {
+		cursor: pointer;
+		display: inline-block;
+		margin-right: 8px;
+		position: relative;
+		height:41px;
+		width: 41px;
+		span {
+			background: $color_fff none repeat scroll 0 0;
+			border:1px solid $gray;
+			display:block;
+			font-size:14px;
+			font-weight:normal;
+			line-height:39px;
+			position:absolute;
+			text-align:center;
+			height:41px;
+			width:41px;
+			color: $gray;
+		}
+		&.no-size span .diagonal {
+			background: rgba(0, 0, 0, 0) url("../images/diagonal.png") repeat scroll 0 0 / 100% 100%;
+			left:0px;
+		}
+	}
+	.add_to_wishlist {
+		.div-nowrap {
+			white-space:nowrap;
+			.upsell_like_icon {
+				top:-8px;
+				display:inline-block;
+				position:relative;
+				.spinner {
+					margin-right:15px;
+				}
+			}
+			.upsell_like_text {
+				white-space: normal;
+				color: $colorSecondFont;
+				display:inline-block;
+				max-width:120px;
+				&:hover {
+					text-decoration:underline;
+				}
+			}
+		}
+	}
+	.watch_more {
+		margin-top:5px;
+		a {			
+		        color: $colorSecondFont;
+			&:hover {
+				text-decoration:underline;
+			}
+		}
+	}
+      }
       @media (min-width: $screen-xs-min) and (max-width: $screen-sm-min) {
         width: 50%;
       }
 
       .media {
+        border: 1px solid $color_fff;
         overflow: hidden;
         zoom: 1;
 
@@ -40,16 +145,21 @@
         }
 
         img {
-          max-width: 4.2857em;
+          max-width: 7.2857em;
           height: auto
         }
       }
-
+      .sizes {
+	text-align:center;
+ 	display:none;   
+      }
       h4 {
         text-transform: none;
         font-size: 1em;
         padding: 0;
-        height: 36px;
+        max-height: 70px;
+	margin-bottom:15px;
+	margin-top:10px;
         overflow: hidden;
 
         a {
@@ -58,6 +168,9 @@
           transition: color .25s ease;
           color: #3d3d3d;
           cursor: pointer;
+	  &:hover {
+		text-decoration:underline;
+	  }
         }
       }
 
@@ -72,18 +185,53 @@
     }
 
     .watch_more_links {
-      padding-top: 10px;
-
-      a.watch_more,
-      a.watch_less {
-        font-size: 14px;
-        text-transform: none;
-        color: $colorSecondFont;
-
-        &:hover {
-          color: $colorLinkHover;
-        }
-      }
+	padding-top: 10px;
+	text-align:right;
+	height:150px;
+	.more_label {
+		position:relative;
+		top:-4px;
+		marign-right:4px;
+	}
+    }
+    .more_block {
+	display:none;
     }
   }
+}
+.arrow_circle {
+    &:before {
+      position: relative;
+      font-size: 24px;
+      font-family: FontAwesome;
+      color: #252525;
+      top: 0px;
+      @include transition(all 0.2s ease-in-out);
+    }
+    color: #fff;
+    font-size: 22px;
+    width: 35px;
+    height: 35px;
+    line-height: 32px;
+    text-align: center;
+    margin-left: 0px;
+    display: inline-block;
+    background: #fff;
+    top: 45%;
+    border: 1px solid #252525;
+    border-radius: 100%;
+
+    &:hover {
+      border-color: #eee;
+    }
+}
+ .arrow_circle_up {
+      &:before {
+	      content: "\f106";
+      }
+}
+.arrow_circle_down {
+ 	&:before {
+	      content: "\f107";	
+      }
 }

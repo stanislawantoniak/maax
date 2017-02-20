@@ -190,6 +190,42 @@ Mall.wishlist = {
         });
     },
 
+
+    /**
+     * toggle wishlist product in upsell
+     */
+
+    toggleWishlistFromUpsell: function(obj,id) {
+        "use strict";
+        var mark = jQuery(obj).find('.upsell_like_icon i.icon');
+        var spinner = jQuery(obj).find('.spinner');
+        var textfield = jQuery(obj).find('.upsell_like_text');
+        var isInWishlist = mark.hasClass('i-like-wf');
+        spinner.show();
+        mark.hide();
+        if (isInWishlist) {
+            OrbaLib.Wishlist.remove({product: id}, function (data) {        
+                if (data.status === true) {	
+                    mark.addClass('i-unlike-wf');
+                    mark.removeClass('i-like-wf');
+                    textfield.text(Mall.translate.__("add-to-favorites", "Add to favorites"));
+                    mark.show();
+                    spinner.hide();
+                }
+            });
+        } else {
+            OrbaLib.Wishlist.add({product: id}, function(data) {
+                if (data.status === true) {	
+                    mark.addClass('i-like-wf');
+                    mark.removeClass('i-unlike-wf');
+                    textfield.text(Mall.translate.__("you-like-this", "You like this"));
+                    mark.show();
+                    spinner.hide();
+                }
+            });
+        }
+    },
+
     /**
      * Removes product from wishlist - this function is made to be used on product page.
      *

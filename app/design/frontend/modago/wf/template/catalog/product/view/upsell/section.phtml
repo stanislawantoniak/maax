@@ -1,0 +1,64 @@
+<?php
+/**
+ * Author: Paweł Chyl <pawel.chyl@orba.pl>
+ * Date: 29.07.2014
+ *
+ * cross sell items template
+ *
+ * @see Mage_Catalog_Block_Product_List_Crosssell
+ */
+
+$helper = Mage::helper("zolagocatalog");
+$currencyCode = Mage::app()->getStore()->getCurrentCurrencyCode();
+$currencySymbol = Mage::app()->getLocale()->currency($currencyCode)->getSymbol();
+$productHelper = Mage::helper("zolagocatalog/product");
+$_links = $this->getItemCollection()->getItems();
+if (count($_links)): ?>
+    <div class="block-upsell-product">
+        <div id="rwd-upsell-product" class="rwdCarousel">
+            <div class="rwd-carousel rwd-theme">
+                <?php foreach ($_links as $_item) : ?>
+                    <?php if($_item->isSalable()): ?>
+                        <div class="item">
+                            <h5 itemprop="isRelatedTo" itemscope itemtype="http://schema.org/Product">
+                                <meta itemprop="sku" content="<?php echo $_item->getSku(); ?>" />
+                                <a href="<?php echo $_item->getProductUrl(); ?>" itemprop="url">
+                                    <div class="box_listing_product">
+                                        <div class="img_product">
+                                            <?php
+                                            $flag = $productHelper->getProductBestFlag($_item);
+                                            $flagLabel = $flag ? $helper->__($flag) : "";
+                                            ?>
+                                            <div class="label-product">
+                                                <div class="listing-label type-label-<?php echo $flag; ?>">
+                                                    <div class="flag-<?php echo $flag; ?>"></div>
+                                                </div>
+                                            </div>
+                                            <img src="<?php echo $this->helper('catalog/image')->init($_item, 'small_image')->resize(262); ?>" alt="<?php echo $this->escapeHtml($_item->getName()) ?>" class="img-responsive"></div>
+                                        <div class="text-center product-details">
+                                            <div class="product-title">
+                                                <?php echo $helper->getShortProductName($_item->getName(), 42); ?>
+                                            </div>
+
+                                            <div class="price">
+                                                <?php if ($_item->getStrikeoutPrice() > $_item->getFinalPrice()): ?>
+                                                    <del>
+                                                        <span class="amount"><?php echo Mage::helper('core')->currency($_item->getStrikeoutPrice(), true, false); ?></span>
+                                                    </del>
+                                                <?php endif; ?>
+                                                <ins>
+                                                    <span class="amount"><?php echo Mage::helper('core')->currency($_item->getFinalPrice(), true, false); ?></span>
+                                                </ins>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </h5>
+                        </div>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </div>
+
+        </div>
+    </div>
+<?php endif; ?>

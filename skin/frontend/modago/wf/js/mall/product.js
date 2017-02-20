@@ -1197,51 +1197,35 @@ Mall.product = {
     },
 	upsell: {
 		init: function() {
-			if(Mall.windowWidth() < Mall.Breakpoint.md){
-				jQuery(".product_list_widget .watch_more_item")
-					.toggleClass("hidden");
-
-				jQuery("a.watch_less").addClass("hidden");
-				jQuery("a.watch_more").addClass("hidden");
-			}
-			jQuery("a.watch_more, a.watch_less").click(this.click);
+	                var rwd_upsell_product = jQuery("#rwd-upsell-product .rwd-carousel");
+        	        rwd_upsell_product.rwdCarousel({
+	                        items : 4, //10 items above 1000px browser width
+                        	itemsDesktop : [1000,4], //5 items between 1000px and 901px
+                	        itemsDesktopSmall : [900,3], // betweem 900px and 601px
+        	                itemsTablet: [600,3], //2 items between 600 and 0
+	                        itemsMobile : [480,2], // itemsMobile disabled - inherit from itemsTablet option
+        	                pagination : false,
+	                        navigation: true,
+                        	rewindNav : false,
+                	        itemsScaleUp:false,
+        	                navigationText: ['<div class="owl-arrow owl-prev"></div>','<div class="owl-arrow owl-next"></div>'],
+	                });
+        		this.resize();
 			jQuery(window).resize(this.resize);
-		},
-		click: function(e){
-			e.preventDefault();
-			jQuery(".product_list_widget .watch_more_item")
-					.toggleClass("hidden");
-
-			var $el = jQuery(".product_list_widget .watch_more_item");
-
-			if(!$el.hasClass("hidden")){
-				jQuery("a.watch_less").removeClass("hidden");
-				jQuery("a.watch_more").addClass("hidden");
-			}
-			if($el.hasClass("hidden")){
-				jQuery("a.watch_less").addClass("hidden");
-				jQuery("a.watch_more").removeClass("hidden");
-			}
 		},
 		resize: function() {
 			if(Mall.windowWidth() < Mall.Breakpoint.md){
-				if(!jQuery("a.watch_more").hasClass("hidden")){
-					jQuery(".product_list_widget .watch_more_item")
-						.toggleClass("hidden");
-				}
-				jQuery("a.watch_less").addClass("hidden");
-				jQuery("a.watch_more").addClass("hidden");
-			}else{
-				if(jQuery("a.watch_more").hasClass("hidden")){
-					jQuery(".product_list_widget .watch_more_item")
-						.toggleClass("hidden");
-					jQuery("a.watch_more").removeClass("hidden");
-				}
-				if(!jQuery("a.watch_less").hasClass("hidden")){
-					jQuery("a.watch_less").addClass("hidden");
-				}
+				jQuery('.box-up-sell').hide();
+				jQuery('#same_collection').show();
+				jQuery('.hide_big_upsell').show();
+				jQuery('.show_big_upsell').hide();
+			} else {
+				jQuery('.box-up-sell').show();
+				jQuery('#same_collection').hide();
+				jQuery('.hide_big_upsell').hide();
+				jQuery('.show_big_upsell').show();
 			}
-		},
+		},		
 	},
 	sizetable: {
 		_content: "",

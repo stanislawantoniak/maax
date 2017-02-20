@@ -808,7 +808,6 @@ jQuery.noConflict();
 			//	Mall.rwdCarousel.alignComplementaryProductsPrices(this);
 			//}
 		});
-
 		function responsJcarousel() {
 			var jcarousel = $('#complementary_product .jcarousel');
 			jcarousel

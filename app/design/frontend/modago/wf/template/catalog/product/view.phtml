@@ -60,6 +60,8 @@ $attributesData = $this->getAdditionalDataDetailed(true, false);
 $productDescription = $_helper->productAttribute($_product, nl2br($_product->getDescription()), 'description');
 $brandShopProductId = $_product->getData('brandshop');
 $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryreturnHtml();
+$upsell =  $this->getChildHtml('product.upsell.section');
+
 ?>
 <div class="path_back_to_category visible-xs">
 	<?php if ($isVendorContent): ?>
@@ -102,9 +104,13 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
             </div>
         </div>  
         <div id="product_long_box">
-            <ul class="title_section">
-                <li>
-                    <a class="opened" name="description_product" href="#description_product">Opis produktu</a>
+	    <?php if ($upsell): ?>
+            <ul class="title_section hide_big_upsell">
+            	<li>
+		    <a  class="opened" name="same_collection" href="#same_collection">Z tej samej kolekcji</a>
+            	</li>
+                <li class="hidden-xs">
+                    <a name="description_product" href="#description_product">Opis produktu</a>
                 </li>
                 <!--
                 <li class="hidden-xs">
@@ -117,6 +123,25 @@ $deliveryReturn = $this->getChild('product.vendor.deliveryreturn')->getDeliveryr
                 </li>
                 <?php endif; ?>
             </ul>
+            <section id="same_collection" class="section toggle-xs bg-w clearfix" data-mobiletoggle="false">
+            	<?php echo $upsell;?>
+	    </section>            
+	    <?php endif; ?>
+            <ul class="title_section">
+                <li>
+                    <a class="opened" name="description_product" href="#description_product">Opis produktu</a>
+                </li>
+                <!--
+                <li class="hidden-xs">
+                    <a href="#tab_reviews">Opinie o produkcie (<?php echo $_reviewsCount;?>)</a>
+                </li>
+                -->
+                <?php if (!empty($deliveryReturn)) : ?>
+                <li class="hidden-xs <?php if ($upsell): echo "show_big_upsell"; endif;?>">
+                    <a href="#tab_delivery">Dostawa i zwroty</a>
+                </li>
+                <?php endif; ?>
+	    </ul>	    
             <section id="description_product" class="section toggle-xs bg-w clearfix" data-mobiletoggle="false">
                 <div>
                     <div itemprop="description"><?php echo $productDescription; ?></div>
