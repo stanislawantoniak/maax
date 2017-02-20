@@ -64,6 +64,7 @@ Mall.upsell = {
                     showMore = true;
                 }
                 Mall.upsell._realBoxCount = Mall.upsell._realBoxCount + 1;
+                Mall.upsell.loadItem(jQuery(this));
         });
         Mall.upsell._height = this._animationBox.height();
         this._animationBox.css('height',Mall.upsell._height);
@@ -87,16 +88,12 @@ Mall.upsell = {
             self._lock = false;
         });
     },
-    /**
-     * show sizes options after mouseenter
-     */
-
-
-    showItem: function (obj) {
+    /*
+     * load item by ajax
+     */    
+    loadItem: function(obj) {        
         var pid = obj.data('pid');        
         var sizesArea = obj.find('.sizes');
-        sizesArea.addClass('sizeborder');
-        sizesArea.html('<i class="fa fa-spinner fa-spin"></i>');        
         jQuery.ajax({
             method: 'POST',
             url: 'orbacommon/ajax_upsell/getInfo',
@@ -106,8 +103,23 @@ Mall.upsell = {
                 sizesArea.html(data);
                 Mall.upsell.fixOptions(sizesArea);
                 sizesArea.find('.spinner').hide();
+                obj.data('show',1);
             }
         });
+    },
+    /**
+     * show sizes options after mouseenter
+     */
+
+
+    showItem: function (obj) {
+        if (obj.data('show') == 1) {
+            return;
+        }
+        var sizesArea = obj.find('.sizes');
+        sizesArea.addClass('sizeborder');
+        sizesArea.html('<i class="fa fa-spinner fa-spin"></i>');        
+        this.loadItem(obj);
     },
     
     /**
