@@ -349,7 +349,7 @@ class ZolagoOs_Import_Model_Import_Product
                 "size" => $simpleXMLData->size,
                 "ean" => $simpleXMLData->barcode,
 
-
+                "description_status" => 1,
                 //magazyn dla prostych - zarządzaj stanami tak, ilość 0, dostępność - brak w magazynie
                 "manage_stock" => 1,
                 "qty" => 0,
@@ -381,7 +381,7 @@ class ZolagoOs_Import_Model_Import_Product
             "description" => $firstSimple->clothes_description,
             "short_description" => $firstSimple->description2,
             "ean"	=> $firstSimple->barcode,
-
+            "descirpion_status" => 1,
             //ext_
             "ext_productline" => $firstSimple->collection,
             "ext_category" => $firstSimple->clothes_description,
@@ -407,7 +407,6 @@ class ZolagoOs_Import_Model_Import_Product
             if (!empty($propertyValue = $this->formatAdditionalColumns($firstSimple, $property)))
                 $productConfigurable["col" . ($n + 1)] = $propertyValue;
         }
-
         // Now ingest item into magento
         $dp->ingest($productConfigurable);
         $skusUpdated[$configurableSku] = $subskus;
