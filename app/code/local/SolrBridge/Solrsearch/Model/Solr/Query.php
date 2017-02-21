@@ -829,19 +829,9 @@ class SolrBridge_Solrsearch_Model_Solr_Query
             return 'sort_delta_price_decimal+'.$direction;
         }
         else if($attributeCode == 'popularity') {
-            /**
-             * @see Zolago_Solrsearch_Model_Data::processFinalItemData()
-             * and there
-             * @see Zolago_Solrsearch_Model_Data::_prepareDeltaPrice()
-             */
             return 'sort_popularity_int+'.$direction;
         }
         else if($attributeCode == 'created_at') {
-            /**
-             * @see Zolago_Solrsearch_Model_Data::processFinalItemData()
-             * and there
-             * @see Zolago_Solrsearch_Model_Data::_prepareDeltaPrice()
-             */
             return 'sort_created_at_varchar+'.$direction;
         }
         else

@@ -6,7 +6,7 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
 
 	const DEFAULT_DIR = "desc";
 	const DEFAULT_SEARCH_DIR = "desc";
-	const DEFAULT_ORDER = "popularity_int";
+	const DEFAULT_ORDER = "popularity";
 	const DEFAULT_SEARCH_ORDER = "relevance";
 	
     const DEFAULT_LIMIT = 100;

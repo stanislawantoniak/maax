@@ -47,7 +47,7 @@ class Zolago_Solrsearch_Model_Solr_Vendor_Landingpage_Product_Solr extends Zolag
 
     public function getSortFieldByCode($attributeCode, $direction){
         //bestseller products of a vendor. Next value for listing is flag promotion, flag sale, favorite count.
-        return 'is_bestseller_int+desc,campaign_regular_id_int+desc,popularity_int+desc';
+        return 'is_bestseller_int+desc,campaign_regular_id_int+desc,sort_popularity_int+desc';
     }
 
     /**
