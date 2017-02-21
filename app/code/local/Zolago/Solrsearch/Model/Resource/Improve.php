@@ -220,7 +220,34 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
         }
         return $out;
     }
-
+    
+    /**
+     * collect orders count
+     */
+    public function loadOrdersData(Zolago_Solrsearch_Model_Improve_Collection $collection) {
+        $ids = $collection->getAllIds();
+        // raw query (faster)
+        if (empty($ids)) {
+            return;
+        }
+        $resource = Mage::getSingleton('core/resource');
+        $readConnection = $resource->getConnection('core_read');
+        $table = $resource->getTableName('udpo/po_item');
+        $query = "SELECT product_id,sum(qty) as popularity from ".$table." WHERE product_id in (".implode(',',$ids).") GROUP BY product_id";
+        $results = $readConnection->fetchAll($query);
+        $popularity = array();
+        foreach ($results as $val) {
+            $popularity[$val['product_id']] = (int)$val['popularity'];
+        }
+        foreach($ids as $productId) {
+            if($item = $collection->getItemById($productId)) {                
+                $item->setPopularity(empty($popularity[$productId])? 0: $popularity[$productId]);
+            }
+        }
+        return $this;
+        
+    }
+        
     /**
      * @param Zolago_Solrsearch_Model_Improve_Collection $collection
      * @param int $storeId
