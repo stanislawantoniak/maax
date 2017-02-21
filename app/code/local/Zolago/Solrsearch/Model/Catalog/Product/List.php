@@ -141,7 +141,7 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
 		);
 		
 		$options[] = array(
-			'sort' => 'popularity_int',
+			'sort' => 'popularity',
 			'dir'   => 'desc',
 			'label' =>  Mage::helper("zolagosolrsearch")->__("Most popular first")
 		);
@@ -153,7 +153,7 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
 		);
 		
 		$options[] = array(
-			'sort' => 'created_at_varchar',
+			'sort' => 'created_at',
 			'dir'   => 'desc',
 			'label' =>  Mage::helper("zolagosolrsearch")->__("New products")
 		);

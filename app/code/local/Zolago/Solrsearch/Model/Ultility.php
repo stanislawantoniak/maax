@@ -229,7 +229,11 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 			if($item = $finalCollection->getItemById($id)){
 				$dataModel->processPriceData($item);
 				$dataModel->processFinalItemData($item);
-				$item->addData(array('popularity_int' => (empty($popularity[$id])? 0:$popularity[$id])));
+				$popularity = (empty($popularity[$id])? 0:$popularity[$id]));
+				$item->addData(array(
+					'popularity_int' => $popularity,
+					'sort_popularity_int' => $popularity,
+				));
 			}
 		}
 		//Mage::log("Processing final values for regular " . $this->_formatTime($this->getMicrotime()-$time));

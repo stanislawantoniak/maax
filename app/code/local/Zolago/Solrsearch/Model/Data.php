@@ -387,7 +387,7 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		$docData['product_status'] = $item->getOrigData('status');
 		$docData['textSearchStandard'] = $item->getData('textSearch');
 		
-		$docData['created_at_varchar'] = $item->getOrigData('created_at');
+		$docData['sort_created_at_varchar'] = $item->getOrigData('created_at');
 		//Mage::log("Stock :" . $item->getId() . " " . $docData['instock_int']);
 		
 		
