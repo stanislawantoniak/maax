@@ -215,7 +215,7 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		//Mage::log("Extending configurable with child data " . $this->_formatTime($this->getMicrotime()-$time));
 		
 		// add orders data (popularity)
-		$resourceModel->loadOrdersData($finalCollection);
+		$popularity = $resourceModel->loadOrdersData($finalCollection);
 		
 		////////////////////////////////////////////////////////////////////////
 		// Post process loaded data
@@ -229,6 +229,7 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 			if($item = $finalCollection->getItemById($id)){
 				$dataModel->processPriceData($item);
 				$dataModel->processFinalItemData($item);
+				$item->addData(array('popularity_int' => (empty($popularity[$id])? 0:$popularity[$id])));
 			}
 		}
 		//Mage::log("Processing final values for regular " . $this->_formatTime($this->getMicrotime()-$time));

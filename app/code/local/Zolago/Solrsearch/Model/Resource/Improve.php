@@ -228,7 +228,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
         $ids = $collection->getAllIds();
         // raw query (faster)
         if (empty($ids)) {
-            return;
+            return array();
         }
         $resource = Mage::getSingleton('core/resource');
         $readConnection = $resource->getConnection('core_read');
@@ -239,12 +239,7 @@ class Zolago_Solrsearch_Model_Resource_Improve extends Mage_Core_Model_Resource_
         foreach ($results as $val) {
             $popularity[$val['product_id']] = (int)$val['popularity'];
         }
-        foreach($ids as $productId) {
-            if($item = $collection->getItemById($productId)) {                
-                $item->setPopularity(empty($popularity[$productId])? 0: $popularity[$productId]);
-            }
-        }
-        return $this;
+        return $popularity;
         
     }
         
