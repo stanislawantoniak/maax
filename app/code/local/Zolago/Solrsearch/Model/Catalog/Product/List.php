@@ -153,7 +153,7 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
 		);
 		
 		$options[] = array(
-			'sort' => 'is_new',
+			'sort' => 'created_at_varchar',
 			'dir'   => 'desc',
 			'label' =>  Mage::helper("zolagosolrsearch")->__("New products")
 		);
