@@ -197,6 +197,7 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		//Mage::log("Categories load " . $this->_formatTime($this->getMicrotime()-$time));
 		
 		
+		
 		////////////////////////////////////////////////////////////////////////
 		// Extend configurable product with child data
 		// Load attributes data from index EAV
@@ -213,6 +214,8 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		
 		//Mage::log("Extending configurable with child data " . $this->_formatTime($this->getMicrotime()-$time));
 		
+		// add orders data (popularity)
+		$popularity = $resourceModel->loadOrdersData($finalCollection);
 		
 		////////////////////////////////////////////////////////////////////////
 		// Post process loaded data
@@ -220,10 +223,16 @@ class Zolago_Solrsearch_Model_Ultility extends SolrBridge_Solrsearch_Model_Ultil
 		// $time = $this->getMicrotime();
 		// $regularIds =  $finalCollection->getFlag("regular_ids") ?	$finalCollection->getFlag("regular_ids") : $allIds;
 		
+
+
 		foreach($finalCollection->getRegularIds() as $id){
 			if($item = $finalCollection->getItemById($id)){
 				$dataModel->processPriceData($item);
 				$dataModel->processFinalItemData($item);
+				$popularity = (empty($popularity[$id])? 0:$popularity[$id]);
+				$item->addData(array(
+					'sort_popularity_int' => $popularity,
+				));
 			}
 		}
 		//Mage::log("Processing final values for regular " . $this->_formatTime($this->getMicrotime()-$time));

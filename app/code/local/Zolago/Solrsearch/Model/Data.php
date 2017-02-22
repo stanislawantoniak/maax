@@ -302,6 +302,7 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		
 		// bestellers, new, rating, flags
 		$docData['is_new_int'] = (int)$item->getOrigData('is_new');
+		$docData['sort_is_new_int'] = (int)$item->getOrigData('is_new');
 		$docData['product_rating_int'] = (int)$item->getOrigData('product_rating');
 		$docData['is_bestseller_int'] = (int)$item->getOrigData('is_bestseller');
 		$docData['product_flag_int'] = (int)$item->getOrigData('product_flag');
@@ -387,7 +388,7 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		$docData['product_status'] = $item->getOrigData('status');
 		$docData['textSearchStandard'] = $item->getData('textSearch');
 		
-		
+		$docData['sort_created_at_varchar'] = $item->getOrigData('created_at');
 		//Mage::log("Stock :" . $item->getId() . " " . $docData['instock_int']);
 		
 		

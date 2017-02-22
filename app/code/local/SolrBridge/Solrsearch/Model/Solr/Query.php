@@ -44,8 +44,8 @@ class SolrBridge_Solrsearch_Model_Solr_Query
 
     public function __construct()
     {
-       $this->ultility = Mage::getSingleton('solrsearch/ultility');
-       $this->priceFieldName = Mage::helper('solrsearch')->getPriceFieldName();
+        $this->ultility = Mage::getSingleton('solrsearch/ultility');
+        $this->priceFieldName = Mage::helper('solrsearch')->getPriceFieldName();
     }
 
     public function getRangeFields()
@@ -79,11 +79,11 @@ class SolrBridge_Solrsearch_Model_Solr_Query
         }
         if (isset($options['mm']) && !empty($options['mm'])) {
             $this->mm = $options['mm'];
-        }else{
+        } else {
             $relevancy = (int) Mage::helper('solrsearch')->getSetting('relevancy');
             if ($relevancy > 0) {
                 $this->mm = '100%';
-            }else{
+            } else {
                 $this->mm = '0%';
             }
         }
@@ -132,7 +132,7 @@ class SolrBridge_Solrsearch_Model_Solr_Query
         $paramOrder = Mage::helper('solrsearch')->getParam('order');
 
         if (Mage::app()->getRequest()->getRouteName() != 'catalog') {
-        	$orderby = $paramOrder;
+            $orderby = $paramOrder;
         }
         if (!empty($orderby) && !empty($direction) ) {
             $orderbyField = $this->getSortFieldByCode($orderby, $direction);
@@ -142,15 +142,15 @@ class SolrBridge_Solrsearch_Model_Solr_Query
         }
 
         $page = (int)$toolbarBlock->getCurrentPage();
-        if(!empty($page) && is_numeric($page)){
+        if(!empty($page) && is_numeric($page)) {
             $currentPage = $page;
         }
 
         $limit = $toolbarBlock->getLimit();
         if ($limit == 'all') {
             $itemsPerPage = 10000000;
-        }else{
-            if(!empty($limit) && is_numeric($limit)){
+        } else {
+            if(!empty($limit) && is_numeric($limit)) {
                 $itemsPerPage = $limit;
             }
         }
@@ -195,9 +195,9 @@ class SolrBridge_Solrsearch_Model_Solr_Query
         {
             //Collects which attributes will be displayed as facet (range facet)
             if( isset($attribute['solr_search_field_range']) &&
-            !empty($attribute['solr_search_field_range']) &&
-            $attribute['solr_search_field_range'] > 0 &&
-            $attribute['frontend_input'] == 'price')
+                    !empty($attribute['solr_search_field_range']) &&
+                    $attribute['solr_search_field_range'] > 0 &&
+                    $attribute['frontend_input'] == 'price')
             {
                 if (isset($attribute['is_filterable_in_search']) && $attribute['is_filterable_in_search'] > 0) {
                     $rangeFields[$attribute['attribute_code']] = $attribute['attribute_code'].'_'.$attribute['backend_type'];
@@ -215,7 +215,7 @@ class SolrBridge_Solrsearch_Model_Solr_Query
 
             //Collects which attributes will be used for facets
             if ( isset($attribute['is_filterable_in_search']) &&
-            $attribute['is_filterable_in_search'] > 0)
+                    $attribute['is_filterable_in_search'] > 0)
             {
                 if (!isset($attribute['solr_search_field_range']) || intval($attribute['solr_search_field_range']) < 1)
                 {
@@ -258,11 +258,11 @@ class SolrBridge_Solrsearch_Model_Solr_Query
 
     public function getFacetFields()
     {
-    	return $this->facetFields;
+        return $this->facetFields;
     }
     public function getBoostFields()
     {
-    	return $this->boostFields;
+        return $this->boostFields;
     }
 
     /**
@@ -293,51 +293,51 @@ class SolrBridge_Solrsearch_Model_Solr_Query
                     $boostWeight = $pair[1];
 
                     $boostFieldsArr[] = array(
-                            'field' => $attributeCode.'_boost_exact',
-                            'weight' => ((int)$boostWeights[$boostWeight] + 209),
-                            'value' => $boostText,
-                            'type' => 'absolute',
-                    );
+                                            'field' => $attributeCode.'_boost_exact',
+                                            'weight' => ((int)$boostWeights[$boostWeight] + 209),
+                                            'value' => $boostText,
+                                            'type' => 'absolute',
+                                        );
                     $boostFieldsArr[] = array(
-                            'field'=>$attributeCode.'_boost',
-                            'weight'=>((int)$boostWeights[$boostWeight] + 206),
-                            'value'=>$boostText,
-                            'type' => 'relative',
-                    );
+                                            'field'=>$attributeCode.'_boost',
+                                            'weight'=>((int)$boostWeights[$boostWeight] + 206),
+                                            'value'=>$boostText,
+                                            'type' => 'relative',
+                                        );
                     $boostFieldsArr[] = array(
-                            'field'=>$attributeCode.'_relative_boost',
-                            'weight'=>((int)$boostWeights[$boostWeight] + 202),
-                            'value'=>$boostText,
-                            'type' => 'relative',
-                    );
+                                            'field'=>$attributeCode.'_relative_boost',
+                                            'weight'=>((int)$boostWeights[$boostWeight] + 202),
+                                            'value'=>$boostText,
+                                            'type' => 'relative',
+                                        );
 
                 }
             }
-        }else if (isset($attribute['solr_search_field_weight']) && !empty($attribute['solr_search_field_weight'])) {
+        } else if (isset($attribute['solr_search_field_weight']) && !empty($attribute['solr_search_field_weight'])) {
             $queryText = $this->queryText;
             $boostText = Mage::helper('solrsearch')->getPreparedBoostText($queryText);
 
-            if (!in_array( $boostText ,Mage::helper('solrsearch')->getIgnoreQuery() )) {
-            	$attributeCode = $attribute['attribute_code'];
+            if (!in_array( $boostText,Mage::helper('solrsearch')->getIgnoreQuery() )) {
+                $attributeCode = $attribute['attribute_code'];
 
-            	$boostFieldsArr[] = array(
-            			'field' => $attributeCode.'_boost_exact',
-            			'weight' => ((int)$attribute['solr_search_field_weight'] + 209),
-            			'value' => $boostText,
-            			'type' => 'absolute',
-            	);
-            	$boostFieldsArr[] = array(
-            			'field'=>$attributeCode.'_boost',
-            			'weight'=> ((int)$attribute['solr_search_field_weight'] + 206),
-            			'value'=>$boostText,
-            			'type' => 'relative',
-            	);
-            	$boostFieldsArr[] = array(
-            			'field'=>$attributeCode.'_relative_boost',
-            			'weight'=> ((int)$attribute['solr_search_field_weight'] + 202),
-            			'value'=>$boostText,
-            			'type' => 'relative',
-            	);
+                $boostFieldsArr[] = array(
+                                        'field' => $attributeCode.'_boost_exact',
+                                        'weight' => ((int)$attribute['solr_search_field_weight'] + 209),
+                                        'value' => $boostText,
+                                        'type' => 'absolute',
+                                    );
+                $boostFieldsArr[] = array(
+                                        'field'=>$attributeCode.'_boost',
+                                        'weight'=> ((int)$attribute['solr_search_field_weight'] + 206),
+                                        'value'=>$boostText,
+                                        'type' => 'relative',
+                                    );
+                $boostFieldsArr[] = array(
+                                        'field'=>$attributeCode.'_relative_boost',
+                                        'weight'=> ((int)$attribute['solr_search_field_weight'] + 202),
+                                        'value'=>$boostText,
+                                        'type' => 'relative',
+                                    );
             }
         }
         return $boostFieldsArr;
@@ -358,13 +358,13 @@ class SolrBridge_Solrsearch_Model_Solr_Query
         }
 
         $defaultFilterQuery = array(
-                'store_id' => array(Mage::app()->getStore()->getId()),
-                'website_id' => array(Mage::app()->getStore()->getWebsiteId()),
-                'product_status' => array(1)
-        );
+                                  'store_id' => array(Mage::app()->getStore()->getId()),
+                                  'website_id' => array(Mage::app()->getStore()->getWebsiteId()),
+                                  'product_status' => array(1)
+                              );
         $checkInstock =  (int) Mage::helper('solrsearch')->getSetting('check_instock');
         if ($checkInstock > 0) {
-        	$defaultFilterQuery['instock_int'] = array(1);
+            $defaultFilterQuery['instock_int'] = array(1);
         }
 
         $filterQuery = array_merge($filterQuery, $defaultFilterQuery);
@@ -392,7 +392,7 @@ class SolrBridge_Solrsearch_Model_Solr_Query
                     $childrenIds = $_category->getAllChildren(true);
 
                     if (is_array($childrenIds) && isset($filterQuery['category_id']) && is_array($filterQuery['category_id'])) {
-                        if (!isset($standardFilterQuery['category_id'])){
+                        if (!isset($standardFilterQuery['category_id'])) {
                             $filterQuery['category_id'] = array_merge($filterQuery['category_id'], $childrenIds);
                         }
                     }
@@ -403,20 +403,20 @@ class SolrBridge_Solrsearch_Model_Solr_Query
         $filterQueryArray = array();
         $rangeFields = $this->rangeFields;
 
-        foreach($filterQuery as $key=>$filterItem){
+        foreach($filterQuery as $key=>$filterItem) {
             //Ignore cateory facet - using category instead
             if ($key == 'category_facet') {
                 continue;
             }
 
-            if(count($filterItem) > 0){
+            if(count($filterItem) > 0) {
                 $query = '';
-                foreach($filterItem as $value){
+                foreach($filterItem as $value) {
                     if ($key == 'price_decimal') {
                         $query .= $this->priceFieldName.':['.urlencode(trim($value).'.99999').']+OR+';
-                    }else if($key == 'price'){
+                    } else if($key == 'price') {
                         $query .= $this->priceFieldName.':['.urlencode(trim($value).'.99999').']+OR+';
-                    }else{
+                    } else {
                         $face_key = substr($key, 0, strrpos($key, '_'));
                         if ($key == 'price_facet') {
                             $query .= $this->priceFieldName.':['.urlencode(trim($value).'.99999').']+OR+';
@@ -424,7 +424,7 @@ class SolrBridge_Solrsearch_Model_Solr_Query
                         else if(array_key_exists($face_key, $rangeFields))
                         {
                             $query .= $rangeFields[$face_key].':['.urlencode(trim(addslashes($value))).']+OR+';
-                        }else{
+                        } else {
                             $query .= $key.':%22'.urlencode(trim(addslashes($value))).'%22+OR+';
                         }
                     }
@@ -441,7 +441,7 @@ class SolrBridge_Solrsearch_Model_Solr_Query
         if(count($filterQueryArray) > 0) {
             if(count($filterQueryArray) < 2) {
                 $filterQueryString .= $filterQueryArray[0];
-            }else{
+            } else {
                 $filterQueryString .= '%28'.@implode('%29+AND+%28', $filterQueryArray).'%29';
             }
         }
@@ -459,53 +459,53 @@ class SolrBridge_Solrsearch_Model_Solr_Query
         $boostText = Mage::helper('solrsearch')->getPreparedBoostText($queryText);
 
         $boostFieldsArr['name'] = array(
-                array
-                (
-                    'field' => 'name_boost_exact',
-                    'weight' => 120,
-                    'value' => $boostText,
-                    'type' => 'absolute',
-                ),
-                array
-                (
-                    'field' =>'name_boost',
-                    'weight' =>100,
-                    'value'=>$boostText,
-                    'type' => 'absolute',
-                ),
-                array
-                (
-                    'field' =>'name_relative_boost',
-                    'weight' =>80,
-                    'value'=>$boostText,
-                    'type' => 'relative',
-                ),
-        );
+                                      array
+                                      (
+                                          'field' => 'name_boost_exact',
+                                          'weight' => 120,
+                                          'value' => $boostText,
+                                          'type' => 'absolute',
+                                      ),
+                                      array
+                                      (
+                                          'field' =>'name_boost',
+                                          'weight' =>100,
+                                          'value'=>$boostText,
+                                          'type' => 'absolute',
+                                      ),
+                                      array
+                                      (
+                                          'field' =>'name_relative_boost',
+                                          'weight' =>80,
+                                          'value'=>$boostText,
+                                          'type' => 'relative',
+                                      ),
+                                  );
 
         $products_search_fields_weights = Mage::helper('solrsearch')->getProductSearchFieldWeights();
 
         if (is_array($products_search_fields_weights)) {
-            foreach ($products_search_fields_weights as $weight){
+            foreach ($products_search_fields_weights as $weight) {
                 if ((int)$weight > 0) {
                     $searchWeightBoost = array(
-                            'field' => 'product_search_weight_int',
-                            'weight' => (200 + ((int)$weight * 10)),
-                            'value' => $weight,
-                            'type' => 'absolute',
-                    );
+                                             'field' => 'product_search_weight_int',
+                                             'weight' => (200 + ((int)$weight * 10)),
+                                             'value' => $weight,
+                                             'type' => 'absolute',
+                                         );
                     $boostFieldsArr['product_search_weight'][] = $searchWeightBoost;
                 }
             }
         }
 
         $boostFieldsArr['category'] = array(
-                array(
-                        'field' =>'category_boost',
-                        'weight' =>60,
-                        'value'=>$boostText,
-                        'type' => 'relative',
-                )
-        );
+                                          array(
+                                              'field' =>'category_boost',
+                                              'weight' =>60,
+                                              'value'=>$boostText,
+                                              'type' => 'relative',
+                                          )
+                                      );
         return $boostFieldsArr;
     }
 
@@ -529,21 +529,21 @@ class SolrBridge_Solrsearch_Model_Solr_Query
         $queryUrl = $this->buildQueryUrl();
         $store = Mage::app()->getStore();
         $arguments = array(
-            'json.nl' => 'map',
-            'rows' => $this->rows,
-            'start' => $this->start,
-            'fl' => @implode(',', $this->fieldList),
-            'qf' => $this->queryFields,
-            'spellcheck' => 'true',
-            'spellcheck.collate' => 'true',
-            'facet' => 'true',
-            'facet.mincount' => 1,
-            'facet.limit' => $this->facetLimit,
-            'timestamp' => time(),
-            'mm' => $this->mm,
-            'defType'=> 'edismax',
-            'wt'=> 'json',
-        );
+                         'json.nl' => 'map',
+                         'rows' => $this->rows,
+                         'start' => $this->start,
+                         'fl' => @implode(',', $this->fieldList),
+                         'qf' => $this->queryFields,
+                         'spellcheck' => 'true',
+                         'spellcheck.collate' => 'true',
+                         'facet' => 'true',
+                         'facet.mincount' => 1,
+                         'facet.limit' => $this->facetLimit,
+                         'timestamp' => time(),
+                         'mm' => $this->mm,
+                         'defType'=> 'edismax',
+                         'wt'=> 'json',
+                     );
 
         if (!$this->isAutocomplete) {
             $arguments['stats'] = 'true';
@@ -571,10 +571,10 @@ class SolrBridge_Solrsearch_Model_Solr_Query
         }
         else
         {
-        	$spellCheck = array();
-        	if (isset($resultSet['spellcheck']) && is_array($resultSet['spellcheck'])) {
-        		$spellCheck = $resultSet['spellcheck'];
-        	}
+            $spellCheck = array();
+            if (isset($resultSet['spellcheck']) && is_array($resultSet['spellcheck'])) {
+                $spellCheck = $resultSet['spellcheck'];
+            }
             $queryText = $this->getQueryText();
             if (isset($resultSet['spellcheck']['suggestions']['collation']))
             {
@@ -598,7 +598,7 @@ class SolrBridge_Solrsearch_Model_Solr_Query
 
                 $resultSet = Mage::getResourceModel('solrsearch/solr')->doRequest($queryUrl, $arguments, 'array');
                 if (!empty($spellCheck)) {
-                	$resultSet['spellcheck'] = $spellCheck;
+                    $resultSet['spellcheck'] = $spellCheck;
                 }
             }
         }
@@ -642,50 +642,50 @@ class SolrBridge_Solrsearch_Model_Solr_Query
      */
     public function buildQueryUrl($hasCore=true)
     {
-    	$queryUrl = Mage::helper('solrsearch')->getSetting('solr_server_url');
+        $queryUrl = Mage::helper('solrsearch')->getSetting('solr_server_url');
 
-		$q = $this->getQueryText();
+        $q = $this->getQueryText();
 
-		if (!empty($this->synonym))
-		{
-			$q = $this->synonym;
-		}
+        if (!empty($this->synonym))
+        {
+            $q = $this->synonym;
+        }
 
-		if ($hasCore){
-			$queryUrl = trim($queryUrl,'/').'/'.$this->solrcore.'/select/?q='.urlencode(strtolower(trim($q)));
-		}else{
-			$queryUrl = trim($queryUrl,'/').'/select/?q='.urlencode(strtolower(trim($q)));
-		}
+        if ($hasCore) {
+            $queryUrl = trim($queryUrl,'/').'/'.$this->solrcore.'/select/?q='.urlencode(strtolower(trim($q)));
+        } else {
+            $queryUrl = trim($queryUrl,'/').'/select/?q='.urlencode(strtolower(trim($q)));
+        }
 
-		$spellcheckQuery = Mage::helper('solrsearch')->getPreparedBoostText($q);
-		if ( !in_array( $spellcheckQuery, Mage::helper('solrsearch')->getIgnoreQuery() ) )
-		{
-			$queryUrl .= '&spellcheck.q='.urlencode($spellcheckQuery);
-		}
+        $spellcheckQuery = Mage::helper('solrsearch')->getPreparedBoostText($q);
+        if ( !in_array( $spellcheckQuery, Mage::helper('solrsearch')->getIgnoreQuery() ) )
+        {
+            $queryUrl .= '&spellcheck.q='.urlencode($spellcheckQuery);
+        }
 
-		$facetFieldsString = $this->convertFacetFieldsToString();
-		$boostFieldsString = $this->convertBoostFieldsToString();
-		$filterQueryString = $this->filterQuery;
+        $facetFieldsString = $this->convertFacetFieldsToString();
+        $boostFieldsString = $this->convertBoostFieldsToString();
+        $filterQueryString = $this->filterQuery;
 
-		//Facet fields
-		if (!empty($facetFieldsString)) {
-		    $queryUrl .= '&'.$facetFieldsString;
-		}
-		//Range fields
-		if (!$this->isAutocomplete) {
-		    $rangeFieldsString = $this->convertRangeFieldsToString();
-		    $queryUrl .= '&'.$rangeFieldsString;
-		}
-		//filter query
-		if (!empty($filterQueryString)) {
-		    $queryUrl .= '&fq='.$filterQueryString;
-		}
-		//boost query
-		if (!empty($boostFieldsString)) {
-		    $queryUrl .= '&bq='.urlencode($boostFieldsString);
-		}
+        //Facet fields
+        if (!empty($facetFieldsString)) {
+            $queryUrl .= '&'.$facetFieldsString;
+        }
+        //Range fields
+        if (!$this->isAutocomplete) {
+            $rangeFieldsString = $this->convertRangeFieldsToString();
+            $queryUrl .= '&'.$rangeFieldsString;
+        }
+        //filter query
+        if (!empty($filterQueryString)) {
+            $queryUrl .= '&fq='.$filterQueryString;
+        }
+        //boost query
+        if (!empty($boostFieldsString)) {
+            $queryUrl .= '&bq='.urlencode($boostFieldsString);
+        }
 
-		return $queryUrl;
+        return $queryUrl;
     }
 
     /**
@@ -694,36 +694,36 @@ class SolrBridge_Solrsearch_Model_Solr_Query
      */
     public function getStandardFilterQuery()
     {
-    	$params = Mage::helper('solrsearch')->getParams();
-    	if (isset($params['fq']) && is_array($params['fq']))
-    	{
-    		$filterQuery = array();
-    		foreach ($params['fq'] as $key=>$values)
-    		{
-    			if (!empty($key) && !is_array($values) && !empty($values))
-    			{
-    				if ($key == 'category_id')
-    				{
-    					$filterQuery[$key] = array($values);
-    				}else
-    				{
-    					$filterQuery[$key.'_facet'] = array($values);
-    				}
-    			}else if(!empty($key) && is_array($values))
-    			{
-    				if ($key == 'category_id')
-    				{
-    					$filterQuery[$key] = $values;
-    				}
-    				else
-    				{
-    					$filterQuery[$key.'_facet'] = $values;
-    				}
-    			}
-    		}
-    		return $filterQuery;
-    	}
-		return array();
+        $params = Mage::helper('solrsearch')->getParams();
+        if (isset($params['fq']) && is_array($params['fq']))
+        {
+            $filterQuery = array();
+            foreach ($params['fq'] as $key=>$values)
+            {
+                if (!empty($key) && !is_array($values) && !empty($values))
+                {
+                    if ($key == 'category_id')
+                    {
+                        $filterQuery[$key] = array($values);
+                    } else
+                    {
+                        $filterQuery[$key.'_facet'] = array($values);
+                    }
+                } else if(!empty($key) && is_array($values))
+                {
+                    if ($key == 'category_id')
+                    {
+                        $filterQuery[$key] = $values;
+                    }
+                    else
+                    {
+                        $filterQuery[$key.'_facet'] = $values;
+                    }
+                }
+            }
+            return $filterQuery;
+        }
+        return array();
     }
 
     /**
@@ -811,23 +811,29 @@ class SolrBridge_Solrsearch_Model_Solr_Query
     {
         if ($attributeCode == 'price')
         {
-        	$priceFields = Mage::helper('solrsearch')->getPriceFields();
-        	$priceFieldName = $priceFields[0];
-        	$specialPriceFieldName = $priceFields[1];
+            $priceFields = Mage::helper('solrsearch')->getPriceFields();
+            $priceFieldName = $priceFields[0];
+            $specialPriceFieldName = $priceFields[1];
             return 'sort_'.$specialPriceFieldName.'+'.$direction.','.$priceFieldName.'+'.$direction;
         }
         else if( $attributeCode == 'position' )
         {
-        	 return 'sort_position_decimal+'.$direction;
+            return 'sort_position_decimal+'.$direction;
         }
-		else if($attributeCode == 'delta_price') {
-			/**
-			 * @see Zolago_Solrsearch_Model_Data::processFinalItemData()
-			 * and there
-			 * @see Zolago_Solrsearch_Model_Data::_prepareDeltaPrice()
-			 */
-			return 'sort_delta_price_decimal+'.$direction;
-		}
+        else if($attributeCode == 'delta_price') {
+            /**
+             * @see Zolago_Solrsearch_Model_Data::processFinalItemData()
+             * and there
+             * @see Zolago_Solrsearch_Model_Data::_prepareDeltaPrice()
+             */
+            return 'sort_delta_price_decimal+'.$direction;
+        }
+        else if($attributeCode == 'popularity') {
+            return 'sort_popularity_int+'.$direction;
+        }
+        else if($attributeCode == 'created_at') {
+            return 'sort_created_at_varchar+'.$direction;
+        }
         else
         {
             $entityType = Mage::getModel('eav/config')->getEntityType('catalog_product');
