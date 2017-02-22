@@ -6,7 +6,7 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
 
 	const DEFAULT_DIR = "desc";
 	const DEFAULT_SEARCH_DIR = "desc";
-	const DEFAULT_ORDER = "popularity";
+	const DEFAULT_ORDER = "wishlist_count";
 	const DEFAULT_SEARCH_ORDER = "relevance";
 	
     const DEFAULT_LIMIT = 100;
@@ -141,7 +141,7 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
 		);
 		
 		$options[] = array(
-			'sort' => 'popularity',
+			'sort' => 'wishlist_count',
 			'dir'   => 'desc',
 			'label' =>  Mage::helper("zolagosolrsearch")->__("Most popular first")
 		);
@@ -153,7 +153,7 @@ class Zolago_Solrsearch_Model_Catalog_Product_List extends Varien_Object {
 		);
 		
 		$options[] = array(
-			'sort' => 'created_at',
+			'sort' => 'is_new',
 			'dir'   => 'desc',
 			'label' =>  Mage::helper("zolagosolrsearch")->__("New products")
 		);

@@ -302,6 +302,7 @@ class Zolago_Solrsearch_Model_Data extends SolrBridge_Solrsearch_Model_Data {
 		
 		// bestellers, new, rating, flags
 		$docData['is_new_int'] = (int)$item->getOrigData('is_new');
+		$docData['sort_is_new_int'] = (int)$item->getOrigData('is_new');
 		$docData['product_rating_int'] = (int)$item->getOrigData('product_rating');
 		$docData['is_bestseller_int'] = (int)$item->getOrigData('is_bestseller');
 		$docData['product_flag_int'] = (int)$item->getOrigData('product_flag');
