@@ -381,7 +381,7 @@ class ZolagoOs_Import_Model_Import_Product
             "description" => $firstSimple->clothes_description,
             "short_description" => $firstSimple->description2,
             "ean"	=> $firstSimple->barcode,
-            "descirpion_status" => 1,
+            "description_status" => 1,
             //ext_
             "ext_productline" => $firstSimple->collection,
             "ext_category" => $firstSimple->clothes_description,
