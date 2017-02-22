@@ -303,7 +303,7 @@ class  Zolago_Payment_Helper_Data extends Mage_Core_Helper_Abstract
                 $sum += $transaction->getTxnAmount();
             }
             $coll = $this->getRefundTransactionCollection($po);
-            $coll->addTxnTypeFilter(Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND);
+            $coll->addTxnTypeFilter(array(Mage_Sales_Model_Order_Payment_Transaction::TYPE_REFUND,Zolago_Sales_Model_Order_Payment_Transaction::TYPE_DELIVERY_CHARGE));
             foreach ($coll as $transaction) {
                 $sum += $transaction->getTxnAmount();
             }            

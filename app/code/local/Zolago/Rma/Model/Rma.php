@@ -397,6 +397,7 @@ class Zolago_Rma_Model_Rma extends ZolagoOs_Rma_Model_Rma
         return $this->_refundAmount;
     }
 
+    
     /**
      * wartość zwróconych zamówień
      * @param bool $total liczenie z całego zamówienia, lub tylko z konkretnego rma
@@ -419,6 +420,8 @@ class Zolago_Rma_Model_Rma extends ZolagoOs_Rma_Model_Rma
             }
             if (!$total) {
                 $existTransactions->addFieldToFilter('rma_id',$this->getId());
+            } else { // refunds only for rma
+                $existTransactions->addFieldToFilter('rma_id',array('notnull' => true));                
             }
             $amount = 0;
             foreach($existTransactions as $existTransaction) {
