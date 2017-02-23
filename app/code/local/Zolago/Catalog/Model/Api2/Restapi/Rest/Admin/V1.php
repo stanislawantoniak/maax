@@ -387,7 +387,7 @@ class Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1
             ->getAttribute('catalog_product', 'msrp')
             ->getData('attribute_id');
 
-        $percent = Mage::getStoreConfig('catalog/price/automatic_flag_price_percent');
+        $percent = Mage::getStoreConfig('catalog/price/automatic_strikeout_price_percent');
         // @todo uzależnić procent od vendora - teraz jest tylko default
 
         foreach ($skeleton as $sku => $productId) {
