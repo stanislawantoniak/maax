@@ -322,7 +322,7 @@ class Zolago_Catalog_Model_Resource_Product_Configurable
                 $_vendor = Mage::getModel("udropship/vendor")->load($_product["udropship_vendor"]);
 
                 $percentFlag = Mage::helper("zolagocatalog")->getAutomaticFlagPricePercent($_vendor);
-                self::$_vendorAutomaticFlagPricePercent[$_product["udropship_vendor"]] = $percent;
+                self::$_vendorAutomaticFlagPricePercent[$_product["udropship_vendor"]] = $percentFlag;
 
             }
 
