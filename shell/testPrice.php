@@ -5,10 +5,29 @@ class Modago_Test_Shell2 extends Mage_Shell_Abstract
 {
     public function run()
     {
-        $a = 100;
-        $b = 140;
-        $c = 141;
+        $a = 289.99;
+        $b = 289.99;
+        $c = 609.90;
 
+        $skus = array (
+            "1-WUWOJCIK021/116",
+            "1-WUWOJCIK021/122",
+            "1-WUWOJCIK021/128",
+            "1-WUWOJCIK021/134",
+            "1-WUWOJCIK021/140",
+            "1-WUWOJCIK021/146",
+            "1-WUWOJCIK021/152",
+            "1-WUWOJCIK021/158"
+        );
+        $priceBatch = array();
+        foreach ($skus as $sku) {
+            $priceBatch[$sku] = array(
+                "A" => $a,
+                "B" => $b,
+                "salePriceBefore" => $c
+            );
+        }
+/*
         $priceBatch = array(
             "1-WTSLEDDKLR4/098" => array(
                 "A" => $a,
@@ -110,7 +129,7 @@ class Modago_Test_Shell2 extends Mage_Shell_Abstract
                 "salePriceBefore" => $c+5
             )
         );
-
+*/
         $vi = new Zolago_Catalog_Model_Api2_Restapi_Rest_Admin_V1();
         $vi::updatePricesConverter($priceBatch);
 
@@ -146,10 +165,13 @@ class Modago_Test_Shell2 extends Mage_Shell_Abstract
         $vi::updateStockConverter($stock);
     
     }
+    function run3() {
+        $product = Mage::getModel('catalog/product')->load(7280);
+        
+    }
 
 }
 
 $shell = new Modago_Test_Shell2();
-$shell->run2();
-$shell->run();
 
+$shell->run();
