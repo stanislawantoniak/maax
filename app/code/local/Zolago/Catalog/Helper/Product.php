@@ -108,13 +108,6 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
      */
     public function getStrikeoutPrice($product, $qty=null) {
         $campaignRegularId = (int)$product->getData('campaign_regular_id');
-        $productFlag = (int)$product->getProductFlag();
-        //Strike out price can appear only when product has promo or sale flag
-        //which means when a product is included in campaign.
-        if (empty($campaignRegularId) && !$productFlag)
-            return (float)$product->getFinalPrice($qty);
-
-
         $strikeoutType = $product->getData('campaign_strikeout_price_type');
         $price = (float)$product->getPrice();
         $specialPrice = (float)$product->getSpecialPrice();
@@ -129,7 +122,7 @@ class Zolago_Catalog_Helper_Product extends Mage_Catalog_Helper_Product {
             $returnPrice = $msrp > $specialPrice ? $msrp : $finalPrice;
             return $returnPrice > $finalPrice ? $returnPrice : $finalPrice;
         }
-        elseif (empty($campaignRegularId) && $productFlag) {
+        elseif (empty($campaignRegularId)) {
             $returnPrice = $msrp > $price ? $msrp : $finalPrice;
             return $returnPrice > $finalPrice ? $returnPrice : $finalPrice;
         }
