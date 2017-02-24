@@ -387,5 +387,16 @@ class Zolago_Common_Helper_Data extends Mage_Core_Helper_Abstract {
          }
          return array($tmp);
      }
+     
+    /**
+     * read raw value from core_config_data table (not by config module)
+     */
+     public function getRawStoreConfig($key,$storeId) {
+     	$resource = Mage::getSingleton('core/resource');
+     	$connection = $resource->getConnection('core_read');
+     	$query = 'SELECT value FROM core_config_data WHERE scope_id = %d and path = "%s"';
+     	$out = $connection->fetchAll(sprintf($query,$storeId,$key));
+     	return isset($out[0]['value'])? $out[0]['value']:null;
+     }
 
 }
