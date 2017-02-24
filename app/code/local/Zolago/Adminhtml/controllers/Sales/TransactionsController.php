@@ -155,8 +155,9 @@ class Zolago_Adminhtml_Sales_TransactionsController
                     ->setIsClosed(1);
 
                 $transaction->save();
-
-                $this->_changePaymentStatus($order);
+                if ($transaction->getTxnType() == Mage_Sales_Model_Order_Payment_Transaction::TYPE_ORDER) { // change status only if reject order transactions (not rma)
+                    $this->_changePaymentStatus($order);
+                }
             }            
             $this->_getSession()->addSuccess($this->__('Bank payment has been rejected.'));
         } catch (Exception $e) {
