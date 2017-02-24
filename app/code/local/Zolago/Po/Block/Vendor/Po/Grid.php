@@ -24,7 +24,6 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 		$collection->addPaymentStatuses();
 		$this->_applyExternalFilters($collection);
         $this->setCollection($collection);
-
        parent::_prepareCollection();
 
 	}
@@ -259,19 +258,24 @@ class Zolago_Po_Block_Vendor_Po_Grid extends Mage_Adminhtml_Block_Widget_Grid
 	}
 	
 	protected function _getShippingMethodOptions() {
-		$out = array();
+		$collection = Mage::getModel('udpo/po')->getCollection();
+		$collection->getSelect()
+			->reset(Zend_Db_Select::COLUMNS)
+			->columns('udropship_method')
+			->distinct();
+		$carrierCache = array();
 		$config = Mage::getSingleton('shipping/config');
-		/* @var $config Mage_Shipping_Model_Config */
-		foreach($this->getVendor()->getShippingMethods() as $_array){
-			foreach($_array as $method){
-				if(isset($method["method_code"]) && isset($method["carrier_code"])){
-					$carrier =  $config->getCarrierInstance($method["carrier_code"]);
-					$allMethods = $carrier->getAllowedMethods();
-					if(isset($allMethods[$method["method_code"]])){
-						$out[ $method["carrier_code"]."_".$method["method_code"]] = 
-							$carrier->getConfigData('name') . " - " . $allMethods[$method["method_code"]];
-					}
-				}
+		$out = array();
+		foreach ($collection as $item) {
+			$method = explode('_',$item->getUdropshipMethod());
+			if (!isset($carrierCache[$method[0]])) {
+				$carrierCache[$method[0]] = $config->getCarrierInstance($method[0]);
+			}
+			$carrier = $carrierCache[$method[0]];
+			$allMethods = $carrier->getAllowedMethods();
+			if(isset($allMethods[$method[1]])){
+				$out[ $method[0]."_".$method[1]] = 
+					$carrier->getConfigData('name') . " - " . $allMethods[$method[1]];
 			}
 		}
 		return $out;
