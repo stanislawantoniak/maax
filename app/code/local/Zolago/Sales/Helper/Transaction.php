@@ -33,7 +33,9 @@ class Zolago_Sales_Helper_Transaction extends Mage_Core_Helper_Abstract
         $existTransactionCollection = Mage::getModel('sales/order_payment_transaction')->getCollection()
                                       ->addFieldToFilter('order_id', $orderId)
                                       ->addFieldToFilter('txn_type', $type)
-                                      ->addFieldToFilter('payment_id', $paymentId);
+                                      ->addFieldToFilter('payment_id', $paymentId)
+                                      ->addFieldToFilter('txn_status',Zolago_Payment_Model_Client::TRANSACTION_STATUS_COMPLETED);
+                                      
         return $existTransactionCollection;
     }
     

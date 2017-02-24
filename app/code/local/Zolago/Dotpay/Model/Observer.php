@@ -39,4 +39,16 @@ class Zolago_Dotpay_Model_Observer {
 			$dotpayIdsUpdated[] = $dotpayId; //set as already updated number.
 		}
 	}
+	
+    /**
+     * set field "method_name" as payment method name
+     */
+     public function setPaymentMethodName($observer) {
+     	$obj = $observer->getEvent()->getOrderPaymentTransaction();
+     	$paymentId = $obj->getPaymentId();
+     	$method = Mage::getModel('sales/order_payment')->load($paymentId)->getMethod();
+     	if ($obj->isObjectNew()) {
+     		$obj->setPaymentMethod($method);
+     	}
+     }
 }

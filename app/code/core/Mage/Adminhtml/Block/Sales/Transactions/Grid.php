@@ -61,7 +61,6 @@ class Mage_Adminhtml_Block_Sales_Transactions_Grid extends Mage_Adminhtml_Block_
             $collection->addOrderIdFilter($order->getId());
         }
         $collection->addOrderInformation(array('increment_id'));
-        $collection->addPaymentInformation(array('method'));
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -99,7 +98,7 @@ class Mage_Adminhtml_Block_Sales_Transactions_Grid extends Mage_Adminhtml_Block_
 
         $this->addColumn('method', array(
             'header'    => Mage::helper('sales')->__('Payment Method Name'),
-            'index'     => 'method',
+            'index'     => 'payment_method',
             'type'      => 'options',
             'options'       => Mage::helper('payment')->getPaymentMethodList(true),
             'option_groups' => Mage::helper('payment')->getPaymentMethodList(true, true, true),

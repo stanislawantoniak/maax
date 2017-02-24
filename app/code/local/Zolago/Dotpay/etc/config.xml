@@ -2,44 +2,58 @@
 <config>
     <modules>
         <Zolago_Dotpay>
-            <version>0.0.1</version>
+            <version>0.0.2</version>
         </Zolago_Dotpay>
     </modules>
     <global>
-		<models>
-			<zolagodotpay>
+        <models>
+            <zolagodotpay>
                 <class>Zolago_Dotpay_Model</class>
             </zolagodotpay>
             <dotpay>
-				<rewrite>
-					<paymentMethod>Zolago_Dotpay_Model_PaymentMethod</paymentMethod>
-				</rewrite>
-			</dotpay>
-		</models>
-	    <resources>
-		    <zolagodotpay_setup>
-			    <setup>
-				    <module>Zolago_Dotpay</module>
-			    </setup>
-		    </zolagodotpay_setup>
-	    </resources>
-	</global>
-	<frontend>
-		<routers>
-            <dotpay>  
-                <args>  
-                    <modules>  
-                        <Zolago_Dotpay before="Dotpay_Dotpay">Zolago_Dotpay</Zolago_Dotpay>  
-                    </modules>  
-                </args>  
-            </dotpay> 
+                <rewrite>
+                    <paymentMethod>Zolago_Dotpay_Model_PaymentMethod</paymentMethod>
+                </rewrite>
+            </dotpay>
+        </models>
+        <resources>
+            <zolagodotpay_setup>
+                <setup>
+                    <module>Zolago_Dotpay</module>
+                </setup>
+            </zolagodotpay_setup>
+        </resources>
+        <events>
+            <sales_order_payment_transaction_save_before>
+                <observers>                                        
+                    <set_payment_method_name>
+                        <class>zolagodotpay/observer</class>
+                        <method>setPaymentMethodName</method>                        
+                    </set_payment_method_name>                                
+    		    </observers>
+            </sales_order_payment_transaction_save_before>
+        </events>
+    </global>
+    <frontend>
+        <routers>
+            <dotpay>
+                <args>
+                    <modules>
+                        <Zolago_Dotpay before="Dotpay_Dotpay">Zolago_Dotpay</Zolago_Dotpay>
+                    </modules>
+                </args>
+            </dotpay>
         </routers>
-	</frontend>
+    </frontend>
     <crontab>
         <jobs>
             <zolagodotpay_update_transactions>
-                <schedule><cron_expr>*/5 * * * *</cron_expr></schedule>
-                <run><model>zolagodotpay/observer::updateTransactions</model></run>
+                <schedule>
+                    <cron_expr>*/5 * * * *</cron_expr>
+                </schedule>
+                <run>
+                    <model>zolagodotpay/observer::updateTransactions</model>
+                </run>
             </zolagodotpay_update_transactions>
         </jobs>
     </crontab>
