@@ -102,7 +102,7 @@ class Zolago_Po_Model_Resource_Po_Collection
 	public function addHasShipment() {
 		$this->getSelect()->joinLeft(
 				array("shipment"=>$this->getTable("sales/shipment")), 
-				"shipment.udpo_id=main_table.entity_id",
+				"shipment.udpo_id=main_table.entity_id AND shipment.udropship_status!=".ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_CANCELED,
 				array("has_shipment"=>$this->_getShipmentExpr())
 		);
 		$this->getSelect()->group("main_table.entity_id");
