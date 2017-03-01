@@ -92,7 +92,6 @@ class Orba_Shipping_Helper_Packstation_Inpost extends Orba_Shipping_Helper_Carri
                         $track->getShipment()->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_SHIPPED);                        
                         break;
                     case self::INPOST_STATUS_LABEL_EXPIRED:
-                    case self::INPOST_STATUS_EXPIRED:
                     case self::INPOST_STATUS_CANCELLED:
                         $status = $this->__('Cancelled');
                         $track->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::TRACK_STATUS_CANCELED);
@@ -113,6 +112,7 @@ class Orba_Shipping_Helper_Packstation_Inpost extends Orba_Shipping_Helper_Carri
                         $track->getShipment()->setUdropshipStatus(ZolagoOs_OmniChannel_Model_Source::SHIPMENT_STATUS_RETURNED);                        
                         break;
                     case self::INPOST_STATUS_CLAIMED:
+                    case self::INPOST_STATUS_EXPIRED:
                     case self::INPOST_STATUS_CUSTOMER_DELIVERING:
                     case self::INPOST_STATUS_CLAIM_PROCESSED:
                     case self::INPOST_STATUS_CREATED:
