@@ -92,11 +92,10 @@ class ZolagoOs_OmniChannelVendorAskQuestion_Block_Vendor_Question extends Mage_C
             'is_top'=>true,
             'disabled'=>'disabled'
         ));
-
         $fieldset->addField('customer_name', 'note', array(
             'name' => 'customer_name',
             'label' => $this->__('CUSTOMER NAME'),
-            'text' => $data->getCustomerName(),
+            'text' => $data->getCustomerName().' (<a href="mailto:'.$data->getCustomerEmail().'">'.$data->getCustomerEmail().'</a>)',
             'is_wide'=>true,
             'is_top'=>true,
         ));
