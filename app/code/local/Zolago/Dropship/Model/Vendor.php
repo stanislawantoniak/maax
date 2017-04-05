@@ -32,7 +32,7 @@ class Zolago_Dropship_Model_Vendor extends ZolagoOs_OmniChannel_Model_Vendor
 
     const VENDOR_TYPE_BRANDSHOP = 2;
     const VENDOR_TYPE_STANDARD = 1;
-
+    const DELIVERY_BLOCK_KEY = 'vendor_terms_delivery_info_%d';
     /**
      * Override function to add additional email address bases od vendor operators
      * @return array
@@ -577,6 +577,17 @@ class Zolago_Dropship_Model_Vendor extends ZolagoOs_OmniChannel_Model_Vendor
             return $status;
         }
         return $status;
+     }
+     
+    /**
+     * override delivery terms
+     */
+     public function getTermsDeliveryInformation() {
+         $key = sprintf(self::DELIVERY_BLOCK_KEY,$this->getId());
+         if (!$html = Mage::app()->getLayout()->createBlock('cms/block')->setBlockId($key)->toHtml()) {
+             return parent::getTermsDeliveryInformation();
+         }
+         return $html;
      }
 
 }
