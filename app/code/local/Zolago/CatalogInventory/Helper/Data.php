@@ -12,7 +12,7 @@ class Zolago_CatalogInventory_Helper_Data extends Mage_Core_Helper_Abstract {
 	const FLAG_OUT_OF_STOCK		= 0;
 	const FLAG_NO_STOCK_INFO	=-1;
 	
-	const MAX_CART_LIST_QTY		= 10;
+	const MAX_CART_LIST_QTY		= 10000;
 
 	/**
 	 * @param Mage_Sales_Model_Quote_Item $item
