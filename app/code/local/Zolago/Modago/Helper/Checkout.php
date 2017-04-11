@@ -15,7 +15,8 @@ class Zolago_Modago_Helper_Checkout extends Mage_Core_Helper_Abstract
         /*shipping_cost*/
         if($totalItemsInCart > 0){
             $a = $q->getShippingAddress();
-
+            $sessionCode = Mage::getSingleton('checkout/session')->getShippingMethod();
+            
             $qRates = $a->getGroupedAllShippingRates();
 
             /**
@@ -27,7 +28,7 @@ class Zolago_Modago_Helper_Checkout extends Mage_Core_Helper_Abstract
                 $a->collectShippingRates();
                 $qRates = $a->getGroupedAllShippingRates();
             }
-
+            
             if(!empty($qRates)){
                 foreach ($qRates as $cRates) {
                     foreach ($cRates as $rate) {
@@ -39,10 +40,16 @@ class Zolago_Modago_Helper_Checkout extends Mage_Core_Helper_Abstract
                     }
                     unset($rate);
                 }
-
                 unset($cRates);
                 if (!empty($data)) {
                     foreach ($data as $vId => $dataItem) {
+                        if (!empty($sessionCode)) {
+                            foreach ($dataItem as $key => $val) {
+                                if (!in_array($key,$sessionCode)) {
+                                    unset($dataItem[$key]);
+                                }
+                            }
+                        }
                         $cost[$vId] = min($dataItem); //get lowest costs for ajax basket
                     }
                 }
