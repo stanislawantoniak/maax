@@ -599,6 +599,7 @@ var Mall = {
 
     validateAddingToCart: function(id){
         jQuery("#qty-error").hide();
+        var selectObject = jQuery(".sizes-content select option");
         var selectedSizeOption = jQuery(".sizes-content select option:selected");
         var quantity =  parseInt(jQuery("#product-options input[name=quantity]").val());
         var attrId;
@@ -609,7 +610,7 @@ var Mall = {
             attrId = jQuery(".size-box ul.selectboxit-options li.selectboxit-focus").attr('data-val');
         }
 
-        if(!attrId){
+        if(!attrId && selectObject.length > 1){
             return false;
         }
 
