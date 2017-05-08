@@ -640,7 +640,7 @@ class Magmi_ProductImportEngine extends Magmi_Engine
             }
             else
             {
-                $pvalues[]= 0;
+                $pvalues[]= -1;
             }
             $val=$pvals[0];
 
@@ -673,7 +673,7 @@ class Magmi_ProductImportEngine extends Magmi_Engine
             if(!isset($optAdmin[$avalues[$i]]))
             {
                 //create new option entry
-                $newoptid = $this->createOption($attid,$pos);
+                $newoptid = $this->createOption($attid,$pos==-1?0:$pos);
                 $this->createOptionValue($newoptid, 0,$avalues[$i]);
                 //cache new created one
                 $this->cacheOpt($attid, 0, $newoptid, $avalues[$i],$pos==-1?0:$pos);
